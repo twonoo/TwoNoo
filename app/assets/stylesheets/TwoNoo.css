@@ -1,0 +1,299 @@
+header, section, footer, aside, nav, article, figure, figcaption {
+display: block;}
+body	{
+	color: #666666;
+	font-family: Arial, Verdana, sans-serif;
+	line-height: 1.4em;
+	margin: 0px;}
+.wrapper {
+	width: 940px;
+	margin: 20px auto auto auto;
+	border: 2px solid #000000;
+	background-color: #ffffff;}
+.nav {
+	margin: 5px auto auto 30px;
+	height: 50px;}
+img.logo {
+	width: 300px;
+	float: left;
+	margin: 10px;}
+img.ActivityPhoto {
+	max-width: 100px;
+	max-height: 80px;
+	float: right;
+	display: inline;
+	margin: 2px;}
+img.ActivityDetailsPhoto {
+	max-width: 250px;
+	max-height: 185px;
+	float: left;
+	display: block;
+	margin: 5px;}
+img.ActivityDetailsUserPhoto {
+	max-width: 220px;
+	max-height: 170px;
+	float: left;
+	display: block;
+	margin: 5px;}
+input.save {
+	width: 200px;
+	float: right;
+	margin: 10px;}
+input.search {
+	width: 150px;
+	float: right;
+	margin: 10px;}
+input.rsvp {
+	width: 200px;
+	float: right;
+	margin: 10px;}
+input.follow {
+	width: 130px;
+	float: right;
+	margin: 5px;}
+#user {
+	float: right;
+	margin: 10px;}
+div.PageTitle {
+	display: inline;
+	float: right;
+	font-size: 2em;
+	margin: 20px;}	
+header {
+	height 100px;}
+nav {
+	clear: both;
+	color: black;
+	background-color: #3CB371;
+	background-image: url("/assets/NewGreenBanner.png");
+	background-size: 100% 80%;
+	background-repeat: no-repeat;
+	background-position: 0px 5px;
+	margin: auto auto auto auto;
+	height: 60px;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;}
+footer {
+	clear: both;
+	color: #ffffff;
+	background-color: #3CB371;
+	height: 30px;
+	border-top: 1px solid #000000;
+	font-size: 80%;
+	margin: 0px 0px 0px 0px;}
+div.collapsebar {
+	clear: both;
+	color: #ffffff;
+	background-color: #3CB371;
+	height: 20px;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	font-size: 60%;
+	margin: 20px 0px 0px 0px;}
+input:required {
+	border-color: red;
+	border-width:2px;}
+input:invalid {
+	background-color: pink;}
+td {
+	padding: 10px 10px 0px 10px;}
+#ActivityType {
+	width: 370px;}
+textarea.required {
+	border: 2px solid red;}
+label {
+	width: 100px;
+	padding-right: 10px;
+	text-align: right;}
+.column1 {
+	width:450px;
+	float: left;
+	margin: 10px;}
+.column2 {
+	width:450px;
+	float: left;
+	margin: 10px;}
+.findcolumn1 {
+	width:320px;
+	float: left;
+	margin: 10px;}
+.findcolumn2 {
+	width:400px;
+	float: left;
+	margin: 10px;}
+.searchresults {
+	background-color: #DCDCDC;}
+.searchresult {
+	background-color: #ffffff;
+	line-height: 1.3em;
+	font-size: 80%;
+	padding: 10px;
+	border: 1px solid #3CB371;
+	border-radius: 20px;
+	width:430px;
+	float: left;
+	margin: 0px;}
+div.activityname {
+	color: black;
+	font-weight: bold;
+	display: inline;
+	float: left;
+	width: 250px;}	
+div.time {
+	display: inline;}	
+#activity {
+	width:570px;
+	height:600px;
+	float: left;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 20px;
+	background-color: white;
+	margin: 5px;}
+#activitydetailsuser {
+	width:330px;
+	height:600px;
+	float: right;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 20px;
+	background-color: white;
+	margin: 5px 5px auto auto;}
+div.clearleft {
+	clear: left;}
+#actdetailstime {
+	float: right;
+	margin: 10px;}
+#UserName {
+	color: Blue;
+	font-weight: bold;}
+a.searchlink {
+	text-decoration: none;
+	color: #666666;}
+
+/*Main Page Specific*/
+
+img.SignUpButton {
+	width: 200px;
+	clear: left;
+	margin-left: 80px;
+	margin-bottom: 20px; 
+	float: left;}
+img.FindButtonMainPage {
+	width: 200px;
+	margin-right: 80px;
+	margin-bottom: 20px; 	
+	float: right;}
+div.TagLine {
+	clear: both;
+	opacity: .3;
+	float: center;
+	font-size: 2em;
+	line-height: 8em;
+	margin: 40px auto auto auto;}	
+div.Main {
+	text-align: center;}
+.SignIn {
+	line-height: 1.3em;
+	font-size: 80%;
+	text-align: left;
+	padding: 10px;
+	border: 2px solid black;
+	border-radius: 20px;
+	width:200px;
+	float: right;
+	margin: 20px 20px auto auto}
+input.signin {
+	background-color: #3CB371;}
+.forgotpassword {
+	clear: both;
+	padding: 10px;
+	margin: auto 20px auto auto;
+	text-align: center;
+	width:200px;
+	float: right;}
+
+/*Sign Up Specific*/	
+
+input.signup {
+	float: right;
+	margin: 5px;}
+.signupcolumn1 {
+	width:300px;
+	float: left;
+	margin: 10px;}
+.signupcolumn2 {
+	width:320px;
+	float: left;
+	margin: 10px;}
+	
+/*My Stuff Specific*/
+#MyStuffUser {
+	width:920px;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 20px;
+	background-color: white;
+	margin: 2px auto 2px auto;}
+.MyStuffTopcolumn1 {
+	width:440px;
+	float: left;
+	margin: 10px;}
+.MyStuffTopcolumn2 {
+	width:440px;
+	float: left;
+	margin: 10px;}
+input.MyStuffSave {
+	width: 200px;
+	float: right;
+	margin: 10px;}
+img.MyPhoto {
+	max-width: 70px;
+	max-height: 50px;
+	float: left;
+	display: inline;
+	margin: 2px;}
+img.MyPhotoPrimary {
+	border: 3px solid blue;
+	max-width: 70px;
+	max-height: 50px;
+	float: left;
+	display: inline;
+	margin: 2px;}
+div.MyStuffBottom {
+	border: 1px solid black;
+	overflow: scroll;
+	float: left;
+	display: inline;
+	width: 300px;
+	height: 200px;
+	border-radius: 20px;
+	margin: 2px 5px 2px 5px;;
+	background-color: #DCDCDC;}
+.eachactivity {
+	background-color: #ffffff;
+	line-height: 1.2em;
+	font-size: 70%;
+	padding: 2px;
+	border: 1px solid #3CB371;
+	border-radius: 10px;
+	width:240px;
+	margin: 0px auto 0px auto;}
+.MyStuff {
+	padding: 2px 2px 2px 2px;}
+img.FollowingPhoto {
+	max-width: 90px;
+	max-height: 72px;
+	float: left;
+	margin: 2px;}
+div.following {
+	background-color: #ffffff;
+	line-height: 1.2em;
+	font-size: 70%;
+	padding: 2px;
+	border: 1px solid #3CB371;
+	border-radius: 10px;
+	width:150px;
+	height:80px;
+	margin: 0px auto 0px auto;}
+ 

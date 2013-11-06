@@ -1,0 +1,32 @@
+<header>
+  <%= link_to image_tag("TwoNooLogo-HandDrawn.jpg", alt: "TwoNoo", class: "logo"), '/', id: "logo" %>
+  <% if (yield(:title) == 'SIGN UP') %>
+  <% else if signed_in? %>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <%=current_user.UserId%> <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Profile", current_user %></li>
+            <li><%= link_to "Settings", '#' %></li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to "Sign out", signout_path, method: "delete" %>
+            </li>
+          </ul>
+  <% else %>
+  <div class="SignIn">
+    <%= form_for(:session, url: sessions_path) do |f| %>
+      <%= f.text_field :UserId, placeholder: "Username", size: 25 %>
+      <p>
+      <%= f.password_field :password, placeholder: "Password", size: 15, maxlength: 25 %>
+      <%= f.submit "Sign in", class: "signin" %>
+      </p>
+      <input type="checkbox" name="StaySignedIn" value="StaySignedIn"/>Stay signed in
+    <% end %>
+    <div class="forgotpassword">
+      <a href="javascript:alert('Bummer! That sucks.)">Forgot password</a>
+    </div>
+    </div>
+  <% end %>
+<% end %>
+</header>

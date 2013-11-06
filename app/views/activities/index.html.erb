@@ -1,0 +1,84 @@
+<% provide(:title, "FIND ACTIVITIES") %>
+<%= form_for(:activity_search, url: activities_path, method: "get") do |f| %>
+  <div class="findcolumn1">
+    <p>
+      <label>Activity Name:</label>
+      <%= f.text_field :Name, size: 25, maxlength: 50, autofocus: true %>
+    </p>
+    <p><label>Activity Date:</label>
+      <%= f.date_field :ActivityDate %>
+    </p>
+    <p><label>City:</label>
+      <%= f.text_field :City, size: 25, maxlength: 50 %>
+    </p>
+    <p>
+      <label>State:</label>
+      <%= f.text_field :State, size: 2, maxlength: 2 %>
+    </p>
+    <p>
+      <label>Venue Name:</label>
+      <%= f.text_field :LocationName, size: 25, maxlength: 50, placeholder: "Example: Billy's Bar"%>
+    </p>
+    <p>
+      <label>User Name:</label>
+      <input type="text" name="username" size="20" maxlength="20" placeholder="not working"/>
+    </p>
+  </div>
+  <div class="findcolumn2">
+    <fieldset id="ActivityType">
+      <legend>Activity Type (Select ALL that apply):</legend>
+      <table>
+        <tr>
+          <td><input type="checkbox" name="activityType" value="Sports"/> Sports</td>
+          <td><input type="checkbox" name="activityType" value="Outdoors"/> Outdoors</td>
+          <td><input type="checkbox" name="activityType" value="Nightlife"/> Nightlife</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="activityType" value="Arts"/> Arts</td>
+          <td><input type="checkbox" name="activityType" value="EatDrink"/> Eat & Drink</td>
+          <td><input type="checkbox" name="activityType" value="Community"/> Community</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="activityType" value="Business"/> Business</td>
+          <td><input type="checkbox" name="activityType" value="Cool Stuff"/> Cool Stuff</td>
+        </tr>
+      </table>
+    </fieldset>
+      <p>
+      	<input type="checkbox" name="Following" value="Following"/>Only show people I'm following
+      </p>
+  </div>
+  <%= image_submit_tag("SearchButton.png", alt: "Search", class: "search", id: "search")%>
+<% end %>
+
+  <div class="collapsebar"></div>
+  <% if !(@activities.nil? or @activities.count == 0) %>
+    <div class="searchresults">
+      <table>
+        <% @odd = true %>
+        <% @activities.each do |activity| %>
+          <% if @odd %>
+            <tr>
+          <% end %>
+            <td>
+              <a href="TwoNoo-ActivityDetails.html" class="searchlink">
+                <div class="searchresult">
+                  <div class="activityname"><%=activity.Name%></div>
+                  <div class="time"><%=activity.ActivityTime%></div>
+                  <%= image_tag("KickballTeam.JPG", alt: "Activity", class: "ActivityPhoto") %>
+                  <div>Tuesday, July 9 @ Billy's Bar</div>
+                  <div>1234 Slippery Slope Lane, Aurora, CO</div>
+                </div>
+              </a>
+             </td>
+          <% if !@odd %>
+          </tr>
+          <% end %>
+          <% @odd = !@odd %>
+        <% end %>
+        <% if @odd %>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>

@@ -1,0 +1,5 @@
+<% provide(:title, @user.UserId) %>
+<div class="row" style="width: 100%; text-align: center;">
+        Welcome, <%= link_to @user.UserId, user_path(@user)  %>
+        <%= link_to "Create", new_activity_path, class: "btn btn-large btn-primary" %>
+</div>
