@@ -1,4 +1,4 @@
-<% provide(:title, 'New Activity') %>
+<% provide(:title, 'CREATE') %>
   <div>
     <%= form_for(@activity) do |f| %>
       <%= render 'shared/error_messages' %>
@@ -9,9 +9,9 @@
           </p>
           <p>
             <label>Activity Date:</label>
-            <%= f.date_field :StartDateTime %>
+            <%= f.date_field :ActivityDate %>
             <label>Time:</label>
-            <input type="time" name="activityTime"/>
+            <%= f.time_field :ActivityTime %>
           </p>
           <p>
             <label>Address:</label>

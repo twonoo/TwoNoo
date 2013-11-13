@@ -11,7 +11,8 @@ TwoNoo::Application.routes.draw do
   match '/welcome/user', to: 'users#welcome',        via: 'get'
   match 'activities/search', to: 'activities#search',        via: 'get'
   match 'activities/search', to: 'activities#search',        via: 'post'
-  
+  match '/showUser/:id',  to: 'users#showUser',            via: 'get'
+
   get "welcome/index"
   get "users/login"
   get "users/show"

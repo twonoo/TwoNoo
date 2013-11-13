@@ -1,91 +1,40 @@
-
-<% provide(:title, "MY STUFF" )%>
-<%= form_for(@user) do |f| %>
-  <%= render 'shared/error_messages' %>
-  <div id="MyStuffUser">
-    <div class="MyStuffTopcolumn1">
-      <p>
-        <label>First Name:</label>
-        <%= f.text_field :FirstName, class: "signup", size: 25, maxlength: 50, required: true%>
-      </p>
-      <p>
-        <label>Last Name:</label>
-        <%= f.text_field :LastName, class: "signup", size: 25, maxlength:50, required: true %>
-      </p>
-      <p>
-        <label>User Name:</label>
-        <%= f.text_field :UserId, class: "signup", size: 25, maxlength: 50, readonly: true, value: @user.UserId.upcase %>
-      </p>
-      <p>
-        <label>Birthday:</label>
-        <%= f.date_field :Birthday, class: "signup", require: true, :value => @user.Birthday %>
-      </p>
-      <p>
-        <%= f.radio_button :Sex, "Male", required: true %>Male
-        <%= f.radio_button :Sex, "Female", required: true %>Female
-      </p>	
-    </div>
-    <div class="MyStuffTopcolumn2">
-      <p>
-        <label>Email:</label>
-        <%= f.text_field :Email, class: "signup", size: 25, maxlength: 50, required: true %>
-      </p>
-      <fieldset>
-        <legend>Change password</legend>
-        <label>Password:</label>
-        <input class="signup" type="password" name="orig_password" size="25" maxlength="50"/>
-        <p>
-          <label>New Password:</label>
-          <%= f.password_field :password, class: "signup", size: 25, maxlength: 50 %>
-        </p>
-        <p>
-          <label>Re-enter New Password:</label>
-          <%= f.password_field :password_confirmation, class: "signup", size: 25, maxlength: 50 %>
-        </p>
-      </fieldset>
-    </div>
+<% provide(:title, "USER INFO" )%>
+<%= render 'shared/error_messages' %>
+<div id="MyStuffUser">
+  <div class="MyStuffTopcolumn1">
+    <p>
+      <label>First Name:</label>
+      <%= @user.FirstName %>
+    </p>
+    <p>
+      <label>Last Name:</label>
+      <%= @user.LastName %>
+    </p>
+    <p>
+      <label>User Name:</label>
+      <%= @user.UserId %>
+    </p>
+    <p>
+      <label>Birthday:</label>
+      <%= @user.Birthday %>
+    </p>
+    <p>
+      <%= @user.Sex %>
+    </p>	
+  </div>
+  <div class="MyStuffTopcolumn2">
+    <p>
+      <label>Email:</label>
+      <%= @user.Email %>
+    </p>
+  </div>
   <p>
     <label>About me:</label>
-    <%= f.text_area :AboutMe, class: "signup", cols: 80, rows: 4 %>
-    <%= image_submit_tag("SaveButton.png", alt: "Save", class: "save", id: "save")%>
+    <%= text_area @user.AboutMe, class: "signup", cols: 80, rows: 4 , readonly: true %>
   </p>
-<% end %>
-  <label>Upload Photo:</label>
-    <input type="file" name="MyPhoto"/>
-  <table>
-    <tr>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "ActivityPhoto") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "MyPhotoPrimary") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "MyPhoto") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-    </tr>
-  </table>
 </div>
 <div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;My Activities</b>
+  <b>&nbsp;&nbsp;My Activities (only if you allow it)</b>
   <table>
     <tr>
       <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
@@ -126,7 +75,7 @@
   </table>
 </div>
 <div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;People I'm Following</b>
+  <b>&nbsp;&nbsp;People I'm Following (only if if you allow others to see)</b>
   <table>
     <tr>
       <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
@@ -147,7 +96,7 @@
   </table>
 </div>
 <div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;People Following Me</b>
+  <b>&nbsp;&nbsp;People Following Me (only if you allow others to see)</b>
   <table>
     <tr>
       <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">

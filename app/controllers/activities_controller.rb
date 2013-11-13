@@ -11,10 +11,12 @@ class ActivitiesController < ApplicationController
     @searchParams = []
     @first = true
     
-    params[:activity_search].each do |key, value|
-      if !(params[:activity_search][key].nil? or params[:activity_search][key].empty?)      
-        @searchParams << [key + " = ?", params[:activity_search][key]]
-      end
+    if !(params[:activity_search].nil?)
+      params[:activity_search].each do |key, value|
+        if !(params[:activity_search][key].nil? or params[:activity_search][key].empty?)      
+          @searchParams << [key + " = ?", params[:activity_search][key]]
+        end
+      end   
     end
     
     if params.count <= 2 or @searchParams.count == 0
@@ -27,6 +29,8 @@ class ActivitiesController < ApplicationController
   
   def show
     @activity = Activity.find(params[:id])
+    
+    @user = User.find(@activity.CreateUserId)
   end
   
   def new
@@ -39,6 +43,7 @@ class ActivitiesController < ApplicationController
   
   def create
     @activity = Activity.new(activity_params)
+    @activity.ModUserId = @activity.CreateUserId = current_user.id
     
     if @activity.save
       flash[:success] = "Activity Created!"

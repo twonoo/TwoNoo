@@ -1,26 +1,31 @@
 <% provide(:title, 'Activity Details') %>
-   <%= render 'shared/error_messages' %>
- <table width="100%">
-      <tr>
-        <td width="75%"><b><%= @activity.Name %></b></td>
-        <td rowspan="2">Organized By..... <br/><center><%=current_user.UserId%></center></td>
-      </tr>
-      <tr>
-        <td>
-        This is my activity description
-        </td>
-      <tr>
-      <tr>
-        <td style="text-align: center;">
-          <%= link_to image_tag("Back.jpg", alt: "Activities", style: "width: 50px;"), activities_path%>
+  <%= render 'shared/error_messages' %>
+  <div class="searchresults">
+    <div id="activity">
+        <div>
+          <h1><%=@activity.Name%></h1>
+          <div id="actdetailstime"><%=@activity.ActivityTime%></div>
+        </div>
+        <p><%=@activity.ActivityDate%> @ @activity.ActivityVenue</p>
+        <p><%=@activity.City%>, <%=@activity.State%></p>
+        <hr />
+        <p>@activity.Description</p>
+        <hr />
+        <p><%= image_tag("ActivityImage3.JPG", alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%></p>
+        <%= image_submit_tag("RSVPButton.png", alt: "RSVP", class: "rsvp", id: "rsvp")%>
+        <div class="clearleft"><p>&nbsp;&nbsp;<a href="">X More Photo(s) (Should probably only show this if this IS another photo other than the one shown</a></p></div>
+    </div>
+    <div id="activitydetailsuser">
+          <%= image_submit_tag("FollowButton.png", alt: "Follow", class: "follow", id: "follow")%>
+          <p>Organized by...</p>
+          <p id="UserName"><%= link_to @user.UserId, "/showUser/" + @user.id.to_s %></a></p>
+          <hr />
+        <div class="clearleft"><p><%=@user.AboutMe%></p></div>
+        <hr />
+        <p>
+          <%= image_tag("ActivityImage1.JPG", alt: "ActivityDetailsUserPhoto", class: "ActivityDetailsUserPhoto", id: "ActivityDetailsUserPhoto")%>
+        </p>
+        <div class="clearleft"><p>&nbsp;&nbsp;<a href="">X More Photo(s)</a></p></div>
+    </div>
+  </div>
 
-              <%= link_to 'Edit', edit_activity_path(@activity) %>
-        <%= link_to image_tag("RSVP.jpg", alt: "RSVP", style: "width: 150px;"), "#"%>
-        </td>
-              <td>
-        <%= link_to image_tag("KeepMeInTheLoop.jpg", alt: "KeepMeInTheLoop", style: "width: 150px;"), "#"%>
-
-              </td>
-              
-      </tr>
-  </table>
