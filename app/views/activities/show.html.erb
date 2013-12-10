@@ -18,7 +18,7 @@
     <div id="activitydetailsuser">
           <%= image_submit_tag("FollowButton.png", alt: "Follow", class: "follow", id: "follow")%>
           <p>Organized by...</p>
-          <p id="UserName"><%= link_to @user.UserId, "/showUser/" + @user.id.to_s %></a></p>
+          <p id="UserName"><%= link_to @user.UserId, "/showUser/" + @user.id.to_s %></p>
           <hr />
         <div class="clearleft"><p><%=@user.AboutMe%></p></div>
         <hr />

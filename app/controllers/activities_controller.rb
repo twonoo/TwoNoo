@@ -14,15 +14,23 @@ class ActivitiesController < ApplicationController
     if !(params[:activity_search].nil?)
       params[:activity_search].each do |key, value|
         if !(params[:activity_search][key].nil? or params[:activity_search][key].empty?)      
-          @searchParams << [key + " = ?", params[:activity_search][key]]
+          @searchParams << [key + " LIKE ?", "%#{params[:activity_search][key]}%"]
         end
       end   
     end
-    
+        
     if params.count <= 2 or @searchParams.count == 0
-      @activities = Activity.all  
+      if !(params[:username].nil? or params[:username].empty?) 
+        @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%")
+      else
+        @activities = Activity.all  
+      end
     else
-      @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+      if !(params[:username].nil? or params[:username].empty?) 
+        @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%").all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+      else
+        @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+      end
     end
     
   end

@@ -21,7 +21,7 @@
     </p>
     <p>
       <label>User Name:</label>
-      <input type="text" name="username" size="20" maxlength="20" placeholder="not working"/>
+      <input type="text" name="username" size="20" maxlength="20"/>
     </p>
   </div>
   <div class="findcolumn2">
@@ -61,13 +61,25 @@
             <tr>
           <% end %>
             <td>
-              <a href="TwoNoo-ActivityDetails.html" class="searchlink">
+              <a href="/activities/<%=activity.id%>" class="searchlink">
                 <div class="searchresult">
-                  <div class="activityname"><%=activity.Name%></div>
-                  <div class="time"><%=activity.ActivityTime%></div>
-                  <%= image_tag("KickballTeam.JPG", alt: "Activity", class: "ActivityPhoto") %>
-                  <div>Tuesday, July 9 @ Billy's Bar</div>
-                  <div>1234 Slippery Slope Lane, Aurora, CO</div>
+                  <div class="activityname"><%=activity.Name%></div><%= image_tag("KickballTeam.JPG", alt: "Activity", class: "ActivityPhoto") %><br/>
+                  <div class="time"><%=activity.ActivityTime%></div><br/>
+                  <div>
+                    <%if !(activity.ActivityDate.nil?)%>
+                      <%=activity.ActivityDate.strftime("%A")%>, <%=activity.ActivityDate.strftime("%B")%> <%=activity.ActivityDate.strftime("%d")%>
+                    <% end %>
+                    <%if !(activity.LocationName.nil?)%>
+                      @ <%=activity.LocationName%>
+                    <% end %>
+                  </div><br/>
+                  <div>
+                    <%=activity.StreetAddress1%>
+                    <% if !(activity.StreetAddress1.nil?) && !(activity.StreetAddress1.empty?) && !(activity.City.nil?)&& !(activity.City.empty?)%>, <% end %>
+                    <%=activity.City%>
+                    <% if !(activity.State.nil?) && !(activity.State.empty?) && !(activity.City.nil?)&& !(activity.City.empty?)%>, <% end %>
+                    <%=activity.State%>
+                  </div><br/>
                 </div>
               </a>
              </td>

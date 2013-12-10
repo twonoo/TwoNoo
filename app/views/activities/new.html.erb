@@ -1,6 +1,6 @@
 <% provide(:title, 'CREATE') %>
   <div>
-    <%= form_for(@activity) do |f| %>
+    <%= form_for(@activity, :html => { :multipart => true } ) do |f| %>
       <%= render 'shared/error_messages' %>
       	<div class="column1">
           <p>
@@ -15,21 +15,21 @@
           </p>
           <p>
             <label>Address:</label>
-            <input type="text" name="activityaddress" size="50" maxlength="100"/>
+            <%= f.text_field :StreetAddress1, size: 50, maxlength: 100 %>
           </p>
           <p>
             <label>City:</label>
-            <input type="text" name="activityCity" size="25" maxlength="50" required/>
+            <%= f.text_field :City, size: 25, maxlength: 50, required: true %>
             <label>State:</label>
-            <input type="text" name="activityState" size="2" maxlength="2" required/>
+            <%= f.text_field :State, size: 2, maxlength: 2, required: true %>
           </p>
           <p>
             <label>Venue Name:</label>
-            <input type="text" name="activityVenue" size="25" maxlength="50" placeholder="Example: Billy's Bar"/>
+            <%= f.text_field :LocationName, size: 25, maxlength: 50, placeholder: "Example: Billy's Bar" %>
           </p>
           <p>
             <label>Website URL:</label>
-            <input type="url" name="activityURL" size="25" maxlength="50"/>
+            <%= f.text_field :Website, size: 25, maxlength: 50 %>
           </p>
           <p>
             <label>Upload Photo:</label>

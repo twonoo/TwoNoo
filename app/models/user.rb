@@ -3,6 +3,7 @@ class DayValidator < ActiveModel::EachValidator
 end
 
 class User < ActiveRecord::Base
+  has_many :activities
   
   before_save { self.Email = self.Email.downcase }
   before_save { self.UserId = self.UserId.downcase }
