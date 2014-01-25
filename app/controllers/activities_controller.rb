@@ -54,6 +54,16 @@ class ActivitiesController < ApplicationController
     @activity.ModUserId = @activity.CreateUserId = current_user.id
     
     if @activity.save
+      uploaded_io = params[:activity][:picture]
+      @photoActivity = PhotoActivity.new
+      @photoActivity.ActivityId = @activity.id
+      @photoActivity.upload(uploaded_io)
+      @photoActivity.save
+
+#      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+#        file.write(uploaded_io.read)
+#      end
+    
       flash[:success] = "Activity Created!"
       redirect_to activity_path(@activity)
     else
