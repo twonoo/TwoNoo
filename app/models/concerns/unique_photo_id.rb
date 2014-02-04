@@ -1,10 +1,6 @@
 module UniquePhotoId
   extend ActiveSupport::Concern
 
-  included do
-    before_create :generate_unique_photo_id
-  end
-
   protected
 
   def generate_unique_photo_id

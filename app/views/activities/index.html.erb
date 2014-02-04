@@ -25,25 +25,26 @@
     </p>
   </div>
   <div class="findcolumn2">
-    <fieldset id="ActivityType">
-      <legend>Activity Type (Select ALL that apply):</legend>
-      <table>
-        <tr>
-          <td><input type="checkbox" name="activityType" value="Sports"/> Sports</td>
-          <td><input type="checkbox" name="activityType" value="Outdoors"/> Outdoors</td>
-          <td><input type="checkbox" name="activityType" value="Nightlife"/> Nightlife</td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" name="activityType" value="Arts"/> Arts</td>
-          <td><input type="checkbox" name="activityType" value="EatDrink"/> Eat & Drink</td>
-          <td><input type="checkbox" name="activityType" value="Community"/> Community</td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" name="activityType" value="Business"/> Business</td>
-          <td><input type="checkbox" name="activityType" value="Cool Stuff"/> Cool Stuff</td>
-        </tr>
-      </table>
-    </fieldset>
+      <fieldset id="ActivityType">
+        <legend>Activity Type (Select ALL that apply):
+        </legend>
+        <table>
+          <% @cellNum = 1 %>
+          <% @activityTypes.each do |activityType| %>
+            <% if @cellNum%3 == 1 %>
+              <tr>
+            <% end %>
+            <td><input type="checkbox" name="activityType[]" value="<%=activityType.id%>"/><%=activityType.Type%></td>
+            <% if @cellNum%3 == 0 %>
+              </tr>
+            <% end %>
+            <% @cellNum = @cellNum + 1 %>
+          <% end %>
+          <% if @cellNum%3 > 0 %>
+            </tr>
+          <% end %>
+        </table>
+      </fieldset>
       <p>
       	<input type="checkbox" name="Following" value="Following"/>Only show people I'm following
       </p>
@@ -63,7 +64,8 @@
             <td>
               <a href="/activities/<%=activity.id%>" class="searchlink">
                 <div class="searchresult">
-                  <div class="activityname"><%=activity.Name%></div><%= image_tag("KickballTeam.JPG", alt: "Activity", class: "ActivityPhoto") %><br/>
+                  <div class="activityname"><%=activity.Name%></div><% @mainPhoto = PhotoActivity.where("Activity_Id = ? AND MainPhoto = ?", activity.id, true).first
+                     unless @mainPhoto.nil? %><%= image_tag("activity/"+@mainPhoto.PhotoId, alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%><% end %>
                   <div class="time"><%=activity.ActivityTime%></div><br/>
                   <div>
                     <%if !(activity.ActivityDate.nil?)%>

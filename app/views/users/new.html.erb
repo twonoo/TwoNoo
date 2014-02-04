@@ -3,8 +3,46 @@
   $(function() {
     $( "#user_Birthday" ).datepicker();
   });
-  </script>
   
+  </script>
+ 
+<script>
+
+function scrolltobottom() {
+
+	$(".Acknowledged").attr("disabled",false);
+
+}
+
+</script>
+
+<script>
+
+function disclaimer() {
+
+	$(".AcknowledgedOuterDiv").scroll(function(){
+	
+		var outerDiv = $(this);
+		var innerDiv = $(">.AcknowledgedInnerDiv", $(this));
+		var ScrollSign = 1;
+		if (outerDiv.offset().top < innerDiv.outerHeight()) {
+		
+			ScrollSign = -1;
+		
+		}
+	
+		if (Math.round((ScrollSign * innerDiv.offset().top) + outerDiv.offset().top) >= innerDiv.outerHeight() && innerDiv.offset().top != 0) {
+		
+			$(".AcknowledgedCheckBox input").attr("disabled", false);
+		
+		}
+		
+	});
+
+}
+
+</script>
+
 <% if !@user.nil? && @user.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-error">
@@ -43,7 +81,24 @@
     <p>
       <%= f.radio_button :Sex, "Male", required: true %>Male
       <%= f.radio_button :Sex, "Female", required: true %>Female
-    </p>	
+    </p>
+
+<div id="AcknowledgedOuterDiv" onclick='enableCheckboxes();'>
+	<div id="AcknowledgedInnerDiv" style="height:200px;overflow:scroll">
+		Legal text starts here <BR><BR><BR>
+		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
+		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
+		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
+		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
+		Legal text ends here
+	</div>
+</div>
+	
+	<span class="AcknowledgedCheckbox">
+		<input disabled id="Acknowledged" type="Checkbox" onclick="scrolltobottom()">
+		<label for="Acknowledged">* I have read and agree to the terms outlined above.</label>
+	</span>
+	
   </div>
   <div class="signupcolumn2">
     <p>
@@ -59,5 +114,7 @@
       <%= f.password_field :password_confirmation, class: "signup", size: 25, maxlength: 50, required: true %>
     </p>
   </div>
+  
+
   <%= image_submit_tag("SignUpButton.png", alt: "Sign Up", class: "save", id: "save")%>
 <% end %>

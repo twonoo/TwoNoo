@@ -37,33 +37,33 @@
           </p>
           <p>
             <label>Description:</label>
-            <textarea name="activityDescription" cols="80" rows="4" class="required" placeholder="Describe you activity..." required></textarea>
+            <%=f.text_area :Description, cols: 80, rows: 4, class: "required", placeholder: "Describe you activity..." %>
           </p>
       	</div>
       	<div class="column2">
           <p>Allow others to RSVP for this activity?
             <br />
-            <input type="radio" name="AllowRSVP" value="Yes" checked="checked" />Yes
-            <input type="radio" name="AllowRSVP" value="No"/>No
+            <%= f.radio_button :rsvp, true, :checked => true %>Yes
+            <%= f.radio_button :rsvp, false %>No
           </p>      		
           <fieldset id="ActivityType">
             <legend>Activity Type (Select ALL that apply):
             </legend>
             <table>
-              <tr>
-                <td><input type="checkbox" name="activityType" value="Sports"/> Sports</td>
-                <td><input type="checkbox" name="activityType" value="Outdoors"/> Outdoors</td>
-                <td><input type="checkbox" name="activityType" value="Nightlife"/> Nightlife</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" name="activityType" value="Arts"/> Arts</td>
-                <td><input type="checkbox" name="activityType" value="EatDrink"/> Eat & Drink</td>
-                <td><input type="checkbox" name="activityType" value="Community"/> Community</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" name="activityType" value="Business"/> Business</td>
-                <td><input type="checkbox" name="activityType" value="Cool Stuff"/> Cool Stuff</td>
-              </tr>
+              <% @cellNum = 1 %>
+              <% @activityTypes.each do |activityType| %>
+                <% if @cellNum%3 == 1 %>
+                  <tr>
+                <% end %>
+                <td><input type="checkbox" name="activityType[]" value="<%=activityType.id%>"/><%=activityType.Type%></td>
+                <% if @cellNum%3 == 0 %>
+                  </tr>
+                <% end %>
+                <% @cellNum = @cellNum + 1 %>
+              <% end %>
+              <% if @cellNum%3 > 0 %>
+                </tr>
+              <% end %>
             </table>
           </fieldset>
         </div>

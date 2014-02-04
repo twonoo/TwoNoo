@@ -4,15 +4,21 @@
     <div id="activity">
         <div>
           <h1><%=@activity.Name%></h1>
+          <%=@activity.Website%>
           <div id="actdetailstime"><%=@activity.ActivityTime%></div>
         </div>
-        <p><%=@activity.ActivityDate%> @ @activity.ActivityVenue</p>
+        <p><%=@activity.ActivityDate%><% unless @activity.LocationName.nil? || @activity.LocationName.empty? %> @ <%=@activity.LocationName%><% end %></p>
         <p><%=@activity.City%>, <%=@activity.State%></p>
         <hr />
-        <p>@activity.Description</p>
+        <p><%=@activity.Description%></p>
         <hr />
-        <p><%= image_tag("ActivityImage3.JPG", alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%></p>
-        <%= image_submit_tag("RSVPButton.png", alt: "RSVP", class: "rsvp", id: "rsvp")%>
+        <p><% unless @mainPhoto.nil? %>
+          <%= image_tag("activity/"+@mainPhoto.PhotoId, alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%>
+          <% end %>
+        </p>
+        <% if @activity.rsvp %>
+          <%= image_submit_tag("RSVPButton.png", alt: "RSVP", class: "rsvp", id: "rsvp")%>
+        <% end %>
         <div class="clearleft"><p>&nbsp;&nbsp;<a href="">X More Photo(s) (Should probably only show this if this IS another photo other than the one shown</a></p></div>
     </div>
     <div id="activitydetailsuser">

@@ -23,15 +23,20 @@ class ActivitiesController < ApplicationController
       if !(params[:username].nil? or params[:username].empty?) 
         @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%")
       else
-        @activities = Activity.all  
+ #      @activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
+       @activities = Activity.all  
       end
     else
       if !(params[:username].nil? or params[:username].empty?) 
         @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%").all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
       else
-        @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+         #@activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
+       @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
       end
     end
+      # @activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
+    
+    @activityTypes = ActivityType.all
     
   end
   
@@ -39,10 +44,14 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
     
     @user = User.find(@activity.CreateUserId)
+    
+    # Get the photos for the Activity
+    @mainPhoto = PhotoActivity.where("Activity_Id = ? AND MainPhoto = ?", @activity.id, true).first
   end
   
   def new
     @activity = Activity.new
+    @activityTypes = ActivityType.all
   end
   
   def edit
@@ -53,19 +62,28 @@ class ActivitiesController < ApplicationController
     @activity = Activity.new(activity_params)
     @activity.ModUserId = @activity.CreateUserId = current_user.id
     
-    if @activity.save
-      uploaded_io = params[:activity][:picture]
-      @photoActivity = PhotoActivity.new
-      @photoActivity.ActivityId = @activity.id
-      @photoActivity.upload(uploaded_io)
-      @photoActivity.save
+    # For each ActivityType, let's create a new activity Type record
+    params[:activityType].each do |value|
+      @activity.activity_types << ActivityType.find(value)
+    end
 
+      if @activity.save
+      if params[:activity][:picture]
+        uploaded_io = params[:activity][:picture]
+        @photoActivity = PhotoActivity.new
+        @photoActivity.Activity_id = @activity.id
+        @photoActivity.MainPhoto = true
+        @photoActivity.upload(uploaded_io)
+        @photoActivity.save
+      end
+     
+      
 #      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
 #        file.write(uploaded_io.read)
 #      end
     
       flash[:success] = "Activity Created!"
-      redirect_to activity_path(@activity)
+      #redirect_to activity_path(@activity)
     else
       render 'new'
     end
@@ -90,7 +108,11 @@ class ActivitiesController < ApplicationController
                                        :State,
                                        :StreetAddress1,
                                        :StreetAddress2,
-                                       :Country)
+                                       :Country,
+                                       :LocationName,
+                                       :Description,
+                                       :rsvp,
+                                       :Website)
     end
 
     def resolve_layout
