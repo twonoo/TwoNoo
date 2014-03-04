@@ -2,17 +2,8 @@
   <%= link_to image_tag("TwoNooLogo-HandDrawn.jpg", alt: "TwoNoo", class: "logo"), '/', id: "logo" %>
   <% if (yield(:title) == 'SIGN UP') %>
   <% else if signed_in? %>
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <%=current_user.UserId%> <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to "Profile", current_user %></li>
-            <li><%= link_to "Settings", '#' %></li>
-            <li class="divider"></li>
-            <li>
-              <%= link_to "Sign out", signout_path, method: "delete" %>
-            </li>
-          </ul>
+    <div id="user"><%= link_to current_user.UserId, current_user %>  | <%= link_to "Sign out", signout_path, method: "delete" %><div>
+    <div class="counts">17 </div> Credits</div></div>
   <% else %>
   <div class="SignIn">
     <%= form_for(:session, url: sessions_path) do |f| %>

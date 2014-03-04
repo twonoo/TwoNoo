@@ -83,7 +83,7 @@ class ActivitiesController < ApplicationController
 #      end
     
       flash[:success] = "Activity Created!"
-      #redirect_to activity_path(@activity)
+      redirect_to activity_path(@activity)
     else
       render 'new'
     end

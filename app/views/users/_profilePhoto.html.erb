@@ -1,0 +1,17 @@
+<td>
+    <% unless profilePhoto.nil? %>
+      <% if profilePhoto.MainPhoto %>
+        <%= image_tag("profile/" + profilePhoto.PhotoId, alt: "MyPhotoPrimary", class: "MyPhotoPrimary", id: "MyPhotoPrimary")%>
+      <% else %>
+        <%= image_tag("profile/" + profilePhoto.PhotoId, alt: "MyPhoto", class: "MyPhoto", id: "MyPhoto")%>
+      <%end%>
+      <p>
+        <%= form_tag({controller: "users", action: "profilePictureUpdate"}) do %>
+          <%= hidden_field_tag "PhotoId", profilePhoto.PhotoId %>
+          <%= submit_tag "Delete" %>
+          <%= submit_tag "Primary Photo" %>
+        <% end %>
+      </p>
+
+    <% end %>
+</td>

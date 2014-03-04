@@ -1,16 +1,55 @@
 class UsersController < ApplicationController
   #layout :resolve_layout
 
+  def dashboard
+    @user = User.find(params[:id])
+  end
+
+  def messages
+    @user = User.find(params[:id])
+  end
+
+  def settings
+    @user = User.find(params[:id])
+  end
+
   def welcome
     @user = current_user
   end
 
   def show
     @user = User.find(params[:id])
+
+    # Get the photos for the Activity
+    @profilePhotos = ProfilePhoto.where("Users_id = ?", @user.id)
   end
 
   def showUser
     @user = User.find(params[:id])
+  end
+  
+  def profilePictureUpload
+    @user = current_user  
+ 
+    if params[:profilePicture][:picture]
+      uploaded_io = params[:profilePicture][:picture]
+      @profilePhoto = ProfilePhoto.new
+      @profilePhoto.Users_id = @user.id
+      @profilePhoto.MainPhoto = false
+      @profilePhoto.upload(uploaded_io)
+      @profilePhoto.save
+    end
+    
+    redirect_to :action => :show, :id => @user.id
+  end
+  
+  def profilePictureUpdate
+    @user = current_user  
+ 
+    #Get the Primary photo ID
+    #Update all photos to NOT be the primary
+    #Update the new photo be the primary
+    #If it did not succeed the set the orignal photo back to primary and somehow let the user know.
   end
 
   def update
@@ -35,6 +74,7 @@ class UsersController < ApplicationController
     
     if @user.save
       sign_in @user
+
       flash[:success] = "Welcome to TwoNoo!"
       redirect_to welcome_user_path(@user)
     else

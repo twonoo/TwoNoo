@@ -1,47 +1,41 @@
-<% provide(:title, 'SIGN UP') %>
+  <% provide(:title, 'SIGN UP') %>
   <script>
-  $(function() {
-    $( "#user_Birthday" ).datepicker();
-  });
+    $(document).ready(function(){
+      
+      $('#Terms').click(function(){
+        if ($('#Terms').is(':checked'))
+        {
+          $("#save").attr("disabled",false);
+        }
+        else
+        {
+          $("#save").attr("disabled",true);
+        }
+      });
+      
+      $('#save').click(function(){
+        if ($('#Terms').is(':checked'))
+        {
+          return true;
+        }
+        else
+        {
+          alert('Please review and accept the terms and conditions before continuing');
+          return false;
+        }
+      });
+    })
+    
+    $(function() {
+      $( "#user_Birthday" ).datepicker();
+    });
   
+    function scrolltobottom() {
+      $("#Terms").attr("disabled",false);
+    };
+    
+
   </script>
- 
-<script>
-
-function scrolltobottom() {
-
-	$(".Acknowledged").attr("disabled",false);
-
-}
-
-</script>
-
-<script>
-
-function disclaimer() {
-
-	$(".AcknowledgedOuterDiv").scroll(function(){
-	
-		var outerDiv = $(this);
-		var innerDiv = $(">.AcknowledgedInnerDiv", $(this));
-		var ScrollSign = 1;
-		if (outerDiv.offset().top < innerDiv.outerHeight()) {
-		
-			ScrollSign = -1;
-		
-		}
-	
-		if (Math.round((ScrollSign * innerDiv.offset().top) + outerDiv.offset().top) >= innerDiv.outerHeight() && innerDiv.offset().top != 0) {
-		
-			$(".AcknowledgedCheckBox input").attr("disabled", false);
-		
-		}
-		
-	});
-
-}
-
-</script>
 
 <% if !@user.nil? && @user.errors.any? %>
   <div id="error_explanation">
@@ -83,21 +77,6 @@ function disclaimer() {
       <%= f.radio_button :Sex, "Female", required: true %>Female
     </p>
 
-<div id="AcknowledgedOuterDiv" onclick='enableCheckboxes();'>
-	<div id="AcknowledgedInnerDiv" style="height:200px;overflow:scroll">
-		Legal text starts here <BR><BR><BR>
-		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
-		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
-		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
-		<BR><BR><BR><BR><BR><BR><BR><BR><BR>
-		Legal text ends here
-	</div>
-</div>
-	
-	<span class="AcknowledgedCheckbox">
-		<input disabled id="Acknowledged" type="Checkbox" onclick="scrolltobottom()">
-		<label for="Acknowledged">* I have read and agree to the terms outlined above.</label>
-	</span>
 	
   </div>
   <div class="signupcolumn2">
@@ -116,5 +95,19 @@ function disclaimer() {
   </div>
   
 
-  <%= image_submit_tag("SignUpButton.png", alt: "Sign Up", class: "save", id: "save")%>
+  <%= image_submit_tag("SignUpButton.png", alt: "Sign Up", class: "save", id: "save", disabled: true)%>
+  
+  <table border="0" cellpadding="0" cellspacing="0" style="border: 0; margin: 0; padding: 0; width: 100%; height: 100%;">
+<tr><td id="ifmtd" style="height: 100%;">
+<div><b>Terms, Conditions, Data Usage, and Cookies Usage</b></div>
+</td></tr>
+<tr><td id="ifmtd" style="height: 100%;">
+<iframe id="ifm" frameborder="0" style="border: 0; margin: 0; padding: 0; width: 100%; height: 100%;"
+src="/static_pages/terms"></iframe>
+</td></tr>
+</table>
+    	<p class="terms">
+    	    <td><input id="Terms" type="checkbox" name="Terms" value="YestoTerms" disabled="true"/>
+      	    When I click "Sign Up", I agree to all Terms, Conditions, Data usage, and Cookie usage</td>	
+    	</p>
 <% end %>

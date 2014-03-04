@@ -1,8 +1,16 @@
-
 <% provide(:title, "MY STUFF" )%>
-<%= form_for(@user) do |f| %>
-  <%= render 'shared/error_messages' %>
-  <div id="MyStuffUser">
+<div id="mystuffnav">
+  <ul>
+    <li class="mystuffnav"><%= link_to "DASHBOARD", "/dashboard/"+current_user.id.to_s %></li>
+    <li class="mystuffnav"><%= link_to "PROFILE", current_user, class: "selected" %></li>
+    <li class="mystuffnav"><%= link_to "SETTINGS", "#" %></li>
+    <li class="mystuffnav"><%= link_to "MESSAGES", "#" %></li>
+  </ul>
+</div>
+
+<%= render 'shared/error_messages' %>
+<div id="MyStuffUser">
+  <%= form_for(@user, :html => { :multipart => true } ) do |f|%>
     <div class="MyStuffTopcolumn1">
       <p>
         <label>First Name:</label>
@@ -44,126 +52,22 @@
         </p>
       </fieldset>
     </div>
-  <p>
-    <label>About me:</label>
-    <%= f.text_area :AboutMe, class: "signup", cols: 80, rows: 4 %>
-    <%= image_submit_tag("SaveButton.png", alt: "Save", class: "save", id: "save")%>
-  </p>
-<% end %>
-  <label>Upload Photo:</label>
-    <input type="file" name="MyPhoto"/>
-  <table>
-    <tr>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "ActivityPhoto") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "MyPhotoPrimary") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-      <td>
-        <%= image_tag("KickballTeam.JPG", class: "MyPhoto") %>
-        <form action="">
-          <p>
-            <input type="button" name="Delete" value="Delete" />
-            <input type="button" name="Primary" value="Primary Photo" />
-          </p>
-        </form>
-      </td>
-    </tr>
-  </table>
-</div>
-<div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;My Activities</b>
-  <table>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Trivia Tuesdays</div>
-      <div>Tuesday, July 9 @ Billy's Bar</div>
-      </div></td></a>
-    </tr>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Libertarians of Denver Monthly Meeting</div>
-      <div>Wednesday, July 10 @ St. Mark's Coffee Shop</div>
-      </div></td></a>
-    </tr>
-            <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Trivia Tuesdays</div>
-      <div>Tuesday, July 9 @ Billy's Bar</div>
-      </div></td></a>
-    </tr>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Libertarians of Denver Monthly Meeting</div>
-      <div>Wednesday, July 10 @ St. Mark's Coffee Shop</div>
-      </div></td></a>
-    </tr>
-            <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Trivia Tuesdays</div>
-      <div>Tuesday, July 9 @ Billy's Bar</div>
-      </div></td></a>
-    </tr>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
-      <div class="activityname">Libertarians of Denver Monthly Meeting</div>
-      <div>Wednesday, July 10 @ St. Mark's Coffee Shop</div>
-      </div></td></a>
-    </tr>
-  </table>
-</div>
-<div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;People I'm Following</b>
-  <table>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
-      <div class="following">
-        <div class="activityname">Michael Jackson</div>
-        <img class="FollowingPhoto" src="images/ActivityImage2.jpg">
-      </div></a>
-      </td>
-    </tr>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
-      <div class="following">
-        <div class="activityname">Frank Underwood</div>
-        <img class="FollowingPhoto" src="images/ActivityImage1.jpg">
-      </div></a>
-      </td>
-    </tr>
-  </table>
-</div>
-<div class="MyStuffBottom">
-  <b>&nbsp;&nbsp;People Following Me</b>
-  <table>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
-      <div class="following">
-        <div class="activityname">Michael Jackson</div>
-        <img class="FollowingPhoto" src="images/ActivityImage2.jpg">
-      </div></a>
-      </td>
-    </tr>
-    <tr>
-      <td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
-      <div class="following">
-        <div class="activityname">Frank Underwood</div>
-        <img class="FollowingPhoto" src="images/ActivityImage1.jpg">
-      </div></a>
-      </td>
-    </tr>
-  </table>
+    <p>
+      <label>About me:</label>
+      <%= f.text_area :AboutMe, class: "signup", cols: 80, rows: 4 %>
+      <%= image_submit_tag("SaveButton.png", alt: "Save", class: "save", id: "save")%>
+    </p>
+  <% end %> 
+  <%= form_tag({controller: "users", action: "profilePictureUpload"}, {:remote => true, :multipart => true, :authenticity_token => true }) do %>
+    <label>Upload Photo:</label>
+      <%= file_field 'profilePicture', :picture %>
+      <%= submit_tag "Upload" %>
+  <% end %>
+  <div style="width:900px;overflow:auto;">
+    <table>
+      <tr>
+        <%= render partial: "profilePhoto", collection: @profilePhotos %>
+      </tr>
+    </table>
+ </div>
 </div>

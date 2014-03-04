@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>TwoNoo <%= yield(:title) %></title>
+    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+    <%= render 'layouts/shim' %>
+    
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(window).scroll(function(){
+          if ($(window).scrollTop() == $(document).height() - $(window).height()){
+            parent.scrolltobottom();
+          }
+        });
+      })
+
+    </script>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>

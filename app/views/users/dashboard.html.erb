@@ -1,0 +1,129 @@
+<% provide(:title, "MY STUFF" )%>
+<div id="mystuffnav">
+  <ul>
+    <li class="mystuffnav"><%= link_to "DASHBOARD", "/dashboard/"+current_user.id.to_s, class: "selected" %></li>
+    <li class="mystuffnav"><%= link_to "PROFILE", current_user %></li>
+    <li class="mystuffnav"><%= link_to "SETTINGS", "/settings/"+current_user.id.to_s %></li>
+    <li class="mystuffnav"><%= link_to "MESSAGES", "/messages/"+current_user.id.to_s %></li>
+  </ul>
+</div>
+            <div class="MyStuffBottom">
+      <div class="HeaderDashboard">My Activities (6)</div>
+      <table>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Trivia Tuesdays</div>
+      		<div>Tuesday, July 9 @ Billy's Bar</div>
+      		<div>Views: <div class="counts">1,321</div><div class="rsvps">RSVPs: <div class="counts">22</div></div></div>
+      		</div></td></a>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Libertarians of Denver Monthly Meeting</div>
+      		<div>Wednesday, July 10 @ St. Mark's Coffee Shop</div>
+      		<div>Views: <div class="counts">74</div></div>
+      		</div></td></a>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Trivia Tuesdays</div>
+      		<div>Tuesday, July 16 @ Billy's Bar</div>
+      		<div>Views: <div class="counts">89</div><div class="rsvps">RSVPs: <div class="counts">7</div></div></div>
+      		</div></td></a>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Hiking in Lyons</div>
+      		<div>Saturday, August 1</div>
+      		<div>Views: <div class="counts">742</div><div class="rsvps">RSVPs: <div class="counts">31</div></div></div>
+      		</div></td></a>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Pickup Soccer Game</div>
+      		<div>Sunday, August 2 @ City Park</div>
+      		<div>Views: <div class="counts">183</div><div class="rsvps">RSVPs: <div class="counts">16</div></div></div>
+      		</div></td></a>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink"><div class="eachactivity">
+      		<div class="activityname">Homeless Shelter Volunteer</div>
+      		<div>Tuesday, August 16 @ Colfax Mission</div>
+      		<div>Views: <div class="counts">220</div></div>
+      		</div></td></a>
+      	</tr>
+    	</table>
+    	</div>
+    <div class="MyStuffBottom">
+      <div class="HeaderDashboard">I'm Following (6)</div>
+      <table>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage2.jpg">
+      			<div class="followinguser">Michael Jackson</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage1.jpg">
+      			 <div class="followinguser">Frank Underwood</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage3.jpg">
+      			<div class="followinguser">Amy Jekich</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/kickballteam.jpg">
+      			 <div class="followinguser">Dizzy Gillespie</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage1.jpg">
+      			<div class="followinguser">Larry Bird</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage1.jpg">
+      			 <div class="followinguser">Mike Tyson</div>
+      		</div></a>
+      		</td>
+      	</tr>
+    	</table>
+    	</div>
+    	<div class="MyStuffBottom">
+      <div class="HeaderDashboard">Following Me (2)</div>
+      <table>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage2.jpg">
+      			<div class="followinguser">Michael Jackson</div>
+      		</div></a>
+      		</td>
+      	</tr>
+      	<tr>
+      		<td class="MyStuff"><a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      		<div class="following">
+      			<img class="FollowingPhoto" src="images/ActivityImage1.jpg">
+      			<div class="followinguser">Frank Underwood</div>
+      		</div></a>
+      		</td>
+      	</tr>
+    	</table>
+    	</div>

@@ -26,8 +26,7 @@
   </div>
   <div class="findcolumn2">
       <fieldset id="ActivityType">
-        <legend>Activity Type (Select ALL that apply):
-        </legend>
+        <legend>Activity Type (Select ALL that apply):</legend>
         <table>
           <% @cellNum = 1 %>
           <% @activityTypes.each do |activityType| %>
@@ -45,6 +44,7 @@
           <% end %>
         </table>
       </fieldset>
+      <br/>
       <p>
       	<input type="checkbox" name="Following" value="Following"/>Only show people I'm following
       </p>

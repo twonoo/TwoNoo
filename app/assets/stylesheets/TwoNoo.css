@@ -36,22 +36,25 @@ img.ActivityDetailsUserPhoto {
 	display: block;
 	margin: 5px;}
 input.save {
-	width: 200px;
+	width: 130px;
 	float: right;
-	margin: 10px;}
+	margin: auto 20px auto auto;}
 input.search {
 	width: 150px;
 	float: right;
 	margin: 10px;}
 input.rsvp {
-	width: 200px;
+	width: 140px;
 	float: right;
-	margin: 10px;}
+	margin: 30px;}
 input.follow {
 	width: 130px;
 	float: right;
 	margin: 5px;}
 #user {
+	float: right;
+	margin: 10px;}
+div#user {
 	float: right;
 	margin: 10px;}
 div.PageTitle {
@@ -65,7 +68,7 @@ nav {
 	clear: both;
 	color: black;
 	background-color: #3CB371;
-	background-image: url("/assets/NewGreenBanner.png");
+	background-image: url("images/NewGreenBanner.png");
 	background-size: 100% 80%;
 	background-repeat: no-repeat;
 	background-position: 0px 5px;
@@ -76,6 +79,7 @@ nav {
 footer {
 	clear: both;
 	color: #ffffff;
+	background-image: linear-gradient(#3CB371, white);
 	background-color: #3CB371;
 	height: 30px;
 	border-top: 1px solid #000000;
@@ -84,12 +88,17 @@ footer {
 div.collapsebar {
 	clear: both;
 	color: #ffffff;
+	background-image: linear-gradient(#3CB371, white);
 	background-color: #3CB371;
 	height: 20px;
 	border-top: 1px solid #000000;
 	border-bottom: 1px solid #000000;
 	font-size: 60%;
 	margin: 20px 0px 0px 0px;}
+#floatleft { 
+	clear: both;
+	float: left;
+	display: block;}
 input:required {
 	border-color: red;
 	border-width:2px;}
@@ -143,7 +152,7 @@ div.time {
 	display: inline;}	
 #activity {
 	width:570px;
-	height:600px;
+	height:680px;
 	float: left;
 	padding: 5px;
 	border: 1px solid black;
@@ -152,7 +161,7 @@ div.time {
 	margin: 5px;}
 #activitydetailsuser {
 	width:330px;
-	height:600px;
+	height:680px;
 	float: right;
 	padding: 5px;
 	border: 1px solid black;
@@ -162,14 +171,26 @@ div.time {
 div.clearleft {
 	clear: left;}
 #actdetailstime {
+	display: inline;
 	float: right;
-	margin: 10px;}
+	margin-right: 10px;}
 #UserName {
 	color: Blue;
 	font-weight: bold;}
 a.searchlink {
 	text-decoration: none;
 	color: #666666;}
+.EditActivity {
+	line-height: 1em;
+	font-size: 100%;
+	padding: 10px;
+	border: 2px solid black;
+	border-radius: 5px;
+	width:60px;
+	float:right;
+	margin: 10px;
+	display: inline;
+	background-color: #3CB371;}
 
 /*Main Page Specific*/
 
@@ -226,6 +247,9 @@ input.signup {
 	width:320px;
 	float: left;
 	margin: 10px;}
+p.terms {
+	margin-left: 20px;
+	clear: both;}	
 	
 /*My Stuff Specific*/
 #MyStuffUser {
@@ -266,9 +290,10 @@ div.MyStuffBottom {
 	float: left;
 	display: inline;
 	width: 300px;
-	height: 200px;
+	height: 360px;
 	border-radius: 20px;
 	margin: 2px 5px 2px 5px;;
+	background-image: linear-gradient(#DCDCDC, white);
 	background-color: #DCDCDC;}
 .eachactivity {
 	background-color: #ffffff;
@@ -279,7 +304,16 @@ div.MyStuffBottom {
 	border-radius: 10px;
 	width:240px;
 	margin: 0px auto 0px auto;}
+div.rsvps {
+	float: right;
+	margin-right: 5px;
+	display: inline;}
+div.counts {
+	display: inline;
+	color: blue;
+	font-weight: bold;}	
 .MyStuff {
+	clear: both;
 	padding: 2px 2px 2px 2px;}
 img.FollowingPhoto {
 	max-width: 90px;
@@ -293,7 +327,49 @@ div.following {
 	padding: 2px;
 	border: 1px solid #3CB371;
 	border-radius: 10px;
-	width:150px;
+	width:260px;
 	height:80px;
 	margin: 0px auto 0px auto;}
- 
+div.followinguser {
+	margin: 2px 5px auto auto;
+	color: black;
+	font-weight: bold;
+	float: right;
+	font-size: 120%;
+	display: inline;}
+div.HeaderDashboard {
+	font-weight: bold;
+	text-align: center;}
+#mystuffnav {
+	clear: both;
+	color: black;
+	background-color: none;
+	padding: auto;}
+#mystuffnav a {
+	color:black;
+	text-decoration: none;
+	border-width: 2px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: black;
+	padding: 5px;
+	}	
+#mystuffnav a.selected {
+	background-color: #3CB371;
+	background-image: linear-gradient(#3CB371 60%, white);
+	color: white;
+	text-decoration: none;
+	}	
+#mystuffnav a:hover {
+	background-color: #3CB371;
+	background-image: linear-gradient(#3CB371 60%, white);
+	color: white;
+	text-decoration: none;
+	}	
+li.mystuffnav {
+	display: inline;
+	color: black;
+	font-size: 150%;
+	margin:  5px;
+ }	
+	

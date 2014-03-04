@@ -1,6 +1,7 @@
 TwoNoo::Application.routes.draw do
   get "static_pages/about"
   get "static_pages/contact"
+  get "static_pages/terms"
   resources :users
   resources :activities
   resources :sessions, only: [:new, :create, :destroy]
@@ -12,7 +13,12 @@ TwoNoo::Application.routes.draw do
   match 'activities/search', to: 'activities#search',        via: 'get'
   match 'activities/search', to: 'activities#search',        via: 'post'
   match '/showUser/:id',  to: 'users#showUser',            via: 'get'
-
+  match '/dashboard/:id',  to: 'users#dashboard',            via: 'get'
+  match '/messages/:id',  to: 'users#messages',            via: 'get'
+  match '/settings/:id',  to: 'users#settings',            via: 'get'
+  match '/users/profilePictureUpload',  to: 'users#profilePictureUpload',            via: 'post'
+  match '/users/profilePictureUpdate',  to: 'users#profilePictureUpdate',            via: 'post'
+  
   get "welcome/index"
   get "users/login"
   get "users/show"

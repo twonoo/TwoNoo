@@ -1,0 +1,14 @@
+<% provide(:title, "MY STUFF" )%>
+<div id="mystuffnav">
+  <ul>
+    <li class="mystuffnav"><%= link_to "DASHBOARD", "/dashboard/"+current_user.id.to_s %></li>
+    <li class="mystuffnav"><%= link_to "PROFILE", current_user %></li>
+    <li class="mystuffnav"><%= link_to "SETTINGS", "/settings/"+current_user.id.to_s %></li>
+    <li class="mystuffnav"><%= link_to "MESSAGES", "/messages/"+current_user.id.to_s, class: "selected" %></li>
+  </ul>
+</div>
+
+      <div id="MyStuffUser">
+      	<p>TBD</p>
+      </div>
+
