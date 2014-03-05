@@ -47,9 +47,31 @@ class UsersController < ApplicationController
     @user = current_user  
  
     #Get the Primary photo ID
-    #Update all photos to NOT be the primary
-    #Update the new photo be the primary
+    @mainPhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", @user.id, true).first
+    @photo = ProfilePhoto.find(params[:PhotoId])
+
+    if params[:todo] == "delete"
+      @photo = ProfilePhoto.find(params[:PhotoId])
+      @photo.destroy
+    else
+      #Update all photos to NOT be the primary
+      unless @mainPhoto.nil?
+        @mainPhoto.MainPhoto = false
+        @mainPhoto.save
+      end
+      
+      #Update the new photo be the primary
+      unless @photo.nil?
+        @photo.MainPhoto = true
+        @photo.save
+      end
+      
+    end
+    
     #If it did not succeed the set the orignal photo back to primary and somehow let the user know.
+    redirect_to :action => :show, :id => @user.id
+    
+    
   end
 
   def update
@@ -88,13 +110,15 @@ class UsersController < ApplicationController
       params.require(:user).permit(:FirstName, :LastName,
                                    :Email, :UserId,
                                    :password, :password_confirmation,
-                                   :Birthday, :AboutMe)
+                                   :Birthday, :AboutMe,
+                                   :Sex)
     end
           
     def user_params_no_pass
       params.require(:user).permit(:FirstName, :LastName,
                                    :Email, :UserId,
-                                   :Birthday, :AboutMe)
+                                   :Birthday, :AboutMe,
+                                   :Sex)
     end
     
     def resolve_layout

@@ -3,8 +3,8 @@
   <ul>
     <li class="mystuffnav"><%= link_to "DASHBOARD", "/dashboard/"+current_user.id.to_s %></li>
     <li class="mystuffnav"><%= link_to "PROFILE", current_user, class: "selected" %></li>
-    <li class="mystuffnav"><%= link_to "SETTINGS", "#" %></li>
-    <li class="mystuffnav"><%= link_to "MESSAGES", "#" %></li>
+    <li class="mystuffnav"><%= link_to "SETTINGS", "/settings/"+current_user.id.to_s %></li>
+    <li class="mystuffnav"><%= link_to "MESSAGES", "/messages/"+current_user.id.to_s %></li>
   </ul>
 </div>
 
@@ -26,7 +26,7 @@
       </p>
       <p>
         <label>Birthday:</label>
-        <%= f.date_field :Birthday, class: "signup", require: true, :value => @user.Birthday %>
+        <%= f.date_field :Birthday, class: "signup", require: true, value: @user.Birthday.to_date %>
       </p>
       <p>
         <%= f.radio_button :Sex, "Male", required: true %>Male
