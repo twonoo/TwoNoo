@@ -1,0 +1,18 @@
+<tr>
+  <td class="MyStuff">
+    <a href="/activities/<%=myActivity.id%>" class="searchlink">
+      <div class="eachactivity">
+        <div class="activityname"><%=myActivity.Name%></div>
+        <div>
+          <%if !(myActivity.ActivityDate.nil?)%>
+            <%=myActivity.ActivityDate.strftime("%A")%>, <%=myActivity.ActivityDate.strftime("%B")%> <%=myActivity.ActivityDate.strftime("%d")%>
+          <% end %>
+          <%if !(myActivity.LocationName.nil?)%>
+            @ <%=myActivity.LocationName%>
+          <% end %>
+        </div>
+        <div>Views: <div class="counts">X</div></div>
+      </div>
+    </a>
+  </td>
+</tr>

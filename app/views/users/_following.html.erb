@@ -1,0 +1,16 @@
+<tr>
+  <td class="MyStuff">
+    <a href="TwoNoo-ActivityDetails.html" class="searchlink">
+      <div class="following">
+        <% @followedUser = User.find(following.user_id2)
+           @profilePhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", following.user_id2, true).first %>
+        <% unless @profilePhoto.nil? %>
+          <%= image_tag("profile/" + @profilePhoto.PhotoId, alt: "FollowingPhoto", class: "FollowingPhoto", id: "FollowingPhoto")%> 
+        <% end %>
+        <div class="followinguser">
+          <%= @followedUser.FirstName %> <%= @followedUser.LastName %>
+        </div>
+      </div>
+    </a>
+  </td>
+</tr>

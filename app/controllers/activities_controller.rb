@@ -44,6 +44,7 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
     
     @user = User.find(@activity.CreateUserId)
+    @profilePhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", @user.id, true).first
     
     # Get the photos for the Activity
     @mainPhoto = PhotoActivity.where("Activity_Id = ? AND MainPhoto = ?", @activity.id, true).first

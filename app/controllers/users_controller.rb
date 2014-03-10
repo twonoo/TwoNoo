@@ -3,8 +3,27 @@ class UsersController < ApplicationController
 
   def dashboard
     @user = User.find(params[:id])
+    
+    @activities = Activity.where("CreateUserId = ?", @user.id)
+    @followings = Following.where("user_id1 = ?", @user.id)
+    @followingMes = Following.where("user_id2 = ?", @user.id)
+    
   end
 
+  def followUser
+    @user = current_user
+    @userToFollow = User.find(params[:UserId])
+    
+    #Make sure they aren't both null
+    unless @user.nil? && @userToFollow.nil?
+      @following = Following.new
+      @following.user_id1 = @user.id
+      @following.user_id2 = @userToFollow.id
+      @following.save
+    end
+    
+  end
+  
   def messages
     @user = User.find(params[:id])
   end
@@ -26,21 +45,6 @@ class UsersController < ApplicationController
 
   def showUser
     @user = User.find(params[:id])
-  end
-  
-  def profilePictureUpload
-    @user = current_user  
- 
-    if params[:profilePicture][:picture]
-      uploaded_io = params[:profilePicture][:picture]
-      @profilePhoto = ProfilePhoto.new
-      @profilePhoto.Users_id = @user.id
-      @profilePhoto.MainPhoto = false
-      @profilePhoto.upload(uploaded_io)
-      @profilePhoto.save
-    end
-    
-    redirect_to :action => :show, :id => @user.id
   end
   
   def profilePictureUpdate
@@ -70,10 +74,24 @@ class UsersController < ApplicationController
     
     #If it did not succeed the set the orignal photo back to primary and somehow let the user know.
     redirect_to :action => :show, :id => @user.id
-    
-    
+        
   end
 
+  def profilePictureUpload
+    @user = current_user  
+ 
+    if params[:profilePicture][:picture]
+      uploaded_io = params[:profilePicture][:picture]
+      @profilePhoto = ProfilePhoto.new
+      @profilePhoto.Users_id = @user.id
+      @profilePhoto.MainPhoto = false
+      @profilePhoto.upload(uploaded_io)
+      @profilePhoto.save
+    end
+    
+    redirect_to :action => :show, :id => @user.id
+  end
+  
   def update
     @user = User.find(params[:id])
     
