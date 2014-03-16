@@ -19,6 +19,7 @@ TwoNoo::Application.routes.draw do
   match '/users/profilePictureUpload',  to: 'users#profilePictureUpload',            via: 'post'
   match '/users/profilePictureUpdate',  to: 'users#profilePictureUpdate',            via: 'post'
   match '/users/followUser',  to: 'users#followUser',            via: 'post'
+  match '/users/unfollowUser',  to: 'users#unfollowUser',            via: 'post'
   
   get "welcome/index"
   get "users/login"

@@ -10,33 +10,68 @@ class ActivitiesController < ApplicationController
     @searchClause = ""
     @searchParams = []
     @first = true
+    @bActivityDate = false
     
     if !(params[:activity_search].nil?)
       params[:activity_search].each do |key, value|
         if !(params[:activity_search][key].nil? or params[:activity_search][key].empty?)      
+          if key == "ActivityDate"
+            @bActivityDate = true
+          end
           @searchParams << [key + " LIKE ?", "%#{params[:activity_search][key]}%"]
         end
       end   
     end
-        
-    if params.count <= 2 or @searchParams.count == 0
-      if !(params[:username].nil? or params[:username].empty?) 
-        @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%")
+    
+    unless @bActivityDate
+      @date = Time.now
+      
+      @searchParams << ["ActivityDate is null OR ActivityDate = ?", @date.strftime("%Y-%m-%d")]
+    end
+      
+    @joins = ""
+    @where = ""
+    
+    if !(params[:username].nil? or params[:username].empty?) 
+      @joins = "INNER JOIN users on users.id = activities.CreateUserId "
+      @where = "users.UserId LIKE '%" + params[:username] + "%' "
+    end
+    
+    unless params[:Following].nil?
+      @joins = @joins + "INNER JOIN followings on followings.user_id2 = activities.CreateUserId "
+      
+      unless @where.empty?
+        @where = @where + "AND "
+      end
+      
+      @where = @where + "followings.user_id1 = " + current_user.id.to_s + " "
+    end
+    
+    unless @joins.empty? and @where.empty?
+      unless @searchParams.size == 0
+        @activities = Activity.joins(@joins).where(@where).all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
       else
- #      @activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
-       @activities = Activity.all  
+        @activities = Activity.joins(@joins).where(@where).all
       end
     else
-      if !(params[:username].nil? or params[:username].empty?) 
-        @activities = Activity.joins(:user).where("users.UserId LIKE ?", "%#{params[:username]}%").all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+       #@activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
+      unless @searchParams.size == 0
+        @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
       else
-         #@activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
-       @activities = Activity.all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
+      #      @activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
+        @activities = Activity.all 
       end
+        
     end
+    
       # @activities = Activity.joins(:activity_types).where("activity_type_id = ?", params[:activityTypes])
     
+    # if !(params[:Following].nil? or params[:Following].empty?) 
+        # @activities = Activity.joins("INNER JOIN followings on followings.user_id2 = activities.CreateUserId").where("followings.user_id1 = ?", current_user.id)
+    # end
+    
     @activityTypes = ActivityType.all
+    
     
   end
   

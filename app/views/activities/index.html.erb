@@ -46,7 +46,7 @@
       </fieldset>
       <br/>
       <p>
-      	<input type="checkbox" name="Following" value="Following"/>Only show people I'm following
+      	<input type="checkbox" name="Following" <%=params[:Following].nil? ? '':"checked=true" %>/>Only show people I'm following
       </p>
   </div>
   <%= image_submit_tag("SearchButton.png", alt: "Search", class: "search", id: "search")%>

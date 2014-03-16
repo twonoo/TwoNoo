@@ -1,16 +1,23 @@
 <tr>
   <td class="MyStuff">
-    <a href="TwoNoo-ActivityDetails.html" class="searchlink">
-      <div class="following">
-        <% @followedUser = User.find(following.user_id2)
-           @profilePhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", following.user_id2, true).first %>
+    <div class="following">
+      <% @followedUser = User.find(following.user_id2)
+         @profilePhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", following.user_id2, true).first %>
+      <a href="/activities?username=<%=@followedUser.UserId%>&Following=on" class="searchlink">
+
         <% unless @profilePhoto.nil? %>
           <%= image_tag("profile/" + @profilePhoto.PhotoId, alt: "FollowingPhoto", class: "FollowingPhoto", id: "FollowingPhoto")%> 
         <% end %>
         <div class="followinguser">
           <%= @followedUser.FirstName %> <%= @followedUser.LastName %>
         </div>
-      </div>
-    </a>
+      </a>
+      <%= form_tag({controller: "users", action: "unfollowUser"}) do %>
+        <%= hidden_field_tag "UserId", following.user_id2 %>
+        <div class="stopfollowing">
+          <%= submit_tag "Stop Following" %>
+        </div>
+      <% end %>
+    </div>
   </td>
 </tr>

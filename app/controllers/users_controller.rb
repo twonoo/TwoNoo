@@ -36,17 +36,6 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
-  def show
-    @user = User.find(params[:id])
-
-    # Get the photos for the Activity
-    @profilePhotos = ProfilePhoto.where("Users_id = ?", @user.id)
-  end
-
-  def showUser
-    @user = User.find(params[:id])
-  end
-  
   def profilePictureUpdate
     @user = current_user  
  
@@ -121,7 +110,27 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
+
+  def show
+    @user = User.find(params[:id])
+
+    # Get the photos for the Activity
+    @profilePhotos = ProfilePhoto.where("Users_id = ?", @user.id)
+  end
+
+  def showUser
+    @user = User.find(params[:id])
+  end
   
+  def unfollowUser
+    @user = current_user
+    @userToFollow = User.find(params[:UserId])
+
+    Following.where("user_id1 = ? and user_id2 = ?", @user.id, @userToFollow.id).destroy_all
+    
+    redirect_to :action => :dashboard, :id => @user.id
+  end
+    
   private
 
     def user_params
