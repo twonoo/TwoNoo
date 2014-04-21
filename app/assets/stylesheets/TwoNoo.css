@@ -8,8 +8,8 @@ body	{
 .wrapper {
 	width: 940px;
 	margin: 20px auto auto auto;
-	border: 2px solid #000000;
 	background-color: #ffffff;}
+	/*border: 2px solid #000000;*/
 .nav {
 	margin: 5px auto auto 30px;
 	height: 50px;}
@@ -60,15 +60,23 @@ div#user {
 div.PageTitle {
 	display: inline;
 	float: right;
+	color: #3CB371;
+	text-shadow:
+    -1px -1px 0 black,
+    0px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    0px 1px 0 black,
+    1px 1px 0 black;
 	font-size: 2em;
-	margin: 20px;}	
+	margin: 20px 10px auto auto;}	
 header {
 	height 100px;}
 nav {
 	clear: both;
 	color: black;
+	background-image: linear-gradient(black, white);
 	background-color: #3CB371;
-	background-image: url("images/NewGreenBanner.png");
 	background-size: 100% 80%;
 	background-repeat: no-repeat;
 	background-position: 0px 5px;
@@ -76,6 +84,7 @@ nav {
 	height: 60px;
 	border-bottom: 1px solid #000000;
 	border-top: 1px solid #000000;}
+	/*background-image: url("images/NewGreenBanner.png");*/
 footer {
 	clear: both;
 	color: #ffffff;
@@ -170,6 +179,15 @@ div.time {
 	margin: 5px 5px auto auto;}
 div.clearleft {
 	clear: left;}
+div.cancelrsvp {
+	margin: 5px 5px auto 5px;
+	padding: 1px 1px 1px 1px;
+	color: green;
+	font-weight: bold;
+	float: left;
+	border: 2px solid red;
+	font-size: 100%;
+	display: inline;}
 #actdetailstime {
 	display: inline;
 	float: right;
@@ -191,6 +209,30 @@ a.searchlink {
 	margin: 10px;
 	display: inline;
 	background-color: #3CB371;}
+.EditActPhotos {
+    width:600px;}
+.CancelButtons {
+	line-height: 1em;
+	font-size: 80%;
+	color: white;
+	padding: 10px;
+	border: 2px solid black;
+	border-radius: 5px;
+	float: right;
+	margin: 10px;
+	display: block;
+	clear: both;
+	background-color: red;}
+.CancelRSVP {
+	line-height: 1em;
+	font-size: 100%;
+	padding: 10px;
+	border: 2px solid red;
+	border-radius: 5px;
+	width:120px;
+	float:right;
+	margin: 10px;
+	display: inline;}
 
 /*Main Page Specific*/
 
@@ -233,6 +275,18 @@ input.signin {
 	text-align: center;
 	width:200px;
 	float: right;}
+.Forgot {
+	line-height: 1.3em;
+	font-size: 120%;
+	text-align: left;
+	padding: 10px;
+	margin: 10px;
+	float: center;
+	clear: both;
+	border: 1px solid;
+	border-radius: 20px;
+	width:500px;
+	margin: auto auto auto auto}
 
 /*Sign Up Specific*/	
 
@@ -337,6 +391,15 @@ div.followinguser {
 	float: right;
 	font-size: 120%;
 	display: inline;}
+div.stopfollowing {
+	margin: 20px 5px auto 20px;
+	padding: 1px 1px 1px 1px;
+	color: green;
+	font-weight: bold;
+	float: right;
+	border: 2px solid red;
+	font-size: 100%;
+	display: inline;}
 div.HeaderDashboard {
 	font-weight: bold;
 	text-align: center;}
@@ -372,4 +435,130 @@ li.mystuffnav {
 	font-size: 150%;
 	margin:  5px;
  }	
-	
+ 
+/* Admin Specific */
+.ApprovePhotosItem {
+	clear: both;
+	padding: 2px 2px 2px 2px;}
+div.ApprovePhotos {
+	background-color: #ffffff;
+	line-height: 1.2em;
+	font-size: 80%;
+	padding: 2px;
+	border: 1px solid #3CB371;
+	border-radius: 10px;
+	width:400px;
+	height:80px;
+	margin: 0px auto 0px auto;}
+div.ApprovePhotoDetail {
+	color: black;
+	clear: left;
+	float: left;}
+img.AdminPhoto {
+	max-width: 90px;
+	max-height: 72px;
+	float: right;
+	margin: 2px;}
+#photosapprove {
+	width:900px;
+	float: left;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 20px;
+	background-color: white;
+	margin: 5px;}	
+img.ApprovePhoto {
+	max-width: 250px;
+	max-height: 185px;
+	float: left;
+	display: inline;}
+.ApprovalButtons {
+	line-height: 1em;
+	font-size: 100%;
+	padding: 10px;
+	border: 2px solid black;
+	border-radius: 5px;
+	float:right;	
+	margin: 10px;
+	display: inline;
+	background-color: #3CB371;}
+div.ApprovePhoto {
+	float: left;
+	display: inline;
+	margin: 5px;}
+img.BlockPhoto {
+	max-width: 250px;
+	max-height: 185px;
+	float: left;
+	margin: 5px;
+	display: inline;}
+.Block {
+	line-height: 1.3em;
+	font-size: 120%;
+	text-align: left;
+	padding: 10px;
+	margin: 10px auto 10px auto;
+	float: center;
+	clear: both;
+	border: 1px solid;
+	border-radius: 20px;
+	width:500px;}
+.adjustbox {
+	margin: 5px;
+	float: right;}
+#credits {
+	color: red;
+	font-weight: bold;}
+.signedOut{
+	text-align: right;
+}
+
+  /* Credits Screen */
+
+ div.addUseL {
+	float: left;
+	width: 50%;
+	text-align: center;
+ }
+ 
+ div.addUseR {
+	width: 50%;
+	float: right;
+	text-align: center;
+ }
+ 
+ .creditLogItem{
+	width: 75%;
+	float: right;
+	text-align: left;
+	margin: 3px;
+	padding: 5px;
+	background-color: #EFEFE7;
+ }
+ 
+ .alignRight{
+	text-align: right;
+ }
+ 
+ #FriendsProgress {
+	background-color: black;
+	border-radius: 6px;
+	padding: 2px;
+	width: 75%;
+	text-align: right;
+	margin: 5px;
+ }
+ 
+ #FriendsProgress > div {
+	background-color: #0066CC;
+	width: 60%;
+	height: 20px;
+	border-radius: 4px;
+	color: white;
+ }
+ 
+ td.CreditsMembershipTypeSelected {
+	background-color: #0066CC;
+	color: white;
+	vertical-align: text-center;
+ }

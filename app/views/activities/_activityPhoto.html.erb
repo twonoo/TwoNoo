@@ -1,0 +1,27 @@
+<td>
+    <% unless activityPhoto.nil? %>
+      <% if activityPhoto.MainPhoto %>
+        <%= image_tag("activity/" + activityPhoto.PhotoId, alt: "MyPhotoPrimary", class: "MyPhotoPrimary", id: "MyPhotoPrimary")%>
+      <% else %>
+        <%= image_tag("activity/" + activityPhoto.PhotoId, alt: "MyPhoto", class: "MyPhoto", id: "MyPhoto")%>
+      <%end%>
+      <p>
+        <%= form_tag({controller: "activities", action: "activityPictureUpdate"}, id: "frm_"+activityPhoto.id.to_s()) do %>
+          <%= hidden_field_tag "PhotoId", activityPhoto.id %>
+          <%= hidden_field_tag "todo", "delete", id: "todo" %>
+          <%= button_tag "Delete", id: "delete_"+activityPhoto.id.to_s() %>
+          <%= button_tag "Primary Photo", id: "primary_"+activityPhoto.id.to_s() %>
+          <script>
+            $('#delete_<%=activityPhoto.id%>').click(function(){
+              
+            });
+            
+            $('#primary_<%=activityPhoto.id%>').click(function(){
+              $('#frm_<%=activityPhoto.id%> input[id=todo]').attr('value', 'primary');
+            });
+          </script>
+        <% end %>
+      </p>
+
+    <% end %>
+</td>

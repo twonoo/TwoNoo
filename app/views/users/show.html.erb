@@ -58,11 +58,13 @@
       <%= image_submit_tag("SaveButton.png", alt: "Save", class: "save", id: "save")%>
     </p>
   <% end %> 
-  <%= form_tag({controller: "users", action: "profilePictureUpload"}, {:remote => true, :multipart => true, :authenticity_token => true }) do %>
-    <label>Upload Photo:</label>
-      <%= file_field 'profilePicture', :picture %>
-      <%= submit_tag "Upload" %>
-  <% end %>
+  <% unless (!(@profilePhotos.nil?) && @profilePhotos.size >= 6) %>
+    <%= form_tag({controller: "users", action: "profilePictureUpload"}, {:remote => true, :multipart => true, :authenticity_token => true }) do %>
+      <label>Upload Photo:</label>
+        <%= file_field 'profilePicture', :picture %>
+        <%= submit_tag "Upload" %>
+    <% end %>
+  <%end%>
   <div style="width:900px;overflow:auto;">
     <table>
       <tr>

@@ -1,11 +1,21 @@
 class ActivitiesController < ApplicationController
   layout :resolve_layout
 
-  # This is the main activities page for searching on activites.
-  # When first loaded it will display all of the activities for the user's location for today.
-  # The user will then have the option to update the search criteria
-  # If the user clickes on the "What's Hot" link this will be called with the param 'hot'
-  # which will then load all the activities that meet ????? criteria
+  def activityPictureUpload
+   @user = current_user  
+ 
+    if params[:activityPicture][:picture]
+      uploaded_io = params[:activityPicture][:picture]
+      @activityPhoto = PhotoActivity.new
+      @activityPhoto.Activity_id = @user.id
+      @activityPhoto.MainPhoto = false
+      @activityPhoto.upload(uploaded_io)
+      @activityPhoto.save
+    end
+    
+    redirect_to :action => :show, :id => @user.id
+  end
+  
   def index
     @searchClause = ""
     @searchParams = []
@@ -47,6 +57,26 @@ class ActivitiesController < ApplicationController
       @where = @where + "followings.user_id1 = " + current_user.id.to_s + " "
     end
     
+    unless params[:activityTypes].nil?
+      @joins = @joins + "INNER JOIN activities_activity_types on activities_activity_types.activity_id = activities.activity_id "
+      
+      unless @where.empty?
+        @where = @where + "AND "
+      end
+      @where = @where + "("
+      
+      @or = false
+      params[:activityTypes].each do |key, value|
+        if @or
+          @where = @where + " OR "
+        end 
+        
+        @where = @where + "activities_activity_types.activity_type_id = " + value
+        
+        @or = true
+      end
+    end
+    
     unless @joins.empty? and @where.empty?
       unless @searchParams.size == 0
         @activities = Activity.joins(@joins).where(@where).all :conditions => [@searchParams.map{|c| c[0] }.join(" AND "), *@searchParams.map{|c| c[1..-1] }.flatten]
@@ -78,6 +108,14 @@ class ActivitiesController < ApplicationController
   def show
     @activity = Activity.find(params[:id])
     
+    # unless the user is the creator of the activity add 1 to the total views
+    unless current_user.id = @activity.CreateUserId
+      @activity.views += 1
+    end
+	
+    # determine if the viewing user has already RSVPd
+    
+    
     @user = User.find(@activity.CreateUserId)
     @profilePhoto = ProfilePhoto.where("Users_id = ? AND MainPhoto = ?", @user.id, true).first
     
@@ -92,6 +130,10 @@ class ActivitiesController < ApplicationController
   
   def edit
      @activity = Activity.find(params[:id])
+     
+     #Get photos for the activity
+     @activityPhotos = PhotoActivity.where("Activity_id = ?", @activity.id)
+
   end
   
   def create
@@ -99,8 +141,10 @@ class ActivitiesController < ApplicationController
     @activity.ModUserId = @activity.CreateUserId = current_user.id
     
     # For each ActivityType, let's create a new activity Type record
-    params[:activityType].each do |value|
-      @activity.activity_types << ActivityType.find(value)
+    unless (params[:activityType].nil?)
+      params[:activityType].each do |value|
+        @activity.activity_types << ActivityType.find(value)
+      end
     end
 
       if @activity.save
@@ -125,6 +169,10 @@ class ActivitiesController < ApplicationController
     end
   end
   
+  def rsvp
+    redirect_to :action => :show, :id => @user.id
+  end
+  
   def update
      @activity = Activity.find(params[:id])
     
@@ -133,7 +181,8 @@ class ActivitiesController < ApplicationController
       redirect_to activity_path(@activity)
     else
       render 'edit'
-    end end
+    end
+  end
   
   private
 

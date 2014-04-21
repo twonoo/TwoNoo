@@ -1,0 +1,96 @@
+<% provide(:title, 'Edit Activities') %>
+  <%= render 'shared/error_messages' %>
+      <div class="PageTitle"><b>EDIT ACTIVITY</b></div>
+      <form action="TwoNoo-ActivityDetails.html" method="post">
+      	<div class="column1">
+      	<p><label>Activity Name:</label>
+      		<input type="text" value="Pickup Soccer in City Park" name="activityname" size="25" maxlength="50" required autofocus/>
+      	</p>
+      	<p><label>Activity Date:</label>
+      		<input type="date" value="2014-07-09" name="activitydate"/>
+      		<label>Time:</label>
+      		<input type="time" value="18:00:00" name="activityTime"/>
+      	</p>
+      	<p><label>Address:</label>
+      		<input type="text" name="activityaddress" size="50" maxlength="100"/>
+      	</p>
+      	<p><label>City:</label>
+      		<input type="text" value="Denver" name="activityCity" size="25" maxlength="50" required/>
+      	<label>State:</label>
+      		<input type="text" value="CO" name="activityState" size="2" maxlength="2" required/>
+      	</p>
+      	<p><label>Venue Name:</label>
+      		<input type="text" value="City Park" name="activityVenue" size="25" maxlength="50" placeholder="Example: Billy's Bar"/>
+      	</p>
+      	<p><label>Website URL:</label>
+      		<input type="url" name="activityURL" size="25" maxlength="50"/>
+      	</p>
+      	<p><label>Upload Photo:</label>
+      		<input type="file" name="activityPhoto"/>
+      	</p>
+      	<table class="EditActPhotos">
+      	<tr>
+      	<td>
+			<img class="MyPhoto" src="images/ActivityImage3.jpg">
+      		<form action="">
+      		<p>
+      		<input type="button" name="Delete" value="Delete" />
+      		<input type="button" name="Primary" value="Primary Photo" />
+      		</p></form>
+      </td>
+            	<td>
+			<img class="MyPhotoPrimary" src="images/kickballteam.jpg">
+      		<form action="">
+      		<p>
+      		<input type="button" name="Delete" value="Delete" />
+      		<input type="button" name="Primary" value="Primary Photo" />
+      		</p></form>
+      </td>
+            	<td>
+			<img class="MyPhoto" src="images/ActivityImage2.jpg">
+      		<form action="">
+      		<p>
+      		<input type="button" name="Delete" value="Delete" />
+      		<input type="button" name="Primary" value="Primary Photo" />
+      		</p></form>
+      </td>
+      </tr>
+      </table>
+      	<p><label>Description:</label>
+      		<textarea name="activityDescription" cols="80" rows="4" class="required" required>Come join us for pickup soccer every Tuesday at City Park! All skill levels are welcome and it's coed. We meet on the east side of the park near York and 17th.</textarea>
+      	</p>
+      	</div>
+      	<div class="column2">
+      	<p>Allow others to RSVP for this activity?
+      	<br />
+      		<input type="radio" name="AllowRSVP" value="Yes" checked="checked" />Yes
+      		<input type="radio" name="AllowRSVP" value="No"/>No
+      	</p>      		
+      	<fieldset id="ActivityType">
+      	<legend>Activity Type (Select ALL that apply):
+      	</legend>
+      	<table>
+      	<tr>
+      		<td><input type="checkbox" name="activityType" value="Sports" checked="checked"/> Sports</td>
+      		<td><input type="checkbox" name="activityType" value="Outdoors" checked="checked"/> Outdoors</td>
+      		<td><input type="checkbox" name="activityType" value="Nightlife"/> Nightlife</td>
+      	</tr>
+      	<tr>
+      		<td><input type="checkbox" name="activityType" value="Arts"/> Arts</td>
+      		<td><input type="checkbox" name="activityType" value="EatDrink"/> Eat & Drink</td>
+      		<td><input type="checkbox" name="activityType" value="Community"/> Community</td>
+      	</tr>
+      	<tr>
+      		<td><input type="checkbox" name="activityType" value="Business"/> Business</td>
+      		<td><input type="checkbox" name="activityType" value="Cool Stuff"/> Cool Stuff</td>
+      	</tr>
+    	</table>
+    	</fieldset>
+    	</div>
+    	<div>
+    	<input type="image" class="save" id="save" src="images/SaveButton.png">
+    	</div>
+    	<div>
+    	<a href=""><input type="submit" class="CancelButtons" name="Cancel Activity" value="Cancel Activity"></a>
+        </div>
+      </form>

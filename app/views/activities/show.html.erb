@@ -2,23 +2,38 @@
   <%= render 'shared/error_messages' %>
   <div class="searchresults">
     <div id="activity">
-        <div>
-          <h1><%=@activity.Name%></h1>
-          <%=@activity.Website%>
-          <div id="actdetailstime"><%=@activity.ActivityTime%></div>
-        </div>
-        <p><%=@activity.ActivityDate%><% unless @activity.LocationName.nil? || @activity.LocationName.empty? %> @ <%=@activity.LocationName%><% end %></p>
-        <p><%=@activity.City%>, <%=@activity.State%></p>
-        <hr />
-        <p><%=@activity.Description%></p>
-        <hr />
-        <p><% unless @mainPhoto.nil? %>
-          <%= image_tag("activity/"+@mainPhoto.PhotoId, alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%>
-          <% end %>
-        </p>
-        <% if @activity.rsvp %>
+		<% if current_user.id == @activity.CreateUserId %>
+      <a href="/activities/edit/<%=@activity.id%>"><input type="submit" class="EditActivity" name="Edit" value="Edit"></a>
+		<% end %>
+		<div>
+      <h1><%=@activity.Name%></h1>
+      <% unless @activity.Website.empty? %>
+        <%= link_to @activity.Website, @activity.Website %>
+      <% end %>
+      <div id="actdetailstime"><%=@activity.ActivityTime%></div>
+    </div>
+    <p><%=@activity.ActivityDate%><% unless @activity.LocationName.nil? || @activity.LocationName.empty? %> @ <%=@activity.LocationName%><% end %></p>
+    <p><%=@activity.City%>, <%=@activity.State%>
+			<div id="actdetailstime"><div class="counts"><%=@activity.Views%> </div> Views</div>
+			<div id="actdetailstime"><div class="counts">16 </div> RSVPs</div>
+		</p>
+    <hr />
+    <p><%=@activity.Description%></p>
+    <hr />
+    <p>
+      <% unless @mainPhoto.nil? %>
+        <%= image_tag("activity/"+@mainPhoto.PhotoId, alt: "ActivityDetailsPhoto", class: "ActivityDetailsPhoto", id: "ActivityDetailsPhoto")%>
+      <% end %>
+    </p>
+    <% if @activity.rsvp %>
+      <%= form_tag({controller: "activities", action: "rsvp"}) do %>
+        <% if true %> 
           <%= image_submit_tag("RSVPButton.png", alt: "RSVP", class: "rsvp", id: "rsvp")%>
+        <% else %>
+          <a href=""><input type="submit" class="CancelRSVP" name="Cancel RSVP" value="Cancel RSVP"></a>
         <% end %>
+      <% end %>
+    <% end %>
         <div class="clearleft"><p>&nbsp;&nbsp;<a href="">X More Photo(s) (Should probably only show this if this IS another photo other than the one shown</a></p></div>
     </div>
     <div id="activitydetailsuser">
