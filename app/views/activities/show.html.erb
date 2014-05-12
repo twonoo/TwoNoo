@@ -41,7 +41,7 @@
           <%= image_submit_tag("FollowButton.png", alt: "Follow", class: "follow", id: "follow")%>
           <p>Organized by...</p>
           <%= hidden_field_tag "UserId", @user.id.to_s() %>
-          <p id="UserName"><%= link_to @user.UserId, "/showUser/" + @user.id.to_s() %></p>
+          <p id="UserName"><%= link_to @user.UserId, "/activities?username=" + @user.UserId %></p>
           <hr />
           <div class="clearleft"><p><%=@user.AboutMe%></p></div>
           <hr />

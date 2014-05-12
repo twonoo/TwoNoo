@@ -1,13 +1,14 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
 
 gem 'rails', '4.0.1'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'bcrypt-ruby', '3.1.2'
+gem 'activerecord-jdbcmysql-adapter'
 
 group :development, :test do
-  gem 'mysql2', '0.3.15'
-	gem 'sqlite3', '1.3.7'
+  #gem 'mysql2', '0.3.15'
+	#gem 'sqlite3', '1.3.7'
 	gem 'rspec-rails', '2.13.1'
 end
 
@@ -23,6 +24,7 @@ gem 'jquery-rails', '2.2.1'
 gem 'turbolinks', '1.1.1'
 gem 'jbuilder', '1.0.2'
 gem 'calendar_date_select'
+#gem 'puma'
 
 gem 'jquery-fileupload-rails'
 

@@ -31,7 +31,7 @@
           <%= f.text_field :Website, size: 25, maxlength: 50 %>
         </p>
         <p><label>Description:</label>
-          <textarea name="activityDescription" cols="80" rows="4" class="required" required>Come join us for pickup soccer every Tuesday at City Park! All skill levels are welcome and it's coed. We meet on the east side of the park near York and 17th.</textarea>
+          <%=f.text_area :Description, cols: 80, rows: 4, class: "required", placeholder: "Describe you activity..." %>
         </p>
       </div>
       <div class="column2">
@@ -82,6 +82,8 @@
       </table>
     </div>
     <div>
-      <a href=""><input type="submit" class="CancelButtons" name="Cancel Activity" value="Cancel Activity"></a>
+      <%= form_tag({controller: "activities", action: "cancelActivity"}, {:remote => true, :multipart => true, :authenticity_token => true }) do %>
+        <%= submit_tag "Cancel Activity", class: "CancelButtons" %>
+      <% end %>
     </div>
       
