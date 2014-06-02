@@ -3,25 +3,25 @@
   <div class="findcolumn1">
     <p>
       <label>Activity Name:</label>
-      <%= f.text_field :Name, size: 25, maxlength: 50, autofocus: true %>
+      <%= f.text_field :Name, size: 25, maxlength: 50, autofocus: true, value: params["activity_search"].nil? ? "" : params["activity_search"]["Name"] %>
     </p>
     <p><label>Activity Date:</label>
-      <%= f.date_field :ActivityDate %>
+      <%= f.date_field :ActivityDate, value: params["activity_search"].nil? ? "" : params["activity_search"]["ActivityDate"] %>
     </p>
     <p><label>City:</label>
-      <%= f.text_field :City, size: 25, maxlength: 50 %>
+      <%= f.text_field :City, size: 25, maxlength: 50, value: params["activity_search"].nil? ? "" : params["activity_search"]["City"] %>
     </p>
     <p>
       <label>State:</label>
-      <%= f.text_field :State, size: 2, maxlength: 2 %>
+      <%= f.text_field :State, size: 2, maxlength: 2, value: params["activity_search"].nil? ? "" : params["activity_search"]["State"] %>
     </p>
     <p>
       <label>Venue Name:</label>
-      <%= f.text_field :LocationName, size: 25, maxlength: 50, placeholder: "Example: Billy's Bar"%>
+      <%= f.text_field :LocationName, size: 25, maxlength: 50, placeholder: "Example: Billy's Bar", value: params["activity_search"].nil? ? nil : params["activity_search"]["LocationName"] %>
     </p>
     <p>
       <label>User Name:</label>
-      <input type="text" name="username" size="20" maxlength="20"/>
+      <%= text_field_tag 'username', params["username"].nil? ? nil : params["username"], size: 20, maxlength: 20 %>
     </p>
   </div>
   <div class="findcolumn2">
@@ -33,7 +33,18 @@
             <% if @cellNum%3 == 1 %>
               <tr>
             <% end %>
-            <td><input type="checkbox" name="activityType[]" value="<%=activityType.id%>"/><%=activityType.Type%></td>
+            <td>
+
+		<input type="checkbox" name="activityType[]" value="<%=activityType.id%>"
+	    <% unless params["activityType"].nil? 
+                params["activityType"].each do |value|
+                  if value == activityType.id.to_s() %>
+		    checked=true
+                  <%end
+		end
+               end
+            %> 
+            /><%=activityType.Type%></td>
             <% if @cellNum%3 == 0 %>
               </tr>
             <% end %>
@@ -49,7 +60,7 @@
       	<input type="checkbox" name="Following" <%=params[:Following].nil? ? '':"checked=true" %>/>Only show people I'm following
       </p>
   </div>
-  <%= image_submit_tag("SearchButton.png", alt: "Search", class: "search", id: "search")%>
+  <%= image_submit_tag("SearchButton.jpg", alt: "Search", class: "search", id: "search")%>
 <% end %>
 
   <div class="collapsebar"></div>
