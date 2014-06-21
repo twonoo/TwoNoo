@@ -1,7 +1,7 @@
 <% if (yield(:title) != "") %>
 <nav>
   <%= link_to image_tag("FindButton.png", alt: "Find", class: "nav"), activities_path, id: "find" %>
-  <% if signed_in? %>
+  <% if user_signed_in? %>
     <%= link_to image_tag("CreateButton.png", alt: "Create", class: "nav"), new_activity_path, id: "create" %>
     <%= link_to image_tag("MyStuffButton.png", alt: "MyStuff", class: "nav"), current_user, id: "mystuff" %>
   <% end %>

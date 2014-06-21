@@ -1,18 +1,19 @@
 <header>
   <%= link_to image_tag("TwoNooLogo-HandDrawn.jpg", alt: "TwoNoo", class: "logo"), '/', id: "logo" %>
   <% if (yield(:title) == 'SIGN UP') %>
-  <% else if signed_in? %>
-    <div id="user"><%= link_to current_user.UserId, current_user %>  | <%= link_to "Sign out", signout_path, method: "delete" %><div>
+  <% else if user_signed_in? %>
+    <div id="user"><%= link_to current_user.UserId, current_user %>  | <%= link_to "Sign out", destroy_user_session_path, method: "delete" %><div>
     <div class="counts">17 </div> Credits</div></div>
   <% else %>
   <div class="SignIn">
-    <%= form_for(:session, url: sessions_path) do |f| %>
-      <%= f.text_field :UserId, placeholder: "Username", size: 25 %>
+    <%= form_for(resource, as: resource_name, url: user_session_path) do |f| %>
+      <%= f.email_field :email, placeholder: "e-mail", size: 25, autofocus: true %>
       <p>
-      <%= f.password_field :password, placeholder: "Password", size: 15, maxlength: 25 %>
+      <%= f.password_field :password, placeholder: "Password", size: 15, maxlength: 25, autocomplete: "off" %>
       <%= f.submit "Sign in", class: "signin" %>
+      <%= link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook) %>
       </p>
-      <input type="checkbox" name="StaySignedIn" value="StaySignedIn"/>Stay signed in
+      <%= f.check_box :remember_me %>Stay signed in<%=user_signed_in?%>
     <% end %>
     <div class="forgotpassword">
       <a href="javascript:alert('Bummer! That sucks.)">Forgot password</a>

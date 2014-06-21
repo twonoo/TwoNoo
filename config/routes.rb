@@ -1,4 +1,5 @@
 TwoNoo::Application.routes.draw do
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   get "static_pages/about"
   get "static_pages/contact"
   get "static_pages/terms"
