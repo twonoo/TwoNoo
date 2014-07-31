@@ -48,7 +48,7 @@
           <div class="input-group input-group-lg" >
             <%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
             <span class="input-group-btn">
-              <button class="btn btn-danger" type="button">Create!</button>
+              <%= submit_tag 'Create!', class: 'btn btn-danger' %>
             </span>
           <% end %>
           </div><!-- /input-group -->

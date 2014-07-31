@@ -23,7 +23,7 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    @activity = Activity.new
+    @activity = Activity.new activity_name: params[:activity_name]
   end
 
   def edit
