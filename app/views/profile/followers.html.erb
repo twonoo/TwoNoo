@@ -1,0 +1,23 @@
+<div class="container">
+	<div class="row">
+		<% if current_user %>
+    <div class="col-md-4">
+      <div class="panel">
+        <%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img' %>
+        <ul class="nav list-group">
+          <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.activities.count}</span>My Activities</li></li>".html_safe, user_activities_path(current_user.id) %>
+          <%= link_to "<li class='list-group-item'><span class='badge pull-right'>0</span>I'm Attending</li></li>".html_safe, root_path %>
+          <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followers.count}</span>Followers</li></li>".html_safe, profile_followers_path(current_user) %>
+          <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followed_users.count}</span>Following</li></li>".html_safe, profile_following_path(current_user) %>
+        </ul>
+      </div>
+    </div>
+    <% end %>
+		<div class="panel col-md-8">
+			<% @followers.each do |f| %>
+				<p class="lead"><%= image_tag f.profile.profile_picture.url(:thumb), class: 'profile-img', style: 'height:50px; width:50px' %> 
+				<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %></p>
+			<% end %>
+		</div>
+	</div>
+</div>

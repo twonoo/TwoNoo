@@ -1,0 +1,48 @@
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div><%= f.label :email %><br />
+  <%= f.email_field :email, autofocus: true %></div>
+
+  <div><%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "off" %></div>
+
+  <div><%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+  <%= f.fields_for :profile, resource_name do |profile_form| %>
+        <div><%= profile_form.label :first_name %><br />
+        <%= profile_form.text_field :first_name %></div>
+
+        <div><%= profile_form.label :last_name %><br />
+        <%= profile_form.text_field :last_name %></div>
+
+        <div><%= profile_form.label :birthday %><br />
+        <%= profile_form.date_select :birthday, start_year: Time.now.year - 18, end_year: Time.now.year - 80, order: [:month, :day, :year], prompt: { month: 'Month', day: 'Day', year: 'Year' } %></div>
+
+        <div><%= profile_form.label :gender %><br />
+        <%= profile_form.select :gender, [['Male', 0], ['Female', 1], ["No Answer", 2]] %></div>
+
+        <div><%= profile_form.label :postcode %><br />
+        <%= profile_form.text_field :postcode %></div>
+
+        <div><%= profile_form.label :about_me, "About You" %><br />
+        <%= profile_form.text_area :about_me %></div>
+
+        <h4>Profile Picture</h4>
+        <div><%= profile_form.file_field :profile_picture %></div>
+    <% end %>
+
+  <div><%= f.label :current_password %><br />
+  <%= f.password_field :current_password, autocomplete: "off" %></div>
+
+  <div><%= f.submit "Update" %></div>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+
+<%= link_to "Back", :back %>

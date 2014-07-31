@@ -1,0 +1,69 @@
+body {background-color:#F8F8F8}
+
+.headline { 
+  font-family: 'PT Sans Narrow', sans-serif; 
+  font-size:72px; 
+  color:white; 
+  background:rgba(0,0,0,0.8); 
+  clear:left; 
+  width:auto; 
+  line-height: 95px; 
+  padding: 0px 10px 0px 10px
+}
+
+.headline-gray { 
+  background:transparent; 
+  color:gray;
+}
+
+
+.center-block {
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+}
+
+
+@font-face {
+  font-family: 'PT Sans Narrow';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Narrow Bold'), local('PTSans-NarrowBold'), url(http://themes.googleusercontent.com/static/fonts/ptsansnarrow/v5/Q_pTky3Sc3ubRibGToTAYnhM4mdXpoxYNWk7Ev34U70.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(http://themes.googleusercontent.com/static/fonts/ptsans/v6/7YGmE4Ls5b94ct65u07hVQLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+}
+
+.navbar {
+  background-color: white;
+}
+.profile-img {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border:solid 1px #FFF; 
+    width:100px;
+    margin:10px;
+}
+.profile-img-icon {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border:solid 0px #FFF; 
+    width:30px; 
+}
+.navbar-nav > li > a {
+    line-height: 30px;
+}
+.panel {
+    -moz-border-radius: 5px/5px;
+    -webkit-border-radius: 5px 5px;
+    border-radius: 5px/5px;
+    border:solid 1px #FFF;
+    background:rgba(255,255,255,0.95);
+    margin-bottom:10px;
+}

@@ -1,0 +1,11 @@
+<div class="container">
+	<div class="row">
+		<%= current_user ? render('layouts/side_nav') : render(nil) %>
+		<div class="panel col-md-8">
+			<% @following.each do |f| %>
+				<p class="lead"><%= image_tag f.profile.profile_picture.url(:thumb), class: 'profile-img', style: 'height:50px; width:50px' %> 
+				<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %></p>
+			<% end %>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1, minimal-ui" name="viewport">
+  <title><%= @title ? @title : 'TwoNoo' %></title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+  <%= csrf_meta_tags %>
+<meta name="google-site-verification" content="EiVIH4ce5RGmJBuZIatvMd1DBQyRsmuMOvQRncxitIM" />
+</head>
+<body>
+	<div class="vegas"></div>
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid"> 
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="/">
+	        <img height="28px" src="<%= asset_path 'twonoo_logo_small.png' %>"></a> </div>
+
+	      <!-- Collect the nav links, forms, and other content for toggling -->
+	      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	        <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
+	      </div>
+	    </div>
+	  </nav>
+
+	<%= yield %>
+
+</body>
+</html>

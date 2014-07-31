@@ -1,0 +1,41 @@
+<div class="vegas"></div>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid"> 
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img height="28px" src="<%= asset_path 'twonoo_logo_small.png' %>"></a> </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <%= current_user ? render('signed_in_nav') : render('sign_in_nav') %>
+      </div>
+    </div>
+  </nav>
+
+<%= yield %>
+
+<script>
+  $(function() {
+    $.vegas({
+      src:'<%= asset_path 'backgrounds/sd.jpg' %>'
+    })('overlay', {
+      src:"<%= asset_path 'overlays/05.png' %>"
+    });
+    $.vegas('slideshow', {
+      delay:10000,
+      backgrounds:[
+      { src: '<%= asset_path 'backgrounds/sd.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/hiking.jpg' %>', fade:1000, valign:'70%' },
+      { src: '<%= asset_path 'backgrounds/rockies.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/beach.jpg' %>', fade:1000 }
+      ]
+    })('overlay');
+  });
+</script>

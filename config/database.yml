@@ -1,0 +1,29 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: twonoo_dev
+  pool: 5
+  username: twonoo
+  password: Tw0#oo
+  socket: /var/lib/mysql/mysql.sock
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: twonoo_test
+  pool: 5
+  username: twonoo
+  password: Tw0#oo
+  socket: /var/lib/mysql/mysql.sock
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: twonoo_prod
+  pool: 5
+  username: twonoo
+  password: Tw0#oo
+  socket: /var/lib/mysql/mysql.sock

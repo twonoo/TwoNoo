@@ -1,0 +1,69 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="panel panel-default">
+				<div class="panel-body">
+          <button class="btn btn-success pull-right">I'm Going</button>
+					<h2><%= @activity.activity_name %></h2>
+					<p class="lead"><%= @activity.description %></p>
+					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
+					<div id="map-canvas"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+          <div><p class="lead"><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p></div></br></br>
+
+          <h4>Who's Going</h4>
+          Steve</br>Brandon
+				</div>
+			</div>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNhGdKD91B3SVN5kH1oE8y1hS-swp2e4k"></script>
+
+<script type="text/javascript">
+  function initialize() {
+  	var myLatlng = new google.maps.LatLng(<%= @activity.latitude %>, <%= @activity.longitude %>)
+
+  	var mapOptions = {
+  	  center: myLatlng,
+  	  zoom: 11, scrollwheel: false
+  	};
+  	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+  	var contentString = '<div>'+
+  		'<h4><%= @activity.location_name %></h4>' +
+  		'<%= @activity.address %></br>' +
+      '<%= @activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p") %>' +
+  		'<h3><div style="height:100px; width:250px; background-color:#e2e2e2; margin:0 auto"></div></h3>' +
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+      content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: "<%= @activity.activity_name %>"
+  });
+
+  	infowindow.open(map,marker);
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker);
+      }
+    );
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+

@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row center-block" style=" text-align:center; margin-bottom:5px">
+    <div class="panel">
+      <span class="headline headline-gray">MEET.</span>
+      <span class="headline headline-gray">EXPLORE.</span>
+      <span class="headline headline-gray" style="color:#4DBFF5">LIVE!</span>
+    </div>
+  </div>
+  <div class="row">
+    <%= current_user ? render('layouts/side_nav') : render(nil) %>
+    <div class="col-md-8 <%= current_user ? nil : 'col-md-offset-2' %> ">
+      <div class="panel" style="height:284px;padding:50px">
+        <div class="text-center">
+         <div class="btn-group" style="margin-top:-50px;">
+          <a href="#find" data-toggle="tab" class="btn btn-default">Search</a>
+          <a href="#create" data-toggle="tab" class="btn btn-default">Create</a>
+        </div>
+      </div>
+      
+      <div class="tab-content">
+        <div class="tab-pane active" id="find">
+          <%= form_tag("/activities/search", method: "post") do %>
+            
+          
+          <form role="form">
+            <div class="form-group">
+              <div class="input-group input-group-lg">
+                <%= search_field_tag :terms, nil, placeholder: "Search for Activities…by name, venue, user", class: "form-control" %>
+                <span class="input-group-btn">
+                  <%= submit_tag "Search", class: "btn btn-success" %>
+                </span>
+              </div><!-- /input-group -->
+              <div class="row" style="margin-top:5px;">
+                <div class="col-xs-4 col-md-4 col-lg-3">
+                  <%= select_tag :when, options_for_select([ ["Today", Date.today + 1], ["This Week", Date.today.at_end_of_week + 1], ["This Month", Date.today.at_end_of_month + 1], ["This Year", Date.today.at_end_of_year + 1] ], Date.today.at_end_of_week + 1) %>
+                </div>
+                <div class="col-xs-4 col-md-4 col-lg-3">
+                  <%= select_tag :type, options_from_collection_for_select(ActivityType.all, "id", "activity_type"), prompt: "Type" %>
+                </div>
+                <div class="col-xs-4 col-md-4 col-lg-5">
+                  Within <%= select_tag :miles, options_for_select([ 5, 25, 50, 100, 200], 25) %> miles of <%= select_tag :location, options_for_select([ ["Denver", "Denver, CO"], ["Pittsburgh", "Pittsburgh, PA"], ["Atlanta", "Atlanta, GA"]]) %> </div>
+              </div>
+            </div>
+
+            <% end %>
+          </form>
+        </div>
+        <div class="tab-pane" id="create">
+          <%= form_tag new_activity_path do %> 
+          <div class="input-group input-group-lg" >
+            <%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
+            <span class="input-group-btn">
+              <button class="btn btn-danger" type="button">Create!</button>
+            </span>
+          <% end %>
+          </div><!-- /input-group -->
+        </div>
+      </div></br>
+      <button class="btn btn-danger btn-lg center-block " style="color:yellow; margin-top:15px">What's hot!</button>
+      <h4 style="margin: 25px 0 0 0px"><small>Trending in Denver: <a href="#">Kickball at Wash Park</a>, <a href="#">Trivia in DTC</a>, <a href="#">Hike a 14er</a></small></h4>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    $.vegas({
+      src:'<%= asset_path 'backgrounds/sd.jpg' %>'
+    })('overlay', {
+      src:"<%= asset_path 'overlays/05.png' %>"
+    });
+    $.vegas('slideshow', {
+      delay:10000,
+      backgrounds:[
+      { src: '<%= asset_path 'backgrounds/sd.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/hiking.jpg' %>', fade:1000, valign:'70%' },
+      { src: '<%= asset_path 'backgrounds/rockies.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/beach.jpg' %>', fade:1000 }
+      ]
+    })('overlay');
+  });
+</script>

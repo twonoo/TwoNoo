@@ -1,0 +1,106 @@
+<div class="container">
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+    		<h3 class="panel-title">Create your Activity</h3>
+  		</div>
+			<div class="panel-body">
+	    <div class="col-md-7">
+	    	<%= form_for @activity, html: { class: "form-horizontal"} do |f| %>
+
+		    	<div class="form-group">
+			    	<%= f.label :name, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :activity_name, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+						<%= f.label :when, class: "col-sm-2 control-label" %>
+					  <div class='input-group date col-sm-4' style='padding-left:15px' id='datetimepicker1'>
+					    <%= f.text_field :datetime, class: "form-control" %>
+					    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					  </div>
+					</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :where, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :location_name, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :address, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :street_address_1, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :address_2, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :street_address_2, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :city, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :city, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+					<div class="form-group">
+			    	<%= f.label :state, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.select :state, us_states, {}, {class: "form-control"} %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :website, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-4">
+		      		<%= f.text_field :website, class: "form-control" %>
+		    		</div>
+		    	</div>
+
+		    	<div class="form-group">
+			    	<%= f.label :description, class: "col-sm-2 control-label" %>
+			    	<div class="col-sm-8">
+		      		<%= f.text_area :description, class: "form-control", rows: "3" %>
+		    		</div>
+		    	</div>
+	    </div>
+
+	    <div class="col-md-5">
+	    	<div class="text-center" style="height:200px; width:300px; background-color:#e2e2e2; margin:0 auto">
+	    		<a href=""><h5 style="margin: 0 auto; line-height:200px">Upload Image</h5></a>
+	    	</div>
+	    	<br/><br/>
+	    	<div>
+		    	<%= f.check_box :rsvp %>
+					<%= f.label :rsvp, "Allow others to RSVP" %>
+				</div>
+				<br/>
+
+				<div>
+					<label>Activity Type</label>
+				</div>
+				<% for type in ActivityType.all %>
+		    <div>
+		      <%= check_box_tag "activity[activity_type_ids][]", type.id %>
+		      <%= type.activity_type %>
+		    </div>
+				<% end %>
+
+	    	<button type="submit" class="btn btn-lg btn-success pull-right">Create!</button>
+	    <% end %>
+
+      <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+      </script>
+  </div>
+</div>
