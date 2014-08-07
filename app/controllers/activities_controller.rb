@@ -2,7 +2,6 @@ class ActivitiesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-
   end
 
   def search
@@ -27,6 +26,17 @@ class ActivitiesController < ApplicationController
   end
 
   def edit
+    @activity = Activity.find(params[:id])
+    @activity.datetime = @activity.datetime.strftime('%m/%d/%Y %I:%M %p')
+  end
+
+  def update
+    activity = Activity.find(params[:id])
+    params = activity_params
+    activity.activity_type_ids=params[:activity_type_ids]
+    params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+    activity.update!(params)
+    redirect_to activity
   end
 
   def create

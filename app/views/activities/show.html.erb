@@ -3,8 +3,14 @@
 		<div class="col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-body">
-          <button class="btn btn-success pull-right">I'm Going</button>
+          <%= link_to 'Edit',activity_edit_path(@activity.id), class: 'btn btn-default pull-right' %>
 					<h2><%= @activity.activity_name %></h2>
+          <div>
+            <% @activity.activity_types.each do |a| %>
+              <span class="label label-danger"><%= a.activity_type %></span>
+            <% end %>
+          </div>
+        </br>
 					<p class="lead"><%= @activity.description %></p>
 					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
 					<div id="map-canvas"></div>
@@ -15,9 +21,13 @@
 		<div class="col-md-4">
 			<div class="panel panel-default">
 				<div class="panel-body">
-          <div><p class="lead"><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p></div></br></br>
+          <div>
 
-          <h4>Who's Going</h4>
+            <p class="lead"><span class="glyphicon glyphicon-user"></span> <%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p>
+          </div>
+        </br></br>
+
+          <h4>Who's Going <button class="btn btn-success pull-right">I'm Going</button></h4>
           Steve</br>Brandon
 				</div>
 			</div>

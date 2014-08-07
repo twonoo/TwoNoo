@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'activities/new'  
   post 'activities/new'
   get 'activities/edit'
+   get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
   get 'activities/create'
   get 'activities/rsvp'
 
