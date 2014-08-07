@@ -53,24 +53,25 @@
   		'<h3><div style="height:100px; width:250px"><%= @activity.image.url ? (image_tag @activity.image.url(:map_image)) : nil %>' +
       '</div>';
 
-  var infowindow = new google.maps.InfoWindow({
-      content: contentString
-  });
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
 
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: "<%= @activity.activity_name %>"
-  });
-
-  	infowindow.open(map,marker);
-
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: "<%= @activity.activity_name %>"
+    });
+    google.maps.event.addListenerOnce(map, 'idle', function() {
+      infowindow.open(map, marker);
+      }
+    );
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.open(map,marker);
       }
     );
   }
-
+  
   google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
