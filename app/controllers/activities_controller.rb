@@ -27,7 +27,6 @@ class ActivitiesController < ApplicationController
 
   def edit
     @activity = Activity.find(params[:id])
-    #@activity.datetime = @activity.datetime.strftime('%m/%d/%Y %I:%M %p')
   end
 
   def update
