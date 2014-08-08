@@ -13,6 +13,7 @@ class ProfileController < ApplicationController
 
   def show
     @profile = User.find(params[:id])
+    @activities = Activity.where(user_id: params[:id])
   end
 
   def followers
