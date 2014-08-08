@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807174210) do
+ActiveRecord::Schema.define(version: 20140808064513) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -72,6 +72,13 @@ ActiveRecord::Schema.define(version: 20140807174210) do
     t.string   "profile_picture_content_type"
     t.integer  "profile_picture_file_size"
     t.datetime "profile_picture_updated_at"
+  end
+
+  create_table "rsvps", force: true do |t|
+    t.integer  "activity_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

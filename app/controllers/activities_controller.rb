@@ -45,11 +45,20 @@ class ActivitiesController < ApplicationController
     @activity.user_id = current_user.id
     if @activity.save
       redirect_to @activity
-    else
     end
   end
 
   def rsvp
+    rsvp = Rsvp.new(activity_id: params[:activity_id], user_id: params[:user_id])
+    if rsvp.save
+      redirect_to request.referer
+    end
+  end
+
+  def unrsvp
+    rsvp = Rsvp.where(activity_id: params[:activity_id], user_id: params[:user_id]).first
+    rsvp.delete
+    redirect_to request.referer
   end
 
   private

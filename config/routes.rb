@@ -45,6 +45,11 @@ Rails.application.routes.draw do
 
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers
+  get 'users/follow/:id' => 'users#follow!', as: :follow
+  get 'users/unfollow/:id' => 'users#unfollow!', as: :unfollow
+
+  get 'activities/rsvp/:activity_id/:user_id' => 'activities#rsvp', as: :rsvp
+  get 'activities/unrsvp/:activity_id/:user_id' => 'activities#unrsvp', as: :unrsvp
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
