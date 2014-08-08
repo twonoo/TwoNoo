@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   get 'profile/:id/following' => 'profile#following', as: :profile_following
 
+  get 'profile/:id' => 'profile#show', as: :profile
+
 
   get 'welcome/index'
   get 'welcome/coming_soon'

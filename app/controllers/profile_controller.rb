@@ -11,6 +11,10 @@ class ProfileController < ApplicationController
   def privacy
   end
 
+  def show
+    @profile = User.find(params[:id])
+  end
+
   def followers
     @followers = User.find(params[:id]).followers
   end
