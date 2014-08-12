@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get 'profile/:id/following' => 'profile#following', as: :profile_following
 
   get 'profile/:id' => 'profile#show', as: :profile
+  get 'profile/:id' => 'profile#show', as: :user
+
+  patch 'profile/:id' => 'profile#update', as: :profile_update
 
 
   get 'welcome/index'
@@ -32,7 +35,7 @@ Rails.application.routes.draw do
   get 'activities/new'  
   post 'activities/new'
   get 'activities/edit'
-   get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
+  get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
   get 'activities/create'
   get 'activities/rsvp'
 
@@ -52,6 +55,9 @@ Rails.application.routes.draw do
 
   get 'activities/rsvp/:activity_id/:user_id' => 'activities#rsvp', as: :rsvp
   get 'activities/unrsvp/:activity_id/:user_id' => 'activities#unrsvp', as: :unrsvp
+
+
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
