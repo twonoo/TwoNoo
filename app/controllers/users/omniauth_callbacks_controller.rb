@@ -5,7 +5,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     logger.info "@USER !!!!!!!!!!!!!!!!!"
     logger.info @user.inspect
     logger.info "@USER !!!!!!!!!!!!!!!!!"
-    logger.info @user.persisted?
+    logger.info (@user.persisted? ? 'yes!' : 'no!')
     logger.info "I'm Done _________________"
     if @user.persisted?
       sign_in_and_redirect @user, :event => :authentication #this will throw if @user is not activated
