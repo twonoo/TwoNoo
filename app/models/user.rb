@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
       oauth_picture = URI.parse(auth.info.image) if auth.info.image?
-      user.create_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, about_me: auth.info.bio, profile_picture: oauth_picture)
+      user.build_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, about_me: auth.info.bio, profile_picture: oauth_picture)
     end
   end
 
