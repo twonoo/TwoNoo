@@ -48,6 +48,11 @@ class User < ActiveRecord::Base
         user.email = data["email"] if user.email.blank?
         user.profile.first_name ||= data["first_name"]
         user.profile.last_name ||= data["last_name"]
+        if data["gender"] == "male"
+          user.profile.gender = 0
+        else
+          user.profile.gender = 1
+        end
       end
     end
   end
