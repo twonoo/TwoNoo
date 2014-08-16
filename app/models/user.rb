@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
       # Begin Profile Build
       user.profile.first_name = auth.info.first_name
       user.profile.last_name = auth.info.last_name
-      oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
-      user.profile.profile_picture = oauth_picture
+      #oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
+      #user.profile.profile_picture = oauth_picture
     end
   end
 
