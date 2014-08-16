@@ -36,11 +36,8 @@ class User < ActiveRecord::Base
   where(auth.slice(:provider, :uid)).first_or_create do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
-      user.profile.first_name = auth.info.first_name
-      user.profile.last_name = auth.info.last_name
-      user.profile.birthday = auth.info.birthday
-      user.profile.about_me = auth.info.bio
-      user.profile_picture = URI.parse(auth.info.image) if auth.info.image?
+      oauth_picture = URI.parse(auth.info.image) if auth.info.image?
+      user.create_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, birthday: auth.info.birthday, about_me: auth.info.bio, profile_picture: oauth_picture)
     end
   end
 
