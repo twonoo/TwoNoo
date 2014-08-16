@@ -48,8 +48,6 @@ class User < ActiveRecord::Base
         user.email = data["email"] if user.email.blank?
         user.profile.first_name ||= data["first_name"]
         user.profile.last_name ||= data["last_name"]
-        
-        logger data
       end
     end
   end
