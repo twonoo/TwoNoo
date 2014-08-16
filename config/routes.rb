@@ -45,7 +45,8 @@ Rails.application.routes.draw do
   resources :activities
 
 
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
 
 
   get 'users/:id/following' => 'users#following', as: :following
