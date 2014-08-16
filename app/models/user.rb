@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
       oauth_picture = URI.parse(auth.info.image) if auth.info.image?
-      user.create_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, birthday: auth.info.birthday, about_me: auth.info.bio, profile_picture: oauth_picture)
+      user.create_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, about_me: auth.info.bio, profile_picture: oauth_picture)
     end
   end
 
@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
     super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
         user.email = data["email"] if user.email.blank?
+        user.profile.first_name = data["first_name"] if user.profile.first_name.bank?
       end
     end
   end
