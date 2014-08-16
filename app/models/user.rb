@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
         user.build_profile
-        user.email ||= data["email"]
+        user.email = data["email"] if user.email.blank?
         user.profile.first_name ||= data["first_name"]
         user.profile.last_name ||= data["last_name"]
         user.profile.profile_picture ||= URI.parse(data["image"])
