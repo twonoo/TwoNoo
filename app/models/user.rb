@@ -34,10 +34,14 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth(auth)
   where(auth.slice(:provider, :uid)).first_or_create do |user|
+      user.build_profile
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
+      # Begin Profile Build
+      user.profile.first_name = auth.info.first_name
+      user.profile.last_name = auth.info.last_name
       oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
-      user.build_profile(first_name: auth.info.first_name, last_name: auth.info.last_name, about_me: auth.info.bio, profile_picture: oauth_picture)
+      user.profile.profile_picture = oauth_picture
     end
   end
 
