@@ -44,8 +44,12 @@ class User < ActiveRecord::Base
   def self.new_with_session(params, session)
     super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
+        user.build_profile
         user.email = data["email"] if user.email.blank?
-        user.profile.first_name = data["first_name"] if user.profile.first_name.bank?
+        user.profile.first_name ||= data["first_name"]
+        user.profile.last_name ||= data["last_name"]
+        
+        logger data
       end
     end
   end
