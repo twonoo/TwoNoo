@@ -1,0 +1,9 @@
+<%= form_for :conversation, url: :conversations do |f| %>
+  <%= f.hidden_field :recipients, :value => organizer %>
+  <%= f.text_area :body, as: :text %>
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn-primary' %>
+    <%= submit_tag 'Cancel', type: :reset, class: 'btn-danger' %>
+  </div>
+<% end %>
+

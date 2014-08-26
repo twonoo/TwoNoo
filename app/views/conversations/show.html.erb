@@ -1,0 +1,16 @@
+<h1>
+<% if conversation.originator == current_user%>
+  <%= conversation.recipients[0].profile.first_name %> <%=conversation.recipients[0].profile.last_name%>
+<% else %>
+  <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
+<% end %>
+</h1>
+<ul>
+  <%= content_tag_for(:li, conversation.receipts_for(current_user)) do |receipt| %>
+    <% message = receipt.message %>
+    <b><%= message.sender.profile.first_name %></b>
+    <p><%= message.body %></p>
+  <% end %>
+</ul>
+<%= render 'messages/form', conversation: conversation %>
+

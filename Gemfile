@@ -38,6 +38,8 @@ gem "paperclip", "~> 4.1"
 gem 'geokit'
 gem 'geokit-rails'
 
+gem 'mailboxer'
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'profile/edit'
 
   get 'profile/notifications'
+  get 'profile/messages'
 
   get 'profile/privacy'
 
@@ -40,6 +41,13 @@ Rails.application.routes.draw do
 
 
   devise_for :users
+  resources :conversations, only: [:index, :show, :new, :create] do
+    member do
+      post :reply
+      post :trash
+      post :untrash
+    end
+  end
 
 
   get 'users/:id/following' => 'users#following', as: :following

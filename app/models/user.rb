@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  acts_as_messageable
 
   has_one :profile, dependent: :destroy
   has_many :follow_relationships, foreign_key: "follower_id", dependent: :destroy
@@ -30,6 +31,10 @@ class User < ActiveRecord::Base
 
   def unfollow!(other_user)
     follow_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  def mailboxer_email(object)
+    return :email
   end
 
 end

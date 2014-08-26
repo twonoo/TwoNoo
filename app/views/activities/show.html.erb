@@ -15,7 +15,9 @@
 		<div class="col-md-4">
 			<div class="panel panel-default">
 				<div class="panel-body">
-          <div><p class="lead"><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p></div></br></br>
+          <div><p class="lead"><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p>
+<%= render '/conversations/form', :organizer => @organizer.email %>
+</div></br></br>
 
           <h4>Who's Going</h4>
           Steve</br>Brandon
