@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+    <div class="panel panel-default panel-body">
+      <div class="col-md-7">
+        <%= form_tag credits_path do %>
+          <article>
+            <label class="amount">
+            </label>
+          </article>
+
+        <% end %>
+        <input id='slide' data-slider-value='1' data-slider-min='1' data-slider-max='30'></input>
+        <h2>Credits <span id="slidervalue">1</span></h2>
+        <h2>Cost $<span id="calculation">1.25</span></h2></br></br>
+          <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+          data-description="Credit Purcahse"
+          data-amount="100"
+          data-email="<%= current_user.email %>"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  var cost = 125
+
+  $('#slide').slider({
+    formater: function(value) {
+      return 'Credits: ' + value;
+    }
+  });
+
+  $("#slide").on('slide', function(e) {
+    if (e.value > 0 && e.value <= 5) { cost = 125} else
+    if (e.value > 5 && e.value <= 10) { cost = 100 } else
+    if (e.value > 10 && e.value <= 20) { cost = 75 } else
+      cost = 50;
+    $("#calculation").text(cost * e.value / 100);
+    $("#slidervalue").text(e.value);
+    });
+
+
+
+</script>
+

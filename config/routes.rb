@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'credits/index'
+
+  get 'credits/new'
+
+  get 'credits/create'
+
   authenticated :user do
     root :to => "welcome#index", as: :authenticated_root
   end
@@ -43,7 +49,7 @@ Rails.application.routes.draw do
 
 
   resources :activities
-
+  resources :credits
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 

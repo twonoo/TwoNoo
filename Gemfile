@@ -39,6 +39,7 @@ gem "paperclip", "~> 4.1"
 gem 'geokit'
 gem 'geokit-rails'
 
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
