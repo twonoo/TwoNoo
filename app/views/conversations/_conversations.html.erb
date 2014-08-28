@@ -1,4 +1,4 @@
-<%= content_tag_for(:li, conversation) do |conversation| %>
+<%= content_tag_for(:li, conversations) do |conversation| %>
   <p>
     <% if conversation.originator == current_user %>
       <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, conversation_path(conversation) %>

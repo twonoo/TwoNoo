@@ -11,7 +11,7 @@
     <ul class="dropdown-menu" style="width:300px">
       <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
         <%= content_tag_for(:li, conversation.messages({:read => false})) do |message| %>
-          <% if message.sender.id != current_user.id %>
+          <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
               <%= link_to conversation_path(conversation) do %>
                 <b><%=message.sender.profile.first_name%>:</b> <%=message.body%>
               <% end %>
@@ -19,6 +19,7 @@
         <% end %>
         <li class="divider"></li>
      <% end %>
+      <li><b><%= link_to 'View All', conversations_path %></b></li>
     </ul>
   </li>
   <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img-icon' %> <%= current_user.profile.first_name %><b class="caret"></b></a>

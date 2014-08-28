@@ -1,5 +1,11 @@
-<h1>Conversations</h1>
-<ul><%= render collection: mailbox.conversations(:mailbox_type => 'not_trash'), partial: 'conversations'%></ul>
-<h2>Trash</h2>
-<ul><%= render collection: mailbox.trash, partial: 'conversations'%></ul>
-
+<div class="container">
+  <div class="col-md-4">
+  <h1>Conversations</h1>
+  <ul><%= render collection: mailbox.conversations(:mailbox_type => 'not_trash'), partial: 'conversations'%></ul>
+  <h2>Trash</h2>
+  <ul><%= render collection: mailbox.trash, partial: 'conversations'%></ul>
+  </div>
+  <div class="col-md-8">
+still working on it
+  </div>
+</div>
