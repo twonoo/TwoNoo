@@ -7,16 +7,23 @@
       <li><a href="#"><b>Brett</b> is coming to <b>Bowling</b></a></li>
     </ul>
   </li>
-  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge">2</span></a>
+  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
     <ul class="dropdown-menu" style="width:300px">
-      <li><a href="#"><b>Brad:</b> Yo! What's up?</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><b>Jessica:</b> Hey there! I'm looking forward...</a></li>
+      <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
+        <%= content_tag_for(:li, conversation.messages({:read => false})) do |message| %>
+          <% if message.sender.id != current_user.id %>
+              <%= link_to conversation_path(conversation) do %>
+                <b><%=message.sender.profile.first_name%>:</b> <%=message.body%>
+              <% end %>
+          <% end %>
+        <% end %>
+        <li class="divider"></li>
+     <% end %>
     </ul>
   </li>
   <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img-icon' %> <%= current_user.profile.first_name %><b class="caret"></b></a>
     <ul class="dropdown-menu">
-      <li><%= link_to 'My Profile', profile_index_path %></li>
+      <li><%= link_to 'My Profile', profile_path(current_user) %></li>
       <li><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>
       <li><%= link_to 'Settings', profile_edit_path %></li>
       <li><%= link_to 'Privacy', profile_privacy_path %></li>

@@ -1,9 +1,19 @@
+<script>
+   $(function(){
+     $('#conversation_body').keyup(function(e) {
+       if (e.keyCode == 13 && !e.shiftKey) {
+         e.preventDefault();
+         this.form.submit();
+       }
+       else if (e.keyCode == 27)
+       {
+         this.form.reset();
+       }
+     });
+   });
+</script>
 <%= form_for :conversation, url: :conversations do |f| %>
   <%= f.hidden_field :recipients, :value => organizer %>
-  <%= f.text_area :body, as: :text %>
-  <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
-    <%= submit_tag 'Cancel', type: :reset, class: 'btn-danger' %>
-  </div>
+  <%= f.text_area :body, as: :text, :cols=>"40", :rows=>"3" %>
 <% end %>
 

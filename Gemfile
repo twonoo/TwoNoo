@@ -26,6 +26,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 # Use Devise for Authentication and Authorization
+gem 'omniauth-facebook'
 gem 'devise'
 
 gem 'momentjs-rails', '~> 2.5.0'
@@ -39,10 +40,12 @@ gem 'geokit'
 gem 'geokit-rails'
 
 gem 'mailboxer'
-
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+

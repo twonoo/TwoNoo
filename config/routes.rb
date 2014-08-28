@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'credits/index'
+
+  get 'credits/new'
+
+  get 'credits/create'
+
   authenticated :user do
     root :to => "welcome#index", as: :authenticated_root
   end
@@ -19,6 +25,11 @@ Rails.application.routes.draw do
 
   get 'profile/:id/following' => 'profile#following', as: :profile_following
 
+  get 'profile/:id' => 'profile#show', as: :profile
+  get 'profile/:id' => 'profile#show', as: :user
+
+  patch 'profile/:id' => 'profile#update', as: :profile_update
+
 
   get 'welcome/index'
   get 'welcome/coming_soon'
@@ -31,6 +42,7 @@ Rails.application.routes.draw do
   get 'activities/new'  
   post 'activities/new'
   get 'activities/edit'
+  get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
   get 'activities/create'
   get 'activities/rsvp'
 
@@ -38,9 +50,10 @@ Rails.application.routes.draw do
 
 
   resources :activities
+  resources :credits
 
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
-  devise_for :users
   resources :conversations, only: [:index, :show, :new, :create] do
     member do
       post :reply
@@ -49,9 +62,16 @@ Rails.application.routes.draw do
     end
   end
 
-
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers
+  get 'users/follow/:id' => 'users#follow!', as: :follow
+  get 'users/unfollow/:id' => 'users#unfollow!', as: :unfollow
+
+  get 'activities/rsvp/:activity_id/:user_id' => 'activities#rsvp', as: :rsvp
+  get 'activities/unrsvp/:activity_id/:user_id' => 'activities#unrsvp', as: :unrsvp
+
+
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

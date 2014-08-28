@@ -3,8 +3,18 @@
 		<div class="col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-body">
-          <button class="btn btn-success pull-right">I'm Going</button>
+          <% if @organizer == current_user %>
+          <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-default pull-right' %>
+          <% else %>
+          <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger pull-right') %>
+          <% end %>
 					<h2><%= @activity.activity_name %></h2>
+          <div>
+            <% @activity.activity_types.each do |a| %>
+              <span class="label label-danger"><%= a.activity_type %></span>
+            <% end %>
+          </div>
+        </br>
 					<p class="lead"><%= @activity.description %></p>
 					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
 					<div id="map-canvas"></div>
@@ -14,15 +24,24 @@
 
 		<div class="col-md-4">
 			<div class="panel panel-default">
-				<div class="panel-body">
-          <div><p class="lead"><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></p>
-<%= render '/conversations/form', :organizer => @organizer.email %>
-</div></br></br>
-
-          <h4>Who's Going</h4>
-          Steve</br>Brandon
+				<div class="panel-body text-center">
+            <%= image_tag @organizer.profile.profile_picture.url(:thumb), class: 'img-circle center-text' %>
+            <h4><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></h4> 
+            <h4><small><%= @organizer.profile.about_me %></small></h4>
+            <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
+            <% if @organizer != current_user %>
+              <%= render '/conversations/form', :organizer => @organizer.email %>
+            <% end %>
 				</div>
 			</div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4>Who's Going</h4>
+          <% Rsvp.where(activity_id: @activity.id).each do |rsvp| %>
+          <p><%= User.find(rsvp.user_id).profile.first_name %> <%= User.find(rsvp.user_id).profile.last_name %></p>
+          <% end %>
+        </div>
+      </div>
 		</div>
   </div>
 </div>
@@ -42,27 +61,28 @@
   		'<h4><%= @activity.location_name %></h4>' +
   		'<%= @activity.address %></br>' +
       '<%= @activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p") %>' +
-  		'<h3><div style="height:100px; width:250px; background-color:#e2e2e2; margin:0 auto"></div></h3>' +
+  		'<h3><div style="height:100px; width:250px"><%= @activity.image.url ? (image_tag @activity.image.url(:map_image)) : nil %>' +
       '</div>';
 
-  var infowindow = new google.maps.InfoWindow({
-      content: contentString
-  });
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
 
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: "<%= @activity.activity_name %>"
-  });
-
-  	infowindow.open(map,marker);
-
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: "<%= @activity.activity_name %>"
+    });
+    google.maps.event.addListenerOnce(map, 'idle', function() {
+      infowindow.open(map, marker);
+      }
+    );
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.open(map,marker);
       }
     );
   }
-
+  
   google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 

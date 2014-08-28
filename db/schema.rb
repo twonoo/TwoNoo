@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140805004143) do
+ActiveRecord::Schema.define(version: 20140817211322) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -29,9 +29,13 @@ ActiveRecord::Schema.define(version: 20140805004143) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "datetime"
-    t.boolean  "rsvp",             default: false
+    t.boolean  "rsvp",               default: false
     t.float    "latitude"
     t.float    "longitude"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "activities_activity_types", id: false, force: true do |t|
@@ -118,6 +122,31 @@ ActiveRecord::Schema.define(version: 20140805004143) do
     t.datetime "profile_picture_updated_at"
   end
 
+  create_table "rsvps", force: true do |t|
+    t.integer  "activity_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transaction_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transactions", force: true do |t|
+    t.integer  "transaction_type_id"
+    t.integer  "amount"
+    t.integer  "cost"
+    t.integer  "balance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "comment"
+    t.integer  "activity_id"
+    t.integer  "user_id"
+  end
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -131,6 +160,8 @@ ActiveRecord::Schema.define(version: 20140805004143) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
