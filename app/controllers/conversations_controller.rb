@@ -36,6 +36,12 @@ class ConversationsController < ApplicationController
   def show
   end
 
+  def show_messages
+    respond_to do |format|
+      format.html { render :partial => 'conversation', :locals => { :conversation => conversation } }
+    end
+  end
+
   def trash
     conversation.move_to_trash(current_user)
     redirect_to :conversations

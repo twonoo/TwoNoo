@@ -6,19 +6,30 @@
   <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
 <% end %>
 </h1>
-  <% prevuserid = nil %>
-  <% conversation.receipts_for(current_user).each do |receipt| %>
-    <% 
-      receipt.mark_as_read()
-      message = receipt.message
-      userid = message.sender.id
-    %>
-    <% if userid != prevuserid %>
-      <p>
-      <b><%= message.sender.profile.first_name %>:</b><br/>
-    <% end %>
-    <%= message.body %><br/>
-    <% prevuserid = message.sender.id %>
-  <% end %>
+<div id='conversation'>
+  <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
+</div>
 <%= render 'messages/form', conversation: conversation %>
 </div>
+<script>
+  $(function(){
+    var interval = 5000;   //number of mili seconds between each call
+    var refresh = function() {
+      $.ajax({
+        url: "/conversations/show_messages/<%=conversation.id%>",
+        datatype: 'script',
+        cache: false,
+        success: function(html) {
+          $('#conversation').html(html);
+          setTimeout(function() {
+            refresh();
+          }, interval);
+        }
+      });
+    };
+
+    setTimeout(function() {
+      refresh();
+    }, interval);
+  });
+</script>

@@ -61,6 +61,7 @@ Rails.application.routes.draw do
       post :untrash
     end
   end
+  get 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
 
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers
