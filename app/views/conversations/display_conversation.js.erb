@@ -1,0 +1,7 @@
+$('#display_conversation').html("<%=escape_javascript  render(partial: 'show', locals: {:conversation =>  conversation})%>");
+
+conversation_id = <%=conversation.id.to_s%>;
+
+$('[id^=conversation_]').css('font-weight', 'normal');
+$('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
+

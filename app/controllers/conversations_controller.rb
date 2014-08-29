@@ -12,7 +12,7 @@ class ConversationsController < ApplicationController
     conversation = nil
 
     @conversations.each do |c|
-      if (c.originator.id = current_user.id) || (c.recipients.first.id = recipient.id) then
+      if (((c.originator.id == current_user.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == current_user.id))) then
         conversation = c
         break
       end
@@ -28,12 +28,19 @@ class ConversationsController < ApplicationController
     redirect_to conversation_path(conversation)
   end
 
+  def display_conversation
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def reply
     current_user.reply_to_conversation(conversation, *message_params(:body))
     redirect_to conversation_path(conversation)
   end
 
   def show
+    redirect_to conversations_path(:id => conversation.id)
   end
 
   def show_messages

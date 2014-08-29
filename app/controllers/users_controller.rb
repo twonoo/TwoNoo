@@ -2,6 +2,11 @@ class UsersController < ApplicationController
 
 	def follow!
 		current_user.follow!(params[:id])
+		
+		# notify the user that they are being followed
+                user = User.find(params[:id])
+		user.notify(current_user.name, 'is now following you.')
+
 		redirect_to request.referer
 	end
 

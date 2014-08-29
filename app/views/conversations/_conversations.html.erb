@@ -1,15 +1,9 @@
 <%= content_tag_for(:li, conversations) do |conversation| %>
-  <p>
+  <p id="conversation_<%=conversation.id.to_s%>">
     <% if conversation.originator == current_user %>
-      <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, conversation_path(conversation) %>
+      <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
     <% else %>
-      <%= link_to conversation.originator.profile.first_name + ' ' + conversation.originator.profile.last_name, conversation_path(conversation) %>
-    <% end %>
-    |
-    <% if conversation.is_completely_trashed?(current_user) %>
-      <%= link_to 'Untrash', untrash_conversation_path(conversation), method: :post %>
-    <% else %>
-      <%= link_to 'Move to trash', trash_conversation_path(conversation), method: :post %>
+      <%= link_to conversation.originator.profile.first_name + ' ' + conversation.originator.profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
     <% end %>
   </p>
 <% end %>

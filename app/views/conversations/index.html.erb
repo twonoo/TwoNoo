@@ -2,10 +2,39 @@
   <div class="col-md-4">
   <h1>Conversations</h1>
   <ul><%= render collection: mailbox.conversations(:mailbox_type => 'not_trash'), partial: 'conversations'%></ul>
-  <h2>Trash</h2>
-  <ul><%= render collection: mailbox.trash, partial: 'conversations'%></ul>
   </div>
-  <div class="col-md-8">
-still working on it
+  <div id="display_conversation" class="col-md-8">
+    <% if params[:id].nil? then %>
+      <% conversation = mailbox.conversations(:mailbox_type => 'not_trash').first %>
+    <% else %>
+      <% conversation = mailbox.conversations.find(params[:id]) %>
+    <% end %>
+    <%= render locals: {:conversation => conversation}, partial: 'show' %>
   </div>
 </div>
+
+<script>
+  var conversation_id = <%=conversation.id.to_s%>;
+
+  $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
+
+  $(function(){
+    var interval = 5000;   //number of mili seconds between each call
+    var refresh = function() {
+      $.ajax({
+        url: "/conversations/show_messages/" + conversation_id,
+        datatype: 'script',
+        cache: false,
+        success: function(html) {
+          setTimeout(function() {
+            refresh();
+          }, interval);
+        }
+      });
+    };
+
+    setTimeout(function() {
+      refresh();
+    }, interval);
+  });
+</script>

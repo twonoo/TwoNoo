@@ -50,6 +50,12 @@ class ActivitiesController < ApplicationController
 
   def rsvp
     rsvp = Rsvp.new(activity_id: params[:activity_id], user_id: params[:user_id])
+
+    # Notfiy the creator that a new user is going
+    @activity = Activity.find(params[:activity_id])
+    @organizer = User.find(@activity.user_id)
+    @organizer.notify(params[:user_id], 'is attending your <todo: add activiity and link to activvity here>')
+
     if rsvp.save
       redirect_to request.referer
     end

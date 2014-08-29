@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     end
   end
   get 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
+  get 'conversations/:id/display' => 'conversations#display_conversation', as: :display_conversation
 
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers
