@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+
+  mailboxer:
+    message_mailer:
+      subject_new: "New message from TwoNoo"
+      subject_reply: "New reply message from TwoNoo"

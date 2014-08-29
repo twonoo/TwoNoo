@@ -69,8 +69,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def name
+    return self.profile.first_name + ' ' + self.profile.last_name
+  end
+
   def mailboxer_email(object)
-    return :email
+    return self.email
   end
 
 end
