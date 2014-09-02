@@ -1,0 +1,18 @@
+<script>
+   $(function(){
+     $('#comment').keyup(function(e) {
+       if (e.keyCode == 13 && !e.shiftKey) {
+         e.preventDefault();
+         this.form.submit();
+       }
+       else if (e.keyCode == 27)
+       {
+         this.form.reset();
+       }
+     });
+   });
+</script>
+<%= form_tag({controller: 'activities', action: 'comment'}, id: 'comment_form', method: 'post') do %>
+  <%= hidden_field_tag 'id', activity.id.to_s %>
+  <%= text_area_tag 'comment', nil, cols: '40' %>
+<% end %>

@@ -40,6 +40,7 @@ gem 'geokit'
 gem 'geokit-rails'
 
 gem 'mailboxer'
+gem 'acts_as_commentable'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # Use Capistrano for deployment

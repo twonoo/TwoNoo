@@ -1,0 +1,10 @@
+<% activity.comments.recent.all.each do |comment| %>
+  <p>
+    <% if comment.user.nil? then %>
+      <b>Anonymous:</b><br/>
+    <% else %>
+      <b><%= comment.user.profile.first_name %>:</b><br/>
+    <% end %>
+    <%= comment.comment %>
+ </p>
+<% end %>

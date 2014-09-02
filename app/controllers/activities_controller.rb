@@ -67,6 +67,16 @@ class ActivitiesController < ApplicationController
     redirect_to request.referer
   end
 
+  def comment
+    @activity = Activity.find(params[:id])
+    @comment = @activity.comments.create
+    @comment.user = current_user
+    @comment.comment = params[:comment]
+    @comment.save
+
+    redirect_to :back
+  end
+
   private
 
   def activity_params

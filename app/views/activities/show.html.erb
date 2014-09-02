@@ -14,7 +14,7 @@
               <span class="label label-danger"><%= a.activity_type %></span>
             <% end %>
           </div>
-        </br>
+          </br>
 					<p class="lead"><%= @activity.description %></p>
 					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
 					<div id="map-canvas"></div>
@@ -40,6 +40,12 @@
           <% Rsvp.where(activity_id: @activity.id).each do |rsvp| %>
           <p><%= User.find(rsvp.user_id).profile.first_name %> <%= User.find(rsvp.user_id).profile.last_name %></p>
           <% end %>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <%= render partial: 'comments', locals: {:activity => @activity} %>
+          <%= render partial: 'form', locals: {:activity => @activity} %>
         </div>
       </div>
 		</div>

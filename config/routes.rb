@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   get 'activities/create'
   get 'activities/rsvp'
 
-
+  post 'activities/comment' => 'activities#comment', as: :activity_comment
 
 
   resources :activities
