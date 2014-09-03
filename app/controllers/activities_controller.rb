@@ -44,6 +44,11 @@ class ActivitiesController < ApplicationController
     @activity = Activity.create(params)
     @activity.user_id = current_user.id
     if @activity.save
+      # Notfiy all followers of this organizer that a new activity has been created.
+      current_user.followers.each do |follower|
+        follower.notify(current_user.id.to_s, 'has created a new activity <todo: add activity and link to activity here>')
+      end
+
       redirect_to @activity
     end
   end

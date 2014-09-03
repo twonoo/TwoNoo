@@ -12,8 +12,11 @@
      });
    });
 </script>
+<style type='text/css'>
+  #conversation_body { width: 100% }
+</style>
 <%= form_for :conversation, url: :conversations do |f| %>
   <%= f.hidden_field :recipients, :value => organizer %>
-  <%= f.text_area :body, as: :text, :cols=>"40", :rows=>"3" %>
+  <%= f.text_area :body, as: :text, :rows=>"3" %>
 <% end %>
 
