@@ -46,7 +46,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        follower.notify(current_user.id.to_s, 'has created a new activity <todo: add activity and link to activity here>')
+        follower.notify(current_user.id.to_s, 'has created a new activity <a href="http://192.241.208.33/activities/' + @activity.id.to_s + '">' + @activity.activity_name + '</a>')
       end
 
       redirect_to @activity
@@ -59,7 +59,7 @@ class ActivitiesController < ApplicationController
     # Notfiy the creator that a new user is going
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
-    @organizer.notify(params[:user_id], 'is attending your <todo: add activiity and link to activvity here>')
+    @organizer.notify(params[:user_id], 'is attending your <a href="http://192.241.208.33/activities/' + @activity.id.to_s + '">' + @activity.activity_name + '</a>')
 
     if rsvp.save
       redirect_to request.referer

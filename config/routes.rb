@@ -64,6 +64,12 @@ Rails.application.routes.draw do
   get 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
   get 'conversations/:id/display' => 'conversations#display_conversation', as: :display_conversation
 
+  get 'messages/display' => 'messages#display_messages', as: :display_messages
+  get 'messages/number' => 'messages#num_messages', as: :num_messages
+
+  get 'notifications/display' => 'notifications#display_notifications', as: :display_notifications
+  get 'notifications/number' => 'notifications#num_notifications', as: :num_notifications
+
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers
   get 'users/follow/:id' => 'users#follow!', as: :follow

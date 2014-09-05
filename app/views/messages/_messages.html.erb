@@ -1,0 +1,12 @@
+<% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
+  <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
+    <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
+	<%= link_to conversation_path(conversation) do %>
+	  <b><%=message.sender.profile.first_name%>:</b> <%=message.body[0..99]%>
+	  <% if message.body.length > 100 then %>...<% end %>
+	<% end %>
+    <% end %>
+  <% end %>
+  <li class="divider"></li>
+<% end %>
+<div style="width: 300px; text-align: center;"><b><%= link_to 'View All', conversations_path %></b></div>

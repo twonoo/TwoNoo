@@ -1,0 +1,25 @@
+<%
+  @numNotifs = 10
+  if current_user.mailbox.notifications({:read => false}).count > @numNotifs then
+    @numNotifs = current_user.mailbox.notifications({:read => false}).count
+  end
+%>
+
+<% current_user.mailbox.notifications.first(@numNotifs).each do |notif| %>
+  <% if notif.is_unread?(current_user) then %>
+    <div style='word-wrap: break-word; width: 290px; margin-left: 5px; background-color: #F0F0F0;'>
+  <% else %>
+    <div style='word-wrap: break-word; width: 290px; margin-left: 5px;'>
+  <% end %>
+    <%
+      @user = User.find_by_id(notif.subject)
+      if @user.nil? then %>
+    <b><%=notif.subject%>:</b>
+    <% else %>
+      <b><%=link_to @user.name, profile_path(@user)%>:</b>
+    <% end %>
+    <%=notif.body%>
+    <li class="divider"></li>
+  </div>
+  <% notif.mark_as_read(current_user) %>
+<% end %>
