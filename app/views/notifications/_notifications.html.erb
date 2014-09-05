@@ -18,7 +18,7 @@
     <% else %>
       <b><%=link_to @user.name, profile_path(@user)%>:</b>
     <% end %>
-    <%=notif.body%>
+    <%=notif.body.html_safe%>
     <li class="divider"></li>
   </div>
   <% notif.mark_as_read(current_user) %>

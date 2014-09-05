@@ -1,8 +1,4 @@
-You have a new reply: <%= @subject %>
-===============================================
-
-You have received a new reply:
-
+You have a new message from <%= @message.sender.name %>
 -----------------------------------------------
 <%= @message.body.html_safe? ? @message.body : strip_tags(@message.body) %>
 -----------------------------------------------

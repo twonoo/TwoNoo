@@ -17,6 +17,6 @@
 </style>
 <%= form_for :conversation, url: :conversations do |f| %>
   <%= f.hidden_field :recipients, :value => organizer %>
-  <%= f.text_area :body, as: :text, :rows=>"3" %>
+  <%= f.text_area :body, as: :text %>
 <% end %>
 

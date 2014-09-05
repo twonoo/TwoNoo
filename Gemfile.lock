@@ -43,6 +43,9 @@ GEM
       sass (~> 3.2)
     bootstrap3-datetimepicker-rails (3.0.0.2)
       momentjs-rails (~> 2.5.0)
+    browser-timezone-rails (0.0.7)
+      jquery-rails
+      rails (>= 3.1)
     builder (3.2.2)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
@@ -192,6 +195,7 @@ DEPENDENCIES
   acts_as_commentable
   bootstrap-sass (~> 3.1.1)
   bootstrap3-datetimepicker-rails (~> 3.0.0)
+  browser-timezone-rails
   devise
   geocoder
   geokit

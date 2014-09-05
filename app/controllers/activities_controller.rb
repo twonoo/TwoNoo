@@ -35,6 +35,16 @@ class ActivitiesController < ApplicationController
     activity.activity_type_ids=params[:activity_type_ids]
     params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
     activity.update!(params)
+
+    # Get the rsvp'd users
+    @rsvps = Rsvp.where(activity_id: activity.id).all
+    @rsvps.each do |rsvp|
+      @user = User.find_by_id(rsvp.user_id)
+      if !@user.nil? then
+        @user.notify(current_user.id.to_s, 'has updated activity <a href="http://192.241.208.33/activities/' + activity.id.to_s + '">' + activity.activity_name + '</a>')
+      end
+    end
+
     redirect_to activity
   end
 

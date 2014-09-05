@@ -4,10 +4,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>You have a new reply: <%= @subject %></h1>
-    <p>
-      You have received a new reply:
-    </p>
+    <h1>You have a new message from <%= @message.sender.name %></h1>
     <blockquote>
       <p>
         <%= raw @message.body %>

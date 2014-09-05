@@ -1,10 +1,11 @@
 <% activity.comments.recent.all.each do |comment| %>
   <p>
     <% if comment.user.nil? then %>
-      <b>Anonymous:</b><br/>
+      <b>Anonymous:</b>
     <% else %>
-      <b><%= comment.user.profile.first_name %>:</b><br/>
+      <b><%= comment.user.profile.first_name %>:</b>
     <% end %>
+    <font size="1">(<%=comment.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font><br/>
     <%= comment.comment %>
  </p>
 <% end %>
