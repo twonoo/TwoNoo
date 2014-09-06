@@ -152,14 +152,14 @@ ActiveRecord::Schema.define(version: 20140905181826) do
 
   create_table "transactions", force: true do |t|
     t.integer  "transaction_type_id"
+    t.integer  "user_id"
+    t.integer  "activity_id"
     t.integer  "amount"
     t.integer  "cost"
     t.integer  "balance"
+    t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "comment"
-    t.integer  "activity_id"
-    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|

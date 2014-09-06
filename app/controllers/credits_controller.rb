@@ -40,11 +40,12 @@ class CreditsController < ApplicationController
 	    :currency    => 'usd'
 	  )
 
-
-    redirect_to credits_purchase_path, flash[:success] = "Woohoo! You got dem credits son! #{@number_of_credits} to be exact!"
+    flash[:notice] = "Thank you for your purchase"
+    redirect_to credits_purchase_path
 
 	rescue Stripe::CardError => e
 	  flash[:error] = e.message
-	  redirect_to credits_path
+	  redirect_to credits_purchase_path
 	end
+
 end
