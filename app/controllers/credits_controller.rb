@@ -7,6 +7,9 @@ class CreditsController < ApplicationController
   	@transaction = Transaction.new
   end
 
+  def purchase
+  end
+
   def create
 
   	@number_of_credits = params[:number_of_credits].to_i
@@ -37,8 +40,11 @@ class CreditsController < ApplicationController
 	    :currency    => 'usd'
 	  )
 
+
+    redirect_to credits_purchase_path, flash[:success] = "Woohoo! You got dem credits son! #{@number_of_credits} to be exact!"
+
 	rescue Stripe::CardError => e
 	  flash[:error] = e.message
 	  redirect_to credits_path
-	  end
+	end
 end

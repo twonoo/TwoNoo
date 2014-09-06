@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'credits/new'
 
   get 'credits/create'
+  get 'credits/purchase'
 
   authenticated :user do
     root :to => "welcome#index", as: :authenticated_root
