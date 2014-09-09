@@ -62,7 +62,7 @@ class ActivitiesController < ApplicationController
       current_user.followers.each do |follower|
         follower.notify(current_user.id.to_s, 'has created a new activity <a href="http://192.241.208.33/activities/' + @activity.id.to_s + '">' + @activity.activity_name + '</a>')
       end
-
+      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: (Transaction.get_balance(current_user) - 1))
       redirect_to @activity
     end
   end
