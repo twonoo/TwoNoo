@@ -45,7 +45,7 @@ class ActivitiesController < ApplicationController
     @rsvps.each do |rsvp|
       @user = User.find_by_id(rsvp.user_id)
       if !@user.nil? then
-        @user.notify(current_user.id.to_s, 'has updated activity <a href="http://192.241.208.33/activities/' + activity.id.to_s + '">' + activity.activity_name + '</a>')
+        @user.notify("#{current_user.name} has updated an activity you're going to: <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
     end
 
@@ -60,7 +60,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        follower.notify("#{current_user.name} has created a new activity <a href='http://twonoo.com:8000/activities/#{@activity.id}</a>")
+        follower.notify("#{current_user.name} has created a new activity:  <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: (Transaction.get_balance(current_user) - 1))
       redirect_to @activity
@@ -73,7 +73,7 @@ class ActivitiesController < ApplicationController
     # Notfiy the creator that a new user is going
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
-    @organizer.notify(params[:user_id], 'is attending your <a href="http://192.241.208.33/activities/' + @activity.id.to_s + '">' + @activity.activity_name + '</a>')
+    @organizer.notify("#{current_user.name} is attending your activity: <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
     if rsvp.save
       redirect_to request.referer
