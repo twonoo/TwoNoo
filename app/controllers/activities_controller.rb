@@ -60,7 +60,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        follower.notify(current_user.id.to_s, 'has created a new activity <a href="http://192.241.208.33/activities/' + @activity.id.to_s + '">' + @activity.activity_name + '</a>')
+        follower.notify("#{current_user.profile.name} has created a new activity <a href='http://twonoo.com:8000/activities/#{@activity.id}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: (Transaction.get_balance(current_user) - 1))
       redirect_to @activity
