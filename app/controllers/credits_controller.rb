@@ -41,7 +41,7 @@ class CreditsController < ApplicationController
 	  )
 
     flash[:notice] = "Thank you for your purchase"
-    redirect_to credits_purchase_path
+    redirect_to credits_path
 
 	rescue Stripe::CardError => e
 	  flash[:error] = e.message

@@ -1,8 +1,9 @@
 <div class="container">
+  <%= flash_messages %>
   <div class="row">
     <div class="panel panel-default panel-body">
       <div class="col-md-6 text-center">
-        <table class="table table-condensed" style="font-size:17px;text-align:center;">
+        <table class="table table-condensed purchase-table" style="font-size:17px;text-align:center">
           <thead>
             <td><strong>Credits</strong></td>
             <td><strong>Price<strong></td>
@@ -201,3 +202,9 @@
       });
     });
   </script>
+
+  <style>
+  .purchase-table > tbody > tr > td {
+    line-height:32px;
+    padding:5px;
+  }
