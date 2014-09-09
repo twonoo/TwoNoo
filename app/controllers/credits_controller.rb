@@ -10,9 +10,8 @@ class CreditsController < ApplicationController
   def purchase
     if Transaction.get_balance(current_user) == 0
       flash[:error] = "Before creating an activity, you'll need to buy more credits."
-    else
-      @user_transactions = Transaction.where(user_id: current_user).order("id DESC")
     end
+    @user_transactions = Transaction.where(user_id: current_user).order("id DESC")
   end
 
   def create
