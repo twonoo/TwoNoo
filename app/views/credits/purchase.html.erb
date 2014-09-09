@@ -51,7 +51,7 @@
     </div>
     <div class="col-md-3 col-md-offset-2 text-center">
       <div class="row">
-        <span><h2>8 Credits</h2></span>
+        <span><h2><%= Transaction.get_balance(current_user) if current_user %> Credits</h2></span>
         <span><h6>Your Balance</h6></span>
       </div>
       <div class="row" style="margin-top:25px">
@@ -59,6 +59,43 @@
       </div>
     </div>
   </div>
+
+<% unless @user_transactions.empty? %>
+  <div class="container">
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-body">
+        <div class="col-md-7">
+          <p class="lead">Recent Usage</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <td>Type</td>
+                <td>Amount</td>
+                <td>Cost</td>
+                <td>Date</td>
+                <td>Balance</td>
+              </tr>
+            </thead>
+            <tbody>
+            <% @user_transactions.each do |t| %>
+              <tr>
+                <td><%= t.transaction_type.name %></td>
+                <td><%= t.amount %></td>
+                <td><%= "$#{t.cost}" if t.cost %></td>
+                <td><%= t.created_at.strftime('%b-%d-%Y') %></td>
+                <td><%= t.balance %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
 
 <!-- Modal -->
 <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -99,7 +136,7 @@
           </label>
         </article>
 
-        <%= hidden_field_tag :number_of_credits, '1'  %> 
+        <%= hidden_field_tag :number_of_credits, nil, id: 'number_of_credits_hidden' %> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -149,17 +186,13 @@
 
   $(document).on("click", ".open-purchase", function () {
        if ($(this).attr('id') == "custom-purchase") { 
-          var number_of_credits = $("#custom-input").val()} 
+          var number_of_credits = $("#custom-input").val()}
        else
           var number_of_credits = $(this).data('number-of-credits');
 
        $(".modal-body #number_of_credits").text( number_of_credits );
+       $(".modal-body #number_of_credits_hidden").val( number_of_credits );
        $(".modal-body #cost_calculation").text( calculate_cost(number_of_credits));
-
-
-       // As pointed out in comments, 
-       // it is superfluous to have to manually call the modal.
-       // $('#addBookDialog').modal('show');
     });
 
 </script>
@@ -204,7 +237,8 @@
   </script>
 
   <style>
-  .purchase-table > tbody > tr > td {
-    line-height:32px;
-    padding:5px;
-  }
+    .purchase-table > tbody > tr > td {
+      line-height:32px;
+      padding:5px;
+    }
+  </style>

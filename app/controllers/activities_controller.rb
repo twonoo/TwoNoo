@@ -22,7 +22,11 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    @activity = Activity.new activity_name: params[:activity_name]
+    if Transaction.get_balance(current_user) > 0
+      @activity = Activity.new activity_name: params[:activity_name]
+    else
+      redirect_to credits_purchase_path
+    end
   end
 
   def edit
