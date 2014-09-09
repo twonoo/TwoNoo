@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
         user.email = data["email"] if user.email.blank?
         user.profile.first_name = data["first_name"] if user.profile.first_name.blank?
         user.profile.last_name = data["last_name"] if user.profile.last_name.blank?
-        user.profile.profile_picture = URI.parse(URI.encode(session["devise.facebook_data"]["info"]["image"])) if user.profile.profile_picture.blank?
+        user.profile.profile_picture = URI.parse(URI.encode(session["devise.facebook_data"]["info"]["image"])) #if user.profile.profile_picture.blank?
         logger.info data
         if data["gender"] == "male"
           user.profile.gender = 0
