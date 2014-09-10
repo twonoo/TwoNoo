@@ -15,8 +15,8 @@ $(function(){
     }
   });
 
-  var interval = 500000000; // give me some sanity during testing!
-  //var interval = 5000;   //number of mili seconds between each call
+  //var interval = 500000000; // give me some sanity during testing!
+  var interval = 5000;   //number of mili seconds between each call
   var refresh_num_notifs = function() {
     $.ajax({
       url: "/notifications/number",
