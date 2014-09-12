@@ -6,6 +6,7 @@
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>0</span>I'm Attending</li></li>".html_safe, root_path %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followers.count}</span>Followers</li></li>".html_safe, profile_followers_path(current_user) %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followed_users.count}</span>Following</li></li>".html_safe, profile_following_path(current_user) %>
+      <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.alerts.count}</span>My Alerts</li></li>".html_safe, alerts_path %>
     </ul>
   </div>
 </div>

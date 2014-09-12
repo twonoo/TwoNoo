@@ -131,17 +131,17 @@
 <script>
   $(function() {
     $.vegas({
-      src:'<%= asset_path 'backgrounds/sd.jpg' %>'
+      src:'<%= asset_path 'backgrounds/1.jpg' %>'
     })('overlay', {
       src:"<%= asset_path 'overlays/05.png' %>"
     });
     $.vegas('slideshow', {
       delay:10000,
       backgrounds:[
-      { src: '<%= asset_path 'backgrounds/sd.jpg' %>', fade:1000 },
-      { src: '<%= asset_path 'backgrounds/hiking.jpg' %>', fade:1000, valign:'70%' },
-      { src: '<%= asset_path 'backgrounds/rockies.jpg' %>', fade:1000 },
-      { src: '<%= asset_path 'backgrounds/beach.jpg' %>', fade:1000 }
+      { src: '<%= asset_path 'backgrounds/1.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/2.jpg' %>', fade:1000, valign:'70%' },
+      { src: '<%= asset_path 'backgrounds/3.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/4.jpg' %>', fade:1000 }
       ]
     })('overlay');
   });

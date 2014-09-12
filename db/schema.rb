@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140909043604) do
+ActiveRecord::Schema.define(version: 20140912034713) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(version: 20140909043604) do
 
   create_table "activity_types", force: true do |t|
     t.string   "activity_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "alerts", force: true do |t|
+    t.string   "keywords"
+    t.string   "location"
+    t.integer  "distance"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

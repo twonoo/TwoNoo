@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  get 'alerts/index'
+  get 'alerts' => 'alerts#index', as: :alerts
+  post 'alerts/create' => 'alerts#create', as: :alert_create
+
+  resources :alerts
+  get 'alerts/new'
+
+  get 'alerts/create'
+
   get 'credits/index'
 
   get 'credits/new'

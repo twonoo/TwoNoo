@@ -19,7 +19,11 @@ class Activity < ActiveRecord::Base
 	end
 
 	def self.terms(terms)
-		where('activity_name LIKE ? OR location_name LIKE ? OR description LIKE ?', "%#{terms}%", "%#{terms}%", "%#{terms}%")
+		query = []
+		terms.split.each do |t|
+			query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%')"
+		end
+		where(query.join(" AND "))
 	end
 
 end
