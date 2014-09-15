@@ -26,11 +26,11 @@
 			<div class="panel panel-default">
 				<div class="panel-body text-center">
             <%= image_tag @organizer.profile.profile_picture.url(:thumb), class: 'img-circle center-text' %>
-            <h4><%= @organizer.profile.first_name %> <%= @organizer.profile.last_name %></h4> 
+            <h4><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h4> 
             <h4><small><%= @organizer.profile.about_me %></small></h4>
-            <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
             <% if @organizer != current_user %>
-				<div class="text-left">
+              <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
+	      <div class="text-left">
               Send <%=@organizer.profile.first_name%> a message:
               <%= render '/conversations/form', :organizer => @organizer.email %>
 			</div>
@@ -39,9 +39,10 @@
 			</div>
       <div class="panel panel-default">
         <div class="panel-body">
-          <h4>Who's Going</h4>
-          <% Rsvp.where(activity_id: @activity.id).each do |rsvp| %>
-          <p><%= User.find(rsvp.user_id).profile.first_name %> <%= User.find(rsvp.user_id).profile.last_name %></p>
+          <h4>Who's Going (<%=Rsvp.where(activity_id: @activity.id).count%>)</h4>
+          <% Rsvp.where(activity_id: @activity.id).each do |rsvp|
+            @going = User.find(rsvp.user_id) %>
+            <p><%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %></p>
           <% end %>
         </div>
       </div>

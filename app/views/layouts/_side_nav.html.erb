@@ -3,7 +3,7 @@
     <%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img' %>
     <ul class="nav list-group">
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.activities.count}</span>My Activities</li></li>".html_safe, user_activities_path(current_user.id) %>
-      <%= link_to "<li class='list-group-item'><span class='badge pull-right'>0</span>I'm Attending</li></li>".html_safe, root_path %>
+      <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{Rsvp.where(user_id: current_user.id).count}</span>I'm Attending</li></li>".html_safe, attending_activities_path(current_user.id) %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followers.count}</span>Followers</li></li>".html_safe, profile_followers_path(current_user) %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.followed_users.count}</span>Following</li></li>".html_safe, profile_following_path(current_user) %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.alerts.count}</span>My Alerts</li></li>".html_safe, alerts_path %>

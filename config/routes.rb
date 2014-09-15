@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
   get 'activities/index'
   get 'activities/user/:id' => 'activities#user', as: :user_activities
+  get 'activities/attending/:id' => 'activities#attending', as: :attending_activities
   get 'activities/search'
   post 'activities/search' => 'activities#search', as: :activity_search
   get 'activities/show'

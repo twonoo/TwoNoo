@@ -1,6 +1,10 @@
 class ActivitiesController < ApplicationController
   before_filter :authenticate_user!
 
+  def attending
+    @rsvps = Rsvp.where(user_id: current_user.id)
+  end
+
   def index
   end
 

@@ -6,7 +6,9 @@
 					<%= image_tag @profile.profile.profile_picture.url(:thumb), class: 'img-circle center-text' %>
             <h3><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></h3> 
             <p><%= @profile.profile.about_me %></p>
+            <% if current_user != @profile then %>
             <h4><%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %></h4>
+            <% end %>
 				</div>
 			</div>
 		</div>
