@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   get 'welcome/index'
   get 'welcome/coming_soon'
 
+  get 'company/about' => 'company#about', as: :about
+  get 'company/contact' => 'company#contact', as: :contact
+
   get 'activities/index'
   get 'activities/user/:id' => 'activities#user', as: :user_activities
   get 'activities/attending/:id' => 'activities#attending', as: :attending_activities
