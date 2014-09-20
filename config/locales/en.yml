@@ -25,6 +25,6 @@ en:
   mailboxer:
     message_mailer:
       subject_new: "New message from TwoNoo"
-      subject_reply: "New reply message from TwoNoo"
+      subject_reply: "New message from TwoNoo"
     notification_mailer:
       subject: "TwoNoo - %{subject}"
