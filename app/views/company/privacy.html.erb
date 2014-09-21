@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row center-block" style=" text-align:center; margin-bottom:5px">
+    <div class="panel">
+       This is where we will tell the users they don't have any privacy and we will rifle through their personal belongings whenever we want.
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    $.vegas({
+      src:'<%= asset_path 'backgrounds/1.jpg' %>'
+    })('overlay', {
+      src:"<%= asset_path 'overlays/05.png' %>"
+    });
+    $.vegas('slideshow', {
+      delay:10000,
+      backgrounds:[
+      { src: '<%= asset_path 'backgrounds/1.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/2.jpg' %>', fade:1000, valign:'70%' },
+      { src: '<%= asset_path 'backgrounds/3.jpg' %>', fade:1000 },
+      { src: '<%= asset_path 'backgrounds/4.jpg' %>', fade:1000 }
+      ]
+    })('overlay');
+  });
+
+  $("#create_search").children().click(function(e){
+   $(this).addClass("active btn-info");
+   $(this).siblings().removeClass('active btn-info').addClass('btn-default');
+  });
+
+  $(".dropdown-menu li a").click(function(){
+    $(this).parents(".btn-group").find('.selection').text($(this).text());
+    $(this).parents(".btn-group").find('.selection').val($(this).text());
+  });
+
+
+
+  $(function () {
+      $('#startDatePicker').datetimepicker({
+        minDate: "<%= Date.today %>",
+        pickTime: false
+      });
+
+      $('#endDatePicker').datetimepicker({
+        pickTime: false
+      });
+
+      $("#startDatePicker").on("dp.change",function (e) {
+         $('#endDatePicker').data("DateTimePicker").setMinDate(e.date);
+      });
+      $("#endDatePicker").on("dp.change",function (e) {
+         $('#startDatePicker').data("DateTimePicker").setMaxDate(e.date);
+      });
+
+  });
+
+</script>

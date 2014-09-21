@@ -46,6 +46,8 @@ Rails.application.routes.draw do
 
   get 'company/about' => 'company#about', as: :about
   get 'company/contact' => 'company#contact', as: :contact
+  get 'company/terms' => 'company#terms', as: :terms
+  get 'company/privacy' => 'company#privacy', as: :privacy
 
   get 'activities/index'
   get 'activities/user/:id' => 'activities#user', as: :user_activities

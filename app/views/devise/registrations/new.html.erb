@@ -42,7 +42,7 @@
 
       <% end %>
 
-      <h4><small>By clicking Sign Up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</small></h4>
+      <h4><small>By clicking Sign Up, you agree to our <%= link_to 'Terms', terms_path, target: '_blank' %> and <%= link_to 'Privacy Policy', privacy_path, target: '_blank' %>.</small></h4>
       <div class="text-center"><%= f.submit "Sign up", class: 'btn btn-success btn-lg btn-block' %>
       </div>
 

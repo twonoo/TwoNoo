@@ -26,7 +26,10 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    if Transaction.get_balance(current_user) > 0
+    if     (Transaction.get_balance(current_user) > 0) \
+        || (current_user.profile.nonprofit == 1) \
+        || (current_user.profile.abassador == 1) \
+    then
       @activity = Activity.new activity_name: params[:activity_name]
     else
       redirect_to credits_purchase_path
@@ -66,7 +69,7 @@ class ActivitiesController < ApplicationController
       current_user.followers.each do |follower|
         follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
-      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: (Transaction.get_balance(current_user) - 1))
+      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
       redirect_to @activity
     end
   end
