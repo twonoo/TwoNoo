@@ -1,18 +1,10 @@
 <div class="col-md-3 ">
   <div class="panel panel-default">
-    <ul class="nav list-group">
-      <a href="/profile/edit">
-        <li class="list-group-item active">Edit Profile</li>
-      </a> 
-      <a href="/users/password/edit">
-        <li class="list-group-item">Change Password</li>
-      </a>
-      <a href="/users/privacy">
-        <li class="list-group-item">Privacy</li>
-      </a>
-      <a href="/users/sign_out">
-        <li class="list-group-item">Sign Out</li>
-      </a>
+    <ul class="nav list-group profile">
+      <%= link_to '<li class="list-group-item">Edit Profile</li>'.html_safe, profile_edit_path %>
+      <%= link_to '<li class="list-group-item">Change Password</li>'.html_safe, profile_change_password_path %>
+      <%= link_to '<li class="list-group-item">Privacy</li>'.html_safe, profile_privacy_path %>
+      <%= link_to '<li class="list-group-item">Sign Out</li>'.html_safe, destroy_user_session_path, method: :delete %>
     </ul>
   </div>
 </div>

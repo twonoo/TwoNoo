@@ -15,7 +15,7 @@
               <div class="col-sm-6"> <%= u.text_field :email, class: "form-control" %> </div>
             </div>
             <div class="form-group"> <%= p.label :sex, class: "col-sm-2 control-label" %>
-              <div class="col-sm-2"> <%= p.select :gender, [['Male', 0], ['Female', 1]], {}, class: "form-control" %> </div>
+              <div class="col-sm-3"> <%= p.select :gender, [['Male', 0], ['Female', 1], ['Other', 2]], {}, class: "form-control" %> </div>
             </div>
             <div class="form-group"> <%= p.label :about_me, class: "col-sm-2 control-label" %>
               <div class="col-sm-6"> <%= p.text_area :about_me, class: "form-control" %> </div>
