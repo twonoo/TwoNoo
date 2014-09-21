@@ -25,11 +25,13 @@ Rails.application.routes.draw do
   get 'profile/index'
 
   get 'profile/edit'
+  get 'profile/password', as: :profile_change_password
+  patch 'profile/update_password/:id' => 'profile#update_password', as: :profile_update_password
 
   get 'profile/notifications'
   get 'profile/messages'
 
-  get 'profile/privacy'
+  get 'profile/privacy' => 'profile#privacy', as: :profile_privacy
 
   get 'profile/:id/followers' => 'profile#followers', as: :profile_followers
 
@@ -37,6 +39,8 @@ Rails.application.routes.draw do
 
   get 'profile/:id' => 'profile#show', as: :profile
   get 'profile/:id' => 'profile#show', as: :user
+
+
 
   patch 'profile/:id' => 'profile#update', as: :profile_update
 

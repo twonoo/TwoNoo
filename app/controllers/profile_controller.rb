@@ -6,11 +6,28 @@ class ProfileController < ApplicationController
     @user = User.find(current_user)
   end
 
+  def password
+    @user = User.find(current_user)
+  end
+
+  def update_password
+    user = User.find(params[:id])
+    if user.valid_password?(params[:user][:current_password])
+      user.update(password_params)
+      logger.info user.errors
+      if user.save
+        redirect_to new_user_session_path
+      end
+    else
+      redirect_to profile_change_password_path, alert: "Your current password is incorrect"
+    end
+  end
+
   def update
     user = User.find(params[:id])
     user.update(profile_params)
     if user.save
-      redirect_to user
+      redirect_to profile_edit_path, notice: "Your profile has been updated"
     end
   end
 
@@ -31,6 +48,10 @@ class ProfileController < ApplicationController
 
   def following
     @following = User.find(params[:id]).followed_users
+  end
+
+  def password_params
+    params.require(:user).permit(:password)
   end
 
   def profile_params
