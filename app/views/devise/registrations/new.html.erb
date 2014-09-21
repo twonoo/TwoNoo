@@ -28,6 +28,10 @@
         <%= profile_form.date_select :birthday, {start_year: Time.now.year - 18, end_year: Time.now.year - 100, order: [:month, :day, :year], prompt: { month: 'Month', day: 'Day', year: 'Year' } }, {class: "form-control input-md", style: "width:32%; display:inline"} %>
       </div>
 
+      <h4><%= profile_form.check_box :nonprofit %>
+        <small>This account is for the exclusive purpose of promoting a non-profit organization.</small>
+      </h4>
+
       <div>
         <%= profile_form.radio_button :gender, "0" %>
         <%= profile_form.label :gender, "Male", class: "h5", style: "margin-right:25px; margin-top:10px; padding-left:5px" %>

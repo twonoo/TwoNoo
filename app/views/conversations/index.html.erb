@@ -9,14 +9,18 @@
     <% else %>
       <% conversation = mailbox.conversations.find(params[:id]) %>
     <% end %>
-    <%= render locals: {:conversation => conversation}, partial: 'show' %>
+    <% if !(conversation.nil?) then %>
+      <%= render locals: {:conversation => conversation}, partial: 'show' %>
+    <% end %>
   </div>
 </div>
 
 <script>
-  var conversation_id = <%=conversation.id.to_s%>;
+  var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
 
-  $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
+  <% if !(conversation.nil?) then %>
+    $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
+  <% end %>
 
   $(function(){
     var interval = 5000;   //number of mili seconds between each call
