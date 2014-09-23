@@ -15,7 +15,7 @@ class Activity < ActiveRecord::Base
                    :lng_column_name => :longitude
 
 	def address
-		[street_address_1, street_address_2, city, state].reject!(&:empty?).join(', ')
+		[street_address_1, street_address_2, city, state].grep(String).join(', ')
 	end
 
 	def self.terms(terms)
