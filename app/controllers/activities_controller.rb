@@ -9,16 +9,39 @@ class ActivitiesController < ApplicationController
   end
 
   def search
+    # Setup location constraints
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
+
+    # Convert search parameter to coordinates
     search_coordinates = Geocoder.search(params[:location]).first.coordinates
     unless Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 || Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100
       redirect_to root_path, notice: "You're trying to search outside of the area"
     end
+
+    # Determine date range
+    if !params[:when].blank?
+      case params[:when]
+        when "Today"
+          end_date = Date.today + 1
+        when "This Week"
+          end_date = Date.today.at_end_of_week + 1
+        when "Next Two Weeks"
+          end_date = 2.weeks.from_now + 1
+        else
+          end_date = 1.month.from_now + 1
+      end
+      from_date = Date.today
+    else
+      from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
+      end_date = Time.strptime(params[:to_date], '%m/%d/%Y')
+    end
+
+    # Build search query
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
-    @activities = @activities.where('datetime BETWEEN ? AND ?', Date.yesterday, params[:when])
-    @activities = @activities.within(params[:miles], origin: search_coordinates)
+    @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
+    @activities = @activities.within(params[:distance], origin: search_coordinates)
   end
 
   def user

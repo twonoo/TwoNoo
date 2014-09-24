@@ -32,6 +32,7 @@
                 <div class="col-xs-4 col-md-4 col-lg-3">
                   <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <input type="hidden" name="when" class="hidden-input" value="Today">
                       <span class="selection">Today</span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
@@ -42,38 +43,23 @@
                       <div class="form-group" style="padding:5px">
                         <label>Start</label>
                         <div class='input-group date col-sm-4' style='width:200px' id='startDatePicker'>
-                          <input type="text" class="form-control input-sm">
+                          <input type="text" class="form-control input-sm" name="from_date">
                           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
                         <label>End</label>
                         <div class='input-group date col-sm-4' style='width:200px' id='endDatePicker'>
-                          <input type="text" class="form-control input-sm">
+                          <input type="text" class="form-control input-sm" name="to_date">
                           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
                       </div>
                     </ul>
                   </div>
                 </div>
-                <div class="col-xs-4 col-md-4 col-lg-3">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      <span class="selection">Type</span> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">All</a></li>
-                      <li><a href="#">Sports</a></li>
-                      <li><a href="#">Arts</a></li>
-                      <li><a href="#">Business</a></li>
-                      <li><a href="#">Eat & Drink</a></li>
-                      <li><a href="#">Nightlife</a></li>
-                      <li><a href="#">Community</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-xs-4 col-md-4 col-lg-5">
+                <div class="col-xs-6 col-md-6 col-lg-6">
                   Within
                   <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <input type="hidden" name="distance" class="hidden-input" value="25">
                       <span class="selection">25</span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
@@ -87,25 +73,15 @@
                   miles of
                   <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      <span class="selection">Denver</span> <span class="caret"></span>
+                      <input type="hidden" name="location" class="hidden-input" value="Denver, CO">
+                      <span class="selection">Denver, CO</span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Denver</a></li>
-                      <li><a href="#">Pittsburgh</a></li>
-                      <li><a href="#">Atlanta</a></li>
+                      <li><a href="#">Denver, CO</a></li>
+                      <li><a href="#">Pittsburgh, PA</a></li>
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="row" style="margin-top:5px; display:none">
-                <div class="col-xs-4 col-md-4 col-lg-3">
-                  <%= select_tag :when, options_for_select([ ["Today", Date.today + 1], ["This Week", Date.today.at_end_of_week + 1], ["This Month", Date.today.at_end_of_month + 1], ["This Year", Date.today.at_end_of_year + 1] ], Date.today.at_end_of_week + 1) %>
-                </div>
-                <div class="col-xs-4 col-md-4 col-lg-3">
-                  <%= select_tag :type, options_from_collection_for_select(ActivityType.all, "id", "activity_type"), prompt: "Type" %>
-                </div>
-                <div class="col-xs-4 col-md-4 col-lg-5">
-                  Within <%= select_tag :miles, options_for_select([ 5, 25, 50, 100, 200], 25) %> miles of <%= select_tag :location, options_for_select([ ["Denver", "Denver, CO"], ["Pittsburgh", "Pittsburgh, PA"], ["Atlanta", "Atlanta, GA"]]) %> </div>
               </div>
             </div>
             <% end %>
@@ -154,6 +130,7 @@
   $(".dropdown-menu li a").click(function(){
     $(this).parents(".btn-group").find('.selection').text($(this).text());
     $(this).parents(".btn-group").find('.selection').val($(this).text());
+    $(this).parents(".btn-group").find('.hidden-input').val($(this).text());
   });
 
 
@@ -175,6 +152,10 @@
          $('#startDatePicker').data("DateTimePicker").setMaxDate(e.date);
       });
 
+  });
+
+  $(function () {
+    $('')
   });
 
 </script>
