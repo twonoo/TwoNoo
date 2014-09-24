@@ -6,14 +6,19 @@ class ActivitiesController < ApplicationController
   end
 
   def index
+    redirect_to root_path, notice: 'This is a test!'
   end
 
   def search
-    search_location = Geocoder.search(params[:location]).first.coordinates
+    search_location = Geocoder.search(params[:location]).first
+    search_coordinates = search_location.coordinates
+    if search_location.distance_from("Denver, CO") < 100 || search_location.distance_from("Pittsburgh, PA") < 100
+      redirect_to root_path, flash[:notice] => "Yo Mama was here"
+    end
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', Date.yesterday, params[:when])
-    @activities = @activities.within(params[:miles], origin: search_location)
+    @activities = @activities.within(params[:miles], origin: search_coordinates)
   end
 
   def user
@@ -72,6 +77,8 @@ class ActivitiesController < ApplicationController
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
       redirect_to @activity
+    else
+      render :new
     end
   end
 

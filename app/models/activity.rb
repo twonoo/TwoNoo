@@ -6,7 +6,8 @@ class Activity < ActiveRecord::Base
 	belongs_to :user
 	has_and_belongs_to_many :activity_types
 	geocoded_by :address
-	after_validation :geocode
+	before_validation :geocode
+	validate :distance_cannot_be_greater_than_100_miles
 
 	acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
@@ -16,6 +17,12 @@ class Activity < ActiveRecord::Base
 
 	def address
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
+	end
+
+	def distance_cannot_be_greater_than_100_miles
+		unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
+			errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!"
+		end
 	end
 
 	def self.terms(terms)

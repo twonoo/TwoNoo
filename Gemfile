@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+gem 'rails', '4.1.6'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 # Use SCSS for stylesheets
@@ -36,6 +36,8 @@ gem 'quiet_assets', group: :development
 
 gem "paperclip", "~> 4.1"
 
+gem 'byebug'
+
 gem 'geokit'
 gem 'geokit-rails'
 
@@ -47,7 +49,5 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
 
 
