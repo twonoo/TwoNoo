@@ -12,9 +12,9 @@ class ActivitiesController < ApplicationController
   def search
     search_location = Geocoder.search(params[:location]).first
     search_coordinates = search_location.coordinates
-    if search_location.distance_from("Denver, CO") < 100 || search_location.distance_from("Pittsburgh, PA") < 100
-      redirect_to root_path, flash[:notice] => "Yo Mama was here"
-    end
+    #if search_location.distance_from("Denver, CO") < 100 || search_location.distance_from("Pittsburgh, PA") < 100
+    #  redirect_to root_path, flash[:notice] => ""
+    #end
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', Date.yesterday, params[:when])
