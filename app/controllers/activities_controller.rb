@@ -6,15 +6,15 @@ class ActivitiesController < ApplicationController
   end
 
   def index
-    redirect_to root_path, notice: 'This is a test!'
   end
 
   def search
-    search_location = Geocoder.search(params[:location]).first
-    search_coordinates = search_location.coordinates
-    #if search_location.distance_from("Denver, CO") < 100 || search_location.distance_from("Pittsburgh, PA") < 100
-    #  redirect_to root_path, flash[:notice] => ""
-    #end
+    denver = [39.737567, -104.9847179]
+    pittsburgh = [40.44062479999999, -79.9958864]
+    search_coordinates = Geocoder.search(params[:location]).first.coordinates
+    unless Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 || Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100
+      redirect_to root_path, notice: "You're trying to search outside of the area"
+    end
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', Date.yesterday, params[:when])
