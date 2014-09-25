@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  before_filter :set_cache_buster
+  before_filter :set_cache_buster, :set_city
+
+  def set_city
+    session[:city] = request.location.city if session[:city].blank?
+  end
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
