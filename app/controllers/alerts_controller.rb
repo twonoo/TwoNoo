@@ -6,7 +6,7 @@ class AlertsController < ApplicationController
   end
 
   def create
-  	a = Alert.create(keywords: params[:keywords], distance: 5, location: 'Denver, CO', user_id: current_user.id)
+  	a = Alert.create(keywords: params[:keywords], distance: params[:distance], location: params[:location], user_id: current_user.id)
   	if a.save
   		redirect_to alerts_path, notice: "Alert for \"#{params[:keywords]}\" created successfully!"
   	else
@@ -15,7 +15,8 @@ class AlertsController < ApplicationController
   end
 
   def destroy
-  	Alert.find(params[:id]).destroy
-  	redirect_to alerts_path, notice: "Alert for \"#{params[:keywords]}\" has been deleted!"
+  	a = Alert.find(params[:id])
+    a.destroy
+  	redirect_to alerts_path, notice: "Alert for \"#{a.keywords}\" has been deleted!"
   end
 end

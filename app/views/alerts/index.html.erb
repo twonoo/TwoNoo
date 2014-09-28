@@ -1,4 +1,3 @@
-<%= flash_messages %>
 <div class="container">
   <div class="row">
     <%= current_user ? render('layouts/side_nav') : render(nil) %>
@@ -14,7 +13,34 @@
             </span>
           
           </div><!-- /input-group -->
-          <h5> within <strong><a href="#">5 miles</a></strong> of <strong><a href="#">Denver, CO</a></strong></h5>
+          <div style="display:none;" id="search-terms">
+            <h5>within
+            <div class="btn-group" id="distance-dropdown">
+              <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
+                <input type="hidden" name="distance" class="hidden-input" value="25">
+                <strong><span class="selection">25</span></strong>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">5</a></li>
+                <li><a href="#">25</a></li>
+                <li><a href="#">50</a></li>
+                <li><a href="#">100</a></li>
+                <li><a href="#">200</a></li>
+              </ul>
+            </div>
+            miles of
+            <div class="btn-group" id="location-dropdown">
+              <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
+                <input type="hidden" id="location" name="location" class="hidden-input" value="Denver, CO">
+                <strong><span id="selection" class="selection"></span></strong>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Denver, CO</a></li>
+                <li><a href="#">Pittsburgh, PA</a></li>
+              </ul>
+            </div>
+          </h5>
+        </div>
         <% end %>
 	      </div>
 	      <div class="panel" style="padding:25px">
@@ -35,3 +61,42 @@
     </div>
   </div>
 </div>
+
+
+<script>
+
+  $(".dropdown-menu li a").click(function(){
+    $(this).parents(".btn-group").find('.selection').text($(this).text());
+    $(this).parents(".btn-group").find('.selection').val($(this).text());
+    $(this).parents(".btn-group").find('.hidden-input').val($(this).text());
+  });
+
+  $(function () { 
+
+    // Get browser location and set selectors
+    function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(getCity);
+      } else {
+          $('#selection').text('Denver, CO');
+          $('#search-terms').show();
+      }
+    }
+    function getCity(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude
+
+     $.get( "/geocode/search.json", {location: latitude + "," + longitude}, function( data ) {
+          $('#location').val(data.location);
+          $('#selection').text(data.location);
+          $('#search-terms').show();
+        });
+    };
+    getLocation();
+  });
+
+  $('#date-dropdown').on('hide.bs.dropdown', function () {
+    //$(this)
+  });
+
+</script>
