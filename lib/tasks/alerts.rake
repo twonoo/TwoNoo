@@ -7,6 +7,7 @@ namespace :alerts do
 	    activities.each do |activity|
 				a.user.notify('Activity Alert from TwoNoo!', "#{activity.activity_name} on #{activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p")}")
 				puts "#{a.user} was notified about #{activity.activity_name}"
+				
 			end
 		end
 	end
