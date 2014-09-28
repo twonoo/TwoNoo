@@ -1,5 +1,5 @@
 class ActivitiesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:index, :search, :show]
 
   def attending
     @rsvps = Rsvp.where(user_id: current_user.id)
@@ -57,11 +57,11 @@ class ActivitiesController < ApplicationController
   def new
     if     (Transaction.get_balance(current_user) > 0) \
         || (current_user.profile.nonprofit == 1) \
-        || (current_user.profile.abassador == 1) \
+        || (current_user.profile.ambassador == 1) \
     then
       @activity = Activity.new activity_name: params[:activity_name]
     else
-      redirect_to credits_purchase_path
+      redirect_to credits_purchase_path, alert: "Looks like you are out of credits. In order to create an activity, please purchase more."
     end
   end
 
@@ -70,22 +70,25 @@ class ActivitiesController < ApplicationController
   end
 
   def update
-    activity = Activity.find(params[:id])
+    @activity = Activity.find(params[:id])
     params = activity_params
-    activity.activity_type_ids=params[:activity_type_ids]
+    @activity.activity_type_ids=params[:activity_type_ids]
     params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
-    activity.update!(params)
+    @activity.update(params)
 
-    # Get the rsvp'd users
-    @rsvps = Rsvp.where(activity_id: activity.id).all
-    @rsvps.each do |rsvp|
-      @user = User.find_by_id(rsvp.user_id)
-      if !@user.nil? then
-        @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='http://twonoo.com:8000/activities/#{activity.id}'>#{@activity.activity_name}</a>")
+    if @activity.save
+      # Get the rsvp'd users
+      @rsvps = Rsvp.where(activity_id: @activity.id).all
+      @rsvps.each do |rsvp|
+        @user = User.find_by_id(rsvp.user_id)
+        if !@user.nil?
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        end
       end
+      redirect_to @activity
+    else
+      render :edit
     end
-
-    redirect_to activity
   end
 
   def create

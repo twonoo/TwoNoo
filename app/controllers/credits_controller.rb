@@ -1,6 +1,7 @@
 class CreditsController < ApplicationController
   def index
   	@user_transactions = Transaction.where(user_id: current_user).order("id DESC")
+    
   end
 
   def new
@@ -8,9 +9,6 @@ class CreditsController < ApplicationController
   end
 
   def purchase
-    if Transaction.get_balance(current_user) == 0
-      flash[:error] = "Before creating an activity, you'll need to buy more credits."
-    end
     @user_transactions = Transaction.where(user_id: current_user).order("id DESC")
   end
 
@@ -61,7 +59,7 @@ class CreditsController < ApplicationController
     logger.info "#{amount / 100.to_f}"
     Transaction.create!(transaction_type_id: 1, user_id: current_user.id, amount: number_of_credits, cost: amount / 100.to_f, balance: (Transaction.get_balance(current_user) + number_of_credits))
 
-    flash[:notice] = "Thank you for your purchase"
+    flash[:notice] = %Q[Thanks for buying more credits. Time to create an Activity!]
     redirect_to credits_purchase_path
 
 	rescue Stripe::CardError => e

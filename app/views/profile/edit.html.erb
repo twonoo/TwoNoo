@@ -15,13 +15,13 @@
               <div class="col-sm-6"> <%= u.text_field :email, class: "form-control" %> </div>
             </div>
             <div class="form-group"> <%= p.label :sex, class: "col-sm-2 control-label" %>
-              <div class="col-sm-3"> <%= p.select :gender, [['Male', 0], ['Female', 1], ['Other', 2]], {}, class: "form-control" %> </div>
+              <div class="col-sm-3"> <%= p.select :gender, [['Male', 0], ['Female', 1], ['Other', 2], ['Not Disclosed', 3]], {}, class: "form-control" %> </div>
             </div>
             <div class="form-group"> <%= p.label :about_me, class: "col-sm-2 control-label" %>
               <div class="col-sm-6"> <%= p.text_area :about_me, class: "form-control" %> </div>
             </div>
             <%= u.submit 'Save', class: 'btn btn-primary' %> </div>
-          <div class="col-md-2"> <%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img' %>
+          <div class="col-md-2"> <%= render 'layouts/profile_img_thumb' %>
             <label>Update Picture</label>
             <%= p.file_field :profile_picture %> </div>
           <% end %>

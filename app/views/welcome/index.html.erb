@@ -7,7 +7,7 @@
     </div>
   </div>
   <div class="row">
-    <%= current_user ? render('layouts/side_nav') : render(nil) %>
+    <%= current_user ? render('layouts/side_nav') : nil %>
     <div class="col-md-8 <%= current_user ? nil : 'col-md-offset-2' %> ">
       <div class="panel" style="height:284px;padding:50px">
         <div class="text-center">
@@ -28,9 +28,9 @@
                   <%= submit_tag "Search", class: "btn btn-success" %>
                 </span>
               </div><!-- /input-group -->
-              <div class="row" style="margin-top:5px">
+              <div class="row" style="margin-top:5px;display:none" id="search-terms">
                 <div class="col-xs-8 col-md-8 col-lg-8">
-                  <div class="btn-group">
+                  <div class="btn-group" id="date-dropdown">
                     <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
                       <input type="hidden" name="when" class="hidden-input" value="Today">
                       <span class="selection">Today</span>
@@ -55,7 +55,7 @@
                     </ul>
                   </div>
                   within
-                  <div class="btn-group">
+                  <div class="btn-group" id="distance-dropdown">
                     <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
                       <input type="hidden" name="distance" class="hidden-input" value="25">
                       <span class="selection">25</span>
@@ -69,10 +69,10 @@
                     </ul>
                   </div>
                   miles of
-                  <div class="btn-group">
+                  <div class="btn-group" id="location-dropdown" >
                     <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                      <input type="hidden" name="location" class="hidden-input" value="Denver, CO">
-                      <span class="selection">Denver, CO</span>
+                      <input type="hidden" id="location" name="location" class="hidden-input" value="Denver, CO">
+                      <span id="selection" class="selection"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li><a href="#">Denver, CO</a></li>
@@ -150,8 +150,32 @@
 
   });
 
-  $(function () {
-    $('')
+  $(function () { 
+
+    // Get browser location and set selectors
+    function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(getCity);
+      } else {
+          $('#selection').text('Denver, CO');
+          $('#search-terms').show();
+      }
+    }
+    function getCity(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude
+
+     $.get( "/geocode/search.json", {location: latitude + "," + longitude}, function( data ) {
+          $('#location').val(data.location);
+          $('#selection').text(data.location);
+          $('#search-terms').show();
+        });
+    };
+    getLocation();
   });
 
+  $('#date-dropdown').on('hide.bs.dropdown', function () {
+    //$(this)
+  });
+    
 </script>

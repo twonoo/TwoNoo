@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'geocode/search'
+
   get 'alerts/index'
   get 'alerts' => 'alerts#index', as: :alerts
   post 'alerts/create' => 'alerts#create', as: :alert_create

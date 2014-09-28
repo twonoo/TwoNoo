@@ -7,6 +7,8 @@ class Activity < ActiveRecord::Base
 	has_and_belongs_to_many :activity_types
 	geocoded_by :address
 	before_validation :geocode
+
+	validates :activity_name, :datetime, :city, :state, :description, presence: true
 	validate :distance_cannot_be_greater_than_100_miles
 
 	acts_as_mappable :default_units => :miles,
@@ -20,8 +22,10 @@ class Activity < ActiveRecord::Base
 	end
 
 	def distance_cannot_be_greater_than_100_miles
-		unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
-			errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!"
+		unless city.blank?
+			unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
+				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!"
+			end
 		end
 	end
 

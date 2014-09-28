@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
 
   has_many :activities
 
+  after_create :initial_credits
+
   default_scope { includes(:profile, :activities) }
 
   # Include default devise modules. Others available are:
@@ -21,6 +23,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
 
+
+  def initial_credits
+    Transaction.create!(transaction_type_id: 3, user_id: id, amount: 5, balance: 5)
+  end
 
   def following?(other_user)
     follow_relationships.find_by(followed_id: other_user.id)

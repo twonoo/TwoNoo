@@ -1,0 +1,5 @@
+<% if @activity.image_file_name %>
+	<div style="height:100px; width:250px"><%= image_tag @activity.image.url(:map_image) %></div>
+<% else %>
+	<div style="height:100px; width:250px"><img src="http://maps.googleapis.com/maps/api/streetview?size=250x100&location=<%= URI.encode(@activity.address) %>">
+<% end %>

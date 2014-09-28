@@ -1,0 +1,5 @@
+<% if current_user.profile.profile_picture_file_name %>
+	<%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img-icon' %>
+<% else %>
+	<span style="padding:10px; background-color:#e3e3e3; font-size:15px; color:gray; line-height:25px" class="profile-img"><%= current_user.profile.first_name[0] + current_user.profile.last_name[0] %></span>
+<% end %>
