@@ -3,9 +3,9 @@ namespace :alerts do
 		Alert.all.each do |a|
 			activities = Activity.terms(a.keywords)
 	    activities = activities.where('datetime < DATE_ADD(NOW(), INTERVAL 14 DAY)')
-	    #activities = activities.within(params[:miles], origin: search_location)
+	    activities = activities.within(a.distance, origin: a.location)
 	    activities.each do |activity|
-				a.user.notify('New Alert', "#{activity.activity_name}... you should totes go!")
+				a.user.notify('Activity Alert from TwoNoo!', "#{activity.activity_name} on #{activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p")}")
 			end
 		end
 	end
