@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920231609) do
+ActiveRecord::Schema.define(version: 20140928090325) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20140920231609) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.boolean  "alerted",            default: false
   end
 
   create_table "activities_activity_types", id: false, force: true do |t|
