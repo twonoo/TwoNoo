@@ -20,7 +20,7 @@
             <% end %>
           <% end %>
 					<h2><%= @activity.activity_name %></h2>
-<div class="fb-share-button" data-href="<%=activity_path(@activity.id)%>" data-layout="button_count" style="padding: 0px; vertical-align: top; width: 106px; height: 24px;"></div>
+<div class="fb-share-button" data-href="<%= request.original_url %>" data-layout="button_count" style="padding: 0px; vertical-align: top; width: 106px; height: 24px;"></div>
 
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 <g:plusone></g:plusone>
