@@ -14,7 +14,7 @@
 				  </div>
 				<% end %>
 	    <div class="col-md-7">
-	    	<%= form_for @activity, html: { class: "form-horizontal"} do |f| %>
+	    	<%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirm('Creating this Activity will cost 1 Credit')"} do |f| %>
 
 		    	<div class="form-group has-error">
 			    	<%= f.label :name, class: "col-sm-2 control-label" %>
@@ -96,7 +96,7 @@
 		    </div>
 				<% end %>
 
-	    	<button type="submit" class="btn btn-lg btn-success pull-right">Create!</button>
+	    	<button type="submit" class="btn btn-lg btn-success pull-right" >Create!</button>
 	    <% end %>
 
       <script type="text/javascript">
