@@ -3,8 +3,8 @@
 		<div class="content">
 			<div class="row">
 		    <%= current_user ? render('layouts/side_nav') : render(nil) %>
-				<div class="col-md-8">
-<h4>Activities</h4>
+			  	<div class="col-md-8">
+						<h4>Activities</h4>
 						<% @activities.each do |a| %>
 							<div id="results-row" class="row row-md-height">
 								<div class="col-md-2 panel panel-left">
@@ -16,10 +16,13 @@
 									<p class="lead"><%= truncate(a.description, :length => 150) %></p>
 								</div>
 							</div>
-					<% end %>
-				</div>
-				<div class="col-md-8">
-<h4>Past Activities</h4>
+					  <% end %>
+					</div>
+			  	<br/>
+			  	<div class="col-md-8">
+						<h4>Past Activities</h4>
+					</div>
+					<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
 						<% @activitiesPast.each do |a| %>
 							<div id="results-row" class="row row-md-height">
 								<div class="col-md-2 panel panel-left">
@@ -31,8 +34,8 @@
 									<p class="lead"><%= truncate(a.description, :length => 150) %></p>
 								</div>
 							</div>
-					<% end %>
-				</div>
+						<% end %>
+					</div>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_cache_buster, :set_city
 
   def set_city
-    session[:city] = request.location.city if session[:city].blank?
+    # session[:city] = request.location.city if session[:city].blank?
   end
 
   def set_cache_buster

@@ -47,7 +47,7 @@ GEM
       jquery-rails
       rails (>= 3.1)
     builder (3.2.2)
-    byebug (3.4.0)
+    byebug (3.5.0)
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
       slop (~> 3.6)
@@ -100,7 +100,7 @@ GEM
       foreigner (>= 0.9.1)
       rails (>= 3.2.0)
     mime-types (1.25.1)
-    minitest (5.4.1)
+    minitest (5.4.2)
     momentjs-rails (2.5.1)
       railties (>= 3.1)
     multi_json (1.10.1)

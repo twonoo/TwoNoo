@@ -1,6 +1,7 @@
 <div class="container">
   <div class="row center-block" style="margin-bottom:5px">
 		<div class="content">
+<!--
 			<div class="row">
 				<div class="col-md-3">
 					<div class="panel panel-default">
@@ -12,9 +13,11 @@
 			      </div>
 			    </div>
 		    </div>
-				<div class="col-md-9">
+-->
+			<!--	<div class="col-md-9">-->
+  <div class="panel">
 					<% @activities.each do |a| %>
-							<div id="results-row" class="row row-md-height">
+							<div id="results-row" class="row-md-height">
 								<div class="col-md-2 panel panel-left">
 									<h2><%= a.datetime.strftime('%^b %e') %></h2>
 									<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
