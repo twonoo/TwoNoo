@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  before_filter :set_cache_buster, :set_city
+  before_filter :set_cache_buster#, :set_city
 
   def set_city
     # session[:city] = request.location.city if session[:city].blank?

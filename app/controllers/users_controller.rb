@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 		# notify the user that they are being followed
 		current_user.notify(params[:id], 'is now following you.')
 
-		redirect_to request.referer
+		redirect_to profile_path(params[:id]), notice: "You're now following #{User.find(params[:id]).name}"
 	end
 
 	def unfollow!
