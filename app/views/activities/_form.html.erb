@@ -18,4 +18,5 @@
 <%= form_tag({controller: 'activities', action: 'comment'}, id: 'comment_form', method: 'post') do %>
   <%= hidden_field_tag 'id', activity.id.to_s %>
   <%= text_area_tag 'comment' %>
+  <%= submit_tag 'send' %>
 <% end %>
