@@ -1,0 +1,41 @@
+<div class="col-md-8">
+<%= form_tag new_activity_path do %> 
+<div class="input-group input-group-lg" >
+	<%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
+	<span class="input-group-btn">
+		<%= submit_tag 'Create!', class: 'btn btn-danger' %>
+	</span>
+</div>
+<% end %>
+	<h4>Activities</h4>
+	<% @activities.each do |a| %>
+		<div id="results-row" class="row row-md-height">
+			<div class="col-md-2 panel panel-left">
+				<h2><%= a.datetime.strftime('%^b %e') %></h2>
+				<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
+			</div>
+			<div class="col-md-10 panel panel-right" style="background-color:#fff">
+				<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
+				<p class="lead"><%= truncate(a.description, :length => 150) %></p>
+			</div>
+		</div>
+	<% end %>
+</div>
+<br/>
+<div class="col-md-8">
+	<h4>Past Activities</h4>
+</div>
+<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
+	<% @activitiesPast.each do |a| %>
+		<div id="results-row" class="row row-md-height">
+			<div class="col-md-2 panel panel-left">
+				<h2><%= a.datetime.strftime('%^b %e') %></h2>
+				<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
+			</div>
+			<div class="col-md-10 panel panel-right" style="background-color:#fff">
+				<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
+				<p class="lead"><%= truncate(a.description, :length => 150) %></p>
+			</div>
+		</div>
+	<% end %>
+</div>

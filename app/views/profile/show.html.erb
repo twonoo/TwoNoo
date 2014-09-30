@@ -17,28 +17,25 @@
 		<div class="col-md-8 col-md-offset-2">
 			<div class="text-center">
 			<ul class="nav nav-pills nav-justified">
-		      <li class="active"><a href="#">Activities</a></li>
-		      <li><a href="#">Attending</a></li>
-		      <li><a href="#">Followers</a></li>
-		      <li><a href="#">Following</a></li>
+		      <li id="profile_activities" class="active">
+						<%= link_to 'Activities', '#', :remote => true %>
+					</li>
+		      <li id="profile_attending">
+						<%= link_to 'Attending', '#', :remote => true %>
+					</li>
+		      <li id="profile_followers">
+						<%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
+					</li>
+		      <li id="profile_following">
+						<%= link_to 'Following', '#', :remote => true %>
+					</li>
 		    </ul>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2" style="margin-top:50px">
-			<% @activities.each do |a| %>
-				<div id="results-row" class="row row-md-height">
-					<div class="col-md-2 panel panel-left">
-						<h2><%= a.datetime.strftime('%^b %e') %></h2>
-						<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
-					</div>
-					<div class="col-md-10 panel panel-right" style="background-color:#fff">
-						<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
-						<p class="lead"><%= truncate(a.description, :length => 150) %></p>
-					</div>
-				</div>
-			<% end %>
+		<div id="profile_data" class="col-md-12 col-md-offset-2" style="margin-top:50px">
+			<%= render '/activities/activities' %>
 		</div>
 	</div>
 </div>

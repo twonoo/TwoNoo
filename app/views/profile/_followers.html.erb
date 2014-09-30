@@ -1,0 +1,6 @@
+<% @followers.each do |f| %>
+	<p class="lead">
+		<%= render 'layouts/profile_img_small' %>
+		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %>
+	</p>
+<% end %>

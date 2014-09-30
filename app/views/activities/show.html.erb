@@ -50,7 +50,7 @@
 		<div class="col-md-4">
 			<div class="panel panel-default">
 				<div class="panel-body text-center">
-            <%= image_tag @organizer.profile.profile_picture.url(:thumb), class: 'img-circle center-text' %>
+            <%= render 'layouts/profile_img_small' %>
             <h4><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h4> 
             <h4><small><%= @organizer.profile.about_me %></small></h4>
             <% if @organizer != current_user && current_user %>
@@ -121,5 +121,4 @@
   
   google.maps.event.addDomListener(window, 'load', initialize);
 </script>
-
 

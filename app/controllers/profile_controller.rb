@@ -39,7 +39,8 @@ class ProfileController < ApplicationController
 
   def show
     @profile = User.find(params[:id])
-    @activities = Activity.where(user_id: params[:id])
+    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now)
+    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now)
   end
 
   def followers
@@ -57,4 +58,12 @@ class ProfileController < ApplicationController
   def profile_params
     params.require(:user).permit(:email, profile_attributes: [:first_name, :last_name, :gender, :about_me, :id, :profile_picture])
   end
+
+  def followers_profile
+    @followers = User.find(params[:id]).followers
+    respond_to do |format|
+      format.js
+    end
+  end
+
 end
