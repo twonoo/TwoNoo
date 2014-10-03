@@ -1,3 +1,5 @@
 $('#profile_data').html("<%=escape_javascript  render(partial: 'followers')  %>");
 
-alert('bob');
+$('[id^=profile_]').removeClass('active');
+$('#profile_followers').addClass('active');
+

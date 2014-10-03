@@ -18,16 +18,16 @@
 			<div class="text-center">
 			<ul class="nav nav-pills nav-justified">
 		      <li id="profile_activities" class="active">
-						<%= link_to 'Activities', '#', :remote => true %>
+						<%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
 					</li>
 		      <li id="profile_attending">
-						<%= link_to 'Attending', '#', :remote => true %>
+						<%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
 					</li>
 		      <li id="profile_followers">
 						<%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
 					</li>
 		      <li id="profile_following">
-						<%= link_to 'Following', '#', :remote => true %>
+						<%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
 					</li>
 		    </ul>
 			</div>

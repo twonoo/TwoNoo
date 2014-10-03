@@ -2,24 +2,8 @@
   <div class="row center-block" style="margin-bottom:5px">
 		<div class="content">
 			<div class="row">
-		    <%= current_user ? render('layouts/side_nav') : render(nil) %>
-				<div class="col-md-8">
-						<% @rsvps.each do |r| 
-							a = Activity.find(r.activity_id)
-						%>
-
-							<div id="results-row" class="row row-md-height">
-								<div class="col-md-2 panel panel-left">
-									<h2><%= a.datetime.strftime('%^b %e') %></h2>
-									<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
-								</div>
-								<div class="col-md-10 panel panel-right" style="background-color:#fff">
-									<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
-									<p class="lead"><%= truncate(a.description, :length => 150) %></p>
-								</div>
-							</div>
-					<% end %>
-				</div>
+		    		<%= current_user ? render('layouts/side_nav') : render(nil) %>
+				<%= render 'attending' %>
 			</div>
 		</div>
 	</div>

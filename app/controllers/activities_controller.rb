@@ -45,8 +45,8 @@ class ActivitiesController < ApplicationController
   end
 
   def user
-    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now)
-    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now)
+    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
+    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
   end
 
   def show
