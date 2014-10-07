@@ -1,9 +1,11 @@
 <div class="container">
   <div class="row center-block" style="margin-bottom:5px">
-		<div class="content">
-			<div class="row">
-		    <%= current_user ? render('layouts/side_nav') : render(nil) %>
+    <div class="content">
+      <div class="row">
+          <%= current_user ? render('layouts/side_nav') : render(nil) %>
+<div class="col-md-8">
 					<%= render 'activities' %>
+</div>
 			</div>
 		</div>
 	</div>

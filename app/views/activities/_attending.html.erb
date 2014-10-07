@@ -4,7 +4,7 @@
 @activitiesPast = Activity.where('id in (?)', @activityIds.to_a).where('datetime < ?', Time.now).order('datetime DESC')
 %>
 
-<div class="col-md-8">
+<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
 	<h4>Upcoming Activities</h4>
 	<% @activities.each do |a| %>
 		<div id="results-row" class="row row-md-height">

@@ -1,4 +1,4 @@
-<div class="col-md-8">
+<div class="col-md-12" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
 <%= form_tag new_activity_path do %> 
 <div class="input-group input-group-lg" >
 	<%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
@@ -22,10 +22,10 @@
 	<% end %>
 </div>
 <br/>
-<div class="col-md-8">
+<div class="col-md-12">
 	<h4>Past Activities</h4>
 </div>
-<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
+<div class="col-md-12" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
 	<% @activitiesPast.each do |a| %>
 		<div id="results-row" class="row row-md-height">
 			<div class="col-md-2 panel panel-left">

@@ -41,7 +41,7 @@ class ActivitiesController < ApplicationController
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
-    @activities = @activities.within(params[:distance], origin: search_coordinates)
+    @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
   end
 
   def user
@@ -82,7 +82,7 @@ class ActivitiesController < ApplicationController
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
         if !@user.nil?
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
         end
       end
       redirect_to @activity
@@ -99,7 +99,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
       redirect_to @activity
@@ -114,7 +114,7 @@ class ActivitiesController < ApplicationController
     # Notfiy the creator that a new user is going
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
-    @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='http://twonoo.com:8000/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+    @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
     if rsvp.save
       redirect_to request.referer
