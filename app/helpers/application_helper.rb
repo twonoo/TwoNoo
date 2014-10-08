@@ -73,7 +73,7 @@ module ApplicationHelper
 
   def profile_img(user)
     if user.profile.profile_picture_file_name 
-      "#{image_tag user.profile.profile_picture.url(:thumb), class: 'profile-img-icon'}"
+      "#{image_tag user.profile.profile_picture.url(:thumb), class: 'profile-img'}".html_safe
     else
       "<span style='padding:10px; background-color:#e3e3e3; font-size:15px; color:gray; line-height:25px' class='profile-img'><%= user.profile.first_name[0] + user.profile.last_name[0] %></span>"
     end

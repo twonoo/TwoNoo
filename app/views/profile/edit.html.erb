@@ -21,7 +21,7 @@
               <div class="col-sm-6"> <%= p.text_area :about_me, class: "form-control" %> </div>
             </div>
             <%= u.submit 'Save', class: 'btn btn-primary' %> </div>
-          <div class="col-md-2"> <%= render 'layouts/profile_img_thumb' %>
+          <div class="col-md-2"> <%= profile_img(@user) %>
             <label>Update Picture</label>
             <%= p.file_field :profile_picture %> </div>
           <% end %>
