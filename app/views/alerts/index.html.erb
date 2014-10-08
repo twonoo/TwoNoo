@@ -7,7 +7,7 @@
 	      	<p class="lead">Create an Alert</p>
 	      	<h4 style="margin-top:-25px;margin-bottom:25px"><smalL>Receive a daily email of new activities based on your interests.</small></h4>
 	      	<div class="input-group input-group-lg">
-						<%= search_field_tag :keywords, nil, placeholder: "What you're looking for...", class: "form-control" %>
+						<%= search_field_tag :terms, nil, placeholder: "What you're looking for...", class: "form-control" %>
 						<span class="input-group-btn">
               <%= submit_tag "Create", class: "btn btn-info" %>
             </span>
@@ -54,7 +54,7 @@
 	      			<% end %>
 	      		</div>
 	      	<% else %>
-	      		<h5>No alerts have been creaetd</h5>
+	      		<h5>No alerts have been created</h5>
 	      	<% end %>
 	      </div>
       </div>

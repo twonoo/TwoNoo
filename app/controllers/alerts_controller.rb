@@ -6,11 +6,11 @@ class AlertsController < ApplicationController
   end
 
   def create
-  	a = Alert.create(keywords: params[:keywords], distance: params[:distance], location: params[:location], user_id: current_user.id)
+  	a = Alert.create(keywords: params[:terms], distance: params[:distance], location: params[:location], user_id: current_user.id)
   	if a.save
-  		redirect_to alerts_path, notice: "Alert for \"#{params[:keywords]}\" created successfully!"
+  		redirect_to alerts_path, notice: "Alert for \"#{params[:terms]}\" created successfully!"
   	else
-  		redirect_to alerts_path, alert: "Alert for \"#{params[:keywords]}\" could not be created!"
+  		redirect_to alerts_path, alert: "Alert for \"#{params[:terms]}\" could not be created!"
   	end
   end
 
