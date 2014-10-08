@@ -41,15 +41,12 @@ class ActivitiesController < ApplicationController
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
-<<<<<<< HEAD
     @activities = @activities.within(params[:distance], origin: search_coordinates)
 
     if @actvities.blank?
       render 'noresults'
     end
-=======
     @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
->>>>>>> FETCH_HEAD
   end
 
   def user
