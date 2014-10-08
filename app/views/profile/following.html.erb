@@ -2,6 +2,7 @@
 	<div class="row">
 		<%= current_user ? render('layouts/side_nav') : render(nil) %>
 		<div class="panel col-md-8">
+<<<<<<< HEAD
 			<% @following.each do |f| %>
 				<p class="lead">
 			    <p class="lead"><%= image_tag f.profile.profile_picture.url(:thumb), class: 'profile-img', style: 'height:50px; width:50px' %> 
@@ -9,6 +10,9 @@
 					<span class="pull-right"><font size="1"><%= (link_to 'Unfollow', unfollow_path(f.id), class: 'label label-info') %></font></span>
          </p>
 			<% end %>
+=======
+			<%= render 'following' %>
+>>>>>>> FETCH_HEAD
 		</div>
 	</div>
 </div>

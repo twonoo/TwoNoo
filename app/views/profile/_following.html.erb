@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container">
 	<div class="row">
 		<%= current_user ? render('layouts/side_nav') : render(nil) %>
@@ -12,3 +13,12 @@
 		</div>
 	</div>
 </div>
+=======
+<% @following.each do |f| %>
+	<p class="lead">
+		<%= render 'layouts/profile_img_small' %>
+		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %>
+		<span class="pull-right"><font size="1"><%= (link_to 'Unfollow', unfollow_path(f.id), class: 'label label-info') %></font></span>
+	</p>
+<% end %>
+>>>>>>> FETCH_HEAD

@@ -43,7 +43,10 @@ Rails.application.routes.draw do
   get 'profile/:id' => 'profile#show', as: :user
 
 
+  get 'profile/:id/activities_profile' => 'profile#activities_profile', as: :activities_profile
+  get 'profile/:id/attending_profile' => 'profile#attending_profile', as: :attending_profile
   get 'profile/:id/followers_profile' => 'profile#followers_profile', as: :followers_profile
+  get 'profile/:id/following_profile' => 'profile#following_profile', as: :following_profile
 
   patch 'profile/:id' => 'profile#update', as: :profile_update
 

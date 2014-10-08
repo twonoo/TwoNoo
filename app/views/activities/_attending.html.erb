@@ -1,13 +1,11 @@
-<div class="col-md-12" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
-<%= form_tag new_activity_path do %> 
-<div class="input-group input-group-lg" >
-	<%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
-	<span class="input-group-btn">
-		<%= submit_tag 'Create!', class: 'btn btn-danger' %>
-	</span>
-</div>
-<% end %>
-	<h4>Activities</h4>
+<% 
+@activityIds = @rsvps.map{|i| i.activity_id}
+@activities = Activity.where('id in (?)', @activityIds.to_a).where('datetime >= ?', Time.now).order('datetime ASC')
+@activitiesPast = Activity.where('id in (?)', @activityIds.to_a).where('datetime < ?', Time.now).order('datetime DESC')
+%>
+
+<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
+	<h4>Upcoming Activities</h4>
 	<% @activities.each do |a| %>
 		<div id="results-row" class="row row-md-height">
 			<div class="col-md-2 panel panel-left">
@@ -22,10 +20,10 @@
 	<% end %>
 </div>
 <br/>
-<div class="col-md-12">
+<div class="col-md-8">
 	<h4>Past Activities</h4>
 </div>
-<div class="col-md-12" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
+<div class="col-md-8" style='resize:vertical; overflow-y: auto; overflow-x: hidden; height:400px'>
 	<% @activitiesPast.each do |a| %>
 		<div id="results-row" class="row row-md-height">
 			<div class="col-md-2 panel panel-left">
@@ -39,3 +37,4 @@
 		</div>
 	<% end %>
 </div>
+

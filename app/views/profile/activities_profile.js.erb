@@ -1,0 +1,5 @@
+$('#profile_data').html("<%=escape_javascript  render(partial: '/activities/activities')  %>");
+
+$('[id^=profile_]').removeClass('active');
+$('#profile_activities').addClass('active');
+

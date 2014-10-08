@@ -39,8 +39,8 @@ class ProfileController < ApplicationController
 
   def show
     @profile = User.find(params[:id])
-    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now)
-    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now)
+    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
+    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
   end
 
   def followers
@@ -59,8 +59,30 @@ class ProfileController < ApplicationController
     params.require(:user).permit(:email, profile_attributes: [:first_name, :last_name, :gender, :about_me, :id, :profile_picture])
   end
 
+  def activities_profile
+    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
+    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def attending_profile
+    @rsvps = Rsvp.where(user_id: current_user.id)
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def followers_profile
     @followers = User.find(params[:id]).followers
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def following_profile
+    @following = following
     respond_to do |format|
       format.js
     end
