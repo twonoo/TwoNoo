@@ -4,6 +4,14 @@
       <div class="row">
           <%= current_user ? render('layouts/side_nav') : render(nil) %>
 <div class="col-md-8">
+				<%= form_tag new_activity_path do %> 
+				<div class="input-group input-group-lg" >
+					<%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
+					<span class="input-group-btn">
+						<%= submit_tag 'Create!', class: 'btn btn-danger' %>
+					</span>
+				</div>
+				<% end %>
 					<%= render 'activities' %>
 </div>
 			</div>
