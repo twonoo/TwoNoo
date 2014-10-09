@@ -50,7 +50,7 @@
 		<div class="col-md-4">
 			<div class="panel panel-default">
 				<div class="panel-body text-center">
-            <%= render 'layouts/profile_img_small' %>
+            <%= profile_img(@organizer) %>
             <h4><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h4> 
             <h4><small><%= @organizer.profile.about_me %></small></h4>
             <% if @organizer != current_user && current_user %>
