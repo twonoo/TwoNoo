@@ -75,7 +75,7 @@ module ApplicationHelper
     if user.profile.profile_picture_file_name 
       "#{image_tag user.profile.profile_picture.url(:thumb), class: 'profile-img'}".html_safe
     else
-      "<span style='padding:10px; background-color:#e3e3e3; font-size:15px; color:gray; line-height:25px' class='profile-img'><%= user.profile.first_name[0] + user.profile.last_name[0] %></span>"
+      "<span style='padding:35px; background-color:#4DBFF5; font-size:25px; color:white; line-height:120px' class='profile-img'>#{user.profile.first_name[0] + user.profile.last_name[0]}</span>".html_safe
     end
   end
 
