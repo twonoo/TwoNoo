@@ -23,7 +23,7 @@ class ActivitiesController < ApplicationController
     if !params[:when].blank?
       case params[:when]
         when "Today"
-          end_date = Date.today + 1
+          end_date = Date.tomorrow
         when "This Week"
           end_date = Date.today.at_end_of_week + 1
         when "Next Two Weeks"
@@ -31,7 +31,7 @@ class ActivitiesController < ApplicationController
         else
           end_date = 1.month.from_now + 1
       end
-      from_date = Date.today
+      from_date = Date.yesterday
     else
       from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
       end_date = Time.strptime(params[:to_date], '%m/%d/%Y')
