@@ -103,9 +103,10 @@
  				<% if @activity.cancelled %>
 					<%= link_to 'UN-Cancel', activity_cancel_path(@activity.id), class: 'btn btn-lg btn-danger pull-right' %>
 				<% else %>
-					<%= link_to 'Cancel', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger pull-right' %>
-
-					<%= f.submit 'Update!', class: 'btn btn-lg btn-success pull-right' %>
+					<div class='pull-right' style='text-align:left; '>
+					<%= f.submit 'Update!', class: 'btn btn-lg btn-success' %>
+					<%= link_to 'Cancel', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger' %>
+					</div>
 				<% end %>
 	    <% end %>
 

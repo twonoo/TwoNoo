@@ -7,7 +7,15 @@
 				<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
 			</div>
 			<div class="col-md-10 panel panel-right" style="background-color:#fff">
-				<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
+				<h3>
+<% if a.cancelled %>
+<font color='red'>
+<%= link_to a.activity_name, activity_path(a.id) %> (Cancelled)
+</font>
+<% else %>
+<%= link_to a.activity_name, activity_path(a.id) %>
+<% end %>
+</h3>
 				<p class="lead"><%= truncate(a.description, :length => 150) %></p>
 			</div>
 		</div>
@@ -25,7 +33,15 @@
 				<h4><%= a.datetime.strftime('%-I:%M %p') %></h4>
 			</div>
 			<div class="col-md-10 panel panel-right" style="background-color:#fff">
-				<h3><%= link_to a.activity_name, activity_path(a.id) %></h3>
+				<h3>
+<% if a.cancelled %>
+<font color='red'>
+<%= link_to a.activity_name, activity_path(a.id) %> (Cancelled)
+</font>
+<% else %>
+<%= link_to a.activity_name, activity_path(a.id) %>
+<% end %>
+</h3>
 				<p class="lead"><%= truncate(a.description, :length => 150) %></p>
 			</div>
 		</div>

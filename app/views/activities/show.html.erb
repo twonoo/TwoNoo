@@ -12,7 +12,12 @@
 		<div class="col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<h2><%= @activity.activity_name %></h2>
+					<h2>
+						<%= @activity.activity_name %>
+						<% if @activity.cancelled %>
+							<font color='red'>(Cancelled)</font>
+						<% end %>
+					</h2>
           <% if current_user %>
             <% if @organizer == current_user %>
             <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-default pull-right' %>
