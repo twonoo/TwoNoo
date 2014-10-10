@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   post 'activities/new'
   get 'activities/edit'
   get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
+  get 'activities/cancel/:id' => 'activities#cancel', as: :activity_cancel
   get 'activities/create'
   get 'activities/rsvp'
 

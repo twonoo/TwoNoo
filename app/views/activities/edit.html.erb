@@ -100,7 +100,13 @@
 		      <%= type.activity_type %>
 		    </div>
 				<% end %>
-				<%= f.submit 'Update!', class: 'btn btn-lg btn-success pull-right' %>
+ 				<% if @activity.cancelled %>
+					<%= link_to 'UN-Cancel', activity_cancel_path(@activity.id), class: 'btn btn-lg btn-danger pull-right' %>
+				<% else %>
+					<%= link_to 'Cancel', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger pull-right' %>
+
+					<%= f.submit 'Update!', class: 'btn btn-lg btn-success pull-right' %>
+				<% end %>
 	    <% end %>
 
       <script type="text/javascript">

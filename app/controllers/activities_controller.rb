@@ -93,6 +93,29 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  def cancel
+    @activity = Activity.find(params[:id])
+    if @activity.cancelled
+    	@activity.cancelled = false
+    else
+    	@activity.cancelled = true
+    end
+
+    if @activity.save
+      # Get the rsvp'd users
+      @rsvps = Rsvp.where(activity_id: @activity.id).all
+      @rsvps.each do |rsvp|
+        @user = User.find_by_id(rsvp.user_id)
+        if !@user.nil?
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        end
+      end
+      redirect_to @activity
+    else
+      render :edit
+    end
+  end
+
   def create
     params = activity_params
     params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
