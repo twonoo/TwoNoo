@@ -11,33 +11,34 @@
           <tbody>
             <tr>
               <td>5</td>
-              <td>$6.29</td>
+              <td>$6.29 <font style="font-size:8px">(~$1.26/credit)</font></td>
               <td><button class="btn btn-success open-purchase" data-number-of-credits="5" data-toggle="modal" data-target="#purchaseModal">Purchase</button></td>
             </tr>
             <tr>
               <td>10</td>
-              <td>$11.99</td>
+              <td>$11.99 <font style="font-size:8px">(~$1.20/credit)</font></td>
               <td><button class="btn btn-success open-purchase" data-number-of-credits="10" data-toggle="modal" data-target="#purchaseModal">Purchase</button></td>
             </tr>
             <tr>
               <td>20</td>
-              <td>$21.99</td>
+              <td>$21.99 <font style="font-size:8px">(~$1.10/credit)</font></td>
               <td><button class="btn btn-info open-purchase" data-number-of-credits="20" data-toggle="modal" data-target="#purchaseModal">Most Popular</button></td>
             </tr>
             <tr>
               <td>50</td>
-              <td>$49.99</td>
+              <td>$49.99 <font style="font-size:8px">(~$1.00/credit)</font></td>
               <td><button class="btn btn-success open-purchase" data-number-of-credits="50" data-toggle="modal" data-target="#purchaseModal">Purchase</button></td>
             </tr>
             <tr>
               <td>100</td>
-              <td>$98.99</td>
+              <td>$98.99 <font style="font-size:8px">(~$0.99/credit)</font></td>
               <td><button class="btn btn-success open-purchase" data-number-of-credits="100" data-toggle="modal" data-target="#purchaseModal">Purchase</button></td>
             </tr>
           </tbody>
         </table>
         <hr>
         <div style="margin:0 auto">
+          <label>OR</label></br>
           <label>How many credits would you like to purchase?</label></br>
           <div class="input-group input-group-md" style="width:40%;margin:0 auto">
                 <input id="custom-input" class="form-control">
@@ -87,7 +88,7 @@
             <tbody>
             <% @user_transactions.each do |t| %>
               <tr>
-                <td><%= t.transaction_type.name %></td>
+                <td><%= t.transaction_type.nil? ? 'Create Activity' : t.transaction_type.name %></td>
                 <td><%= t.amount %></td>
                 <td><%= "$#{t.cost}" if t.cost %></td>
                 <td><%= t.created_at.strftime('%b-%d-%Y') %></td>
