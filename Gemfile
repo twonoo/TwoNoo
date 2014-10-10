@@ -31,7 +31,7 @@ gem 'devise'
 
 gem 'momentjs-rails', '~> 2.5.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 3.0.0'
-gem 'geocoder'
+gem 'geocoder', git: 'https://github.com/alexreisner/geocoder.git'
 gem 'quiet_assets', group: :development
 
 gem "paperclip", "~> 4.1"
@@ -40,6 +40,7 @@ gem 'byebug'
 
 gem 'geokit'
 gem 'geokit-rails'
+gem 'timezone'
 
 gem 'mailboxer'
 gem 'acts_as_commentable'
