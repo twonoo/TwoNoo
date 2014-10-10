@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get 'profile/messages'
 
   get 'profile/privacy' => 'profile#privacy', as: :profile_privacy
+  get 'profile/editNotifications' => 'profile#editNotifications', as: :profile_editNotifications
 
   get 'profile/:id/followers' => 'profile#followers', as: :profile_followers
 

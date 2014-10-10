@@ -31,6 +31,10 @@ class ProfileController < ApplicationController
     end
   end
 
+  def editNotifications
+    @user = User.find(current_user)
+  end
+
   def notifications
   end
 
