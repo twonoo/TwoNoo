@@ -1,7 +1,24 @@
 <div class="container">
   <div class="row">
     <div class="panel panel-default panel-body">
-      <div class="col-md-6 text-center">
+    <div class="col-md-3 text-center">
+      <div class="row">
+        <h6 style="padding-bottom: 0px;margin-bottom:0px;">Your Balance</h6>
+        <h2 style="padding-top: 0px;margin-top:0px;"><%= Transaction.get_balance(current_user) if current_user %> Credits</h2>
+      </div>
+      <div class="row" style="margin-top:20px">
+        <p>
+          Each credit allows you to post an Activity.  Credits are only valid at TwoNoo and utilization of credits requires acceptance of our
+          <%= link_to 'Terms of Service', terms_path, target: "_blank" %>
+          and
+          <%=link_to 'Privacy Policy', privacy_path, target: '_blank' %>.
+          <br/>
+          <br/>
+          Credits are not redeemable for cash, are nontransferable and no cash refunds will be given for unused credits (except as required by law). If you do not accept these terms, please do not purchase credits.
+        </p>
+      </div>
+    </div>
+      <div class="col-md-6 col-md-offset-2 text-center">
         <table class="table table-condensed purchase-table" style="font-size:17px;text-align:center">
           <thead>
             <td><strong>Credits</strong></td>
@@ -47,23 +64,6 @@
                 </span>
           </div>
           <h5 id="calculation" style="display:none">Your Price: $<span id="calculation-value"></span></h5>
-      </div>
-    </div>
-    <div class="col-md-3 col-md-offset-2 text-center">
-      <div class="row">
-        <span><h2><%= Transaction.get_balance(current_user) if current_user %> Credits</h2></span>
-        <span><h6>Your Balance</h6></span>
-      </div>
-      <div class="row" style="margin-top:25px">
-        <p>
-          Each credit allows you to post an Activity.  Credits are only valid at TwoNoo and utilization of credits requires acceptance of our
-          <%= link_to 'Terms of Service', terms_path, target: "_blank" %>
-          and
-          <%=link_to 'Privacy Policy', privacy_path, target: '_blank' %>.
-          <br/>
-          <br/>
-          Credits are not redeemable for cash, are nontransferable and no cash refunds will be given for unused credits (except as required by law). If you do not accept these terms, please do not purchase credits.
-        </p>
       </div>
     </div>
   </div>
