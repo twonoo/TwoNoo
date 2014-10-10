@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009222514) do
+ActiveRecord::Schema.define(version: 20141010050254) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20141009222514) do
     t.datetime "image_updated_at"
     t.boolean  "alerted",            default: false
     t.boolean  "cancelled",          default: false
+    t.string   "tz"
   end
 
   create_table "activities_activity_types", id: false, force: true do |t|
