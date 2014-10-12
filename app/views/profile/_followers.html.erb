@@ -1,6 +1,6 @@
 <% @followers.each do |f| %>
 	<p class="lead">
-		<p class="lead"><%= image_tag f.profile.profile_picture.url(:thumb), class: 'profile-img', style: 'height:50px; width:50px' %> 
+		<p class="lead"><%= profile_img(f) %> 
 		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %>
 	</p>
 <% end %>

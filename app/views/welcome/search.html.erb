@@ -4,7 +4,7 @@
       
         <ul class="nav nav-tabs" role="tablist">
           <% if @activities.present? %>
-            <li class="<%= 'active' if @activities %>"><a href="#activities.present?" role="tab" data-toggle="tab">Activities</a></li>
+            <li class="<%= 'active' %>"><a href="#activities" role="tab" data-toggle="tab">Activities</a></li>
           <% end %>
           <% if @users.present? %> 
             <li class="<%= 'active' if @activities.blank? %>"><a href="#users" role="tab" data-toggle="tab">Users</a></li>
@@ -29,7 +29,7 @@
           <div class="tab-pane <%= 'active' if @activities.blank? %>" id="users">
             <% @users.each do |u| %>
               <p class="lead">
-                <p class="lead"><%= image_tag u.profile_picture.url(:thumb), class: 'profile-img', style: 'height:50px; width:50px' %> 
+                <p class="lead"><%= profile_img(u.user) %> 
                 <%= link_to (u.first_name + ' ' + u.last_name), profile_path(u.user_id) %>
               </p>
             <% end %>
