@@ -24,12 +24,15 @@ class WelcomeController < ApplicationController
           end_date = DateTime.tomorrow
         when "This Week"
           end_date = DateTime.now.at_end_of_week
+        when "This Weekend"
+          end_date = DateTime.now.at_end_of_week
+          from_date = end_date - 2
         when "Next Two Weeks"
           end_date = 2.weeks.from_now
         else
           end_date = 1.month.from_now
       end
-      from_date = DateTime.now.beginning_of_day
+      from_date = DateTime.now.beginning_of_day unless from_date
     else
       from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
       end_date = Time.strptime(params[:to_date], '%m/%d/%Y')
