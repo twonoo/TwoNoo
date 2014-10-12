@@ -19,9 +19,9 @@ class Profile < ActiveRecord::Base
 	def self.terms(terms)
 		query = []
 			terms.split.each do |t|
-				query << "(first_name = '#{t}' OR last_name LIKE '#{t}')"
+				query << "(first_name = '#{t}' OR last_name = '#{t}')"
 			end
-			where(query.join(" AND "))
+			where(query.join(" AND ")) unless query.blank?
 	end
 
 	def init

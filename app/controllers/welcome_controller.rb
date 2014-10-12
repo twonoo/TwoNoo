@@ -48,7 +48,7 @@ class WelcomeController < ApplicationController
 
     @users = Profile.terms(params[:terms])
     
-    unless @activities.blank? && @users.blank?
+    if @activities.blank? && @users.blank?
       render 'noresults' 
     end
   end
