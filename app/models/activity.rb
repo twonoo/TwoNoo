@@ -7,6 +7,8 @@ class Activity < ActiveRecord::Base
 	has_and_belongs_to_many :activity_types
 	geocoded_by :address
 	before_validation :geocode
+	before_save :assign_timezone
+
 
 	validates :activity_name, :datetime, :city, :state, :description, presence: true
 	validate :distance_cannot_be_greater_than_100_miles
@@ -35,6 +37,17 @@ class Activity < ActiveRecord::Base
 			query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%')"
 		end
 		where(query.join(" AND "))
+	end
+
+	private
+	def assign_timezone
+		timezone = Timezone::Zone.new(:latlon => fetch_coordinates)
+		#offset = timezone.utc_offset.abs
+		#db_offset = 21600
+		#offset = offset - 3600 if Time.now.dst?
+		self.tz = timezone.active_support_time_zone
+		#self.datetime = self.datetime - offset
+		#logger.info "     !!!!_____!_!_!_!_!__!     #{self.datetime}"
 	end
 
 end
