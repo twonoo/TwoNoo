@@ -1,5 +1,6 @@
 class Profile < ActiveRecord::Base
 	belongs_to :user
+	has_one :notification_setting
 
 	validates :first_name, :last_name, length: { minimum: 2 }
 	# validates :gender, numericality: { only_integer: true }

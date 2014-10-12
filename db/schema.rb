@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141010050254) do
+ActiveRecord::Schema.define(version: 20141012042822) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -132,6 +132,20 @@ ActiveRecord::Schema.define(version: 20141010050254) do
   end
 
   add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id", using: :btree
+
+  create_table "notification_settings", force: true do |t|
+    t.integer  "profile_id"
+    t.boolean  "new_follower",                  default: true
+    t.boolean  "new_message",                   default: true
+    t.boolean  "new_rsvp",                      default: true
+    t.boolean  "new_following_activity",        default: true
+    t.boolean  "attending_activity_update",     default: true
+    t.boolean  "comment_on_owned_activity",     default: true
+    t.boolean  "comment_on_attending_activity", default: true
+    t.boolean  "weekly_summary",                default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "profiles", force: true do |t|
     t.integer  "user_id"

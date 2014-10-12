@@ -31,22 +31,8 @@ class ProfileController < ApplicationController
     end
   end
 
-  def notification_setting
-    if current_user.profile.notification_setting.nil?
-      @notification_setting = NotificationSetting.new
-      @notification_setting.profile_id = current_user.profile.id
-      @notification_setting.save
-    else
-      @notification_setting = NotificationSetting.find(current_user.profile.notification_setting.id)
-    end
-  end
-
-  def update_notification_setting
-    @notification_setting = NotificationSetting.find(current_user.profile.notification_setting.id)
-    @notification_setting.update(notification_setting_params)
-    if @notification_setting.save
-      redirect_to notification_setting_path, notice: "Your notification settings have been updated"
-    end
+  def editNotifications
+    @user = User.find(current_user)
   end
 
   def notifications
@@ -75,10 +61,6 @@ class ProfileController < ApplicationController
 
   def profile_params
     params.require(:user).permit(:email, profile_attributes: [:first_name, :last_name, :gender, :about_me, :id, :profile_picture])
-  end
-
-  def notification_setting_params
-    params.require(:notification_setting).permit(:new_follower, :new_message, :new_rsvp, :new_following_activity, :attending_activity_update, :comment_on_owned_activity, :comment_on_attending_activity, :weekly_summary)
   end
 
   def activities_profile

@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+    <%= render 'edit_nav' %>
+    <div class="col-md-9">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-9">
+          <%= form_for @notification_setting, html: {class: "form form-horizontal"} do |ns| %>
+            <div class="form-group" style="vertical-align: bottom;"> 
+              <%= ns.check_box :new_follower %> 
+              <%= ns.label 'New follower'  %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :new_message %> 
+              <%= ns.label 'New message' %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :new_rsvp %> 
+              <%= ns.label 'RSVPs to an activity you organized' %>
+            </div>
+            <div class="form-group"> 
+              <%= ns.check_box :new_following_activity %> 
+              <%= ns.label 'New activity from someone you follow' %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :attending_activity_update %>
+              <%= ns.label 'Update to an activity you are attending' %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :comment_on_owned_activity %>
+              <%= ns.label 'New comment on an actvity you organized' %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :comment_on_attending_activity %>
+              <%= ns.label 'New comment on an actvity you are attending' %>
+            </div>
+            <div class="form-group">
+              <%= ns.check_box :weekly_summary %>
+              <%= ns.label 'Weekly Summary' %>
+            </div>
+            <%= ns.submit 'Save', class: 'btn btn-primary' %> </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

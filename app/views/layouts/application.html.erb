@@ -4,6 +4,16 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1, minimal-ui" name="viewport">
+  <% if !@activity.nil? %>
+	  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
+	  <meta property="og:title" content="<%= @activity.activity_name %>" />
+	  <meta property="og:description" content="<%= @activity.description %>" />
+	<% if @activity.image.exists? %>
+	  <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
+	<% else %>
+	  <meta property="og:image" content="<%=root_url%>assets/logo.jpg" />
+	<% end %>
+  <% end %>
   <title><%= @title ? @title : 'TwoNoo' %></title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <script type="text/javascript" src='http://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js'></script>
