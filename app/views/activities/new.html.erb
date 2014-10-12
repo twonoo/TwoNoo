@@ -92,9 +92,10 @@
 	    </div>
 
 	    <div class="col-md-5">
-	    	<div class="text-center" style="height:200px; width:300px; background-color:#e2e2e2; margin:0 auto">
-	    		<a href=""><h5 style="margin: 0 auto; line-height:200px">Upload Image</h5></a>
-	    	</div>
+	    	<fieldset>
+		    	<legend>Upload Activity Image</legend>
+		    	<%= f.file_field :image %>
+		    </fieldset>
 	    	<br/><br/>
 				<div>
 					<label>Activity Type</label>
