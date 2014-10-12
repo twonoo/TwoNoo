@@ -26,6 +26,7 @@
                 </div>
             <% end %>
           </div>
+          <% if @users.present? %>
           <div class="tab-pane <%= 'active' if @activities.blank? %>" id="users">
             <% @users.each do |u| %>
               <p class="lead">
@@ -34,6 +35,7 @@
               </p>
             <% end %>
           </div>
+          <% end %>
         </div>
        </div>
       </div>
