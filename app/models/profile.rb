@@ -16,6 +16,14 @@ class Profile < ActiveRecord::Base
 		end
 	end
 
+	def self.terms(terms)
+		query = []
+			terms.split.each do |t|
+				query << "(first_name LIKE '%#{t}%' OR last_name LIKE '%#{t}%')"
+			end
+			where(query.join(" AND "))
+	end
+
 	def init
 		self.gender  ||= 3
 	end
