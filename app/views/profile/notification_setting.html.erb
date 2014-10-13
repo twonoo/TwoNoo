@@ -12,7 +12,7 @@
             </div>
             <div class="form-group">
               <%= ns.check_box :new_message %> 
-              <%= ns.label 'New message (coming soon)' %>
+              <%= ns.label 'New message' %>
             </div>
             <div class="form-group">
               <%= ns.check_box :new_rsvp %> 
@@ -28,15 +28,11 @@
             </div>
             <div class="form-group">
               <%= ns.check_box :comment_on_owned_activity %>
-              <%= ns.label 'New comment on an actvity you organized (coming soon)' %>
+              <%= ns.label 'New comment on an actvity you organized' %>
             </div>
             <div class="form-group">
               <%= ns.check_box :comment_on_attending_activity %>
-              <%= ns.label 'New comment on an actvity you are attending (coming soon)' %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :weekly_summary %>
-              <%= ns.label 'Weekly Summary (coming soon)' %>
+              <%= ns.label 'New comment on an actvity you are attending' %>
             </div>
             <%= ns.submit 'Save', class: 'btn btn-primary' %> </div>
           <% end %>
