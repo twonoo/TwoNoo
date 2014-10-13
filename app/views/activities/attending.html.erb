@@ -3,7 +3,9 @@
 		<div class="content">
 			<div class="row">
 		    		<%= current_user ? render('layouts/side_nav') : render(nil) %>
-				<%= render 'attending' %>
+				<div class="col-md-8">
+					<%= render 'attending' %>
+				</div>
 			</div>
 		</div>
 	</div>
