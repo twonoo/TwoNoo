@@ -158,6 +158,7 @@
 
       $("#endDatePicker").on("dp.change",function (e) {
          $('#startDatePicker').data("DateTimePicker").setMaxDate(e.date);
+         $('#daterange-selection').removeAttr('value');
          $('#daterange-selection-phrase').text(getCustomDates);
       });
 
