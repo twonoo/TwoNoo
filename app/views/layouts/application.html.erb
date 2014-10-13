@@ -11,7 +11,7 @@
 	<% if @activity.image.exists? %>
 	  <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
 	<% else %>
-	  <meta property="og:image" content="<%=root_url%>assets/logo.jpg" />
+	  <meta property="og:image" content="<%=root_url%>assets/TwoNoo-Logo.png" />
 	<% end %>
   <% end %>
   <title><%= @title ? @title : 'TwoNoo' %></title>

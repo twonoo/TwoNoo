@@ -35,7 +35,12 @@
 					<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= request.original_url %>" data-hashtags="twonoo" data-text="Check out <%= @activity.activity_name %> on TwoNoo!">Tweet</a>
 					<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-					<a href="//www.pinterest.com/pin/create/button/?url=<%= request.original_url %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%= request.host %>:<%= request.port %><%= @activity.image.url %>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
+<% if @activity.image.exists? 
+  @imageURL = @activity.image.url
+ else
+  @imageURL = "assets/TwoNoo-Logo.png"
+ end %>
+					<a href="//www.pinterest.com/pin/create/button/?url=<%= request.original_url %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%=root_url%><%=@imageURL%>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
 
 					<!-- Please call pinit.js only once per page -->
 					<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
