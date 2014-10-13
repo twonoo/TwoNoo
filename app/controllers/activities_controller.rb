@@ -98,11 +98,11 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
+        UserMailer.new_following_activity(follower, current_user, @activity).deliver
         follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
 
-      UserMailer.new_following_activity(follower, current_user, @activity).deliver
 
       redirect_to @activity
     else
