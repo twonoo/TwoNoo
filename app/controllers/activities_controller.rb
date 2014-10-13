@@ -150,7 +150,7 @@ class ActivitiesController < ApplicationController
       end
 
       @organizer = User.find(@activity.user_id)
-      if curent_user != @organizer
+      if current_user != @organizer
           UserMailer.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment).deliver
       end
 	#Notify all users that have commented on this acctivity that a comment was added
