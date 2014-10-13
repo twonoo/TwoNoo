@@ -57,6 +57,8 @@ class ActivitiesController < ApplicationController
         @user = User.find_by_id(rsvp.user_id)
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.attending_activity_update(@user, @activity).deliver
         end
       end
       redirect_to @activity
@@ -81,7 +83,7 @@ class ActivitiesController < ApplicationController
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.attending_activity_update(current_user, @activity).deliver
+          UserMailer.attending_activity_update(@user, @activity).deliver
         end
       end
       redirect_to @activity

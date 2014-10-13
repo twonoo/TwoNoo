@@ -5,6 +5,8 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="col-md-9">
+            <h1>E-mail settings</h1>
+            <p>Check the notifications you want to get e-mails for.</p>
           <%= form_for @notification_setting, html: {class: "form form-horizontal"} do |ns| %>
             <div class="form-group" style="vertical-align: bottom;"> 
               <%= ns.check_box :new_follower %> 
