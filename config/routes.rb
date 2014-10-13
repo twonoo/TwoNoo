@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   get 'activities/create'
   get 'activities/rsvp'
 
+  post 'activities/invite_people/:id' => 'activities#invite_people', as: :invite_people
   post 'activities/comment' => 'activities#comment', as: :activity_comment
 
 

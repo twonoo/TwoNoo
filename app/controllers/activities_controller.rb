@@ -37,6 +37,12 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
   end
 
+  def invite_people
+    @activity = Activity.find(params[:id])
+    UserMailer.activity_invite(current_user, @activity, params[:emails]).deliver
+  end
+
+
   def update
     @activity = Activity.find(params[:id])
     params = activity_params
@@ -50,7 +56,7 @@ class ActivitiesController < ApplicationController
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
         if !@user.nil?
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>", send_mail: @user.profile.notification_setting.attending_activity_update)
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
         end
       end
       redirect_to @activity
@@ -73,7 +79,7 @@ class ActivitiesController < ApplicationController
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
         if !@user.nil?
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>", send_mail: @user.profile.notification_setting.attending_activity_update)
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
         end
       end
       redirect_to @activity
@@ -90,7 +96,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>", send_mail: follower.profile.notification_setting.new_following_activity)
+        follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
       redirect_to @activity
@@ -105,7 +111,7 @@ class ActivitiesController < ApplicationController
     # Notfiy the creator that a new user is going
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
-    @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>", send_mail: @organizer.profile.notification_setting.new_rsvp)
+    @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
     if rsvp.save
       redirect_to request.referer

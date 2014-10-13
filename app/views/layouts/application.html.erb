@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1, minimal-ui" name="viewport">
-  <% if !@activity.nil? %>
+  <% if !@activity.nil? && !@activity.id.nil? %>
 	  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
 	  <meta property="og:title" content="<%= @activity.activity_name %>" />
 	  <meta property="og:description" content="<%= @activity.description %>" />
