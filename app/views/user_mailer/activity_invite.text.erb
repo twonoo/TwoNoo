@@ -1,10 +1,9 @@
-Welcome to example.com, <%= @user.name %>
+<%= @user.name %> has invited to <%= link_to @activity.activity_name, activity_url(@activity) %>
 ===============================================
- 
-You have successfully signed up to example.com,
-your username is: <%= @user.name %>.
- 
-To login to the site, just follow this link: <%= @url %>.
- 
-Thanks for joining and have a great day!
+Name: <%=@activity.activity_name%>
 
+Description: <%=@activity.description%>
+
+To login to the site, just follow this link: <%= link_to 'TwoNoo.com', root_url %>.
+ 
+Have a great day!
