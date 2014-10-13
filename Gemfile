@@ -47,6 +47,7 @@ gem 'acts_as_commentable'
 gem 'browser-timezone-rails'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
+gem 'coffee-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
