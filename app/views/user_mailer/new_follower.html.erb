@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @follower.name %> is now following you!</h1>
+    <p>
+      Go check them out at: <%= link_to @follower.name, profile_url(@follower)%>
+      <br>
+      <%= link_to 'View all your followers.', followers_url(@user) %>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%=link_to 'TwoNoo.com', root_url %>.
+    </p>
+    <p>Have a great day!</p>
+  </body>
+</html>

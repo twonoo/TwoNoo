@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= link_to @commenter.name, profile_url(@commenter) %> posted this comment on your activity, <%= link_to @activity.activity_name, activity_url(@activity) %></h1>
+    <p>
+      <%=@comment%>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%=link_to 'TwoNoo.com', root_url %>.
+    </p>
+    <p>Have a great day!</p>
+  </body>
+</html>

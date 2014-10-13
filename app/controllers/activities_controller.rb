@@ -80,6 +80,8 @@ class ActivitiesController < ApplicationController
         @user = User.find_by_id(rsvp.user_id)
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.attending_activity_update(current_user, @activity).deliver
         end
       end
       redirect_to @activity
@@ -99,6 +101,9 @@ class ActivitiesController < ApplicationController
         follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
+
+      UserMailer.new_following_activity(follower, current_user, @activity).deliver
+
       redirect_to @activity
     else
       render :new
@@ -112,6 +117,8 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
     @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+    UserMailer.new_rsvp(@organizer, current_user, @activity).deliver
 
     if rsvp.save
       redirect_to request.referer
@@ -130,7 +137,22 @@ class ActivitiesController < ApplicationController
     @comment.user = current_user
     @comment.comment = params[:comment]
     if @comment.save
-	#Notify all users either organizeing or attending this activity that a comment was added
+      #Notify all users either organizeing or attending this activity that a comment was added
+      # Get the rsvp'd users
+      @rsvps = Rsvp.where(activity_id: @activity.id).all
+      @rsvps.each do |rsvp|
+        @user = User.find_by_id(rsvp.user_id)
+        if !@user.nil? && @user != current_user
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.comment_on_attending_activity(@user, @activity, current_user, @comment.comment).deliver
+        end
+      end
+
+      @organizer = User.find(@activity.user_id)
+      if curent_user != @organizer
+          UserMailer.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment).deliver
+      end
 	#Notify all users that have commented on this acctivity that a comment was added
     end
 

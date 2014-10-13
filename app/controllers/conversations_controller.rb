@@ -25,6 +25,8 @@ class ConversationsController < ApplicationController
       current_user.reply_to_conversation(conversation, *conversation_params(:body))
     end
 
+    UserMailer.new_message(recipient, current_user, *conversation_params(:body)).deliver
+
     redirect_to conversation_path(conversation)
   end
 
@@ -36,6 +38,15 @@ class ConversationsController < ApplicationController
 
   def reply
     current_user.reply_to_conversation(conversation, *message_params(:body))
+
+    if conversation.originator == current_user
+      recipient = conversation.recipients[0]
+    else
+      recipient = conversation.originator
+    end
+
+    UserMailer.new_message(recipient, current_user, *fetch_params('message', :body)).deliver
+
     redirect_to conversation_path(conversation)
   end
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @sender.name %> says:</h1>
+    <p>
+      <%= @message %>
+    </p>
+    <p>
+      <%= link_to 'View messages.', conversations_url %>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%=link_to 'TwoNoo.com', root_url %>.
+    </p>
+    <p>Have a great day!</p>
+  </body>
+</html>
