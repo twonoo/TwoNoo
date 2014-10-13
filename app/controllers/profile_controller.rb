@@ -90,7 +90,7 @@ class ProfileController < ApplicationController
   end
 
   def attending_profile
-    @rsvps = Rsvp.where(user_id: current_user.id)
+    @rsvps = Rsvp.where(user_id: params[:id])
     respond_to do |format|
       format.js
     end
