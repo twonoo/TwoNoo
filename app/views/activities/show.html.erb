@@ -77,9 +77,9 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <h4>Who's Going (<%=Rsvp.where(activity_id: @activity.id).count%>)</h4>
-            <% if @organizer == current_user %>
-              <a href="#" data-toggle="modal" data-target="#invite_people_form">Invite People</a>
-	    <% end %>
+
+          <%= render partial: 'invite_people', locals: {:activity => @activity} %>
+
           <% Rsvp.where(activity_id: @activity.id).each do |rsvp|
             @going = User.find(rsvp.user_id) %>
             <p><%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %></p>
@@ -96,61 +96,6 @@
 		</div>
   </div>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="invite_people_form" tabindex="-1" role="dialog" aria-labelledby="myModelLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Invite People</h4>
-      </div>
-      <div class="modal-body">
-        Enter e-mails of people to invite separated by commas.<br/>
-	<textarea id="emails" name="emails" style="width: 100%;"> </textarea>
-      </div>
-      <div class="modal-footer">
-        <button id="cancelInvite" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button id="sendInvites" type="button" class="btn btn-primary">Send Invites</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="invite_info" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	Invitations Sent!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  $(function(){
-    $('#sendInvites').bind('click', function(){invitePeople();});
-    $('#cancelInvite').bind('click', function(){$('#emails').val('');});
-
-    var invitePeople = function() {
-      $.ajax({
-        type: "POST",
-        url: "/activities/invite_people/<%=@activity.id.to_s%>",
-        data: { id: <%=@activity.id.to_s%>, emails: $('#emails').val()},
-        success: function(html) {
-          $('#invite_info').modal('show');
-          $('#emails').val('');
-        },
-       });
-      $('#invite_people_form').modal('hide'); 
-    };
-
-  });
-</script>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNhGdKD91B3SVN5kH1oE8y1hS-swp2e4k"></script>
 
