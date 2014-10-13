@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :search, :show]
 
   def attending
-    @rsvps = Rsvp.where(user_id: current_user.id)
+    @rsvps = Rsvp.where(user_id: params[:id])
   end
 
   def index
