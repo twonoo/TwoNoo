@@ -2,7 +2,7 @@
 	<div id="results-row" class="row row-md-height col-md-12">
 		<div class="pull-right"><%=(link_to 'Unfollow', unfollow_path(f.profile.id), class: 'label label-info')%></div>
 		<p class="lead"><%= profile_img(f) %>
-			<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %>
+			<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), profile_path(f) %>
 		</p>
 	</div>
 <% end %>

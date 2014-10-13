@@ -1,6 +1,6 @@
 <% @followers.each do |f| %>
 	<p class="lead">
 		<p class="lead"><%= profile_img(f) %> 
-		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), user_activities_path(f) %>
+		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), profile_path(f) %>
 	</p>
 <% end %>
