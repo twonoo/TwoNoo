@@ -10,6 +10,7 @@ class UserMailer < ActionMailer::Base
   def activity_invite(user, activity, emails)
     @user = user
     @activity = activity
+    attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
 
     mail(bcc: emails, subject: "#{@user.name} has invited you to #{@activity.activity_name}!")
   end
@@ -19,6 +20,7 @@ class UserMailer < ActionMailer::Base
 
     if (@user.profile.notification_setting.new_follower)
       @follower = follower
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@follower.name} is now following you.")
     end
   end
@@ -29,6 +31,7 @@ class UserMailer < ActionMailer::Base
     if (@user.profile.notification_setting.new_message)
       @message = message
       @sender = sender
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "You have a new message from #{@sender.name}")
     end
   end
@@ -39,6 +42,7 @@ class UserMailer < ActionMailer::Base
     if (@user.profile.notification_setting.new_rsvp)
       @attendee = attendee
       @activity = activity
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@attendee.name} is joining #{@activity.activity_name}")
     end
   end
@@ -49,6 +53,7 @@ class UserMailer < ActionMailer::Base
     if (@user.profile.notification_setting.new_following_activity)
       @organizer = organizer
       @activity = activity
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@organizer.name} just created #{@activity.activity_name} on TwoNoo!")
     end
   end
@@ -58,6 +63,7 @@ class UserMailer < ActionMailer::Base
 
     if (@user.profile.notification_setting.attending_activity_update)
       @activity = activity
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@activity.activity_name} has been updated on TwoNoo!")
     end
   end
@@ -69,6 +75,7 @@ class UserMailer < ActionMailer::Base
       @activity = activity
       @commenter = commenter
       @comment = comment
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@commenter.name} posted a new comment on #{@activity.activity_name}")
     end
   end
@@ -80,6 +87,7 @@ class UserMailer < ActionMailer::Base
       @activity = activity
       @commenter = commenter
       @comment = comment
+      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
       mail(to: @user.email, subject: "#{@commenter.name} posted a new comment on #{@activity.activity_name}")
     end
   end

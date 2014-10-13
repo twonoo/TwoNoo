@@ -8,11 +8,17 @@
     <p>
       Go check them out at: <%= link_to @follower.name, profile_url(@follower)%>
       <br>
-      <%= link_to 'View all your followers.', followers_url(@user) %>
+      <%= link_to 'View all your followers.', profile_followers_url(@user) %>
     </p>
     <p>
       To login to the site, just follow this link: <%=link_to 'TwoNoo.com', root_url %>.
     </p>
-    <p>Have a great day!</p>
+    <p>
+    <%= image_tag attachments['twonoo-logo.png'].url %>
+      <h4>Meet People. Do Stuff!</h4>
+    </p>
+    <p>
+      This message was sent to <%=@user.email%>.  If you do not want to receive these messages anymore, please update your <%= link_to 'Settings', profile_edit_path %>.
+    </p>
   </body>
 </html>
