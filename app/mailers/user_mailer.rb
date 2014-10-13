@@ -1,10 +1,11 @@
 class UserMailer < ActionMailer::Base
   default from: "no-reply@twonoo.com"
 
-  def welcome_email(user)
+  def twonoo_invite(user, emails)
     @user = user
-    @url  = root_url
-    mail(to: @user.email, subject: 'Welcome to My Awesome Site')
+    attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
+
+    mail(bcc: emails, subject: "#{@user.name} has invited you to join TwoNoo!")
   end
 
   def activity_invite(user, activity, emails)

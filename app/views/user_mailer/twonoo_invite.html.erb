@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @user.name %> has invited you to join <%= link_to 'TwoNoo', root_url %>!</h1>
+    <p>
+      To join just follow this link: <%= link_to 'Sign Up',  new_user_registration_url %>.
+    </p>
+    <p>
+    <%= image_tag attachments['twonoo-logo.png'].url %>
+      <h4>Meet People. Do Stuff!</h4>
+    </p>
+  </body>
+</html>

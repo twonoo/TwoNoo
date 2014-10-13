@@ -56,4 +56,8 @@ class WelcomeController < ApplicationController
     end
   end
 
+  def invite_people
+    UserMailer.twonoo_invite(current_user, params[:emails]).deliver
+  end
+
 end
