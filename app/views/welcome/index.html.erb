@@ -33,8 +33,8 @@
                 <div class="col-xs-8 col-md-8 col-lg-8">
                   <div class="btn-group" id="date-dropdown">
                     <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                      <input type="hidden" name="when" class="hidden-input" value="Today">
-                      <span class="selection">Today</span>
+                      <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Today">
+                      <span class="selection" id="daterange-selection-phrase">Today</span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                       <li><a href="#">This Week</a></li>
@@ -42,15 +42,13 @@
                       <li><a href="#">Next Two Weeks</a></li>
                       <li class="divider"></li>
                       <div class="form-group" style="padding:5px">
-                        <label>Start</label>
-                        <div class='input-group date col-sm-4' style='width:200px' id='startDatePicker'>
-                          <input type="text" class="form-control input-sm" name="from_date">
-                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        <h5>Start</h5>
+                        <div class='col-sm-12'>
+                          <input type='text' id='startDatePicker' class="form-control input-sm keep_open" name="from_date"/>
                         </div>
-                        <label>End</label>
-                        <div class='input-group date col-sm-4' style='width:200px' id='endDatePicker'>
-                          <input type="text" class="form-control input-sm" name="to_date">
-                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        <h5>End</h5>
+                        <div class='col-sm-12'>
+                          <input type='text' id='endDatePicker' class="form-control input-sm keep_open" name="to_date"/>
                         </div>
                       </div>
                     </ul>
@@ -136,20 +134,37 @@
   $(function () {
       $('#startDatePicker').datetimepicker({
         minDate: "<%= Date.today %>",
+        defaultDate: "<%= Date.today.strftime('%m/%d/%Y') %>",
         pickTime: false
       });
 
+      function getCustomDates() {
+        start = moment($('#startDatePicker').val());
+        end = moment($('#endDatePicker').val());
+        //console.log(start.format("ddd, M, D") + " - " + end.format("ddd, M, D"));
+        return start.format("ddd M/D") + " - " + end.format("ddd M/D")
+      }
+
       $('#endDatePicker').datetimepicker({
+        defaultDate: "<%= (Date.today + 7).strftime('%m/%d/%Y') %>",
         pickTime: false
       });
 
       $("#startDatePicker").on("dp.change",function (e) {
          $('#endDatePicker').data("DateTimePicker").setMinDate(e.date);
-      });
-      $("#endDatePicker").on("dp.change",function (e) {
-         $('#startDatePicker').data("DateTimePicker").setMaxDate(e.date);
+         $('#daterange-selection').removeAttr('value');
+         $('#daterange-selection-phrase').text(getCustomDates);
       });
 
+      $("#endDatePicker").on("dp.change",function (e) {
+         $('#startDatePicker').data("DateTimePicker").setMaxDate(e.date);
+         $('#daterange-selection').removeAttr('value');
+         $('#daterange-selection-phrase').text(getCustomDates);
+      });
+
+      $('.keep_open').click(function(event){
+        event.stopPropagation();
+      });
   });
 
   $(function () { 
@@ -182,8 +197,4 @@
     getLocation();
   });
 
-  $('#date-dropdown').on('hide.bs.dropdown', function () {
-    //$(this)
-  });
-    
 </script>

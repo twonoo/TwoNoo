@@ -18,7 +18,7 @@ class WelcomeController < ApplicationController
     end
 
     # Determine date range
-    if !params[:when].blank?
+    if params[:when].present?
       case params[:when]
         when "Today"
           end_date = DateTime.tomorrow
