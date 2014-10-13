@@ -68,7 +68,7 @@ class UserMailer < ActionMailer::Base
     if (@user.profile.notification_setting.comment_on_owned_activity)
       @activity = activity
       @commenter = commenter
-      @coment = comment
+      @comment = comment
       mail(to: @user.email, subject: "#{@commenter.name} posted a new comment on #{@activity.activity_name}")
     end
   end
