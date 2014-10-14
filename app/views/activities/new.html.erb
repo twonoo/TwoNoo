@@ -1,114 +1,114 @@
 <div class="container">
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-    		<h3 class="panel-title">Create your Activity</h3>
-  		</div>
-			<div class="panel-body">
-				<% if @activity.errors.any? %>
-				  <div id="error_explanation">
-				    <% @activity.errors.full_messages.each do |msg| %>
-				      <div class="alert alert-danger fade in"><%= msg %><button class="close" data-dismiss="alert">x</button></div>
-				    <% end %>
-				    </ul>
-				  </div>
-				<% end %>
-	    <div class="col-md-7">
-<script>
- function confirmCreate()
-{
-	<% if current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
-		return 1;
-	<% else %>
-		return confirm('Creating this Activity will cost 1 Credit');
-	<% end %>
-}
-</script>
-	    	<%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Create your Activity</h3>
+      </div>
+      <div class="panel-body">
+        <% if @activity.errors.any? %>
+          <div id="error_explanation">
+            <% @activity.errors.full_messages.each do |msg| %>
+              <div class="alert alert-danger fade in"><%= msg %><button class="close" data-dismiss="alert">x</button></div>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <div class="col-md-7">
+      <script>
+        function confirmCreate()
+        {
+          <% if current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
+            return 1;
+          <% else %>
+            return confirm('Creating this Activity will cost 1 Credit');
+          <% end %>
+        }
+      </script>
+        <%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
-		    	<div class="form-group has-error">
-			    	<%= f.label :name, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :activity_name, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group has-error">
+            <%= f.label :name, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :activity_name, class: "form-control" %>
+            </div>
+          </div>
 
-		    	<div class="form-group has-error">
-						<%= f.label :when, class: "col-sm-2 control-label" %>
-					  <div class='input-group date col-sm-4' style='padding-left:15px' id='datetimepicker1'>
-					    <%= f.text_field :datetime, class: "form-control" %>
-					    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-					  </div>
-					</div>
+          <div class="form-group has-error">
+            <%= f.label :when, class: "col-sm-2 control-label" %>
+            <div class='input-group date col-sm-4' style='padding-left:15px' id='datetimepicker1'>
+              <%= f.text_field :datetime, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.datetime.strftime('%m/%d/%Y %l:%M %p')) %>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+          </div>
 
-		    	<div class="form-group">
-			    	<%= f.label :venue, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :location_name, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group">
+            <%= f.label :venue, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :location_name, class: "form-control" %>
+            </div>
+          </div>
 
-		    	<div class="form-group">
-			    	<%= f.label :address, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :street_address_1, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group">
+            <%= f.label :address, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :street_address_1, class: "form-control" %>
+            </div>
+          </div>
 
-		    	<div class="form-group">
-			    	<%= f.label :address_2, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :street_address_2, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group">
+            <%= f.label :address_2, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :street_address_2, class: "form-control" %>
+            </div>
+          </div>
 
-		    	<div class="form-group has-error">
-			    	<%= f.label :city, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :city, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group has-error">
+            <%= f.label :city, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :city, class: "form-control" %>
+            </div>
+          </div>
 
-					<div class="form-group has-error">
-			    	<%= f.label :state, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.select :state, us_states, {}, {class: "form-control"} %>
-		    		</div>
-		    	</div>
+          <div class="form-group has-error">
+            <%= f.label :state, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.select :state, us_states, {}, {class: "form-control"} %>
+            </div>
+          </div>
 
-		    	<div class="form-group">
-			    	<%= f.label :website, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-4">
-		      		<%= f.text_field :website, class: "form-control" %>
-		    		</div>
-		    	</div>
+          <div class="form-group">
+            <%= f.label :website, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= f.text_field :website, class: "form-control" %>
+            </div>
+          </div>
 
-		    	<div class="form-group has-error">
-			    	<%= f.label :description, class: "col-sm-2 control-label" %>
-			    	<div class="col-sm-8">
-		      		<%= f.text_area :description, class: "form-control", rows: "3" %>
-		    		</div>
-		    	</div>
-	    </div>
+          <div class="form-group has-error">
+            <%= f.label :description, class: "col-sm-2 control-label" %>
+            <div class="col-sm-8">
+              <%= f.text_area :description, class: "form-control", rows: "3" %>
+            </div>
+          </div>
+      </div>
 
-	    <div class="col-md-5">
-	    	<fieldset>
-		    	<legend>Upload Activity Image</legend>
-		    	<%= f.file_field :image %>
-		    </fieldset>
-	    	<br/><br/>
-				<div>
-					<label>Activity Type</label>
-				</div>
-				<% for type in ActivityType.all %>
-		    <div>
-		      <%= check_box_tag "activity[activity_type_ids][]", type.id %>
-		      <%= type.activity_type %>
-		    </div>
-				<% end %>
+      <div class="col-md-5">
+        <fieldset>
+          <legend>Upload Activity Image</legend>
+          <%= f.file_field :image %>
+        </fieldset>
+        <br/><br/>
+        <div>
+          <label>Activity Type</label>
+        </div>
+        <% for type in ActivityType.all %>
+        <div>
+          <%= check_box_tag "activity[activity_type_ids][]", type.id %>
+          <%= type.activity_type %>
+        </div>
+        <% end %>
 
-	    	<button type="submit" class="btn btn-lg btn-success pull-right" >Create!</button>
-	    <% end %>
+        <button type="submit" class="btn btn-lg btn-success pull-right" >Create!</button>
+      <% end %>
 
       <script type="text/javascript">
             $(function () {

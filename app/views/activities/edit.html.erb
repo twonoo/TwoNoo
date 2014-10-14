@@ -25,7 +25,7 @@
 		    	<div class="form-group">
 						<%= f.label :when, class: "col-sm-2 control-label" %>
 					  <div class='input-group date col-sm-4' style='padding-left:15px' id='datetimepicker1'>
-					    <%= f.text_field :datetime, value: (@activity.datetime.strftime('%m/%d/%Y %I:%M %p')), class: "form-control"%>
+					    <%= f.text_field :datetime, value: (@activity.datetime.strftime('%m/%d/%Y %l:%M %p')), class: "form-control"%>
 					    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					  </div>
 					</div>
