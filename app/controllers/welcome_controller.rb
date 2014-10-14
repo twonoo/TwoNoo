@@ -50,6 +50,11 @@ class WelcomeController < ApplicationController
     @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
 
     @users = Profile.terms(params[:terms])
+
+    @search = Search.new
+    @search.user_id = current_user.id
+    @search.search = params[:terms]
+    @search.save
     
     if @activities.blank? && @users.blank?
       render 'noresults' 

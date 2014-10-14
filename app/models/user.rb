@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_one :profile, dependent: :destroy
   has_many :follow_relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :follow_relationships, source: :followed
+  has_many :searches
 
   accepts_nested_attributes_for :profile
 

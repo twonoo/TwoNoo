@@ -53,7 +53,7 @@
           </br>
 					<p class="lead"><%= @activity.description %>
 </p>
-					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p %Z') %></p>
+					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
 					<div id="map-canvas"></div>
 				</div>
 			</div>
