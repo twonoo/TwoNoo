@@ -7,6 +7,7 @@ class WelcomeController < ApplicationController
   end
 
   def search
+    @showNoResults = true
   	# Setup location constraints
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
@@ -15,6 +16,7 @@ class WelcomeController < ApplicationController
     search_coordinates = Geocoder.search(params[:location]).first.coordinates
     unless Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 || Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100
       redirect_to root_path, notice: "You're trying to search outside of the area"
+      @showNoResults = false
     end
 
     # Determine date range
@@ -56,7 +58,7 @@ class WelcomeController < ApplicationController
     @search.search = params[:terms]
     @search.save
     
-    if @activities.blank? && @users.blank?
+    if @activities.blank? && @users.blank? && @showNoResults
       render 'noresults' 
     end
   end

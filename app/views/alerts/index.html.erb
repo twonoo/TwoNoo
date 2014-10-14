@@ -76,7 +76,7 @@
     // Get browser location and set selectors
     function getLocation() {
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(getCity);
+          navigator.geolocation.getCurrentPosition(getCity, getCityError);
       } else {
           $('#selection').text('Denver, CO');
           $('#search-terms').show();
@@ -92,6 +92,12 @@
           $('#search-terms').show();
         });
     };
+
+    function getCityError() {
+      $('#selection').text('Denver, CO');
+      $('#search-terms').show();
+    };
+
     getLocation();
   });
 
