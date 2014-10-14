@@ -16,7 +16,7 @@ class ProfileController < ApplicationController
       user.update(password_params)
       logger.info user.errors
       if user.save
-        redirect_to new_user_session_path
+        redirect_to new_user_session_path, notice: "Your password has been successfully changed. Please login again with the new password."
       end
     else
       redirect_to profile_change_password_path, alert: "Your current password is incorrect"
