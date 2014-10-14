@@ -117,3 +117,34 @@
       </script>
   </div>
 </div>
+
+<script>
+  $(function () {
+
+    // Get browser location and set selectors
+    function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(getCity, getCityError);
+      } else {
+        $('#activity_city').val('Denver');
+        $('#activity_state').val('CO');
+      }
+    }
+    function getCity(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude
+
+     $.get( "/geocode/searchCityState.json", {location: latitude + "," + longitude}, function( data ) {
+        $('#activity_city').val(data.city);
+        $('#activity_state').val(data.state);
+      });
+    };
+
+    function getCityError() {
+      $('#activity_city').val('Denver');
+      $('#activity_state').val('CO');
+    };
+
+    getLocation();
+  });
+</script>
