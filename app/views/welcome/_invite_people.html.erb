@@ -38,7 +38,7 @@
     <%
       if cookies[:new_user] == 'true' %>
         $('#invite_people_form').modal('show');
-    <%  cookies[:new_user] == 'false'
+    <%  cookies[:new_user] = 'false'
       end %>
 
     $('#sendInvites').bind('click', function(){invitePeople();});
