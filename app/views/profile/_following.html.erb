@@ -1,7 +1,7 @@
 <% @following.each do |f| %>
 	<div id="results-row" class="row row-md-height col-md-12">
 		<% if current_user == User.find(params[:id]) %>
-			<div class="pull-right"><%=(link_to 'Unfollow', unfollow_path(f.profile.id), class: 'label label-info')%></div>
+			<div class="pull-right" style="margin-top:44px"><%=(link_to 'Unfollow', unfollow_path(f.profile.id), class: 'label label-info')%></div>
 		<% end %>
 		<p class="lead"><%= profile_img(f) %>
 			<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), profile_path(f) %>
