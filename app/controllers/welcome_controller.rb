@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   def index
-    @trending = Activity.all
+    @trending = Activity.trending('Denver, CO')
   end
 
   def coming_soon

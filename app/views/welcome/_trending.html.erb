@@ -16,8 +16,9 @@
       </nav>
       <div class="portfolio-items  isotopeWrapper clearfix imgHover" id="4">
 
-      <% @trending.each do |t| %>
-        <article class="col-sm-3 isotopeItem <%= t.activity_types.map(&:id).join(' ') %> top">
+      <% @trending.each do |k,v| %>
+        <% v.each do |t| %>
+        <article class="col-sm-3 isotopeItem <%= k %>">
           <section class="imgWrapper">
             <% if t.image_file_name %>
               <%= image_tag t.image.url(:trending), class: 'img-responsive' %>
@@ -35,9 +36,9 @@
             <%= link_to t.activity_name, activity_path(t.id) %>
           </section>
         </article>
-
+        <% end %>
       <% end %>
-
+      
       </div>
     </div>
   </div>
