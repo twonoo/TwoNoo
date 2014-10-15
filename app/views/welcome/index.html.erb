@@ -2,8 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2"> <%= form_tag("/search", method: "post") do %>
-        <div class="form-group">
-          <div class="input-group input-group-lg" id="search-group">
+        <div class="form-group" id="search-group">
+          <h1 style="font-weight:600;padding-bottom:45px">MEET PEOPLE. DO STUFF.</h1>
+          <div class="input-group input-group-lg">
             <input class="form-control" id="terms" name="terms" placeholder="Search for Activities…by name, venue, user" type="search" autofocus>
             <span class="input-group-btn">
             <input class="btn" name="commit" type="submit" value="Search">
@@ -173,13 +174,13 @@
   $(document).ready(function() {
     var height = $(window).height() - 350; 
     $("#home").height(height);
-    $("#search-group").css('margin-top', ((height - 150) / 2))
+    $("#search-group").css('margin-top', ((height - 300) / 2))
   });
 
   window.onresize = function() {
    var height = $(window).height() - 350; 
     $("#home").height(height);
-    $("#search-group").css('margin-top', ((height - 150) / 2))
+    $("#search-group").css('margin-top', ((height - 300) / 2))
   }
 
 
