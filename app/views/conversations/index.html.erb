@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container" style="margin-top:35px">
   <div class="col-md-4">
-  <h1>Conversations</h1>
+  <h2>Conversations</h2>
   <ul><%= render collection: mailbox.conversations(:mailbox_type => 'not_trash'), partial: 'conversations'%></ul>
   </div>
   <div id="display_conversation" class="col-md-8">
@@ -17,7 +17,6 @@
 
 <script>
   var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
-
   <% if !(conversation.nil?) then %>
     $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
   <% end %>

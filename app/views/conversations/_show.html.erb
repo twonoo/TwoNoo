@@ -1,12 +1,11 @@
-<h1>Talking To: 
+<h3 class="text-center">
 <% if conversation.originator == current_user%>
   <%= conversation.recipients[0].profile.first_name %> <%=conversation.recipients[0].profile.last_name%>
 <% else %>
   <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
 <% end %>
-</h1>
+</h3>
 <div id='conversation'>
   <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
 </div>
 <%= render 'messages/form', conversation: conversation %>
-

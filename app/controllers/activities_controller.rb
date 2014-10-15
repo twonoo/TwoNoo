@@ -123,7 +123,7 @@ class ActivitiesController < ApplicationController
     UserMailer.new_rsvp(@organizer, current_user, @activity).deliver
 
     if rsvp.save
-      redirect_to request.referer
+      redirect_to activity_path(@activity), notice: "You're now going to #{@activity.activity_name}!"
     end
   end
 
