@@ -53,7 +53,7 @@ class WelcomeController < ApplicationController
         when "Next Two Weeks"
           end_date = 2.weeks.from_now
         else
-          end_date = 1.month.from_now
+          end_date = 1.month.from_now 
       end
       from_date = DateTime.now.beginning_of_day unless from_date
     else
