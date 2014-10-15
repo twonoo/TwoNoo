@@ -8,6 +8,7 @@ class Activity < ActiveRecord::Base
 	geocoded_by :address
 	before_validation :geocode
 	before_save :assign_timezone
+	has_many :rsvps
 
 
 	validates :activity_name, :datetime, :city, :state, :description, presence: true
@@ -39,8 +40,8 @@ class Activity < ActiveRecord::Base
 		where(query.join(" AND "))
 	end
 
-	def self.trending
-		Activity.where('datetime > NOW()')
+	def self.trending(location)
+		where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15).where('cancelled IS FALSE').within(25, origin: Geocoder.search(location).first.coordinates).joins(:rsvps).group(:activity_id).count
 	end
 
 	private
