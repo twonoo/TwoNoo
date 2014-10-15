@@ -6,7 +6,7 @@
 					<%= profile_img(@profile) %>
             <h3><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></h3> 
             <p><%= @profile.profile.about_me %></p>
-            <% if current_user != @profile then %>
+            <% if !current_user.nil? && (current_user != @profile) then %>
             <h4><%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %></h4>
             <% end %>
 				</div>
