@@ -18,6 +18,6 @@
 <%= form_for :conversation, url: :conversations do |f| %>
   <%= f.hidden_field :recipients, :value => organizer %>
   <%= f.text_area :body, as: :text %>
-  <%= f.submit 'Send Message', class: 'btn btn-default btn-sm' %>
+  <%= f.submit 'Send Message', class: 'btn btn-success btn-sm' %>
 <% end %>
 
