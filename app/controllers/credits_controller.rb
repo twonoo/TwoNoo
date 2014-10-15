@@ -1,4 +1,6 @@
 class CreditsController < ApplicationController
+  before_filter :authenticate_user!
+  
   def index
   	@user_transactions = Transaction.where(user_id: current_user).order("id DESC")
     
