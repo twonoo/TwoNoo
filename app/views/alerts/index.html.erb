@@ -48,7 +48,7 @@
 	      		<div>
 	      			<% current_user.alerts.each do |a| %>
 	      				<div >
-	      					<h5>"<%= a.keywords %>" within <%= a.distance %> miles of <%= a.location %> <%= link_to '', alert_path(a), method: :delete, class: 'glyphicon glyphicon-trash pull-right'%><span class=""></span></h5>
+	      					<h5>"<%= a.keywords %>" within <%= a.distance %> miles of <%= a.location %> <%= link_to '', alert_path(a), method: :delete, class: 'icon-trash pull-right'%><span class=""></span></h5>
 	      				</div>
 	      			<% end %>
 	      		</div>
