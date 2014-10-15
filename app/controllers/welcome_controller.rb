@@ -55,7 +55,7 @@ class WelcomeController < ApplicationController
     @users = Profile.terms(params[:terms])
 
     @search = Search.new
-    @search.user_id = current_user.id
+    @search.user_id = current_user.nil? ? nil : current_user.id
     @search.search = params[:terms]
     @search.save
     
