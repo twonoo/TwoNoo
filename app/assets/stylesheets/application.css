@@ -20,7 +20,7 @@
  *= require 'style.css'
  *= require 'flexslider.css'
  *= require 'jquery.pageslide.css'
- *= require 'custom-icons.css'
+ *= require 'custom-icons.css.scss'
  *= require 'custom-icons-ie7.css'
  *= require 'layout.css'
  *= require 'datepicker.css'
