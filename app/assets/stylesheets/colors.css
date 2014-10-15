@@ -71,7 +71,7 @@ h2.subTitle:after, h1.noSubtitle:after{
 .search-term-links, a.search-term-links:hover {
 	color:#FFF;
 	text-decoration: none; 
-	border-bottom:1px dashed;
+	border-bottom:1.75px dashed;
 }
 
 .search-box {
