@@ -31,3 +31,4 @@
 //= require bootstrap-datetimepicker.js
 //= require custom
 //= require holder
+//= require signed_in_nav.js

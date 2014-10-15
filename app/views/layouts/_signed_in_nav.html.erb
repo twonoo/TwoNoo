@@ -8,7 +8,7 @@
       <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span></a>
     <ul class="dropdown-menu" id="notifications_dropdown" style="width:300px;">
       <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |notif| %>
-        <b><%=notif.subject%>:</b> <%=notif.body%>
+        <b><%=notif.subject%>:</b> <%=notif.body.html_safe%>
       <li class="divider"></li>
 <% end %>
     </ul>
