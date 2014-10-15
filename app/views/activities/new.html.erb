@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
-    <div class="panel panel-default">
-        <h3 class="panel-title">Create your Activity</h3>
-      </div>
+    <div class="panel panel-default" >
+        <h4 class="panel-title">Create your Activity</h4>
+    </div>
       <div class="panel-body">
         <% if @activity.errors.any? %>
           <div id="error_explanation">
@@ -25,65 +25,65 @@
       </script>
         <%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
-          <div class="form-group has-error">
-            <%= f.label :name, class: "col-sm-2 control-label" %>
-            <div class="col-sm-4">
+          <div class="form-group">
+            <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
+            <div class="col-sm-5">
               <%= f.text_field :activity_name, class: "form-control" %>
             </div>
           </div>
 
-          <div class="form-group has-error">
-            <%= f.label :when, class: "col-sm-2 control-label" %>
-            <div class='input-group date col-sm-4' style='padding-left:15px' id='datetimepicker1'>
+          <div class="form-group">
+            <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <div class='input-group date col-sm-5' style='padding-left:15px' id='datetimepicker1'>
               <%= f.text_field :datetime, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.datetime.strftime('%m/%d/%Y %l:%M %p')) %>
-              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              <span class="input-group-addon"><span class="icon-calendar"></span></span>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :venue, class: "col-sm-2 control-label" %>
-            <div class="col-sm-4">
+            <%= f.label :venue, class: "col-sm-3 control-label" %>
+            <div class="col-sm-5">
               <%= f.text_field :location_name, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :address, class: "col-sm-2 control-label" %>
-            <div class="col-sm-4">
+            <%= f.label :address, class: "col-sm-3 control-label" %>
+            <div class="col-sm-5">
               <%= f.text_field :street_address_1, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :address_2, class: "col-sm-2 control-label" %>
-            <div class="col-sm-4">
+            <%= f.label :address_2, class: "col-sm-3 control-label" %>
+            <div class="col-sm-5">
               <%= f.text_field :street_address_2, class: "form-control" %>
             </div>
           </div>
 
-          <div class="form-group has-error">
-            <%= f.label :city, class: "col-sm-2 control-label" %>
-            <div class="col-sm-4">
+          <div class="form-group">
+            <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <div class="col-sm-3">
               <%= f.text_field :city, class: "form-control" %>
             </div>
           </div>
 
-          <div class="form-group has-error">
-            <%= f.label :state, class: "col-sm-2 control-label" %>
+          <div class="form-group">
+            <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000"  %>
             <div class="col-sm-4">
               <%= f.select :state, us_states, {}, {class: "form-control"} %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :website, class: "col-sm-2 control-label" %>
+            <%= f.label :website, class: "col-sm-3 control-label" %>
             <div class="col-sm-4">
               <%= f.text_field :website, class: "form-control" %>
             </div>
           </div>
 
-          <div class="form-group has-error">
-            <%= f.label :description, class: "col-sm-2 control-label" %>
+          <div class="form-group">
+            <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000"  %>
             <div class="col-sm-8">
               <%= f.text_area :description, class: "form-control", rows: "3" %>
             </div>
@@ -92,12 +92,12 @@
 
       <div class="col-md-5">
         <fieldset>
-          <legend>Upload Activity Image</legend>
+          <h3>Upload Activity Image</h3>
           <%= f.file_field :image %>
         </fieldset>
         <br/><br/>
         <div>
-          <label>Activity Type</label>
+          <h3>Activity Type</h3>
         </div>
         <% for type in ActivityType.all %>
         <div>
