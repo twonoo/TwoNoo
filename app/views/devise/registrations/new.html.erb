@@ -7,11 +7,11 @@ cookies[:new_user] = "true"
     <div class="panel panel-default">
 
       <div class="panel-heading">
-        <h3 class="panel-title">Sign Up</h3>
+        <h2 class="panel-title">Sign Up</h2>
       </div>
-      <div class="panel-body">
-        <%= link_to "Sign up with Facebook", user_omniauth_authorize_path(:facebook), class: 'btn btn-lg btn-primary btn-block' %> 
-        <hr>
+      <div class="panel-body" style="background-color:#F8F8F8">
+        <%= link_to "Sign up with Facebook", user_omniauth_authorize_path(:facebook), class: 'btn btn-md btn-primary btn-block' %> 
+        <h1><small>OR</small></h1>
       <% resource.build_profile unless resource.profile %>
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form-horizontal"}) do |f| %>
         <%= devise_error_messages! %>
@@ -27,13 +27,9 @@ cookies[:new_user] = "true"
         <%= f.fields_for :profile do |profile_form| %>
 
       <div style="margin-top:10px">
-        <h5>Birthday</h5>
+        <h4>Birthday</h4>
         <%= profile_form.date_select :birthday, {start_year: Time.now.year - 18, end_year: Time.now.year - 100, order: [:month, :day, :year], prompt: { month: 'Month', day: 'Day', year: 'Year' } }, {class: "form-control input-md", style: "width:32%; display:inline"} %>
       </div>
-
-      <h4><%= profile_form.check_box :nonprofit %>
-        <small>This account is for the exclusive purpose of promoting a non-profit organization.</small>
-      </h4>
 
       <div>
         <%= profile_form.radio_button :gender, "0" %>
@@ -43,12 +39,14 @@ cookies[:new_user] = "true"
         <%= profile_form.radio_button :gender, "2" %>
         <%= profile_form.label :gender, "Other", class: "h5", style: "margin-right:25px; margin-top:10px; padding-left:5px" %>
       </div>
+    </br>
 
-
+      <h4>By clicking Sign Up, you agree to our <strong><%= link_to 'Terms', terms_path, target: '_blank' %></strong> and <strong><%= link_to 'Privacy Policy', privacy_path, target: '_blank' %></strong>.</h4>
+      <h4><%= profile_form.check_box :nonprofit %>
+        This account is for the exclusive purpose of promoting a non-profit organization.
+      </h4>
       <% end %>
-
-      <h4><small>By clicking Sign Up, you agree to our <%= link_to 'Terms', terms_path, target: '_blank' %> and <%= link_to 'Privacy Policy', privacy_path, target: '_blank' %>.</small></h4>
-      <div class="text-center"><%= f.submit "Sign up", class: 'btn btn-success btn-lg btn-block' %>
+      <div class="text-center"><%= f.submit "Sign up", class: 'btn btn-success btn-md btn-block' %>
       </div>
 
         

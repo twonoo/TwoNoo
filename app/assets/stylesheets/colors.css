@@ -24,13 +24,13 @@
 /* BOOSTRAP CUSTOMIZATION
 ================================================== */
 
-/** tabs **/
+/** tabs 
 .panel-default>.panel-heading {background:#7DC24F; }
 .panel-default>.panel-heading:hover {background:#fff; }
 .panel-default>.panel-heading:hover a {color:#7DC24F; }
 .panel-title>a {color:#fff;}
 .panel-title>a:hover {text-decoration: none;}
-
+**/
 /* END BOOSTRAP CUSTOMIZATION
 ================================================== */
 

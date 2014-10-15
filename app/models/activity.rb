@@ -57,7 +57,7 @@ class Activity < ActiveRecord::Base
 			.group('rsvps.activity_id')
 			.order('rsvp_count DESC')
 			.limit(4)
-			results[a.id] = result
+			results["#{a.id}"] = result
 		end
 
 		# Calculate Top Trending
