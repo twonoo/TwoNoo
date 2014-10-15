@@ -29,8 +29,17 @@
           <div class="mediaHover">
             <div class="mask"></div>
             <div class="iconLinks">
-              <a href="portfolio-project-fullwidth-image.html" title="link" class="sizer portfolioSheet"> <i class="icon-check iconRounded iconBig"></i> <span>RSVP</span> </a>
-              <a href="assets/portfolio/zoom6.jpg" class="image-link" title="Full width image"> <i class="icon-search iconRounded iconBig"></i> <span>VIEW</span> </a> </div>
+
+
+              <% if current_user && t.user_id == current_user.id && Rsvp.user_rsvp?(t, current_user).blank? %>
+                <%= link_to "<i class='icon-check iconRounded iconBig'></i><span>RSVP</span>".html_safe, rsvp_path(t.id, current_user.id) %>
+              <% end %>
+
+
+
+              <%= link_to "<i class='icon-search iconRounded iconBig'></i><span>VIEW</span>".html_safe, activity_path(t.id) %>
+              </a>
+            </div>
           </div>
           <section class="boxContent">
             <%= link_to t.activity_name, activity_path(t.id) %>
