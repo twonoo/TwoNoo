@@ -38,7 +38,6 @@
       <li><%= link_to 'My Profile', profile_path(current_user) %></li>
       <li><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>
       <li><%= link_to 'Settings', profile_edit_path %></li>
-      <!--<li><%= link_to 'Privacy', profile_privacy_path %></li>-->
       <li class="divider"></li>
       <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
     </ul>

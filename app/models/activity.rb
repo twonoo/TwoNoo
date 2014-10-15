@@ -8,6 +8,7 @@ class Activity < ActiveRecord::Base
 	geocoded_by :address
 	before_validation :geocode
 	before_save :assign_timezone
+	has_many :rsvps
 
 
 	validates :activity_name, :datetime, :city, :state, :description, presence: true
@@ -39,8 +40,39 @@ class Activity < ActiveRecord::Base
 		where(query.join(" AND "))
 	end
 
-	def self.trending
-		Activity.where('datetime > NOW()')
+	def self.trending(location)
+		# Get Coordinates
+		locgeo = Geocoder.search(location).first.coordinates
+		results = Hash.new
+
+		# Cycle Through Activity Types and Store Each 
+		ActivityType.all.each do |a|
+			result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+			.select('activities.*, COUNT(rsvps.id) as rsvp_count')
+			.where(cancelled: false)
+			.where(activity_types: {id: a.id})
+			.within(25, origin: locgeo)
+			.joins(:rsvps)
+			.joins(:activity_types)
+			.group('rsvps.activity_id')
+			.order('rsvp_count DESC')
+			.limit(4)
+			results[a.id] = result
+		end
+
+		# Calculate Top Trending
+		top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+		.select('activities.*, COUNT(rsvps.id) as rsvp_count')
+		.where(cancelled: false)
+		.within(25, origin: locgeo)
+		.joins(:rsvps)
+		.joins(:activity_types)
+		.group('rsvps.activity_id')
+		.order('rsvp_count DESC')
+		.limit(4)
+		results['top'] = top
+
+		return results
 	end
 
 	private
