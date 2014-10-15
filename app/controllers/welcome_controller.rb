@@ -37,7 +37,7 @@ class WelcomeController < ApplicationController
       when "Community"
         type = 7
       else
-        type = 0
+        type = nil
     end
 
     # Determine date range
@@ -66,7 +66,7 @@ class WelcomeController < ApplicationController
 
     # Build search query for activities
     @activities = Activity.terms(params[:terms])
-    @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.blank?
+    @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
     @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
     #logger.info "**********!!!!!!!**********     #{from_date.in_time_zone(tz).utc} -  #{end_date.in_time_zone(tz).utc}"
     @activities = @activities.where('cancelled = ?', false)
