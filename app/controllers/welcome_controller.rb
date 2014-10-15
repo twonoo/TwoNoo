@@ -20,6 +20,26 @@ class WelcomeController < ApplicationController
       @showNoResults = false
     end
 
+    # Determine Type
+    case params[:type]
+      when "Sport"
+        type = 1
+      when "Art"
+        type = 2
+      when "Business"
+        type = 3
+      when "Outdoor"
+        type = 4
+      when "Eat & Drink"
+        type = 5
+      when "Nightlife"
+        type = 6
+      when "Community"
+        type = 7
+      else
+        type = 0
+    end
+
     # Determine date range
     if params[:when].present?
       case params[:when]
@@ -46,7 +66,7 @@ class WelcomeController < ApplicationController
 
     # Build search query for activities
     @activities = Activity.terms(params[:terms])
-    @activities = @activities.joins(:activity_types).where('activity_types.id' => params[:type]) unless params[:type].blank?
+    @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.blank?
     @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
     #logger.info "**********!!!!!!!**********     #{from_date.in_time_zone(tz).utc} -  #{end_date.in_time_zone(tz).utc}"
     @activities = @activities.where('cancelled = ?', false)
