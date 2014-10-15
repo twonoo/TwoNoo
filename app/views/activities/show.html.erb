@@ -100,7 +100,9 @@
         <div class="panel-body">
           <h4>Activity Comments:</h4>
           <%= render partial: 'comments', locals: {:activity => @activity} %>
-          <%= render partial: 'form', locals: {:activity => @activity} %>
+          <% if user_signed_in? %>
+            <%= render partial: 'form', locals: {:activity => @activity} %>
+          <% end %>
         </div>
       </div>
 		</div>

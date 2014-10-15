@@ -18,7 +18,13 @@ class ActivitiesController < ApplicationController
   end
 
   def show
-    @activity = Activity.find(params[:id])
+    @activity = Activity.find_by_id(params[:id])
+
+    if @activity.nil?
+      redirect_to root_url
+      return
+    end
+
     @organizer = User.find(@activity.user_id)
   end
 
