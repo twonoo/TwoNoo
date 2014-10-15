@@ -13,6 +13,18 @@
   <meta name="description" content="TwoNoo - Meet People. Do Stuff.">
 	<meta name="author" content="TwoNoo">
 
+<% if !@activity.nil? && !@activity.id.nil? %>
+  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
+  <meta property="og:title" content="<%= @activity.activity_name %>" />
+  <meta property="og:description" content="<%= @activity.description %>" />
+  <% if @activity.image.exists? %>
+    <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
+  <% else %>
+    <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
+  <% end %>
+<% end %>
+
+
   <%= csrf_meta_tags %>
   <title><%= @title ? @title : 'TwoNoo - Meet People. Do Stuff.' %></title>
 
