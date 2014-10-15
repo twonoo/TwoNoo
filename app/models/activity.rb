@@ -41,7 +41,12 @@ class Activity < ActiveRecord::Base
 	end
 
 	def self.trending(location)
-		where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15).where('cancelled IS FALSE').within(25, origin: Geocoder.search(location).first.coordinates).joins(:rsvps).group(:activity_id).count
+		where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+		.select('activities.*, COUNT(twonoo_dev.rsvps.id) as rsvp_count')
+		.where(cancelled: false)
+		.within(25, origin: Geocoder.search(location).first.coordinates)
+		.joins(:rsvps)
+		.group(:activity_id)
 	end
 
 	private
