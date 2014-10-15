@@ -3,7 +3,17 @@
   <li><%= link_to "Feedback", 'mailto:feedback@twonoo.com'%></li>
   <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
 
-  <li><a href="#">Notifications <span class="badge">2</span></a> </li>
+  <li class="dropdown" id="notifications_menu">
+    <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
+      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span></a>
+    <ul class="dropdown-menu" id="notifications_dropdown" style="width:300px;">
+      <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |notif| %>
+        <b><%=notif.subject%>:</b> <%=notif.body%>
+      <li class="divider"></li>
+<% end %>
+    </ul>
+  </li>
+
 
   <li class="dropdown" id="messags_menu">
     <a href="#" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>

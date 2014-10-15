@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row">
-		<%= current_user ? render('layouts/side_nav') : render(nil) %>
+		<%= current_user ? render('layouts/side_nav') : '' %>
 		<div class="panel col-md-8">
 			<%= render 'followers' %>
 		</div>
