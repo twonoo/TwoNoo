@@ -1,57 +1,52 @@
 <section id="home" data-stellar-background-ratio="0.5">
   <div class="container">
     <div class="row">
-      <div class="col-sm-8 col-sm-offset-2" style="margin-top:125px">
-        <%= form_tag("/search", method: "post") do %>
-          <div class="form-group">
-            <div class="input-group input-group-lg">
-              <input class="form-control" id="terms" name="terms" placeholder="Search for Activities…by name, venue, user" type="search" autofocus>
-              <span class="input-group-btn">
-              <input class="btn" name="commit" type="submit" value="Search">
-              </span> </div>
-            <!-- /input-group -->
-            <div class="row search-terms col-sm-12" style="margin-top:5px" id="search-terms">
-              <div class="btn-group" id="date-dropdown"> 
-                <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
-                  <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Today">
-                  <span class="selection" id="daterange-selection-phrase">Today</span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">This Week</a></li>
-                  <li><a href="#">This Weekend</a></li>
-                  <li><a href="#">Next Two Weeks</a></li>
-                  <li class="divider"></li>
-                  <div class="form-group" style="padding:5px">
-                    <h5>Start</h5>
-                    <input type="text" id="startDatePicker" class="form-control input-sm keep_open" name="from_date">
-                    <h5>End</h5>
-                    <input type="text" id="endDatePicker" class="form-control input-sm keep_open" name="to_date">
-                  </div>
-                </ul>
-              </div>
-              within
-              <div class="btn-group" id="distance-dropdown"> <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
-                <input type="hidden" name="distance" class="hidden-input" value="25">
-                <span class="selection">25</span> </a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">25</a></li>
-                  <li><a href="#">50</a></li>
-                  <li><a href="#">100</a></li>
-                  <li><a href="#">200</a></li>
-                </ul>
-              </div>
-              miles of
-              <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;" value="Denver, CO" placeholder="City or ZIP">
-              <a id="selection" class="selection search-term-links">Denver, CO</a> </div>
-          </div>
+      <div class="col-sm-8 col-sm-offset-2"> <%= form_tag("/search", method: "post") do %>
+        <div class="form-group">
+          <div class="input-group input-group-lg" id="search-group">
+            <input class="form-control" id="terms" name="terms" placeholder="Search for Activities…by name, venue, user" type="search" autofocus>
+            <span class="input-group-btn">
+            <input class="btn" name="commit" type="submit" value="Search">
+            </span> </div>
+          <!-- /input-group -->
+          <div class="row search-terms col-sm-12" style="margin-top:5px" id="search-terms">
+            <div class="btn-group" id="date-dropdown"> <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
+              <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Today">
+              <span class="selection" id="daterange-selection-phrase">Today</span> </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">This Week</a></li>
+                <li><a href="#">This Weekend</a></li>
+                <li><a href="#">Next Two Weeks</a></li>
+                <li class="divider"></li>
+                <div class="form-group" style="padding:5px">
+                  <h5>Start</h5>
+                  <input type="text" id="startDatePicker" class="form-control input-sm keep_open" name="from_date">
+                  <h5>End</h5>
+                  <input type="text" id="endDatePicker" class="form-control input-sm keep_open" name="to_date">
+                </div>
+              </ul>
+            </div>
+            within
+            <div class="btn-group" id="distance-dropdown"> <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
+              <input type="hidden" name="distance" class="hidden-input" value="25">
+              <span class="selection">25</span> </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">5</a></li>
+                <li><a href="#">25</a></li>
+                <li><a href="#">50</a></li>
+                <li><a href="#">100</a></li>
+                <li><a href="#">200</a></li>
+              </ul>
+            </div>
+            miles of
+            <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;" value="Denver, CO" placeholder="City or ZIP">
+            <a id="selection" class="selection search-term-links">Denver, CO</a> </div>
+        </div>
         <% end %>
       </div>
     </div>
   </div>
-  </div>
 </section>
-
 
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
@@ -62,7 +57,6 @@
 <%= render('welcome/trending') %>
 
 <script>
-
   $("#create_search").children().click(function(e){
    $(this).addClass("active btn-info");
    $(this).siblings().removeClass('active btn-info').addClass('btn-default');
@@ -73,6 +67,8 @@
     $(this).parents(".btn-group").find('.selection').val($(this).text());
     $(this).parents(".btn-group").find('.hidden-input').val($(this).text());
   });
+
+
 
 
 
@@ -159,5 +155,19 @@
           }
       });
   });
+
+  $(document).ready(function() {
+    var height = $(window).height() - 350; 
+    $("#home").height(height);
+    $("#search-group").css('margin-top', ((height - 150) / 2))
+  });
+
+  window.onresize = function() {
+   var height = $(window).height() - 350; 
+    $("#home").height(height);
+    $("#search-group").css('margin-top', ((height - 150) / 2))
+  }
+
+
 
 </script>
