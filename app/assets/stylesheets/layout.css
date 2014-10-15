@@ -70,6 +70,12 @@ display:block;
 /*** MEDIA QUERIES ***/
 
 @media(max-width:767px){
+	.tagline {
+		display: none;
+	}
+	#search-group {
+		padding-top:100px;
+	}
 }
 
 @media(min-width:768px){}
