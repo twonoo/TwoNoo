@@ -40,7 +40,7 @@ class Activity < ActiveRecord::Base
 	end
 
 	def self.trending
-		Activity.all
+		Activity.where('datetime > NOW();')
 	end
 
 	private
