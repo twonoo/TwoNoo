@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
   def index
+    @trending = Activity.trending
   end
 
   def coming_soon

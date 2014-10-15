@@ -10,12 +10,24 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require respond.min.js
+//= require jquery.min.js
+//= require jquery-ui-1.8.23.custom.min.js
 //= require jquery_ujs
-//= require_tree .
-//= require jquery.vegas.min.js
-// Loads all Bootstrap javascripts
-//= require bootstrap
-//= require moment
-//= require bootstrap-datetimepicker
+//= require bootstrap.js
+//= require jquery.easing.1.3.js
+//= require jquery.flexslider-min.js
+//= require jquery.isotope.min.js
+//= require jquery.form.js
+//= require jquery.validate.min.js
+//= require jquery.magnific-popup.min.js
+//= require jquery.scrollTo-1.4.3.1-min.js
+//= require jquery.localscroll-1.2.7-min.js
+//= require jquery.stellar.min.js
+//= require jquery.pageslide-custom.js
+//= require jquery.sharrre-1.3.4.min.js
+//= require moment.min.js
+//= require modernizr-2.6.1.min.js
+//= require bootstrap-datetimepicker.js
+//= require custom
 //= require holder

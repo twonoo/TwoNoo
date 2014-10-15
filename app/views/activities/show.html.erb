@@ -1,3 +1,13 @@
+<% if !@activity.nil? && !@activity.id.nil? %>
+  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
+  <meta property="og:title" content="<%= @activity.activity_name %>" />
+  <meta property="og:description" content="<%= @activity.description %>" />
+<% if @activity.image.exists? %>
+  <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
+<% else %>
+  <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
+<% end %>
+<% end %>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -20,9 +30,9 @@
 					</h2>
           <% if current_user %>
             <% if @organizer == current_user %>
-            <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-default pull-right' %>
+            <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
             <% else %>
-            <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger pull-right') %>
+            <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success btn-sm pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger btn-sm pull-right') %>
             <% end %>
           <% end %>
 
@@ -63,8 +73,8 @@
 			<div class="panel panel-default">
 				<div class="panel-body text-center">
             <%= profile_img(@organizer) %>
-            <h4><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h4> 
-            <h4><small><%= @organizer.profile.about_me %></small></h4>
+            <h3><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h3> 
+            <h4><%= @organizer.profile.about_me %></h4>
             <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
 	      <div class="text-left">

@@ -1,6 +1,5 @@
 <div class="col-md-4">
   <div class="panel">
-    <%= profile_img(current_user) %>
     <ul class="nav list-group">
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{current_user.activities.count}</span>My Activities</li></li>".html_safe, user_activities_path(current_user.id) %>
       <%= link_to "<li class='list-group-item'><span class='badge pull-right'>#{Rsvp.where(user_id: current_user.id).count}</span>I'm Attending</li></li>".html_safe, attending_activities_path(current_user.id) %>

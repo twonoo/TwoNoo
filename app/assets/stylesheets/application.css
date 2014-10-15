@@ -10,10 +10,26 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
+ 
  *= require_self
- *= require jquery.vegas.min.css
+ *= require 'bootstrap.min.css'
+ * require 'bootstrap-theme.min.css'
+ *= require 'animate.min.css'
+ *= require 'magnific-popup.css'
+ *= require 'style.css'
+ *= require 'flexslider.css'
+ *= require 'jquery.pageslide.css'
+ *= require 'custom-icons.css'
+ *= require 'custom-icons-ie7.css'
+ *= require 'layout.css'
+ *= require 'datepicker.css'
+ *= require 'colors.css'
  */
+
+
+.row {
+    margin-top:25px;
+}
 
 #map-canvas { height: 400px }
 
@@ -40,9 +56,18 @@
 	padding-top: 15px;
 }
 
-.footer {
-	color:#000000;
-	text-align:center;
-	height:50px;
-	padding:5px;
+.profile-img {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border:solid 1px #FFF; 
+    width:100px;
+    margin:10px;
+}
+.profile-img-icon {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border:solid 0px #FFF; 
+    width:30px; 
 }

@@ -1,124 +1,67 @@
-<div class="container">
-  <div class="row center-block" style=" text-align:center; margin-bottom:5px">
-    <div class="">
-      <span class="headline headline-gray" style="color:white;">MEET PEOPLE.</span>
-      <span class="headline headline-gray" style="color:#BF0055">DO STUFF.</span>
-      <br/>
-      <span style="color:#22BF55;font-size:20px;">Now available in metro Denver and Pittsburgh!!!</span>
-    </div>
-  </div>
-  <div class="row">
-    <%= current_user ? render('layouts/side_nav') : nil %>
-    <div class="col-md-8 <%= current_user ? nil : 'col-md-offset-2' %> ">
-      <div class="panel" style="height:284px;padding:50px">
-        <div class="text-center">
-         <div class="btn-group" id="create_search" style="margin-top:-50px;">
-          <a href="#search" data-toggle="tab" class="btn active btn-info">Search</a>
-          <a href="#create" data-toggle="tab" class="btn btn-default">Create</a>
-        </div>
-      </div>
-      
-      <div class="tab-content">
-        <div class="tab-pane active" id="search">
-          <%= form_tag("/search", method: "post") do %>
-          <form role="form">
-            <div class="form-group">
-              <div class="input-group input-group-lg">
-                <%= search_field_tag :terms, nil, placeholder: "Search for Activities…by name, venue, user", class: "form-control" %>
-                <span class="input-group-btn">
-                  <%= submit_tag "Search", class: "btn btn-success" %>
-                </span>
-              </div><!-- /input-group -->
-              <div class="row" style="margin-top:5px;display:none" id="search-terms">
-                <div class="col-xs-8 col-md-8 col-lg-8">
-                  <div class="btn-group" id="date-dropdown">
-                    <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                      <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Today">
-                      <span class="selection" id="daterange-selection-phrase">Today</span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">This Week</a></li>
-                      <li><a href="#">This Weekend</a></li>
-                      <li><a href="#">Next Two Weeks</a></li>
-                      <li class="divider"></li>
-                      <div class="form-group" style="padding:5px">
-                        <h5>Start</h5>
-                        <div class='col-sm-12'>
-                          <input type='text' id='startDatePicker' class="form-control input-sm keep_open" name="from_date"/>
-                        </div>
-                        <h5>End</h5>
-                        <div class='col-sm-12'>
-                          <input type='text' id='endDatePicker' class="form-control input-sm keep_open" name="to_date"/>
-                        </div>
-                      </div>
-                    </ul>
+<section id="home" data-stellar-background-ratio="0.5">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2" style="margin-top:125px">
+        <%= form_tag("/search", method: "post") do %>
+          <div class="form-group">
+            <div class="input-group input-group-lg">
+              <input class="form-control" id="terms" name="terms" placeholder="Search for Activities…by name, venue, user" type="search" autofocus>
+              <span class="input-group-btn">
+              <input class="btn" name="commit" type="submit" value="Search">
+              </span> </div>
+            <!-- /input-group -->
+            <div class="row search-terms col-sm-12" style="margin-top:5px" id="search-terms">
+              <div class="btn-group" id="date-dropdown"> 
+                <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
+                  <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Today">
+                  <span class="selection" id="daterange-selection-phrase">Today</span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">This Week</a></li>
+                  <li><a href="#">This Weekend</a></li>
+                  <li><a href="#">Next Two Weeks</a></li>
+                  <li class="divider"></li>
+                  <div class="form-group" style="padding:5px">
+                    <h5>Start</h5>
+                    <input type="text" id="startDatePicker" class="form-control input-sm keep_open" name="from_date">
+                    <h5>End</h5>
+                    <input type="text" id="endDatePicker" class="form-control input-sm keep_open" name="to_date">
                   </div>
-                  within
-                  <div class="btn-group" id="distance-dropdown">
-                    <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                      <input type="hidden" name="distance" class="hidden-input" value="25">
-                      <span class="selection">25</span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">5</a></li>
-                      <li><a href="#">25</a></li>
-                      <li><a href="#">50</a></li>
-                      <li><a href="#">100</a></li>
-                      <li><a href="#">200</a></li>
-                    </ul>
-                  </div>
-                  miles of
-                  <div class="btn-group" id="location-dropdown" >
-                    <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                      <input type="hidden" id="location" name="location" class="hidden-input" value="Denver, CO">
-                      <span id="selection" class="selection"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Denver, CO</a></li>
-                      <li><a href="#">Pittsburgh, PA</a></li>
-                    </ul>
-                  </div>
-                </div>
+                </ul>
               </div>
-            </div>
-            <% end %>
-          </form>
-        </div>
-        <div class="tab-pane" id="create">
-          <%= form_tag new_activity_path do %> 
-          <div class="input-group input-group-lg" >
-            <%= text_field_tag :activity_name, nil, {class: 'form-control', placeholder: 'Activity Name'} %>
-            <span class="input-group-btn">
-              <%= submit_tag 'Create!', class: 'btn btn-danger' %>
-            </span>
-          <% end %>
-          </div><!-- /input-group -->
-        </div>
+              within
+              <div class="btn-group" id="distance-dropdown"> <a style="cursor: pointer" class="dropdown-toggle search-term-links" data-toggle="dropdown">
+                <input type="hidden" name="distance" class="hidden-input" value="25">
+                <span class="selection">25</span> </a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">25</a></li>
+                  <li><a href="#">50</a></li>
+                  <li><a href="#">100</a></li>
+                  <li><a href="#">200</a></li>
+                </ul>
+              </div>
+              miles of
+              <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;" value="Denver, CO" placeholder="City or ZIP">
+              <a id="selection" class="selection search-term-links">Denver, CO</a> </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
-</div>
-</div>
+  </div>
+</section>
+
+
+
+<%= current_user ? render('layouts/user_sub_nav') : nil %>
+
 
 <%= render partial: 'invite_people' %>
 
+<%= render('welcome/trending') %>
+
 <script>
-  $(function() {
-    $.vegas({
-      src:'<%= asset_path 'backgrounds/1.jpg' %>'
-    })('overlay', {
-      src:"<%= asset_path 'overlays/05.png' %>"
-    });
-    $.vegas('slideshow', {
-      delay:10000,
-      backgrounds:[
-      { src: '<%= asset_path 'backgrounds/1.jpg' %>', fade:1000 },
-      { src: '<%= asset_path 'backgrounds/2.jpg' %>', fade:1000, valign:'70%' },
-      { src: '<%= asset_path 'backgrounds/3.jpg' %>', fade:1000 },
-      { src: '<%= asset_path 'backgrounds/4.jpg' %>', fade:1000 }
-      ]
-    })('overlay');
-  });
 
   $("#create_search").children().click(function(e){
    $(this).addClass("active btn-info");
@@ -197,6 +140,24 @@
     };
 
     getLocation();
+  });
+
+  $(document).ready(function() {
+      $('#selection').click(function () {
+          $('#location').css('display', 'inline');
+          $('#location').val('');
+          $('#location').focus();
+          
+          $(this).hide();
+      });
+
+      $('#location').focusout(function() {
+          if( !$(this).val()) {
+              $('#selection').show();
+              $(this).val($('#selection').text());
+              $(this).css('display', 'none');
+          }
+      });
   });
 
 </script>

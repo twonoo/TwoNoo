@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     root :to => "welcome#index", as: :authenticated_root
   end
 
-  root :to => "welcome#coming_soon"
+  root :to => "welcome#index"
 
   get 'profile/index'
 

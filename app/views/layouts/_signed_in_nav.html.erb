@@ -1,43 +1,39 @@
-<ul class="nav navbar-nav navbar-right">
+<ul class="nav navbar-nav pull-right">
   <li><%= link_to 'Home', root_path, :style => 'margin-left:5px'  %></li>
   <li><%= link_to "Feedback", 'mailto:feedback@twonoo.com'%></li>
   <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
-  <li class="dropdown" id="notifications_menu">
-    <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
-      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span></a>
-    <ul class="dropdown-menu" id="notifications_dropdown" style="width:300px;">
-      <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |notif| %>
-        <b><%=notif.subject%>:</b> <%=notif.body%>
-      <li class="divider"></li>
-<% end %>
-    </ul>
-  </li>
+
+  <li><a href="#">Notifications <span class="badge">2</span></a> </li>
+
   <li class="dropdown" id="messags_menu">
-     <a href="#" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
+    <a href="#" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
     <ul class="dropdown-menu" id="messages_dropdown" style="width:300px">
       <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
         <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
           <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
-              <%= link_to conversation_path(conversation) do %>
-                <b><%=message.sender.profile.first_name%>:</b> <%=message.body[0..99]%>
-                <% if message.body.length > 100 then %>...<% end %>
-              <% end %>
+            <%= link_to conversation_path(conversation) do %>
+              <b><%=message.sender.profile.first_name%>:</b> <%=message.body[0..99]%>
+              <% if message.body.length > 100 then %>...<% end %>
+            <% end %>
           <% end %>
         <% end %>
         <li class="divider"></li>
-     <% end %>
+      <% end %>
       <div style="width: 300px; text-align: center;"><b><%= link_to 'View All', conversations_path %></b></div>
     </ul>
   </li>
+
   <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= profile_img_small(current_user) %> <%= current_user.profile.first_name %><b class="caret"></b></a>
     <ul class="dropdown-menu">
       <li><%= link_to 'My Profile', profile_path(current_user) %></li>
       <li><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>
       <li><%= link_to 'Settings', profile_edit_path %></li>
+<<<<<<< Updated upstream
       <!--<li><%= link_to 'Privacy', profile_privacy_path %></li>-->
+=======
+>>>>>>> Stashed changes
       <li class="divider"></li>
       <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
     </ul>
   </li>
 </ul>
-

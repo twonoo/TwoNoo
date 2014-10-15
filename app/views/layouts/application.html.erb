@@ -1,60 +1,61 @@
 <!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
 <html lang="en">
+<!--<![endif]-->
 <head>
+	<!-- Basic Page Needs ================================================== -->
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width, initial-scale=1, minimal-ui" name="viewport">
-  <% if !@activity.nil? && !@activity.id.nil? %>
-	  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
-	  <meta property="og:title" content="<%= @activity.activity_name %>" />
-	  <meta property="og:description" content="<%= @activity.description %>" />
-	<% if @activity.image.exists? %>
-	  <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
-	<% else %>
-	  <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
-	<% end %>
-  <% end %>
-  <title><%= @title ? @title : 'TwoNoo' %></title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:700' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
-  <%= csrf_meta_tags %>
- <meta name="google-site-verification" content="EiVIH4ce5RGmJBuZIatvMd1DBQyRsmuMOvQRncxitIM" />
- <script>
-   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
- 
-   ga('create', 'UA-55676731-1', 'auto');
-   ga('send', 'pageview');
- 
- </script>
-</head>
-<body>
-	<div class="vegas"></div>
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid"> 
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-	        <span class="sr-only"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="/"> <img height="35px" src="<%= asset_path 'twonoo_logo_small.png' %>"></a> 
-            </div>
+  <meta name="google-site-verification" content="EiVIH4ce5RGmJBuZIatvMd1DBQyRsmuMOvQRncxitIM" />
+  <meta name="description" content="TwoNoo - Meet People. Do Stuff.">
+	<meta name="author" content="TwoNoo">
 
-	      <!-- Collect the nav links, forms, and other content for toggling -->
-	      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	        <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
-	      </div>
-	    </div>
-	  </nav>
-	<%= flash_messages %>
-	<%= yield %>
-  <%= render 'layouts/footer' %> 
-</body>
+  <%= csrf_meta_tags %>
+  <title><%= @title ? @title : 'TwoNoo - Meet People. Do Stuff.' %></title>
+
+	<!-- Mobile Specific Metas ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- Stylesheets ================================================== -->
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+
+  <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
+
+  <!-- web font  -->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet" type="text/css">
+
+  <%= javascript_include_tag 'application' %>
+</head>
+	<body>
+		<!-- header -->
+		<header id="mainHeader" class="navbar-fixed-top" role="banner">
+			<div class="container-fluid">
+				<nav class="navbar navbar-default scrollMenu" role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+						<a class="navbar-brand" href="/"><img height="35px" src="<%= asset_path 'main-logo.png' %>"></a> </div>
+						<div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget">
+							<%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
+						</div>
+					</nav>
+				</div>
+			</header>
+				<!-- header -->
+		<%= flash_messages %>
+		<%= yield %>
+	  <%= render 'layouts/footer' %> 
+
+	  <script>
+	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	 
+	   ga('create', 'UA-55676731-1', 'auto');
+	   ga('send', 'pageview');
+	 </script>
+	</body>
 </html>

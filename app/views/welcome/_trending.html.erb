@@ -1,0 +1,44 @@
+<section class="slice" id="trending">
+  <h2 class="subTitle">Trending</h2>
+  <div class="container clearfix" style="padding:0">
+    <div class="row">
+      <nav id="filter" class="col-md-12 text-center">
+        <ul>
+          <li><a href="" class="current btn btn-sm" data-filter=".top">Top</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".1">Sports</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".2">Arts</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".3">Business</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".4">Outdoors</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".5">Eat & Drink</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".6">Nightlife</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".7">Community</a></li>
+        </ul>
+      </nav>
+      <div class="portfolio-items  isotopeWrapper clearfix imgHover" id="4">
+
+      <% @trending.each do |t| %>
+        <article class="col-sm-3 isotopeItem <%= t.activity_types.map(&:id).join(' ') %> top">
+          <section class="imgWrapper">
+            <% if t.image_file_name %>
+              <%= image_tag t.image.url(:trending), class: 'img-responsive' %>
+            <% else %>
+              <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
+            <% end %>
+          </section>
+          <div class="mediaHover">
+            <div class="mask"></div>
+            <div class="iconLinks">
+              <a href="portfolio-project-fullwidth-image.html" title="link" class="sizer portfolioSheet"> <i class="icon-check iconRounded iconBig"></i> <span>RSVP</span> </a>
+              <a href="assets/portfolio/zoom6.jpg" class="image-link" title="Full width image"> <i class="icon-search iconRounded iconBig"></i> <span>VIEW</span> </a> </div>
+          </div>
+          <section class="boxContent">
+            <%= link_to t.activity_name, activity_path(t.id) %>
+          </section>
+        </article>
+
+      <% end %>
+
+      </div>
+    </div>
+  </div>
+</section>
