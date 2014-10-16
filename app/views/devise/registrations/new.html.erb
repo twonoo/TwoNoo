@@ -45,6 +45,7 @@ cookies[:new_user] = "true"
       <h4><%= profile_form.check_box :nonprofit %>
         This account is for the exclusive purpose of promoting a non-profit organization.
       </h4>
+        <%= profile_form.hidden_field 'referrer', value: cookies[:referrer] %>
       <% end %>
       <div class="text-center"><%= f.submit "Sign up", class: 'btn btn-success btn-md btn-block' %>
       </div>

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  before_filter :set_cache_buster#, :set_city
+  before_filter :set_cache_buster, :set_cookies#, :set_city
 
   def set_city
     # session[:city] = request.location.city if session[:city].blank?
@@ -17,10 +17,14 @@ class ApplicationController < ActionController::Base
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
+  def set_cookies
+    cookies[:referrer] = { value: params[:referrer], expires: 1.day.from_now } if params[:referrer]
+  end
+
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) << [:uid, :provider, profile_attributes: [:id, :first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit]]
+    devise_parameter_sanitizer.for(:sign_up) << [:uid, :provider, profile_attributes: [:id, :first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit, :referrer]]
     devise_parameter_sanitizer.for(:account_update) << [:uid, :provider, profile_attributes: [:first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit, :ambassador]]
   end
 

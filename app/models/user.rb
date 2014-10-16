@@ -27,6 +27,18 @@ class User < ActiveRecord::Base
 
   def initial_credits
     Transaction.create!(transaction_type_id: 3, user_id: id, amount: 5, balance: 5)
+
+    # if the user was referred give the referrer 5 credits and make them followers of each other
+    if self.profile.referrer > 0
+      referrer = User.find_by_id(self.profile.referrer)
+      unless referrer.nil?
+        Transaction.create!(transaction_type_id: 5, user_id: referrer.id, amount: 5, balance: (Transaction.get_balance(referrer) + 5))
+        self.follow!(referrer.id)
+        referrer.follow!(self.id)
+
+        # should probably see about adding in some notifications or something here
+      end
+    end
   end
 
   def following?(other_user)

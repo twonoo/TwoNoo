@@ -1,4 +1,4 @@
-<div class="navbar navbar-bottom footer text-center" style="margin-top:100px">
+<div class="navbar navbar-fixed-bottom footer text-center" style="margin-top:100px">
     &copy;2014 TwoNoo, LLC
     |
     <%= link_to "About", about_path %>
@@ -10,4 +10,14 @@
     <%= link_to 'Privacy Policy', privacy_path, target: '_blank' %>
     |
     <script type="text/javascript" src="https://seal.websecurity.norton.com/getseal?host_name=www.twonoo.com&amp;size=XS&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script>
+
+    <% if user_signed_in? %>
+      <%= link_to 'Invite Friends', '#', id: 'invite', class: 'pull-right' %>
+      <script>
+        $('#invite').bind('click', function(){$('#invite_people_form').modal('show');});
+      </script>
+    <% end %>
+
 </div>
+
+<%= render partial: '/welcome/invite_people' if current_user %>
