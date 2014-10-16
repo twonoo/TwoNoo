@@ -14,7 +14,7 @@
 	<meta name="author" content="TwoNoo">
 
 <% if !@activity.nil? && !@activity.id.nil? %>
-  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
+  <meta property="og:url" content="<%=activity_url(:id => @activity.id)%>" />
   <meta property="og:title" content="<%= @activity.activity_name %>" />
   <meta property="og:description" content="<%= @activity.description %>" />
   <% if @activity.image.exists? %>

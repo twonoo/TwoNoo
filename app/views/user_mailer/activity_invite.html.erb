@@ -4,7 +4,7 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1><%= @user.name %> has invited you to <%= link_to @activity.activity_name, activity_url(@activity) %></h1>
+    <h1><%= @user.name %> has invited you to <%= link_to @activity.activity_name, activity_url(id: @activity.id, referrer: @user.id) %></h1>
     <p>
 	<h2><%=@activity.activity_name%></h2>
     </p>
