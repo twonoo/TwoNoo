@@ -10,7 +10,6 @@ class Activity < ActiveRecord::Base
 	before_save :assign_timezone
 	has_many :rsvps
 
-
 	validates :activity_name, :datetime, :city, :state, :description, presence: true
 	validate :distance_cannot_be_greater_than_100_miles
 
@@ -23,6 +22,7 @@ class Activity < ActiveRecord::Base
 	def address
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
 	end
+
 
 	def distance_cannot_be_greater_than_100_miles
 		unless city.blank?

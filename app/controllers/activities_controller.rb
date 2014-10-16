@@ -53,7 +53,15 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
     params = activity_params
     @activity.activity_type_ids=params[:activity_type_ids]
-    params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+
+    dt_invalid = false
+    begin
+      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+    rescue
+      dt_invalid = true
+      params[:datetime] = Time.now
+    end
+
     @activity.update(params)
 
     if @activity.save
@@ -94,15 +102,27 @@ class ActivitiesController < ApplicationController
       end
       redirect_to @activity
     else
+      if dt_invalid
+        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
+        @activity.datetime = Time.now
+      end
       render :edit
     end
   end
 
   def create
     params = activity_params
-    params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+    dt_invalid = false
+    begin
+      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+    rescue
+      dt_invalid = true
+      params[:datetime] = Time.now
+    end
+
     @activity = Activity.create(params)
     @activity.user_id = current_user.id
+
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
@@ -111,9 +131,12 @@ class ActivitiesController < ApplicationController
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
 
-
       redirect_to @activity
     else
+      if dt_invalid
+        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
+        @activity.datetime = Time.now
+      end
       render :new
     end
   end
@@ -147,9 +170,9 @@ class ActivitiesController < ApplicationController
     if @comment.save
       #Notify all users either organizeing or attending this activity that a comment was added
       # Get the rsvp'd users
-      @rsvps = Rsvp.where(activity_id: @activity.id).all
-      @rsvps.each do |rsvp|
-        @user = User.find_by_id(rsvp.user_id)
+      @rsvp_ids = Rsvp.uniq.where(activity_id: @activity.id).pluck(:user_id)
+      @rsvp_ids.each do |rsvp_id|
+        @user = User.find_by_id(rsvp_id)
         if !@user.nil? && @user != current_user
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 

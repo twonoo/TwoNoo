@@ -3,7 +3,7 @@
      $('#message_body').keyup(function(e) {
        if (e.keyCode == 13 && !e.shiftKey) {
          e.preventDefault();
-         this.form.submit();
+         $('#send_message').trigger("click");
        }
        else if (e.keyCode == 27)
        {
@@ -17,4 +17,5 @@
 </style>
 <%= form_for :message, url: reply_conversation_path(conversation) do |f| %>
   <%= f.text_area :body, as: :text, :rows=>"3" %>
+  <%= f.submit 'Send Message', class: 'btn btn-success btn-sm', data: {disable_with: "Sending Message..."}, id: "send_message" %>
 <% end %>

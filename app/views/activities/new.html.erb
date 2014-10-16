@@ -144,6 +144,7 @@
       $('#activity_state').val('CO');
     };
 
-    getLocation();
+    if ($('#activity_city').val() == '')
+      getLocation();
   });
 </script>

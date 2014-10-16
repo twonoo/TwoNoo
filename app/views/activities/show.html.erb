@@ -1,13 +1,3 @@
-<% if !@activity.nil? && !@activity.id.nil? %>
-  <meta property="og:url" content="<%=root_url%><%=activity_path(@activity.id)%>" />
-  <meta property="og:title" content="<%= @activity.activity_name %>" />
-  <meta property="og:description" content="<%= @activity.description %>" />
-<% if @activity.image.exists? %>
-  <meta property="og:image" content="<%=root_url%><%= @activity.image.url %>" />
-<% else %>
-  <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
-<% end %>
-<% end %>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -99,10 +89,10 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <h4>Activity Comments:</h4>
-          <%= render partial: 'comments', locals: {:activity => @activity} %>
           <% if user_signed_in? %>
             <%= render partial: 'form', locals: {:activity => @activity} %>
           <% end %>
+          <%= render partial: 'comments', locals: {:activity => @activity} %>
         </div>
       </div>
 		</div>

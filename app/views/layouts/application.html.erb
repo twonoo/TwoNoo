@@ -22,6 +22,15 @@
   <% else %>
     <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
   <% end %>
+<% else %>
+  <% if user_signed_in?%>
+    <meta id="meta_url" property="og:url" content="new_user_registration_url(:referrer => current_user.id)" />
+  <% else %>
+    <meta id="meta_url" property="og:url" content="<%=root_url%>" />
+  <% end %>
+  <meta property="og:description" content="Come check out TwoNoo!" />
+  <meta id="meta_title" property="og:title" content="TwoNoo" />
+  <meta property="og:image" content="<%= asset_url 'TwoNoo-Logo.png' %>" />
 <% end %>
 
 
@@ -48,7 +57,12 @@
 				<nav class="navbar navbar-default scrollMenu" role="navigation">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-						<a class="navbar-brand" href="/"><img height="35px" src="<%= asset_path 'main-logo.png' %>"></a> </div>
+						<a class="navbar-brand" href="/"><img height="35px" src="<%= asset_path 'main-logo.png' %>"></a>
+            <a href='#' id="invite">Invite</a></div>
+            <script>
+              $('#invite').bind('click', function(){$('#invite_people_form').modal('show');});
+              </script>
+
 						<div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget">
 							<%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
 						</div>
@@ -68,6 +82,9 @@
 	 
 	   ga('create', 'UA-55676731-1', 'auto');
 	   ga('send', 'pageview');
+     <% if params[:terms] %>
+     ga('send', 'pageview', '/search_results.php?q=<%=params[:terms]%>');
+     <% end %>
 	 </script>
 	</body>
 </html>
