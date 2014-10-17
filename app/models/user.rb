@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     if self.profile.referrer > 0
       referrer = User.find_by_id(self.profile.referrer)
       unless referrer.nil?
-        Transaction.create!(transaction_type_id: 5, user_id: referrer.id, amount: 5, balance: (Transaction.get_balance(referrer) + 5))
+        Transaction.create!(transaction_type_id: 5, user_id: referrer.id, amount: 5, balance: (Transaction.get_balance(referrer) + 1))
         self.follow!(referrer.id)
         referrer.follow!(self.id)
 
