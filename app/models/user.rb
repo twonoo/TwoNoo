@@ -28,12 +28,12 @@ class User < ActiveRecord::Base
   def initial_credits
     Transaction.create!(transaction_type_id: 3, user_id: id, amount: 5, balance: 5)
 
-    # if the user was referred give the referrer 5 credits and make them followers of each other
+    # if the user was referred give the referrer 1 credit and make them followers of each other
     unless self.profile.referrer.nil?
       if self.profile.referrer > 0
         referrer = User.find_by_id(self.profile.referrer)
         unless referrer.nil?
-          Transaction.create!(transaction_type_id: 5, user_id: referrer.id, amount: 1, balance: (Transaction.get_balance(referrer) + 1))
+          Transaction.create!(transaction_type_id: 7, user_id: referrer.id, amount: 1, balance: (Transaction.get_balance(referrer) + 1))
           self.follow!(referrer.id)
           referrer.follow!(self.id)
 
