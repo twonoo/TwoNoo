@@ -43,7 +43,7 @@ cookies[:new_user] = "true"
 
       <h4>By clicking Sign Up, you agree to our <strong><%= link_to 'Terms', terms_path, target: '_blank' %></strong> and <strong><%= link_to 'Privacy Policy', privacy_path, target: '_blank' %></strong>.</h4>
       <h4><%= profile_form.check_box :nonprofit %>
-        This account is for the exclusive purpose of promoting a non-profit organization.
+        <font color="red">NON-PROFIT:</font> This account is for the exclusive purpose of promoting a non-profit organization.
       </h4>
         <%= profile_form.hidden_field 'referrer', value: cookies[:referrer] %>
       <% end %>
