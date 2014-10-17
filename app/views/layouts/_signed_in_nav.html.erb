@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav pull-right">
   <% if request.original_url == root_url %>
-    <li><%= link_to 'Invite Friends', '#', id: 'invite'%></li>
+    <li><%= link_to 'Invite Friends', '#', id: 'invite', style: 'background-color:#49AFCD; color:#FFF' %></li>
       <script>
         $('#invite').bind('click', function(){$('#invite_people_form').modal('show');});
       </script>
