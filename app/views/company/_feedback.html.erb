@@ -1,0 +1,60 @@
+<!-- Modal -->
+<div class="modal fade" id="feedback_form" tabindex="-1" role="dialog" aria-labelledby="myModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Feedback</h4>
+      </div>
+      <div class="modal-body">
+        Please provide your feedback below.
+	      <textarea id="user_feedback" name="user_feedback" style="width: 100%;" rows="10"> </textarea>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelFeedback" type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+        <button id="sendFeedback" type="button" class="btn btn-primary btn-sm">Send Feedback</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="feedback_info" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Feedback submitted.  Thank you for letting us know your thoughts.</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn_sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  $(function(){
+    $('#feedback').bind('click', function(){$('#feedback_form').modal('show');});
+    $('#sendFeedback').bind('click', function(){sendFeedback();});
+    $('#cancelFeedback').bind('click', function(){$('#emails').val('');});
+
+    var sendFeedback = function() {
+        $.ajax({
+          type: "POST",
+          url: "<%=feedback_path%>",
+          data: { feedback: $('#user_feedback').val()},
+          success: function(html) {
+            $('#feedback_info').modal('show');
+            $('#user_feedback').val('');
+          },
+          error: function(html) {alert('There was a problem submitting your feedback.  Please try again later.');}
+         });
+    
+        $('#feedback_form').modal('hide'); 
+    };
+  });
+</script>
+
+
+

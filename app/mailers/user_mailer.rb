@@ -8,6 +8,23 @@ class UserMailer < ActionMailer::Base
     mail(bcc: emails, subject: "#{@user.name} has invited you to join TwoNoo!")
   end
 
+  def feedback_from_user(user, feedback)
+    @user = user
+    @feedback = feedback
+    attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
+
+    mail(to: "feedback@twonoo.com",
+      subject: "#{@user.name} has sent you feedback.",
+      template_name: "feedback")
+  end
+
+  def feedback(feedback)
+    @feedback = feedback
+    attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
+
+    mail(to: "feedback@twonoo.com", subject: "Somebody has sent you feedback.")
+  end
+
   def activity_invite(user, activity, emails)
     @user = user
     @activity = activity
