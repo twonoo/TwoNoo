@@ -38,6 +38,7 @@
     $('#feedback').bind('click', function(){$('#feedback_form').modal('show');});
     $('#sendFeedback').bind('click', function(){sendFeedback();});
     $('#cancelFeedback').bind('click', function(){$('#emails').val('');});
+    $('#feedback_form').on('shown.bs.modal', function () { $('#user_feedback').focus(); })
 
     var sendFeedback = function() {
         $.ajax({

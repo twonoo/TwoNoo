@@ -41,6 +41,8 @@
     $('#sendInvites').bind('click', function(){invitePeople();});
     $('#cancelInvite').bind('click', function(){$('#emails').val('');});
 
+    $('#invite_people_form').on('shown.bs.modal', function () { $('#emails').focus(); })
+
     var invitePeople = function() {
       if(validateEmails())
       {

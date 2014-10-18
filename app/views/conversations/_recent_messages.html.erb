@@ -1,11 +1,12 @@
-<% prevuserid = nil %>
-<% lastmessageid= nil %>
-<% firstmessageid= nil %>
-<% conversation.receipts_for(current_user).last(20).each do |receipt| %>
+<%
+  prevuserid = params[:last_user_shown]
+  lastmessageid = params[:last_id_shown]
+%>
+
+<% conversation.receipts_for(current_user).where("mailboxer_receipts.id > #{lastmessageid}").each do |receipt| %>
   <%
     message = receipt.message
-    userid = message.sender.id
-    firstmessageid = receipt.id if firstmessageid.nil?
+    userid = message.sender.id.to_s
   %>
   <% if userid != prevuserid %>
     <p>
@@ -17,14 +18,17 @@
     <%= message.body %>
   </p>
   <% unless message.is_read?(current_user) %></b><% end %>
-  <% prevuserid = message.sender.id
+  <% prevuserid = message.sender.id.to_s
     lastmessageid = receipt.id
     message.mark_as_read(current_user)
   %>
 <% end %>
 
 <script>
-  $('#first_id_shown').val(<%=firstmessageid%>)
   $('#last_id_shown').val(<%=lastmessageid%>)
   $('#last_user_shown').val(<%=prevuserid%>)
+
+  <% unless lastmessageid == params[:last_id_shown] %>
+    $("#messages").animate({scrollTop: $("#messages").prop('scrollHeight')}, 3000);
+  <% end %>
 </script>

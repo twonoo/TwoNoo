@@ -1,0 +1,31 @@
+<%
+  prevuserid = nil
+  lastmessageid = params[:last_id_shown]
+  firstmessageid = params[:first_id_shown]
+%>
+
+<% conversation.receipts_for(current_user).where("mailboxer_receipts.id < #{firstmessageid}").last(20).each do |receipt| %>
+  <%
+    message = receipt.message
+    userid = message.sender.id.to_s
+  %>
+  <% if userid != prevuserid %>
+    <p>
+    <b><%= message.sender.profile.first_name %>:</b><br/>
+  <% end %>
+  <% unless message.is_read?(current_user) %><b><% end %>
+  <p>
+    <font size="1">(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font>
+    <%= message.body %>
+  </p>
+  <% unless message.is_read?(current_user) %></b><% end %>
+  <% prevuserid = message.sender.id.to_s
+    firstmessageid = receipt.id if receipt.id < firstmessageid.to_i
+    message.mark_as_read(current_user)
+  %>
+<% end %>
+
+<script>
+  alert('<%=firstmessageid%>');
+  $('#first_id_shown').val('<%=firstmessageid%>');
+</script>

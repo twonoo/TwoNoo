@@ -17,24 +17,32 @@
 
 <script>
   var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
+  var interval = 5000;   //number of mili seconds between each call
+
   <% if !(conversation.nil?) then %>
     $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
   <% end %>
 
+  function refresh() {
+    $.ajax({
+      type: "POST",
+      url: "<%=show_messages_path(conversation.id)%>",
+      cache: false,
+      data: { last_id_shown: $('#last_id_shown').val(),
+              last_user_shown: $('#last_user_shown').val()
+      },
+      success: function(html) {
+        $('#conversation').append(html);
+
+        setTimeout(function() {
+          refresh();
+        }, interval);
+      }
+    });
+  }
+
   $(function(){
-    var interval = 5000;   //number of mili seconds between each call
-    var refresh = function() {
-      $.ajax({
-        url: "/conversations/show_messages/" + conversation_id,
-        datatype: 'script',
-        cache: false,
-        success: function(html) {
-          setTimeout(function() {
-            refresh();
-          }, interval);
-        }
-      });
-    };
+    $("#messages").animate({scrollTop: $("#messages").prop('scrollHeight')}, 3000);
 
     setTimeout(function() {
       refresh();

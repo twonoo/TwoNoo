@@ -43,6 +43,7 @@ gem 'geokit-rails'
 gem 'timezone'
 
 gem 'mailboxer'
+gem 'sidekiq'
 gem 'acts_as_commentable'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 

@@ -1,11 +1,40 @@
 <h3 class="text-center">
-<% if conversation.originator == current_user%>
-  <%= conversation.recipients[0].profile.first_name %> <%=conversation.recipients[0].profile.last_name%>
-<% else %>
-  <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
-<% end %>
+  <% if conversation.originator == current_user%>
+    <%= conversation.recipients[0].profile.first_name %> <%=conversation.recipients[0].profile.last_name%>
+  <% else %>
+    <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
+  <% end %>
 </h3>
-<div id='conversation'>
-  <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
+<div id="messages" style="height:60vh;overflow-y:auto;">
+  <%= hidden_field_tag "first_id_shown" %>
+  <%= hidden_field_tag "last_id_shown" %>
+  <%= hidden_field_tag "last_user_shown" %>
+  <div style="wdith:100%;text-align:center;"><a href='#' id="earlier_messages">Load Earlier Messages</a></div>
+  <div id='conversation'>
+    <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
+  </div>
 </div>
 <%= render 'messages/form', conversation: conversation %>
+
+<script>
+  $(function(){
+    $('#earlier_messages').bind('click', function(){
+        loadEarlierMessages();
+    });
+
+  });
+
+  function loadEarlierMessages() {
+    $.ajax({
+      type: "POST",
+      url: "<%=load_earlier_messages_path(conversation.id)%>",
+      data: { first_id_shown: $('#first_id_shown').val(),
+              last_id_shown: $('#last_id_shown').val(),
+              last_user_shown: $('#last_user_shown').val()
+      },
+      success: function(html) {
+        $('#conversation').prepend(html);
+      }
+     });
+  }
+</script>

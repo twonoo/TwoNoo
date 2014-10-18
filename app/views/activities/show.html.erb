@@ -57,6 +57,15 @@
 </p>
 					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
 					<div id="map-canvas"></div>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4>Activity Comments:</h4>
+              <% if user_signed_in? %>
+                <%= render partial: 'form', locals: {:activity => @activity} %>
+              <% end %>
+              <%= render partial: 'comments', locals: {:activity => @activity} %>
+            </div>
+          </div>
 				</div>
 			</div>
 		</div>
@@ -86,15 +95,6 @@
             @going = User.find(rsvp.user_id) %>
             <p><%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %></p>
           <% end %>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Activity Comments:</h4>
-          <% if user_signed_in? %>
-            <%= render partial: 'form', locals: {:activity => @activity} %>
-          <% end %>
-          <%= render partial: 'comments', locals: {:activity => @activity} %>
         </div>
       </div>
 		</div>

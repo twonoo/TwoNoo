@@ -89,13 +89,14 @@ Rails.application.routes.draw do
 
   resources :conversations, only: [:index, :show, :new, :create] do
     member do
-      post :reply
       post :trash
       post :untrash
     end
   end
-  get 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
   get 'conversations/:id/display' => 'conversations#display_conversation', as: :display_conversation
+  post 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
+  post 'conversations/load_earlier_messages/:id' => 'conversations#load_earlier_messages', as: :load_earlier_messages
+  post 'conversations/reply/:id' => 'conversations#reply', as: :reply_conversation
 
   get 'messages/display' => 'messages#display_messages', as: :display_messages
   get 'messages/number' => 'messages#num_messages', as: :num_messages

@@ -36,8 +36,14 @@ class ConversationsController < ApplicationController
     end
   end
 
+  def load_earlier_messages
+    respond_to do |format|
+      format.html { render :partial => 'load_earlier_messages', :locals => { :conversation => conversation } }
+    end
+  end
+
   def reply
-    current_user.reply_to_conversation(conversation, *message_params(:body))
+    current_user.reply_to_conversation(conversation, params[:message_body])
 
     if conversation.originator == current_user
       recipient = conversation.recipients[0]
@@ -45,9 +51,11 @@ class ConversationsController < ApplicationController
       recipient = conversation.originator
     end
 
-    UserMailer.new_message(recipient, current_user, *fetch_params('message', :body)).deliver
+    respond_to do |format|
+      format.html { render :partial => 'recent_messages', :locals => { :conversation => conversation } }
+    end
 
-    redirect_to conversation_path(conversation)
+    UserMailer.delay.new_message(recipient, current_user, params[:message_body])
   end
 
   def show
@@ -56,7 +64,7 @@ class ConversationsController < ApplicationController
 
   def show_messages
     respond_to do |format|
-      format.html { render :partial => 'conversation', :locals => { :conversation => conversation } }
+      format.html { render :partial => 'recent_messages', :locals => { :conversation => conversation } }
     end
   end
 

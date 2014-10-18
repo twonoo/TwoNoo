@@ -1,21 +1,55 @@
-<script>
-   $(function(){
-     $('#message_body').keyup(function(e) {
-       if (e.keyCode == 13 && !e.shiftKey) {
-         e.preventDefault();
-         $('#send_message').trigger("click");
-       }
-       else if (e.keyCode == 27)
-       {
-         this.form.reset();
-       }
-     });
-   });
-</script>
 <style type='text/css'>
   #message_body { width: 100%; }
 </style>
-<%= form_for :message, url: reply_conversation_path(conversation) do |f| %>
-  <%= f.text_area :body, as: :text, :rows=>"3" %>
-  <%= f.submit 'Send Message', class: 'btn btn-success btn-sm', data: {disable_with: "Sending Message..."}, id: "send_message" %>
-<% end %>
+<%= text_area_tag :message_body, nil, rows: "3" %>
+<a id="send_message" type="button" class="btn btn-success btn-sm">Send Message</a>
+
+<script>
+  $(document).ready(function() {
+    $('#message_body').focus();
+  });
+
+  $(function(){
+    $('#message_body').keyup(function(e) {
+      if (e.keyCode == 13 && !e.shiftKey) {
+        e.preventDefault();
+        $('#send_message').trigger("click");
+      }
+      else if (e.keyCode == 27)
+      {
+        $('#message_body').val('');
+      }
+    });
+  });
+
+  $(function(){
+    $('#send_message').unbind('click');
+    $('#send_message').bind('click', function(){
+      if ($('#send_message').attr('clicked') == 'true'){
+        e.preventDefault();
+      }
+      else {
+        sendMessage();
+      }
+
+      $('#send_message').attr('clicked', 'true');
+    });
+
+    var sendMessage = function() {
+        $.ajax({
+          type: "POST",
+          url: "<%=reply_conversation_path(conversation.id)%>",
+          data: { message_body: $('#message_body').val(),
+                  last_id_shown: $('#last_id_shown').val(),
+                  last_user_shown: $('#last_user_shown').val()
+          },
+          success: function(html) {
+            $('#conversation').append(html);
+            $('#message_body').val('');
+            $('#send_message').attr('clicked', 'false');    
+          }
+         });
+
+    };
+  });
+</script>
