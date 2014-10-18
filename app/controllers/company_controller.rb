@@ -13,9 +13,9 @@ class CompanyController < ApplicationController
 
   def feedback
     if current_user
-      UserMailer.feedback_from_user(current_user, params[:feedback]).deliver
+      UserMailer.delay.feedback_from_user(current_user, params[:feedback])
     else
-      UserMailer.feedback(params[:feedback]).deliver
+      UserMailer.delay.feedback(params[:feedback])
     end
   end
 end

@@ -25,7 +25,7 @@ class ConversationsController < ApplicationController
       current_user.reply_to_conversation(conversation, *conversation_params(:body))
     end
 
-    UserMailer.new_message(recipient, current_user, *conversation_params(:body)).deliver
+    UserMailer.delay.new_message(recipient, current_user, *conversation_params(:body))
 
     redirect_to conversation_path(conversation)
   end

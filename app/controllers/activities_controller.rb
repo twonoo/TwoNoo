@@ -45,7 +45,7 @@ class ActivitiesController < ApplicationController
 
   def invite_people
     @activity = Activity.find(params[:id])
-    UserMailer.activity_invite(current_user, @activity, params[:emails]).deliver
+    UserMailer.delay.activity_invite(current_user, @activity, params[:emails])
   end
 
 
@@ -72,7 +72,7 @@ class ActivitiesController < ApplicationController
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.attending_activity_update(@user, @activity).deliver
+          UserMailer.delay.attending_activity_update(@user, @activity)
         end
       end
       redirect_to @activity
@@ -97,7 +97,7 @@ class ActivitiesController < ApplicationController
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.attending_activity_update(@user, @activity).deliver
+          UserMailer.deliver.attending_activity_update(@user, @activity)
         end
       end
       redirect_to @activity
@@ -126,7 +126,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
-        UserMailer.new_following_activity(follower, current_user, @activity).deliver
+        UserMailer.delay.new_following_activity(follower, current_user, @activity)
         follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
@@ -149,7 +149,7 @@ class ActivitiesController < ApplicationController
     @organizer = User.find(@activity.user_id)
     @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-    UserMailer.new_rsvp(@organizer, current_user, @activity).deliver
+    UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
 
     if rsvp.save
       redirect_to activity_path(@activity), notice: "You're now going to #{@activity.activity_name}!"
@@ -176,13 +176,13 @@ class ActivitiesController < ApplicationController
         if !@user.nil? && @user != current_user
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.comment_on_attending_activity(@user, @activity, current_user, @comment.comment).deliver
+          UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
         end
       end
 
       @organizer = User.find(@activity.user_id)
       if current_user != @organizer
-          UserMailer.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment).deliver
+          UserMailer.delay.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment)
       end
 	#Notify all users that have commented on this acctivity that a comment was added
     end

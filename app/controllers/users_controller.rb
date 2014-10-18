@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 		followed_user.notify("You have a new follower!", "#{current_user.name} is now following you.")
 
 		if followed_user.profile.notification_setting.new_follower
-			UserMailer.new_follower(followed_user, current_user).deliver
+			UserMailer.delay.new_follower(followed_user, current_user)
 		end
 
 		redirect_to profile_path(params[:id]), notice: "You're now following #{followed_user.name}"
