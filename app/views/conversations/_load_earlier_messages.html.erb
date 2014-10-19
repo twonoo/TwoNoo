@@ -2,12 +2,14 @@
   prevuserid = nil
   lastmessageid = params[:last_id_shown]
   firstmessageid = params[:first_id_shown]
+  messagecount = 0
 %>
 
 <% conversation.receipts_for(current_user).where("mailboxer_receipts.id < #{firstmessageid}").last(20).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id.to_s
+    messagecount = messagecount + 1
   %>
   <% if userid != prevuserid %>
     <p>
@@ -27,4 +29,5 @@
 
 <script>
   $('#first_id_shown').val('<%=firstmessageid%>');
+  <% if messagecount < 20 %> $('#earlier_messages').html('No More Messages To Load') <% end %>
 </script>

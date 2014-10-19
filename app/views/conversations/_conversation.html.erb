@@ -1,11 +1,13 @@
 <% prevuserid = nil %>
 <% lastmessageid= nil %>
 <% firstmessageid= nil %>
+<% messagecount = 0 %>
 <% conversation.receipts_for(current_user).last(20).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id
     firstmessageid = receipt.id if firstmessageid.nil?
+    messagecount = messagecount + 1
   %>
   <% if userid != prevuserid %>
     <p>
@@ -27,4 +29,5 @@
   $('#first_id_shown').val(<%=firstmessageid%>)
   $('#last_id_shown').val(<%=lastmessageid%>)
   $('#last_user_shown').val(<%=prevuserid%>)
+  <% if messagecount < 20 %> $('#earlier_messages').html('No More Messages To Load') <% end %>
 </script>

@@ -13,6 +13,7 @@
 			</div>
 		</div>
 	</div>
+<% if user_signed_in? %>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="text-center">
@@ -20,7 +21,6 @@
 		      <li id="profile_activities" class="active">
 						<%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
 					</li>
-<% if user_signed_in? %>
 		      <li id="profile_attending">
 						<%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
 					</li>
@@ -30,11 +30,11 @@
 		      <li id="profile_following">
 						<%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
 					</li>
-<% end %>
 		    </ul>
 			</div>
 		</div>
 	</div>
+<% end %>
 	<div class="row">
 		<div id="profile_data" class="col-md-8 col-md-offset-2" style="margin-top:50px">
 			<%= render '/activities/activities' %>

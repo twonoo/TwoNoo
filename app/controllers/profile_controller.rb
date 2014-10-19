@@ -59,7 +59,8 @@ class ProfileController < ApplicationController
   end
 
   def show
-    @profile = User.find(params[:id])
+    @profile = User.find_by_id(params[:id])
+    redirect_to root_url if @profile.nil?
     @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
     @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
   end

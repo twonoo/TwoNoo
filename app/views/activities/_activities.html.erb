@@ -25,7 +25,7 @@
 	<h2>No upcoming activities</h2>
 <% end %>
 
-<% if @activitiesPast.present? %>
+<% if @activitiesPast.present? && current_user.present? %>
 	<div>
 		<h2>Past Activities</h2>
 	</div>
