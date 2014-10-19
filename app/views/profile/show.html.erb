@@ -20,6 +20,7 @@
 		      <li id="profile_activities" class="active">
 						<%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
 					</li>
+<% if user_signed_in? %>
 		      <li id="profile_attending">
 						<%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
 					</li>
@@ -29,6 +30,7 @@
 		      <li id="profile_following">
 						<%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
 					</li>
+<% end %>
 		    </ul>
 			</div>
 		</div>
