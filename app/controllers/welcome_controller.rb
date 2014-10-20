@@ -9,6 +9,7 @@ class WelcomeController < ApplicationController
 
   def search
     @showNoResults = true
+    @outsideSupportedArea = false
   	# Setup location constraints
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
@@ -16,8 +17,10 @@ class WelcomeController < ApplicationController
     # Convert search parameter to coordinates
     search_coordinates = Geocoder.search(params[:location]).first.coordinates
     unless Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 || Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100
-      redirect_to root_path, notice: "You're trying to search outside of the area"
-      @showNoResults = false
+      #redirect_to root_path, notice: "You're trying to search outside of the area"
+      #@showNoResults = false
+      flash[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
+      @outsideSupportedArea = true
     end
 
     # Determine Type
@@ -70,11 +73,15 @@ class WelcomeController < ApplicationController
     @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
     #logger.info "**********!!!!!!!**********     #{from_date.in_time_zone(tz).utc} -  #{end_date.in_time_zone(tz).utc}"
     @activities = @activities.where('cancelled = ?', false)
-    @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
+    unless @outsideSupportedArea
+      @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
+    end
+    @activities = @activities.order('datetime ASC')
+
 
     @users = Profile.terms(params[:terms])
 
-    if !params[:terms].empty?
+    unless params[:terms].empty?
       @search = Search.new
       @search.user_id = current_user.nil? ? nil : current_user.id
       @search.search = params[:terms]
