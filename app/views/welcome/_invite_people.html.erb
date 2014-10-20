@@ -10,14 +10,13 @@
         Enter e-mails of people to invite separated by commas.<br/>
 	<textarea id="emails" name="emails" style="width: 100%;"> </textarea>
 <br/><br/>
-<div style="width:100%;text-align:center;">
+  <div style="width:100%;text-align:center;">
 					<!-- share buttons -->
 					<div class="fb-share-button" 
             data-href="<%=new_user_registration_url(:referrer => current_user.id)%>" 
             data-layout="button" 
             style="padding: 0px; vertical-align: top; height: 24px;"></div>
 
-					<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
           <div class="g-plus"
             data-action="share"
             data-annotation="none"
@@ -42,7 +41,7 @@
               fjs.parentNode.insertBefore(js,fjs);
               }}(document, 'script', 'twitter-wjs');
           </script>
-</div>
+  </div>
       </div>
       <div class="modal-footer">
         <button id="cancelInvite" type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>

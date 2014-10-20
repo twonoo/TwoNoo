@@ -32,5 +32,4 @@
 //= require custom
 //= require holder
 //= require signed_in_nav.js
-//= require facebook.js
 //= require global.js

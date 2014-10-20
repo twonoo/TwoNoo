@@ -49,8 +49,18 @@
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet" type="text/css">
 
   <%= javascript_include_tag 'application' %>
+  <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 </head>
 	<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1524267501137363&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 		<!-- header -->
 		<header id="mainHeader" class="navbar-fixed-top" role="banner">
 			<div class="container-fluid">
