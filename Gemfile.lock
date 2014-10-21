@@ -120,6 +120,7 @@ GEM
     multipart-post (2.0.0)
     mysql2 (0.3.16)
     netrc (0.7.7)
+    newrelic_rpm (3.9.6.257)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -236,6 +237,7 @@ DEPENDENCIES
   mailboxer
   momentjs-rails (~> 2.5.0)
   mysql2
+  newrelic_rpm
   omniauth-facebook
   paperclip (~> 4.1)
   quiet_assets
