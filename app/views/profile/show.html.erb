@@ -37,6 +37,18 @@
 <% end %>
 	<div class="row">
 		<div id="profile_data" class="col-md-8 col-md-offset-2" style="margin-top:50px">
+      <%
+@fr = FollowRelationship.uniq.where("followed_id IN (?)", [1, 2]).where("created_at < ?", Time.now).pluck("followed_id")
+
+@fr.each do |f|
+  next if f.nil?
+  fuser = User.find_by_id(f)
+%>
+new_followers: <%=fuser.profile.notification_setting.new_follower%>: <%=fuser.name%><br/>
+id: <%=f%>: <%=Time.now%><br/>
+<%
+end %>
+  
 			<%= render '/activities/activities' %>
 		</div>
 	</div>

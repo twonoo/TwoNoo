@@ -124,12 +124,18 @@ class ActivitiesController < ApplicationController
     @activity.user_id = current_user.id
 
     if @activity.save
+      # Charge the organizer
+      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
+
+      # Have the organizer RSVP to their own activity
+      rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)
+      rsvp.save
+
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
         UserMailer.delay.new_following_activity(follower, current_user, @activity)
         follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
-      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
 
       redirect_to @activity
     else
@@ -147,9 +153,12 @@ class ActivitiesController < ApplicationController
     # Notfiy the creator that a new user is going
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
-    @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-    UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
+    unless current_user = @organizer
+      @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+      
+      UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
+    end
 
     if rsvp.save
       redirect_to activity_path(@activity), notice: "You're now going to #{@activity.activity_name}!"

@@ -1,8 +1,8 @@
 <section id="user-menu" class="sub-nav">
   <ul class="nav navbar-nav">
   	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#49AFCD; color:#FFF' %></li>
-  	<li><%= link_to "My Activities <span class='badge'> #{current_user.activities.count}</span>".html_safe, user_activities_path(current_user.id) %></li>
-    <li><%= link_to "I'm Attending <span class='badge'> #{Rsvp.where(user_id: current_user.id).count}</span>".html_safe, attending_activities_path(current_user.id) %></li>
+  	<li><%= link_to "My Activities <span class='badge'> #{current_user.activities.where("datetime >= ?", Time.now()).count}</span>".html_safe, user_activities_path(current_user.id) %></li>
+    <li><%= link_to "I'm Attending <span class='badge'> #{Activity.where("datetime >= ?", Time.now()).where("id in (?)", Rsvp.where(user_id: current_user.id).pluck(:activity_id)).count}</span>".html_safe, attending_activities_path(current_user.id) %></li>
     <li><%= link_to "Followers <span class='badge'> #{current_user.followers.count}</span>".html_safe, profile_followers_path(current_user) %></li>
     <li><%= link_to "Following <span class='badge'> #{current_user.followed_users.count}</span>".html_safe, profile_following_path(current_user) %></li>
     <li><%= link_to "My Alerts <span class='badge'> #{current_user.alerts.count}</span>".html_safe, alerts_path %></li>
