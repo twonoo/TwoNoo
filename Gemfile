@@ -53,5 +53,5 @@ gem 'coffee-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-
+gem 'geoip2'
 
