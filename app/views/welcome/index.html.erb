@@ -77,7 +77,7 @@
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
 
-<%= render 'welcome/trending' %>
+<section class="slice" id="trending"></section>
 
 <script>
   $("#create_search").children().click(function(e){
@@ -171,7 +171,8 @@
             url: "<%=trending_path%>",
             data: {location: '['+position.coords.latitude+','+position.coords.longitude+']'},
             success: function(html) {
-              $('#trendingdiv').html(html);
+              $('#trending').html(html);
+              trending_load();
             }});
         });
 
