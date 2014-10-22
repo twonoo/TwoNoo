@@ -42,7 +42,7 @@ class Activity < ActiveRecord::Base
 
 	def self.trending(location)
 		# Get Coordinates
-		locgeo = Geocoder.search(location).first.coordinates
+		#locgeo = Geocoder.search(location).first.coordinates
 		results = Hash.new
 
 		# Cycle Through Activity Types and Store Each 

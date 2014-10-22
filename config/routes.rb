@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
   get 'welcome/coming_soon'
   post 'welcome/invite_people' => 'welcome#invite_people', as: :twonoo_invite_people
+  post 'welcome/trending' => 'welcome#trending', as: :trending
 
   get 'company/about' => 'company#about', as: :about
   get 'company/contact' => 'company#contact', as: :contact

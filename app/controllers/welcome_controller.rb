@@ -1,6 +1,13 @@
 class WelcomeController < ApplicationController
   def index
-    @trending = Activity.trending('Denver, CO')
+    #@trending = Activity.trending('Denver, CO')
+  end
+
+  def trending
+    @trending = Activity.trending(params[:location])
+     respond_to do |format|
+       format.html { render :partial => 'trending' }
+     end
   end
 
   def coming_soon
