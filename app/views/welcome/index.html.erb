@@ -77,7 +77,7 @@
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
 
-<%= render('welcome/trending') %>
+<div id="trendingdiv"></div>
 
 <script>
   $("#create_search").children().click(function(e){
@@ -166,15 +166,14 @@
           console.log("city, state: "+city+", "+state);
 
           console.log(latlng);
-          /*
           $.ajax({
             type: "POST",
             url: "<%=trending_path%>",
             data: {location: '['+position.coords.latitude+','+position.coords.longitude+']'},
             success: function(html) {
+            alert(html);
               $('#trendingdiv').html(html);
             }});
-          */
         });
 
         $('#search-terms').show();
