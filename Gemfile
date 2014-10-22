@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# New Relic
+gem 'newrelic_rpm'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.1'
@@ -51,5 +53,5 @@ gem 'coffee-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-
+gem 'geoip2'
 
