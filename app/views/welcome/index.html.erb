@@ -77,7 +77,7 @@
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
 
-<div id="trendingdiv">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhasdf;asldkfja;sldkfj;lkj</div>
+<div id="trendingdiv"></div>
 
 <script>
   $("#create_search").children().click(function(e){
@@ -177,18 +177,6 @@
 
         $('#search-terms').show();
       }
-
-      /*
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude
-
-     $.get( "/geocode/search.json", {location: latitude + "," + longitude}, function( data ) {
-          $('#location').val(data.location);
-          $('#selection').text(data.location);
-          $('#search-terms').show();
-        });
-    };
-        */
 
     function getCityError() {
       $('#selection').text('Denver, CO');

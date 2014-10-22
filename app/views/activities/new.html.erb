@@ -129,15 +129,36 @@
         $('#activity_state').val('CO');
       }
     }
-    function getCity(position) {
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude
 
-     $.get( "/geocode/searchCityState.json", {location: latitude + "," + longitude}, function( data ) {
-        $('#activity_city').val(data.city);
-        $('#activity_state').val(data.state);
+    function getCity(position) {
+      var geocoder = new google.maps.Geocoder();
+
+      var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log(latlng);
+
+      var city = 'Pittsburgh';
+      var state = 'PA';
+
+      geocoder.geocode({'latLng': latlng}, function(results, status){
+        $.each(results[0].address_components, function (i, address_component) {
+            console.log('address_component:'+i);
+
+            var type = address_component.types[0];
+            console.log(i+": "+type+":"+address_component.short_name);
+
+            if (type == 'locality')
+              city = address_component.short_name;
+            else if (type == 'administrative_area_level_1')
+              state = address_component.short_name;
+        });
+
+        console.log("city, state: "+city+", "+state);
+        console.log(latlng);
+
+        $('#activity_city').val(city);
+        $('#activity_state').val(state);
       });
-    };
+    }
 
     function getCityError() {
       $('#activity_city').val('Denver');
@@ -147,4 +168,5 @@
     if ($('#activity_city').val() == '')
       getLocation();
   });
+
 </script>
