@@ -136,6 +136,15 @@
       } else {
           $('#selection').text('Denver, CO');
           $('#search-terms').show();
+
+          $.ajax({
+            type: "POST",
+            url: "<%=trending_path%>",
+            data: {},
+            success: function(html) {
+              $('#trending').html(html);
+              trending_load();
+            }});
       }
     }
 
@@ -169,7 +178,7 @@
           $.ajax({
             type: "POST",
             url: "<%=trending_path%>",
-            data: {location: '['+position.coords.latitude+','+position.coords.longitude+']'},
+            data: {location: [position.coords.latitude,position.coords.longitude]},
             success: function(html) {
               $('#trending').html(html);
               trending_load();
@@ -182,6 +191,15 @@
     function getCityError() {
       $('#selection').text('Denver, CO');
       $('#search-terms').show();
+
+      $.ajax({
+        type: "POST",
+        url: "<%=trending_path%>",
+        data: {},
+        success: function(html) {
+              $('#trending').html(html);
+              trending_load();
+            }});
     };
 
     getLocation();

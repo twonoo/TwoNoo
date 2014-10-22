@@ -26,7 +26,8 @@ class Activity < ActiveRecord::Base
 
 	def distance_cannot_be_greater_than_100_miles
 		unless city.blank?
-			unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
+			#unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
+			unless distance_from([39.737567,-104.9847179]) < 100 || distance_from("Pittsburgh, PA") < 100
 				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!"
 			end
 		end
@@ -42,33 +43,72 @@ class Activity < ActiveRecord::Base
 
 	def self.trending(location)
 		# Get Coordinates
-		#locgeo = Geocoder.search(location).first.coordinates
+    in_network = false
+
+		logger.info "distance: " + Geocoder::Calculations.distance_between([39.737567,-104.9847179], location).to_s unless location.nil?
+
+    unless location.nil?
+      if Geocoder::Calculations.distance_between([39.737567,-104.9847179], location) < 100 || Geocoder::Calculations.distance_between([40.44062479999999, -79.9958864], location) < 100
+        in_network = true
+      end
+    end
+
 		results = Hash.new
 
 		# Cycle Through Activity Types and Store Each 
 		ActivityType.all.each do |a|
-			result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
-			.select('activities.*, COUNT(rsvps.id) as rsvp_count')
-			.where(cancelled: false)
-			.where(activity_types: {id: a.id})
-			.joins(:rsvps)
-			.joins(:activity_types)
-			.group('rsvps.activity_id')
-			.order('rsvp_count DESC')
-			.limit(4)
-			results["#{a.id}"] = result
+      if in_network
+        result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+        .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+        .where(cancelled: false)
+        .where(activity_types: {id: a.id})
+        .within(25, origin: location)
+        .joins(:rsvps)
+        .joins(:activity_types)
+        .group('rsvps.activity_id')
+        .order('rsvp_count DESC')
+        .limit(4)
+        results["#{a.id}"] = result
+      else
+        result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+        .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+        .where(cancelled: false)
+        .where(activity_types: {id: a.id})
+        .joins(:rsvps)
+        .joins(:activity_types)
+        .group('rsvps.activity_id')
+        .order('rsvp_count DESC')
+        .limit(4)
+        results["#{a.id}"] = result
+      end
+
 		end
 
 		# Calculate Top Trending
-		top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
-		.select('activities.*, COUNT(rsvps.id) as rsvp_count')
-		.where(cancelled: false)
-		.joins(:rsvps)
-		.joins(:activity_types)
-		.group('rsvps.activity_id')
-		.order('rsvp_count DESC')
-		.limit(4)
-		results['top'] = top
+    if in_network
+      top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+      .where(cancelled: false)
+      .within(25, origin: location)
+      .joins(:rsvps)
+      .joins(:activity_types)
+      .group('rsvps.activity_id')
+      .order('rsvp_count DESC')
+      .limit(4)
+      results['top'] = top
+    else
+      top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+      .where(cancelled: false)
+      .joins(:rsvps)
+      .joins(:activity_types)
+      .group('rsvps.activity_id')
+      .order('rsvp_count DESC')
+      .limit(4)
+      results['top'] = top
+    end
+
+
 
 		return results
 	end
