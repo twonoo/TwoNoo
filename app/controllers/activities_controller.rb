@@ -97,7 +97,7 @@ class ActivitiesController < ApplicationController
         if !@user.nil?
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.deliver.attending_activity_update(@user, @activity)
+          UserMailer.delay.attending_activity_update(@user, @activity)
         end
       end
       redirect_to @activity

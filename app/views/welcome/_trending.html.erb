@@ -19,7 +19,7 @@
         <article class="col-sm-3 isotopeItem <%= k %>">
           <section class="imgWrapper">
             <% if t.image_file_name %>
-              <%= image_tag t.image.url(:trending), class: 'img-responsive' %>
+              <%= image_tag t.image.url(:trending), class: 'img-responsive', style: "height:208px;width:270px; background-color:#444" %>
             <% else %>
               <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
             <% end %>
