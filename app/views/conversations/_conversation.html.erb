@@ -2,25 +2,26 @@
 <% lastmessageid= nil %>
 <% firstmessageid= nil %>
 <% messagecount = 0 %>
-<% conversation.receipts_for(current_user).last(20).each do |receipt| %>
+<% conversation.receipts_for(current_user).order("id DESC").first(20).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id
-    firstmessageid = receipt.id if firstmessageid.nil?
+    firstmessageid = receipt.id if firstmessageid.nil? || receipt.id < firstmessageid
     messagecount = messagecount + 1
   %>
-  <% if userid != prevuserid %>
-    <p>
-    <b><%= message.sender.profile.first_name %>:</b><br/>
-  <% end %>
-  <% unless message.is_read?(current_user) %><b><% end %>
   <p>
-    <font size="1">(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font>
+  <b><%= message.sender.profile.first_name %>
+  <font size="1">(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font>
+  :</b>
+  <% unless message.is_read?(current_user) %><b><% end %>
     <%= message.body %>
   </p>
   <% unless message.is_read?(current_user) %></b><% end %>
-  <% prevuserid = message.sender.id
-    lastmessageid = receipt.id
+  <%
+    if lastmessageid.nil? || (receipt.id > lastmessageid)
+      prevuserid = message.sender.id
+      lastmessageid = receipt.id
+    end
     message.mark_as_read(current_user)
   %>
 <% end %>

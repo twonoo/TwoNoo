@@ -5,24 +5,25 @@
   messagecount = 0
 %>
 
-<% conversation.receipts_for(current_user).where("mailboxer_receipts.id < #{firstmessageid}").last(20).each do |receipt| %>
+<% conversation.receipts_for(current_user).where("mailboxer_receipts.id < #{firstmessageid}").order("id DESC").first(20).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id.to_s
     messagecount = messagecount + 1
   %>
-  <% if userid != prevuserid %>
-    <p>
-    <b><%= message.sender.profile.first_name %>:</b><br/>
-  <% end %>
-  <% unless message.is_read?(current_user) %><b><% end %>
   <p>
+    <b><%= message.sender.profile.first_name %>
     <font size="1">(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font>
-    <%= message.body %>
+    :</b>
+    <% unless message.is_read?(current_user) %><b><% end %>
+      <%= message.body %>
+    <% unless message.is_read?(current_user) %></b><% end %>
   </p>
-  <% unless message.is_read?(current_user) %></b><% end %>
-  <% prevuserid = message.sender.id.to_s
-    firstmessageid = receipt.id if receipt.id < firstmessageid.to_i
+  <%
+    if receipt.id < firstmessageid.to_i
+      prevuserid = message.sender.id.to_s
+      firstmessageid = receipt.id 
+    end
     message.mark_as_read(current_user)
   %>
 <% end %>

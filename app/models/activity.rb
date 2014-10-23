@@ -6,7 +6,7 @@ class Activity < ActiveRecord::Base
 	belongs_to :user
 	has_and_belongs_to_many :activity_types
 	geocoded_by :address
-	before_validation :geocode if :latitude.blank? || :longitude.blank?
+	#before_validation :geocode if :latitude.blank? || :longitude.blank?
 	before_save :assign_timezone
 	has_many :rsvps
 
@@ -26,9 +26,13 @@ class Activity < ActiveRecord::Base
 
 	def distance_cannot_be_greater_than_100_miles
 		unless city.blank?
+      denver = [39.737567, -104.9847179]
+      pittsburgh = [40.44062479999999, -79.9958864]
+      fairbanks = [64.8377778, -147.7163889]
+
 			#unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
-			unless distance_from([39.737567,-104.9847179]) < 100 || distance_from("Pittsburgh, PA") < 100
-				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!"
+			unless (distance_from(denver) < 100 || distance_from(pittsburgh) < 100 || distance_from(fairbanks) < 100) then
+				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!" + distance_from(fairbanks).to_s
 			end
 		end
 	end

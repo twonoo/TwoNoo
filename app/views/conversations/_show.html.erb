@@ -1,3 +1,5 @@
+<%= render 'messages/form', conversation: conversation %>
+<hr>
 <h3 class="text-center">
   <% if conversation.originator == current_user%>
     <%= conversation.recipients[0].profile.first_name %> <%=conversation.recipients[0].profile.last_name%>
@@ -5,16 +7,15 @@
     <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
   <% end %>
 </h3>
-<div id="messages" style="height:60vh;overflow-y:auto;">
+<div id="messages">
   <%= hidden_field_tag "first_id_shown" %>
   <%= hidden_field_tag "last_id_shown" %>
   <%= hidden_field_tag "last_user_shown" %>
-  <div style="text-align:center;"><a href='#' id="earlier_messages">Load Earlier Messages</a></div>
   <div id='conversation'>
     <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
   </div>
+  <div style="text-align:center;"><a href='#' id="earlier_messages">Load Earlier Messages</a></div>
 </div>
-<%= render 'messages/form', conversation: conversation %>
 
 <script>
   $(function(){
@@ -33,7 +34,7 @@
               last_user_shown: $('#last_user_shown').val()
       },
       success: function(html) {
-        $('#conversation').prepend(html);
+        $('#conversation').append(html);
       }
      });
   }
@@ -54,7 +55,7 @@
               last_user_shown: $('#last_user_shown').val()
       },
       success: function(html) {
-        $('#conversation').append(html);
+        $('#conversation').prepend(html);
 
         setTimeout(function() {
           refresh();
