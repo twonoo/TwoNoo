@@ -13,6 +13,7 @@
 //= require respond.min.js
 //= require jquery.min.js
 //= require jquery-ui-1.8.23.custom.min.js
+//= require jquery-ui-1.11.2.custom.min.js
 //= require jquery_ujs
 //= require bootstrap.js
 //= require jquery.easing.1.3.js

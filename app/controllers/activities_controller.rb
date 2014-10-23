@@ -102,10 +102,6 @@ class ActivitiesController < ApplicationController
       end
       redirect_to @activity
     else
-      if dt_invalid
-        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
-        @activity.datetime = Time.now
-      end
       render :edit
     end
   end

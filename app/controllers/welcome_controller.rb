@@ -23,7 +23,12 @@ class WelcomeController < ApplicationController
     fairbanks = [64.8377778, -147.7163889]
 
     # Convert search parameter to coordinates
-    search_coordinates = Geocoder.search(params[:location]).first.coordinates
+    unless params[:lat].empty? && params[:lng].empty?
+      search_coordinates = [params[:lat].to_f, params[:lng].to_f]
+      logger.info "using passed in coords"
+    else
+      search_coordinates = Geocoder.search(params[:location]).first.coordinates
+    end
     unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 ||
            Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
            Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 100)
