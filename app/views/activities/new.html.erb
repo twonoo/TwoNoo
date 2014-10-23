@@ -14,13 +14,41 @@
         <% end %>
       <div class="col-md-7">
       <script>
+        var bsubmit = false;
         function confirmCreate()
         {
-          <% if current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
-            return 1;
-          <% else %>
-            return confirm('Creating this Activity will cost 1 Credit');
+          if (bsubmit)
+          {
+            return true;
+          }
+
+          <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
+            if (!confirm('Creating this Activity will cost 1 Credit'))
+              return false;
           <% end %>
+
+          // get the city and state entered
+          var city = $('#activity_city').val();
+          var state = $('#activity_state').val();
+          var address = city + ", " + state;
+          console.log("address: " + address);
+
+          
+          // Get the lat long of the city, state
+          var geocoder = new google.maps.Geocoder();
+
+
+          geocoder.geocode({'address': address}, function(results, status){
+                console.log('results[0].geometry.location:'+results[0].geometry.location);
+                $('#lat').val(results[0].geometry.location.lat());
+                $('#lng').val(results[0].geometry.location.lng());
+
+                bsubmit = true;
+
+                $('#new_activity').submit();
+          });
+
+          return false;
         }
       </script>
         <%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
@@ -74,6 +102,8 @@
               <%= f.select :state, us_states, {}, {class: "form-control"} %>
             </div>
           </div>
+          <%= hidden_field_tag :lat%>
+          <%= hidden_field_tag :lng %>
 
           <div class="form-group">
             <%= f.label :website, class: "col-sm-3 control-label" %>
@@ -135,6 +165,8 @@
 
       var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       console.log(latlng);
+      $('#lat').val(position.coords.latitude);
+      $('#lng').val(position.coords.longitude);
 
       var city = 'Pittsburgh';
       var state = 'PA';

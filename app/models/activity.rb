@@ -6,7 +6,7 @@ class Activity < ActiveRecord::Base
 	belongs_to :user
 	has_and_belongs_to_many :activity_types
 	geocoded_by :address
-	before_validation :geocode
+	before_validation :geocode if :latitude.blank? || :longitude.blank?
 	before_save :assign_timezone
 	has_many :rsvps
 

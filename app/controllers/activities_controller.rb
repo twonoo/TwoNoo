@@ -111,16 +111,21 @@ class ActivitiesController < ApplicationController
   end
 
   def create
-    params = activity_params
+    parms = activity_params
     dt_invalid = false
     begin
-      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+      parms[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
     rescue
       dt_invalid = true
-      params[:datetime] = Time.now
+      parms[:datetime] = Time.now
     end
 
-    @activity = Activity.create(params)
+    if params[:lat].present? && params[:lng].present?
+      parms[:latitude] = params[:lat]
+      parms[:longitude] = params[:lng]
+    end
+
+    @activity = Activity.create(parms)
     @activity.user_id = current_user.id
 
     if @activity.save
@@ -202,6 +207,6 @@ class ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :datetime, :rsvp, :image, activity_type_ids: [])
+    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :datetime, :rsvp, :latitude, :longitude, :image, activity_type_ids: [])
   end
 end
