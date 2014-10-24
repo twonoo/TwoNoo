@@ -110,4 +110,15 @@ class UserMailer < ActionMailer::Base
     end
   end
 
+  def alert(user, activity, alert)
+    @user = user
+
+    @activity = activity
+    @alert = alert
+    attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
+    puts "mailing"
+    mail(to: @user.email, subject: "#{@activity.activity_name} matched one of your alerts!")
+    puts "mailed"
+  end
+
 end

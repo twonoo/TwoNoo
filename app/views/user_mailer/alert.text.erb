@@ -1,0 +1,9 @@
+<%=@activity.activity_name %> was just created on TwoNoo and matches your alert for: <%=@alert.keywords%></h1>
+===============================================
+Name: <%=@activity.activity_name%> (<%=activity_url(@activity)%>)
+
+Description: <%=@activity.description%>
+
+To login to the site, just follow this link: <%= link_to 'TwoNoo.com', root_url %>.
+ 
+Have a great day!

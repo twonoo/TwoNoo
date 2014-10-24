@@ -1,0 +1,23 @@
+<script>
+   $(function(){
+     $('#conversation_body').keyup(function(e) {
+       if (e.keyCode == 13 && !e.shiftKey) {
+         e.preventDefault();
+         this.form.submit();
+       }
+       else if (e.keyCode == 27)
+       {
+         this.form.reset();
+       }
+     });
+   });
+</script>
+<style type='text/css'>
+  #conversation_body { width: 100% }
+</style>
+<%= form_for :conversation, url: :conversations do |f| %>
+  <%= f.hidden_field :recipients, :value => organizer %>
+  <%= f.text_area :body, as: :text %>
+  <%= f.submit 'Send Message', class: 'btn btn-success btn-sm', data: {disable_with: 'Sending Message...'}%>
+<% end %>
+
