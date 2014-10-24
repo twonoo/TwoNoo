@@ -1,7 +1,7 @@
 <section id="home" data-stellar-background-ratio="0.5">
   <div class="container">
     <div class="row">
-      <div class="col-sm-8 col-sm-offset-2"> <%= form_tag("/search", method: "post") do %>
+      <div class="col-sm-8 col-sm-offset-2"> <%= form_tag("/search", method: "post", id: "search_form", onsubmit: "return confirmSearch();") do %>
         <div class="form-group" id="search-group">
           <h1 class="tagline" style="font-weight:600;padding-bottom:0px;margin-bottom:0">MEET PEOPLE. DO STUFF.</h1>
           <h1 class="tagline" style="padding-top:0;padding-bottom:45px;margin-bottom:0"><small>AVAILABLE IN METRO DENVER & PITTSBURGH</small></h1>
@@ -220,14 +220,6 @@
       });
 
       $('#location').change(function() {
-          console.log("location: " + $(this).val());
-          var geocoder = new google.maps.Geocoder();
-
-          geocoder.geocode({'address': $(this).val()}, function(results, status){
-                console.log('results[0].geometry.location:'+results[0].geometry.location);
-                $('#lat').val(results[0].geometry.location.lat());
-                $('#lng').val(results[0].geometry.location.lng());
-          });
       });
       
       $('#location').focusout(function() {
@@ -259,5 +251,32 @@
    var height = $(window).height() - 350; 
     $("#home").height(height);
     $("#search-group").css('margin-top', ((height - 375) / 2))
+  }
+
+  var bsubmit = false;
+  function confirmSearch()
+  {
+    if (bsubmit)
+    {
+      return true;
+    }
+
+          
+    // Get the lat long of the city, state
+    console.log("location: " + $('#location').val());
+    var geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({'address': $('#location').val()}, function(results, status){
+      console.log('results[0].geometry.location:'+results[0].geometry.location);
+      $('#lat').val(results[0].geometry.location.lat());
+      $('#lng').val(results[0].geometry.location.lng());
+
+      bsubmit = true;
+
+      $('#search_form').submit();
+    });
+
+    return false;
+    
   }
 </script>

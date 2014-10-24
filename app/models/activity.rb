@@ -5,8 +5,8 @@ class Activity < ActiveRecord::Base
 	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 	belongs_to :user
 	has_and_belongs_to_many :activity_types
-	geocoded_by :address
-	#before_validation :geocode if :latitude.blank? || :longitude.blank?
+	#geocoded_by :address
+	before_validation :geocodecache
 	before_save :assign_timezone
 	has_many :rsvps
 
@@ -37,6 +37,37 @@ class Activity < ActiveRecord::Base
 		end
 	end
 
+  def geocodecache
+    logger.info "geocodecache"
+    geocode = Geocode.where(city: city).where(state: state).first
+
+    if latitude.blank? || longitude.blank?
+      # for some reason we don't have the latlon
+      unless geocode.nil? then
+        self.latitude = geocode.latitude
+        self.longitude = geocode.longitude
+      else
+        # Look up the latlong by citysate
+        search_coordinates = Geocoder.search(params[:location]).first.coordinates
+
+        self.latitude = search_coordinates.latitude
+        self.longitude = search_coordinates.longitude
+      end
+    end
+
+    if geocode.nil? then
+      # let's assume we don't have the timezone
+      timezone = Timezone::Zone.new(:latlon => [latitude, longitude])
+
+      # insert the geocode
+      geocode = Geocode.new(city: city, state: state, latitude: latitude, longitude: longitude,
+                  timezone: timezone.active_support_time_zone)
+
+      logger.info "save it"
+      geocode.save
+    end
+  end
+
 	def self.terms(terms)
 		query = []
 		terms.split.each do |t|
@@ -49,10 +80,15 @@ class Activity < ActiveRecord::Base
 		# Get Coordinates
     in_network = false
 
-		logger.info "distance: " + Geocoder::Calculations.distance_between([39.737567,-104.9847179], location).to_s unless location.nil?
-
     unless location.nil?
-      if Geocoder::Calculations.distance_between([39.737567,-104.9847179], location) < 100 || Geocoder::Calculations.distance_between([40.44062479999999, -79.9958864], location) < 100
+      denver = [39.737567, -104.9847179]
+      pittsburgh = [40.44062479999999, -79.9958864]
+      fairbanks = [64.8377778, -147.7163889]
+
+      if (Geocoder::Calculations.distance_between(denver, location) < 100 ||
+          Geocoder::Calculations.distance_between(pittsburgh, location) < 100 ||
+          Geocoder::Calculations.distance_between(fairbanks, location) < 100)
+      then
         in_network = true
       end
     end
@@ -118,14 +154,32 @@ class Activity < ActiveRecord::Base
 	end
 
 	private
+
+  def get_coordinates
+    unless self.latitude.nil? or self.longitude.nil? then
+      return [self.latitude, self.longitude]
+    end
+
+    return fetch_coordinates
+  end
+
+  def get_timezone
+    # first, see if the timezone is already in the db
+    geocode = Geocode.where(latitude: latitude).where(longitude: longitude).first
+
+    if geocode.nil? then
+      # we had a cache miss
+		  zone = Timezone::Zone.new(:latlon => get_coordinates)
+      timezone = zone.active_support_time_zone
+    else
+      return geocode.timezone
+    end
+
+    return timezone
+  end
+  
 	def assign_timezone
-		timezone = Timezone::Zone.new(:latlon => fetch_coordinates)
-		#offset = timezone.utc_offset.abs
-		#db_offset = 21600
-		#offset = offset - 3600 if Time.now.dst?
-		self.tz = timezone.active_support_time_zone
-		#self.datetime = self.datetime - offset
-		#logger.info "     !!!!_____!_!_!_!_!__!     #{self.datetime}"
+		self.tz = get_timezone
 	end
 
 end

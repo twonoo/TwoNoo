@@ -1,0 +1,10 @@
+<div id="draggable" style="width: 150px; height: 150px; padding: 0.5em;z-index:100;position:absolute;background-color:white;">
+<div style="height:100px;">Drag me around</div>
+<textarea></textarea>
+</div>
+<script>
+$(function() {
+$( "#draggable").draggable();
+});
+</script>
+
