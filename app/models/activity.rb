@@ -31,7 +31,7 @@ class Activity < ActiveRecord::Base
       fairbanks = [64.8377778, -147.7163889]
 
 			#unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
-			unless (distance_from(denver) < 100 || distance_from(pittsburgh) < 100 || distance_from(fairbanks) < 100) then
+			unless (distance_from(denver) < 300 || distance_from(pittsburgh) < 100 || distance_from(fairbanks) < 600) then
 				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!" + distance_from(fairbanks).to_s
 			end
 		end
@@ -85,9 +85,9 @@ class Activity < ActiveRecord::Base
       pittsburgh = [40.44062479999999, -79.9958864]
       fairbanks = [64.8377778, -147.7163889]
 
-      if (Geocoder::Calculations.distance_between(denver, location) < 100 ||
+      if (Geocoder::Calculations.distance_between(denver, location) < 300 ||
           Geocoder::Calculations.distance_between(pittsburgh, location) < 100 ||
-          Geocoder::Calculations.distance_between(fairbanks, location) < 100)
+          Geocoder::Calculations.distance_between(fairbanks, location) < 600)
       then
         in_network = true
       end

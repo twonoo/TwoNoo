@@ -44,7 +44,10 @@
                   last_user_shown: $('#last_user_shown').val()
           },
           success: function(html) {
-            $('#conversation').prepend(html);
+            if ($('#conversation'))
+            {
+              $('#conversation').prepend(html);
+            }
             $('#message_body').val('');
             $('#send_message').attr('clicked', 'false');    
           }

@@ -7,14 +7,14 @@
     <%= conversation.originator.profile.first_name %> <%=conversation.originator.profile.last_name%>
   <% end %>
 </h3>
-<div id="messages">
+<div id="messages" class="col-md-12">
   <%= hidden_field_tag "first_id_shown" %>
   <%= hidden_field_tag "last_id_shown" %>
   <%= hidden_field_tag "last_user_shown" %>
-  <div id='conversation'>
+  <div id='conversation' class="col-md-12">
     <%= render :partial => 'conversation', :locals => { :conversation => conversation } %>
   </div>
-  <div style="text-align:center;"><a href='#' id="earlier_messages">Load Earlier Messages</a></div>
+  <div style="text-align:center;" class="col-md-10"><a href='#' id="earlier_messages">Load Earlier Messages</a></div>
 </div>
 
 <script>

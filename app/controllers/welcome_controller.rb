@@ -29,9 +29,9 @@ class WelcomeController < ApplicationController
     else
       search_coordinates = Geocoder.search(params[:location]).first.coordinates
     end
-    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 100 ||
+    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
            Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
-           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 100)
+           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
       #redirect_to root_path, notice: "You're trying to search outside of the area"
       #@showNoResults = false
       flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."

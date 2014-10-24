@@ -23,7 +23,7 @@
 
 
   <li class="dropdown" id="messags_menu">
-    <a href="#" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
+    <a href="<%=conversations_path%>" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
     <ul class="dropdown-menu" id="messages_dropdown" style="width:300px">
       <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
         <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>

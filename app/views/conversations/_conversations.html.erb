@@ -1,4 +1,4 @@
-<%= content_tag_for(:li, conversations) do |conversation| %>
+<%= content_tag_for(:p, conversations) do |conversation| %>
   <p id="conversation_<%=conversation.id.to_s%>">
     <% if conversation.originator == current_user %>
       <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
