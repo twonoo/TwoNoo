@@ -1,10 +1,12 @@
 <%
   prevuserid = params[:last_user_shown]
   lastmessageid = nil
+  bStartRefresh = false
   if params[:last_id_shown].present?
     lastmessageid = params[:last_id_shown]
   else
     lastmessageid = conversation.receipts_for(current_user).last.id - 1
+    bStartRefresh = true
   end
 
 %>
@@ -43,4 +45,39 @@
 <script>
   $('#last_id_shown').val(<%=lastmessageid%>)
   $('#last_user_shown').val(<%=prevuserid%>)
+
+  <% if bStartRefresh %>
+  var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
+  var interval = 5000;   //number of mili seconds between each call
+
+  <% if !(conversation.nil?) then %>
+    $('#conversation_<%=conversation.id.to_s%>').css('font-weight', 'bold');
+  <% end %>
+
+  function refresh() {
+    $.ajax({
+      type: "POST",
+      url: "<%=show_messages_path(conversation.id)%>",
+      cache: false,
+      data: { last_id_shown: $('#last_id_shown').val(),
+              last_user_shown: $('#last_user_shown').val()
+      },
+      success: function(html) {
+        $('#conversation').append(html);
+        $("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
+
+        setTimeout(function() {
+          refresh();
+        }, interval);
+      }
+    });
+  }
+
+  $(function(){
+
+    setTimeout(function() {
+      refresh();
+    }, interval);
+  });
+  <% end %>
 </script>

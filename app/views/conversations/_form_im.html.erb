@@ -91,7 +91,8 @@
               $('#conversation').append(html);
               //alert(link.prevAll('#conversation').html());
               //scroll to the bottom
-              $('#conversation').scrollTop(link.prev("#conversation").scrollHeight);
+              $('#conversation').scrollTop($("#conversation").scrollHeight);
+              //$("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
             }
             link.prev('#body').val('');
             link.attr('clicked', 'false');    
@@ -103,4 +104,5 @@
 
     };
   });
+
 </script>
