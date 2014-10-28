@@ -1,7 +1,7 @@
 <% 
 @activityIds = @rsvps.map{|i| i.activity_id}
-@activities = Activity.where('id in (?)', @activityIds.to_a).where('datetime >= ?', Time.now).where("cancelled = false").order('datetime ASC')
-@activitiesPast = Activity.where('id in (?)', @activityIds.to_a).where('datetime < ?', Time.now).where("cancelled = false").order('datetime DESC')
+@activities = Activity.where('id in (?)', @activityIds.to_a).where('datetime >= ?', Time.now).order('datetime ASC')
+@activitiesPast = Activity.where('id in (?)', @activityIds.to_a).where('datetime < ?', Time.now).order('datetime DESC')
 %>
 <div class="row">
 <% if @activities.present? %>
