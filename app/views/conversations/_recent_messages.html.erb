@@ -14,7 +14,9 @@
     message = receipt.message
     userid = message.sender.id.to_s
   %>
-  <div class="row" style="padding-top:0px;padding-bottom:0px;margin-top:0px;">
+  <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
+  <%=(current_user != message.sender)?'color:#1111FF;':''%>
+  ">
     <div class="col-xs-3 text-right" style="overflow:hidden;white-space: nowrap;">
       <b><%= message.sender.profile.first_name %>
             <% if message.created_at < (Time.now - 1.day) %>
@@ -23,7 +25,7 @@
               <div style="font-size:50%;display:inline;">(<%=message.created_at.strftime("%l:%M %P")%>)</div>
             <% end %></b>
     </div>
-    <div class="col-xs-9">
+    <div class="col-xs-9" style="background-color:#FFFFFF">
       <% unless message.is_read?(current_user) %><b><% end %>
         <%= message.body %>
       <% unless message.is_read?(current_user) %></b><% end %>

@@ -9,21 +9,23 @@
     firstmessageid = receipt.id if firstmessageid.nil? || receipt.id < firstmessageid
     messagecount = messagecount + 1
   %>
-<div class="row" style="padding-top:0px;padding-bottom:0px;margin-top:0px;">
-  <div class="col-xs-3 text-right">
+  <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
+  <%=(current_user != message.sender)?'color:#1111FF;':''%>
+  ">
+  <div class="col-xs-3" style="background-color:#EEEEEE;">
     <b><%= message.sender.profile.first_name %>
           <% if message.created_at < (Time.now - 1.day) %>
             <span style="font-size:50%;">(<%=message.created_at.strftime("%m/%d")%>)</span>
           <% else %>
             <span style="font-size:50%;">(<%=message.created_at.strftime("%l:%M %P")%>)</span>
           <% end %>
-    :</b>
+    </b>
   </div>
-  <div class="col-xs-9">
-    <% unless message.is_read?(current_user) %><b><% end %>
-      <%= message.body %>
-    <% unless message.is_read?(current_user) %></b><% end %>
-  </div>
+    <div class="col-xs-9" style="background-color:#FFFFFF">
+      <% unless message.is_read?(current_user) %><b><% end %>
+        <%= message.body %>
+      <% unless message.is_read?(current_user) %></b><% end %>
+    </div>
 </div>
   <%
     if lastmessageid.nil? || (receipt.id > lastmessageid)
