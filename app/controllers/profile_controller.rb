@@ -61,8 +61,19 @@ class ProfileController < ApplicationController
   def show
     @profile = User.find_by_id(params[:id])
     redirect_to root_url if @profile.nil?
-    @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
-    @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
+
+    if current_user.present? && (params[:id] == current_user.id.to_s)
+      @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).order('datetime ASC')
+      @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
+    else
+      @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).
+        where('cancelled = false').
+        order('datetime ASC')
+
+      @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).
+        where('cancelled = false').
+        order('datetime DESC')
+    end
   end
 
   def followers
