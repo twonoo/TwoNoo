@@ -42,13 +42,13 @@ Rails.application.configure do
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "smtp.mandrillapp.com",
     port: 587,
     domain: "twonoo.com",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: "info@twonoo.com",
-    password: "Tw0#oo01"
+    user_name: "steven.betts@twonoo.com",
+    password: "FWDtyP_2VA85dpsXhuudoA"
   }
 
 end

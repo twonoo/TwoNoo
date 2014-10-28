@@ -8,25 +8,22 @@
     message = receipt.message
     userid = message.sender.id.to_s
   %>
-    <% unless message.sender = current_user %>
-      <div class="col-md-4">
-        <b><%= message.sender.profile.first_name %>
-        <sub>(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</sub>
-        :</b>
-      </div>
-    <% end %>
-    <div class="col-md-8 text-right" style="overflow-x:auto">
-      <% unless message.is_read?(current_user) %><b><% end %>
-        <%= message.body %>
-      <% unless message.is_read?(current_user) %></b><% end %>
-    </div>
-    <% if message.sender = current_user %>
-      <div class="col-md-4">
-        <b>:<%= message.sender.profile.first_name %>
-        <font size="1">(<%=message.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font>
-        </b>
-      </div>
-    <% end %>
+<div class="col-md-3">
+  <b><%= message.sender.profile.first_name %>
+        <% if message.created_at < (Time.now - 1.day) %>
+          <span style="font-size:50%;">(<%=message.created_at.strftime("%m/%d")%>)</span>
+        <% else %>
+          <span style="font-size:50%;">(<%=message.created_at.strftime("%l:%M %P")%>)</span>
+        <% end %>
+  :</b>
+</div>
+<div class="col-md-9">
+  <p>
+  <% unless message.is_read?(current_user) %><b><% end %>
+    <%= message.body %>
+  <% unless message.is_read?(current_user) %></b><% end %>
+  </p>
+</div>
   <%
     if (receipt.id > lastmessageid.to_i)
       prevuserid = message.sender.id.to_s
