@@ -21,7 +21,7 @@
   <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
   <%=(current_user != message.sender)?'color:#1111FF;':''%>
   ">
-    <div class="col-xs-3 text-right" style="overflow:hidden;white-space: nowrap;">
+    <div class="col-xs-3" style="overflow:hidden;white-space: nowrap;">
       <b><%= message.sender.profile.first_name %>
             <% if message.created_at < (Time.now - 1.day) %>
               <span style="font-size:50%;display:inline;">(<%=message.created_at.strftime("%m/%d")%>)</span>
