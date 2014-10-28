@@ -2,6 +2,7 @@
   prevuserid = params[:last_user_shown]
   lastmessageid = nil
   bStartRefresh = false
+  bSendstuff = false
   if params[:last_id_shown].present?
     lastmessageid = params[:last_id_shown]
   else
@@ -15,6 +16,7 @@
   <%
     message = receipt.message
     userid = message.sender.id.to_s
+    bSendstuff = true
   %>
   <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
   <%=(current_user != message.sender)?'color:#1111FF;':''%>
@@ -42,9 +44,12 @@
   %>
 <% end %>
 
+<% if bSendstuff %>
 <script>
   $('#last_id_shown').val(<%=lastmessageid%>)
   $('#last_user_shown').val(<%=prevuserid%>)
+
+  $("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
 
   <% if bStartRefresh %>
   var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
@@ -64,7 +69,6 @@
       },
       success: function(html) {
         $('#conversation').append(html);
-        $("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
 
         setTimeout(function() {
           refresh();
@@ -81,3 +85,4 @@
   });
   <% end %>
 </script>
+<% end %>
