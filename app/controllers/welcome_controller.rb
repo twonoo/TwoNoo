@@ -24,11 +24,17 @@ class WelcomeController < ApplicationController
 
     # Convert search parameter to coordinates
     unless params[:lat].empty? && params[:lng].empty?
+      lat = params[:lat]
+      lon = params[:lng]
       search_coordinates = [params[:lat].to_f, params[:lng].to_f]
       logger.info "using passed in coords"
     else
-      search_coordinates = Geocoder.search(params[:location]).first.coordinates
+      search_location = Geocoder.search(params[:location]).first
+      search_coordinates = search_location.coordinates
+      lat = search_location.latitude
+      lon = search_location.longitude
     end
+    
     unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
            Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
            Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
@@ -96,12 +102,20 @@ class WelcomeController < ApplicationController
 
     @users = Profile.terms(params[:terms])
 
-    unless params[:terms].empty?
-      @search = Search.new
-      @search.user_id = current_user.nil? ? nil : current_user.id
-      @search.search = params[:terms]
-      @search.save
+    search_history = Search.new(search: params[:terms], location: params[:location])
+    search_history.user_id = current_user.id if current_user
+    search_history.save!
+
+    if current_user
+      if current_user.last_search_location != params[:location]
+        u = User.find(current_user)
+        u.last_search_location = params[:location]
+        u.last_search_lat = lat
+        u.last_search_lon = lon
+        u.save!
+      end
     end
+
     
     if @activities.blank? && @users.blank? && @showNoResults
       render 'noresults' 

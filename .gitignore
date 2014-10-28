@@ -11,6 +11,9 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
+/config/database.yml
+
+
 # Ignore Profile Images
 /public/*
 
@@ -27,3 +30,5 @@ doc/
 .idea
 .secret
 
+
+config/database.yml
