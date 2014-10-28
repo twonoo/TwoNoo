@@ -47,7 +47,7 @@ Rails.application.configure do
     domain: "twonoo.com",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: "steven.betts@twonoo.com",
+    user_name: "info@twonoo.com",
     password: "FWDtyP_2VA85dpsXhuudoA"
   }
 
