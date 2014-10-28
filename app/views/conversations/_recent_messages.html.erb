@@ -1,6 +1,12 @@
 <%
   prevuserid = params[:last_user_shown]
-  lastmessageid = params[:last_id_shown]
+  lastmessageid = nil
+  if params[:last_id_shown].present?
+    lastmessageid = params[:last_id_shown]
+  else
+    lastmessageid = conversation.receipts_for(current_user).last.id - 1
+  end
+
 %>
 
 <% conversation.receipts_for(current_user).where("mailboxer_receipts.id > #{lastmessageid}").order("id DESC").each do |receipt| %>
@@ -8,22 +14,21 @@
     message = receipt.message
     userid = message.sender.id.to_s
   %>
-<div class="col-md-3">
-  <b><%= message.sender.profile.first_name %>
-        <% if message.created_at < (Time.now - 1.day) %>
-          <span style="font-size:50%;">(<%=message.created_at.strftime("%m/%d")%>)</span>
-        <% else %>
-          <span style="font-size:50%;">(<%=message.created_at.strftime("%l:%M %P")%>)</span>
-        <% end %>
-  :</b>
-</div>
-<div class="col-md-9">
-  <p>
-  <% unless message.is_read?(current_user) %><b><% end %>
-    <%= message.body %>
-  <% unless message.is_read?(current_user) %></b><% end %>
-  </p>
-</div>
+  <div class="row" style="padding-top:0px;padding-bottom:0px;margin-top:0px;">
+    <div class="col-xs-3 text-right" style="overflow:hidden;white-space: nowrap;">
+      <b><%= message.sender.profile.first_name %>
+            <% if message.created_at < (Time.now - 1.day) %>
+              <span style="font-size:50%;display:inline;">(<%=message.created_at.strftime("%m/%d")%>)</span>
+            <% else %>
+              <div style="font-size:50%;display:inline;">(<%=message.created_at.strftime("%l:%M %P")%>)</div>
+            <% end %></b>
+    </div>
+    <div class="col-xs-9">
+      <% unless message.is_read?(current_user) %><b><% end %>
+        <%= message.body %>
+      <% unless message.is_read?(current_user) %></b><% end %>
+    </div>
+  </div>
   <%
     if (receipt.id > lastmessageid.to_i)
       prevuserid = message.sender.id.to_s

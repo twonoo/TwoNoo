@@ -9,21 +9,21 @@
     firstmessageid = receipt.id if firstmessageid.nil? || receipt.id < firstmessageid
     messagecount = messagecount + 1
   %>
-<div class="col-md-3">
-  <b><%= message.sender.profile.first_name %>
-        <% if message.created_at < (Time.now - 1.day) %>
-          <span style="font-size:50%;">(<%=message.created_at.strftime("%m/%d")%>)</span>
-        <% else %>
-          <span style="font-size:50%;">(<%=message.created_at.strftime("%l:%M %P")%>)</span>
-        <% end %>
-  :</b>
-</div>
-<div class="col-md-9">
-  <p>
-  <% unless message.is_read?(current_user) %><b><% end %>
-    <%= message.body %>
-  <% unless message.is_read?(current_user) %></b><% end %>
-  </p>
+<div class="row" style="padding-top:0px;padding-bottom:0px;margin-top:0px;">
+  <div class="col-xs-3 text-right">
+    <b><%= message.sender.profile.first_name %>
+          <% if message.created_at < (Time.now - 1.day) %>
+            <span style="font-size:50%;">(<%=message.created_at.strftime("%m/%d")%>)</span>
+          <% else %>
+            <span style="font-size:50%;">(<%=message.created_at.strftime("%l:%M %P")%>)</span>
+          <% end %>
+    :</b>
+  </div>
+  <div class="col-xs-9">
+    <% unless message.is_read?(current_user) %><b><% end %>
+      <%= message.body %>
+    <% unless message.is_read?(current_user) %></b><% end %>
+  </div>
 </div>
   <%
     if lastmessageid.nil? || (receipt.id > lastmessageid)

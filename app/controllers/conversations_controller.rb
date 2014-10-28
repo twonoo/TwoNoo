@@ -58,6 +58,36 @@ class ConversationsController < ApplicationController
     UserMailer.delay.new_message(recipient, current_user, params[:message_body])
   end
 
+  def send_message
+    recipient = User.where(email: params[:recipient]).first
+
+    logger.info("recipient: " + params[:recipient])
+
+    logger.info recipient.email
+    @conversations = mailbox.conversations
+    conversation = nil
+
+    @conversations.each do |c|
+      if (((c.originator.id == current_user.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == current_user.id))) then
+        conversation = c
+        break
+      end
+    end
+
+    if conversation.nil? then
+      conversation = current_user.
+        send_message(recipients, *params[:body], current_user.email).conversation
+    else
+      current_user.reply_to_conversation(conversation, *params[:body])
+    end
+
+    respond_to do |format|
+      format.html { render :partial => '/conversations/recent_messages', :locals => { :conversation => conversation } }
+    end
+
+    UserMailer.delay.new_message(recipient, current_user, *params[:body])
+  end
+
   def show
     redirect_to conversations_path(:id => conversation.id)
   end

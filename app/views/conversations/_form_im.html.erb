@@ -1,23 +1,106 @@
-<script>
-   $(function(){
-     $('#conversation_body').keyup(function(e) {
-       if (e.keyCode == 13 && !e.shiftKey) {
-         e.preventDefault();
-         this.form.submit();
-       }
-       else if (e.keyCode == 27)
-       {
-         this.form.reset();
-       }
-     });
-   });
-</script>
-<style type='text/css'>
-  #conversation_body { width: 100% }
-</style>
-<%= form_for :conversation, url: :conversations do |f| %>
-  <%= f.hidden_field :recipients, :value => organizer %>
-  <%= f.text_area :body, as: :text %>
-  <%= f.submit 'Send Message', class: 'btn btn-success btn-sm', data: {disable_with: 'Sending Message...'}%>
-<% end %>
+<style>
+#chatbox_header {
+  background-color:#4DBFF5;
+  color:#FFFFFF;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+}
 
+#conversation {
+  font-size: 80%;
+  padding: 0px;
+  margin: 0px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#messages {
+  padding: 0px;
+  margin: 0px;
+  }
+
+#body {
+  font-size: 80%;
+  width: 100%;
+  resize: vertical;
+}
+
+</style>
+<div id="messages" class="col-md-12">
+  <%= hidden_field_tag "first_id_shown" %>
+  <%= hidden_field_tag "last_id_shown" %>
+  <%= hidden_field_tag "last_user_shown" %>
+
+  <div id="chatbox_header">
+    <p><%=recipient.profile.first_name %> <%=recipient.profile.last_name%></p>
+    <div style="clear:both"></div>
+  </div>
+
+  <div id='conversation' class="col-md-12">
+  </div>
+
+  <%= text_area_tag :body, nil, rows: "2" %>
+  <a id="send_message" class="btn btn-success btn-sm" recipient="<%=recipient.email%>">Send Message</a>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#message_body').focus();
+  });
+
+  $(function(){
+    $('#body').keyup(function(e) {
+      if (e.keyCode == 13 && !e.shiftKey) {
+        e.preventDefault();
+        $(this).next('#send_message').trigger("click");
+      }
+      else if (e.keyCode == 27)
+      {
+        $('#message_body').val('');
+      }
+    });
+  });
+
+  $(function(){
+    $('#send_message').unbind('click');
+    $('#send_message').bind('click', function(e){
+      if ($(this).attr('clicked') == 'true'){
+        e.preventDefault();
+      }
+      else {
+        sendMessage($(this));
+      }
+
+      $(this).attr('clicked', 'true');
+    });
+
+    var sendMessage = function(link) {
+        $.ajax({
+          type: "POST",
+          url: "<%=send_message_path%>",
+          data: { recipient: link.attr('recipient'),
+                  body: link.prev().val(),
+                  last_id_shown: $('#last_id_shown').val(),
+                  last_user_shown: $('#last_user_shown').val()
+          },
+          success: function(html) {
+            if ($('#conversation'))
+            {
+              $('#conversation').append(html);
+              //alert(link.prevAll('#conversation').html());
+              //scroll to the bottom
+              $('#conversation').scrollTop(link.prev("#conversation").scrollHeight);
+            }
+            link.prev('#body').val('');
+            link.attr('clicked', 'false');    
+          },
+          error: function(e) {
+            link.attr('clicked', 'false');    
+          }
+         });
+
+    };
+  });
+</script>

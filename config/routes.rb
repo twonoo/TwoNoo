@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   post 'conversations/show_messages/:id' => 'conversations#show_messages', as: :show_messages
   post 'conversations/load_earlier_messages/:id' => 'conversations#load_earlier_messages', as: :load_earlier_messages
   post 'conversations/reply/:id' => 'conversations#reply', as: :reply_conversation
+  post 'conversations/send_message' => 'conversations#send_message', as: :send_message
 
   get 'messages/display' => 'messages#display_messages', as: :display_messages
   get 'messages/number' => 'messages#num_messages', as: :num_messages

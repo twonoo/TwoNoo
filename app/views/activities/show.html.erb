@@ -52,10 +52,11 @@
 					<div id="map-canvas"></div>
           <div id="directions-from"
             style="position:relative;
-z-index:100;
-            top:-50px;"
+            z-index:100;
+            top:-50px;
+            left:50px;"
             >
-            Get Directions From: <input type="textbox" id="from_address" onchange="calcRoute()"></input>
+            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions"></input>
           </div>
           <div id="directions-panel"></div>
           <div class="panel panel-default">
@@ -111,8 +112,8 @@ var map;
   function calcRoute() {
     var end = $('#from_address').val()
     var request = {
-        origin:myLatlng,
-        destination:end,
+        origin:end,
+        destination:myLatlng,
         travelMode: google.maps.TravelMode.DRIVING
     };
     directionsService.route(request, function(response, status) {
@@ -148,12 +149,12 @@ var map;
         zoom: 11,
         scrollwheel: true
       };
-directionsService = new google.maps.DirectionsService();
-directionsDisplay = new google.maps.DirectionsRenderer();
+      directionsService = new google.maps.DirectionsService();
+      directionsDisplay = new google.maps.DirectionsRenderer();
       map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-directionsDisplay.setMap(map);
-directionsDisplay.setPanel(document.getElementById('directions-panel'));
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
       var contentString = '<div>'+
         '<h4><%= @activity.location_name %></h4>' +
