@@ -265,6 +265,8 @@
     // Get the lat long of the city, state
     console.log("location: " + $('#location').val());
     var geocoder = new google.maps.Geocoder();
+    var city
+    var state
 
     geocoder.geocode({'address': $('#location').val()}, function(results, status){
       if (status == google.maps.GeocoderStatus.OK)
@@ -272,6 +274,20 @@
         console.log('results[0].geometry.location:'+results[0].geometry.location);
         $('#lat').val(results[0].geometry.location.lat());
         $('#lng').val(results[0].geometry.location.lng());
+
+        var arrAddress = results[0].address_components;
+        // iterate through address_component array
+        $.each(arrAddress, function (i, address_component) {
+            if (address_component.types[0] == "locality") { // locality type
+                city = address_component.long_name; // city
+              }
+            if (address_component.types[0] == "administrative_area_level_1") { // locality type
+                state = address_component.short_name; // state
+              }
+            });
+        $('#location').val(city + ', ' + state);
+        console.log(city + ', ' + state);
+
       }
       else
       {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024004923) do
+ActiveRecord::Schema.define(version: 20141028031129) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 20141024004923) do
     t.string   "search"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "location"
   end
 
   create_table "sessions", force: true do |t|

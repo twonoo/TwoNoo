@@ -96,12 +96,9 @@ class WelcomeController < ApplicationController
 
     @users = Profile.terms(params[:terms])
 
-    unless params[:terms].empty?
-      @search = Search.new
-      @search.user_id = current_user.nil? ? nil : current_user.id
-      @search.search = params[:terms]
-      @search.save
-    end
+    search_history = Search.new(search: params[:terms], location: params[:location])
+    search_history.user_id = current_user.id if current_user
+    search_history.save!
     
     if @activities.blank? && @users.blank? && @showNoResults
       render 'noresults' 
