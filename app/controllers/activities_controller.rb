@@ -155,9 +155,9 @@ class ActivitiesController < ApplicationController
     @activity = Activity.find(params[:activity_id])
     @organizer = User.find(@activity.user_id)
 
-    unless current_user = @organizer
+    unless current_user == @organizer
       @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
-      
+
       UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
     end
 

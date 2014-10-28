@@ -55,9 +55,11 @@ class UserMailer < ActionMailer::Base
   end
 
   def new_rsvp(user, attendee, activity)
+    logger.info "new_rsvp testering"
     @user = user
 
     if (@user.profile.notification_setting.new_rsvp)
+      logger.info "new_rsvp testering receiving"
       @attendee = attendee
       @activity = activity
       attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
