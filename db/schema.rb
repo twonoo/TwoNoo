@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028031129) do
+ActiveRecord::Schema.define(version: 20141028040307) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -238,6 +238,9 @@ ActiveRecord::Schema.define(version: 20141028031129) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
+    t.string   "last_search_location"
+    t.string   "last_search_lat"
+    t.string   "last_search_lon"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
