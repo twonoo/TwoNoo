@@ -1,4 +1,5 @@
 class ActivitiesController < ApplicationController
+  require 'mandrill'
   before_filter :authenticate_user!, :except => [:index, :search, :show]
 
   def attending
@@ -29,6 +30,7 @@ class ActivitiesController < ApplicationController
   end
 
   def show
+  
     @activity = Activity.find_by_id(params[:id])
 
     if @activity.nil?
@@ -195,7 +197,7 @@ class ActivitiesController < ApplicationController
       @rsvp_ids.each do |rsvp_id|
         @user = User.find_by_id(rsvp_id)
         if !@user.nil? && @user != current_user
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+          @user.notify("#{current_user.name} commented on an activity", "#{current_user.name} has commentd on an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
           UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
         end

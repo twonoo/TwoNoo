@@ -83,7 +83,7 @@
           data: { recipient: link.attr('recipient'),
                   body: link.prev().val(),
                   last_id_shown: $('#last_id_shown').val(),
-                  last_user_shown: $('#last_user_shown').val()
+                  orderBy: 'id ASC'
           },
           success: function(html) {
             if ($('#conversation'))

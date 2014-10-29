@@ -1,8 +1,8 @@
 <%
-  prevuserid = params[:last_user_shown]
   lastmessageid = nil
   bStartRefresh = false
   bSendstuff = false
+
   if params[:last_id_shown].present?
     lastmessageid = params[:last_id_shown]
   else
@@ -10,9 +10,14 @@
     bStartRefresh = true
   end
 
+  orderBy = "id DESC"
+  if params[:orderBy].present?
+    orderBy = params[:orderBy]
+  end
+
 %>
 
-<% conversation.receipts_for(current_user).where("mailboxer_receipts.id > #{lastmessageid}").order("id DESC").each do |receipt| %>
+<% conversation.receipts_for(current_user).where("mailboxer_receipts.id > #{lastmessageid}").order(orderBy).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id.to_s
@@ -30,14 +35,11 @@
             <% end %></b>
     </div>
     <div class="col-xs-9" style="background-color:#FFFFFF">
-      <% unless message.is_read?(current_user) %><b><% end %>
-        <%= message.body %>
-      <% unless message.is_read?(current_user) %></b><% end %>
+      <%= message.body %>
     </div>
   </div>
   <%
     if (receipt.id > lastmessageid.to_i)
-      prevuserid = message.sender.id.to_s
       lastmessageid = receipt.id
     end
     message.mark_as_read(current_user)
@@ -47,7 +49,6 @@
 <% if bSendstuff %>
 <script>
   $('#last_id_shown').val(<%=lastmessageid%>)
-  $('#last_user_shown').val(<%=prevuserid%>)
 
   $("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
 

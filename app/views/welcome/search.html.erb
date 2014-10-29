@@ -20,7 +20,7 @@
                   <h3 style="color:white"><%= a.datetime.strftime('%-I:%M %p') %></h3>
                   <font size="1" style="color:white"><%=a.city%>, <%=a.state%></font>
                 </div>
-                <div class="col-md-10 panel panel-right" style="background-color:#fff">
+                <div class="col-md-8 panel panel-middle" style="background-color:#fff">
                   <h2>
                     <%= link_to a.activity_name, activity_path(a.id) %>
                     <% if a.cancelled %>
@@ -28,6 +28,11 @@
                     <% end %>
                   </h2>
                   <p class="lead"><%= truncate(a.description, :length => 150) %></p>
+                </div>
+                <div class="col-md-2 panel panel-right" style="background-color:#fff">
+                  <% if a.image.exists? %>
+                    <%= image_tag a.image.url %>
+                  <% end %>
                 </div>
               </div>
             <% end %>

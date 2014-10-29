@@ -20,6 +20,7 @@
 //= require jquery.flexslider-min.js
 //= require jquery.isotope.min.js
 //= require jquery.form.js
+//= require jquery.cookie.js
 //= require jquery.validate.min.js
 //= require jquery.magnific-popup.min.js
 //= require jquery.scrollTo-1.4.3.1-min.js

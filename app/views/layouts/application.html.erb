@@ -51,14 +51,15 @@
   <%= javascript_include_tag 'application' %>
   <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
   <script>
-
-  $(window).load(function() {
+  $(document).ready(function() {
     $(function() {
+      console.log('getting google stuff');
       var script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
           'callback=initialize';
       document.body.appendChild(script);
+      console.log('done getting google stuff');
     }); 
     
     (function(d, s, id) {

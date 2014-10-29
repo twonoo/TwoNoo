@@ -46,6 +46,7 @@ gem 'timezone'
 
 gem 'mailboxer'
 gem 'sidekiq'
+gem 'mandrill-api'
 gem 'acts_as_commentable'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
