@@ -1,3 +1,26 @@
+<style>
+@media(max-width: 767px)
+{
+  li.narrow>a, .navbar-nav>li>a
+  {
+    font-size:xx-small;
+  }
+  li.wide
+  {
+    display:none;
+  }
+}
+@media(min-width: 768px)
+{
+  li.narrow
+  {
+    display:none;
+  }
+  li.wide
+  {
+  }
+}
+</style>
 <ul class="nav navbar-nav pull-right">
   <% if request.original_url == root_url %>
     <li><%= link_to 'Invite Friends', '#', id: 'invite', style: 'background-color:#49AFCD; color:#FFF', title: "Earn referral credit!", rel: "tooltip" %></li>
@@ -5,25 +28,31 @@
         $('#invite').bind('click', function(){$('#invite_people_form').modal('show');});
       </script>
   <% else %>
-    <li><%= link_to 'Home', root_path, :style => 'margin-left:5px'  %></li>
+  	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#49AFCD; color:#FFF' %></li>
+    <li><%= link_to 'Home', root_path  %></li>
   <% end %>
   <li><%= link_to "Feedback", '#', id: 'feedback' %></li>
   <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
 
-  <li class="dropdown" id="notifications_menu">
+  <li class="dropdown wide" id="notifications_menu">
     <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
-      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span></a>
+      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span>
+    </a>
     <ul class="dropdown-menu" id="notifications_dropdown" style="width:300px;">
       <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |notif| %>
         <b><%=notif.subject%>:</b> <%=notif.body.html_safe%>
-      <li class="divider"></li>
-<% end %>
+        <li class="divider"></li>
+      <% end %>
     </ul>
   </li>
 
 
-  <li class="dropdown" id="messags_menu">
-    <a href="<%=conversations_path%>" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Messages <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
+  <li class="narrow">
+    <a href="<%=conversations_path%>">Conversations <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
+  </li>
+
+  <li class="dropdown wide" id="messags_menu">
+    <a href="<%=conversations_path%>" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Conversations <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
     <ul class="dropdown-menu" id="messages_dropdown" style="width:300px">
       <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
         <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
@@ -40,8 +69,8 @@
     </ul>
   </li>
 
-  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= profile_img_small(current_user) %> <%= current_user.profile.first_name %><b class="caret"></b></a>
-    <ul class="dropdown-menu">
+  <li class="dropdown wide"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= profile_img_small(current_user) %> <%= current_user.profile.first_name %><b class="caret"></b></a>
+    <ul class="dropdown-menu wide">
       <li><%= link_to 'My Profile', profile_path(current_user) %></li>
       <li><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>
       <li><%= link_to 'Settings', profile_edit_path %></li>
@@ -49,4 +78,10 @@
       <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
     </ul>
   </li>
+
+  <li class="narrow"><%= link_to 'My Profile', profile_path(current_user) %></li>
+  <li class="narrow"><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>
+  <li class="narrow"><%= link_to 'Settings', profile_edit_path %></li>
+  <li class="divider narrow"></li>
+  <li class="narrow"><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
 </ul>

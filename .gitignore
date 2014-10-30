@@ -32,4 +32,5 @@ doc/
 
 
 config/database.yml
+/sidekiq.pid
 sidekiq.pid
