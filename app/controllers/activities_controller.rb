@@ -82,7 +82,7 @@ class ActivitiesController < ApplicationController
       @rsvps = Rsvp.where(activity_id: @activity.id).all
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
-        if !@user.nil?
+        unless @user.nil? || (current_user == @user)
           @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
           UserMailer.delay.attending_activity_update(@user, @activity)

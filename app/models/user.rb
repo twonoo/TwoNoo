@@ -56,20 +56,22 @@ class User < ActiveRecord::Base
   end
 
   def self.from_omniauth(auth)
-  where(auth.slice(:provider, :uid)).first_or_create do |user|
-    user.email = auth.info.email
-    user.password = Devise.friendly_token[0,20]
-    # Begin Profile Build
-    user.build_profile
-    user.profile.first_name = auth.info.first_name
-    user.profile.last_name = auth.info.last_name
-    if auth.extra.raw_info.gender == "male"
-      user.profile.gender = 0
-    else
-      user.profile.gender = 1
-    end
-    oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
-    user.profile.profile_picture = oauth_picture
+    where(auth.slice(:provider, :uid)).first_or_create do |user|
+      user.skip_confirmation!
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0,20]
+      # Begin Profile Build
+      user.build_profile
+      user.profile.first_name = auth.info.first_name
+      user.profile.last_name = auth.info.last_name
+      if auth.extra.raw_info.gender == "male"
+        user.profile.gender = 0
+      else
+        user.profile.gender = 1
+      end
+      oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
+      user.profile.profile_picture = oauth_picture
+      logger.info "created account for facebook user: #{user.email}"
     end
   end
 
