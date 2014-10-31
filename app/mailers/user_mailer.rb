@@ -110,8 +110,8 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
      :merge_language=>"mailchimp",
      :global_merge_vars=>[
       {"name"=>"INVITER", "content"=>user.name},
-      {"name"=>"ACTIVITY_ID", "content"=>user.name},
-      {"name"=>"ACTIVITY_NAME", "content"=>user.name},
+      {"name"=>"ACTIVITY_ID", "content"=>activity.id},
+      {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
       {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
       {"name"=>"REFERRER", "content"=>@user.id.to_s}
       ] 

@@ -187,16 +187,20 @@ $(document).ready(function() {
 
 });
 
+var minmargintop = -150
 $(document).ready(function() {
   var height = $(window).height() - 350; 
   $("#home").height(height);
-  $("#search-group").css('margin-top', ((height - 375) / 2))
+
+  var margintop = (height - 362);
+  $("#search-group").css('margin-top', (margintop >= minmargintop)?((margintop <= -30)?margintop:-30):minmargintop)
 });
 
 window.onresize = function() {
  var height = $(window).height() - 350; 
   $("#home").height(height);
-  $("#search-group").css('margin-top', ((height - 375) / 2))
+  var margintop = (height - 362);
+  $("#search-group").css('margin-top', (margintop >= minmargintop)?((margintop <= -30)?margintop:-30):minmargintop)
 }
 
 var bsubmit = false;
