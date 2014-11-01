@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-2 panel panel-right" style="background-color:#fff">
                   <% if a.image.exists? %>
-                    <%= image_tag a.image.url %>
+                    <%= image_tag a.image.url, style: 'max-height:150px' %>
                   <% end %>
                 </div>
               </div>
