@@ -137,7 +137,9 @@
         </div>
         <% for type in ActivityType.all %>
         <div>
-          <%= check_box_tag "activity[activity_type_ids][]", type.id %>
+          <%= check_box_tag "activity[activity_type_ids][]", type.id, (@activity.activity_type_ids.include?(type.id)?true:false) %>
+          <% logger.info "type.id: #{type.id}"
+              logger.info "included: #{@activity.activity_type_ids.include? type.id}" %>
           <%= type.activity_type %>
         </div>
         <% end %>

@@ -12,6 +12,7 @@
           <% if current_user %>
             <% if @organizer == current_user %>
             <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+            <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
             <% end %>
             <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success btn-sm pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger btn-sm pull-right') %>
             <!-- share buttons -->

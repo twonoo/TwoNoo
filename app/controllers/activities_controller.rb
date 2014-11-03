@@ -61,39 +61,6 @@ class ActivitiesController < ApplicationController
     UserMailer.delay.activity_invite(current_user, @activity, params[:emails])
   end
 
-
-  def update
-    @activity = Activity.find(params[:id])
-    params = activity_params
-    @activity.activity_type_ids=params[:activity_type_ids]
-
-    dt_invalid = false
-    begin
-      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
-    rescue
-      dt_invalid = true
-      params[:datetime] = Time.now
-    end
-
-    @activity.update(params)
-
-    if @activity.save
-      # Get the rsvp'd users
-      @rsvps = Rsvp.where(activity_id: @activity.id).all
-      @rsvps.each do |rsvp|
-        @user = User.find_by_id(rsvp.user_id)
-        unless @user.nil? || (current_user == @user)
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
-
-          UserMailer.delay.attending_activity_update(@user, @activity)
-        end
-      end
-      redirect_to @activity
-    else
-      render :edit
-    end
-  end
-
   def cancel
     @activity = Activity.find(params[:id])
     if @activity.cancelled
@@ -117,6 +84,45 @@ class ActivitiesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def comment
+    @activity = Activity.find(params[:id])
+    @comment = @activity.comments.create
+    @comment.user = current_user
+    @comment.comment = params[:comment]
+    if @comment.save
+      #Notify all users either organizeing or attending this activity that a comment was added
+      # Get the rsvp'd users
+      @rsvp_ids = Rsvp.uniq.where(activity_id: @activity.id).pluck(:user_id)
+      @rsvp_ids.each do |rsvp_id|
+        @user = User.find_by_id(rsvp_id)
+        if !@user.nil? && @user != current_user
+          @user.notify("#{current_user.name} commented on an activity", "#{current_user.name} has commentd on an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
+        end
+      end
+
+      @organizer = User.find(@activity.user_id)
+      if current_user != @organizer
+          UserMailer.delay.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment)
+      end
+    end
+
+    redirect_to :back
+  end
+
+  def copy
+    ## Load the activity
+    old_activity = Activity.find_by_id(params[:id])
+
+    unless old_activity.nil?
+      @activity = old_activity.dup
+      @activity.activity_type_ids = old_activity.activity_type_ids
+      logger.info @activity.activity_type_ids
+    end
+    render :new
   end
 
   def create
@@ -185,32 +191,36 @@ class ActivitiesController < ApplicationController
     redirect_to request.referer
   end
 
-  def comment
+  def update
     @activity = Activity.find(params[:id])
-    @comment = @activity.comments.create
-    @comment.user = current_user
-    @comment.comment = params[:comment]
-    if @comment.save
-      #Notify all users either organizeing or attending this activity that a comment was added
-      # Get the rsvp'd users
-      @rsvp_ids = Rsvp.uniq.where(activity_id: @activity.id).pluck(:user_id)
-      @rsvp_ids.each do |rsvp_id|
-        @user = User.find_by_id(rsvp_id)
-        if !@user.nil? && @user != current_user
-          @user.notify("#{current_user.name} commented on an activity", "#{current_user.name} has commentd on an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+    params = activity_params
+    @activity.activity_type_ids=params[:activity_type_ids]
 
-          UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
-        end
-      end
-
-      @organizer = User.find(@activity.user_id)
-      if current_user != @organizer
-          UserMailer.delay.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment)
-      end
-	#Notify all users that have commented on this acctivity that a comment was added
+    dt_invalid = false
+    begin
+      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+    rescue
+      dt_invalid = true
+      params[:datetime] = Time.now
     end
 
-    redirect_to :back
+    @activity.update(params)
+
+    if @activity.save
+      # Get the rsvp'd users
+      @rsvps = Rsvp.where(activity_id: @activity.id).all
+      @rsvps.each do |rsvp|
+        @user = User.find_by_id(rsvp.user_id)
+        unless @user.nil? || (current_user == @user)
+          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.delay.attending_activity_update(@user, @activity)
+        end
+      end
+      redirect_to @activity
+    else
+      render :edit
+    end
   end
 
   private
