@@ -2,7 +2,8 @@ Rails.application.routes.draw do
 
   get 'geocode/search'
   get 'geocode/searchCityState'
-  post 'search' => 'welcome#search', as: :search
+  #post 'search' => 'welcome#search', as: :search
+  get 'search' => 'welcome#search', as: :search
   get 'alerts/index'
   get 'alerts' => 'alerts#index', as: :alerts
   post 'alerts/create' => 'alerts#create', as: :alert_create
