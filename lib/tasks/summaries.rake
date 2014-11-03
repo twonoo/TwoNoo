@@ -67,7 +67,7 @@ namespace :summaries do
         puts "processing recommended follower #{recommended_follower.recommended_follower_id}"
         # verify they are not already following each other
 
-        follow_relationship = FollowRelationship.where('followed_id = ?', user_id).where('follower_id = ?', recommended_follower.recommended_follower_id).first
+        follow_relationship = FollowRelationship.where('follower_id = ?', user_id).where('followed_id = ?', recommended_follower.recommended_follower_id).first
 
         if follow_relationship.nil?
           puts "recommending #{recommended_follower.recommended_follower_id} follows #{user_id}"
@@ -77,13 +77,16 @@ namespace :summaries do
 
           unless recommended_user.nil?
             # for each recommended follower generate a table row with the user profile icon and name
-            html = html + "<tr><td>#{profile_img_small(recommended_user)}</td><td><a href=\"https://wwww.twonoo.com/profile/#{recommended_user.id}\">#{recommended_user.name}</a></td></tr>"
+            html = html + "<tr><td>#{profile_img_small(recommended_user)}</td><td><a href=\"https://www.twonoo.com/profile/#{recommended_user.id}\">#{recommended_user.name}</a></td><td><a href=\"https://www.twonoo.com/users/follow/#{recommended_user.id}\" style='display: inline; padding: .2em .6em .3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: #5bc0de;'>Follow</a></td></tr>"
+
+            recommended_follower.recommended_at = Time.now
+            recommended_follower.save
           else
             puts "user doesn't exist"
           end
 
         else
-          puts "#{follow_relationship.follower_id} is already following #{user_id}"
+          puts "#{user_id} is already following #{recommended_follower.recommended_follower_id}"
         end
 
       end
@@ -96,7 +99,8 @@ namespace :summaries do
         user = User.find_by_id(user_id)
 
         unless user.nil?
-          mandrill_to = [{:email => 'skeef15@gmail.com', :type => 'to'}]
+          #mandrill_to = [{:email => 'skeefe15@gmail.com', :type => 'to'}]
+          mandrill_to = [{:email => user.email, :type => 'to'}]
           m = Mandrill::API.new
           t = 'recommended_followers'
           tc = [{"name" => "inviter", "content" => "TwoNoo Testerino"}]
@@ -127,7 +131,7 @@ namespace :summaries do
 
   def profile_img_small(user)
     if user.profile.profile_picture_file_name
-      "<img src='#{user.profile.profile_picture.url(:thumb)}' style=\"-moz-border-radius: 50px/50px; -webkit-border-radius: 50px 50px; border-radius: 50px/50px; border:solid 0px #FFF; width:30px;\"></img>".html_safe
+      "<img src='https://www.twonoo.com#{user.profile.profile_picture.url(:thumb)}' style=\"-moz-border-radius: 50px/50px; -webkit-border-radius: 50px 50px; border-radius: 50px/50px; border:solid 0px #FFF; width:30px;\"></img>".html_safe
     else
       "<span style='padding:5px 9px 5px 9px; background-color:#4DBFF5; font-size:20px; color:#FFFFFF; line-height:50px; -moz-border-radius: 50px/50px; -webkit-border-radius: 50px 50px; border-radius: 50px/50px; border:solid 1px #FFF; width:100px; margin:10px;'>#{user.profile.first_name[0] + user.profile.last_name[0]}</span>".html_safe
     end
