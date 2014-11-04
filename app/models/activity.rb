@@ -107,7 +107,7 @@ class Activity < ActiveRecord::Base
         .joins(:activity_types)
         .group('rsvps.activity_id')
         .order('rsvp_count DESC')
-        .limit(4)
+        .limit(16)
         results["#{a.id}"] = result
       else
         result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
@@ -118,7 +118,7 @@ class Activity < ActiveRecord::Base
         .joins(:activity_types)
         .group('rsvps.activity_id')
         .order('rsvp_count DESC')
-        .limit(4)
+        .limit(16)
         results["#{a.id}"] = result
       end
 
@@ -134,7 +134,7 @@ class Activity < ActiveRecord::Base
       .joins(:activity_types)
       .group('rsvps.activity_id')
       .order('rsvp_count DESC')
-      .limit(4)
+      .limit(16)
       results['top'] = top
     else
       top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
@@ -144,11 +144,9 @@ class Activity < ActiveRecord::Base
       .joins(:activity_types)
       .group('rsvps.activity_id')
       .order('rsvp_count DESC')
-      .limit(4)
+      .limit(16)
       results['top'] = top
     end
-
-
 
 		return results
 	end
