@@ -1,45 +1,47 @@
-<div class="container clearfix" style="padding:0">
-  <div class="row">
-    <nav id="filter" class="col-md-12 text-center">
-      <ul>
-        <li><a href="" class="current btn btn-sm" data-filter=".top">Top</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".1">Sports</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".2">Arts</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".3">Business</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".4">Outdoors</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".5">Eat & Drink</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".6">Nightlife</a></li>
-        <li><a href=""  class="btn btn-sm" data-filter=".7">Community</a></li>
-      </ul>
-    </nav>
-    <div class="portfolio-items  isotopeWrapper clearfix imgHover" id="4">
-    <% @trending.each do |k,v| %>
-      <% v.each do |t| %>
-      <article class="col-sm-3 isotopeItem <%= k %>">
-        <section class="imgWrapper">
-          <% if t.image_file_name %>
-            <%= image_tag t.image.url(:trending), class: 'img-responsive', style: "height:208px;width:270px; background-color:#444" %>
-          <% else %>
-            <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
-          <% end %>
-          <p style="position:absolute;top:137px; background-color:rgba(0, 0, 0, 0.8); width:270px;color:white; font-size:25px; line-height:70px; padding-left:10px"><%= t.datetime.strftime('%b %e') %></p>
-        </section>
-        <div class="mediaHover">
-          <div class="mask"></div>
-          <div class="iconLinks">
-            <% if current_user && t.user_id != current_user.id && Rsvp.user_rsvp?(t, current_user).blank? %>
-              <%= link_to "<i class='icon-check iconRounded iconBig'></i><span>RSVP</span>".html_safe, rsvp_path(t.id, current_user.id) %>
+<div style="background-image: url(<%= asset_url 'backgrounds/crossword.png' %>); margin-top:-10px">
+  <div class="container clearfix" style="padding:0">
+    <div class="row">
+      <nav id="filter" class="col-md-12 text-center">
+        <ul>
+          <li><a href="" class="current btn btn-sm" data-filter=".top">Top</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".1">Sports</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".2">Arts</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".3">Business</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".4">Outdoors</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".5">Eat & Drink</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".6">Nightlife</a></li>
+          <li><a href=""  class="btn btn-sm" data-filter=".7">Community</a></li>
+        </ul>
+      </nav>
+      <div class="portfolio-items  isotopeWrapper clearfix imgHover" id="4">
+      <% @trending.each do |k,v| %>
+        <% v.each do |t| %>
+        <article class="col-sm-3 isotopeItem <%= k %>">
+          <section class="imgWrapper">
+            <% if t.image_file_name %>
+              <%= image_tag t.image.url(:trending), class: 'img-responsive', style: "height:208px;width:270px; background-color:#444" %>
+            <% else %>
+              <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
             <% end %>
-            <%= link_to "<i class='icon-search iconRounded iconBig'></i><span>VIEW</span>".html_safe, activity_path(t.id) %>
-            </a>
+            <p style="position:absolute;top:137px; background-color:rgba(0, 0, 0, 0.8); width:270px;color:white; font-size:25px; line-height:70px; padding-left:10px"><%= t.datetime.strftime('%b %e') %></p>
+          </section>
+          <div class="mediaHover">
+            <div class="mask"></div>
+            <div class="iconLinks">
+              <% if current_user && t.user_id != current_user.id && Rsvp.user_rsvp?(t, current_user).blank? %>
+                <%= link_to "<i class='icon-check iconRounded iconBig'></i><span>RSVP</span>".html_safe, rsvp_path(t.id, current_user.id) %>
+              <% end %>
+              <%= link_to "<i class='icon-search iconRounded iconBig'></i><span>VIEW</span>".html_safe, activity_path(t.id) %>
+              </a>
+            </div>
           </div>
-        </div>
-        <section class="boxContent">
-          <%= link_to t.activity_name, activity_path(t.id) %>
-        </section>
-      </article>
+          <section class="boxContent">
+            <%= link_to t.activity_name, activity_path(t.id) %>
+          </section>
+        </article>
+        <% end %>
       <% end %>
-    <% end %>
+      </div>
     </div>
   </div>
 </div>
