@@ -36,7 +36,7 @@ namespace :summaries do
 	end
   
 	task :new_following_activities_weekly => :environment do
-    new_following_activites_summary(3, 7.day)
+    new_following_activities_summary(3, 7.day)
 	end
 
 	task :new_messages_daily => :environment do
@@ -408,7 +408,7 @@ namespace :summaries do
 
           # for each recommended follower generate a table row with the activity image and name
           html = html + "<tr>"
-          html = html + "<td>#{profile_img_small(rsvp_user)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{rsvp_user.name}</a></td>"
+          html = html + "<td>#{profile_img_small(rsvp_user)}</td><td><a href=\"https://www.twonoo.com/profile/#{rsvp_user.id}\">#{rsvp_user.name}</a></td>"
           html = html + "<td>is going to: #{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td>"
           html = html + "</tr>"
 
