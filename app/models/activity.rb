@@ -125,7 +125,9 @@ class Activity < ActiveRecord::Base
       result2 = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
         .select('activities.*, COUNT(rsvps.id) as rsvp_count')
         .where(cancelled: false)
-      result2 = result2.where('activities.id not in (?)', resultIds.pluck('id')) unless resultIds.nil?
+      unless results["#{a.id}"].count
+        result2 = result2.where('activities.id not in (?)', resultIds.pluck('id'))
+      end
       result2 = result2.where(activity_types: {id: a.id})
         .joins(:rsvps)
         .joins(:activity_types)
@@ -142,6 +144,7 @@ class Activity < ActiveRecord::Base
 		# Calculate Top Trending
     results['top'] = []
     if in_network
+logger.info "get some"
       top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
@@ -161,10 +164,15 @@ class Activity < ActiveRecord::Base
       end
     end
 
+logger.info "get some more"
+logger.info "count: #{results['top'].count}"
     top = where('datetime BETWEEN ? AND ?', Time.now, Date.today + 15)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
-    top = top.where('activities.id not in (?)', topIds.pluck('id')) unless topIds.nil?
+    unless results['top'].count
+      top = top.where('activities.id not in (?)', topIds.pluck('id'))
+    end
+
     top = top.joins(:rsvps)
       .group('rsvps.activity_id')
       .order('rsvp_count DESC')

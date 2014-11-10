@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 
   has_many :activities
 
+	before_save :geocode_ip
   after_create :initial_credits
 
   default_scope { includes(:profile, :activities) }
@@ -99,6 +100,25 @@ class User < ActiveRecord::Base
 
   def name
     return self.profile.first_name + ' ' + self.profile.last_name
+  end
+
+  def geocode_ip
+    if self.profile.city.nil? || self.profile.state.nil?
+      logger.info "IP Address: #{self.current_sign_in_ip}"
+      results = Geocoder.search(self.current_sign_in_ip)
+      logger.info "results: #{results}"
+
+      result = results.first
+      unless result.nil?
+        logger.info "city: #{result.city}"
+        logger.info "state: #{result.state_code}"
+
+        if result.city.present? and result.state_code.present?
+          self.profile.city = result.city
+          self.profile.state = result.state_code
+        end
+      end
+    end
   end
 
 end

@@ -160,9 +160,15 @@
 
     // Get browser location and set selectors
     function getLocation() {
-      if (navigator.geolocation) {
+      if (($.cookie("city")) && ($.cookie("state")))
+      {
+        $('#activity_city').val($.cookie("city"));
+        $('#activity_state').val($.cookie("state"));
+      }
+      else if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(getCity, getCityError);
-      } else {
+      }
+      else {
         $('#activity_city').val('Denver');
         $('#activity_state').val('CO');
       }

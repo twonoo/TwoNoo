@@ -19,7 +19,7 @@ class ActivitiesController < ApplicationController
               logger.info "have the code: " + params[:code]
               data = {
                 :code => params[:code],
-                :redirect_uri => 'http://dev-steve.twonoo.com/auth/google_oauth2/callback',
+                :redirect_uri => google_cal_callback_url,
                 :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
                 :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
                 :grant_type => 'authorization_code'
@@ -27,7 +27,7 @@ class ActivitiesController < ApplicationController
             elsif user.gcal_refresh_token.present?
               logger.info "refresh token present"
               data = {
-                :redirect_uri => 'http://dev-steve.twonoo.com/auth/google_oauth2/callback',
+                :redirect_uri => google_cal_callback_url,
                 :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
                 :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
                 :refresh_token => user.gcal_refresh_token,

@@ -52,6 +52,7 @@ function trending(lat, lng, city, state)
   $('#lat').val(lat);
   $('#lng').val(lng);
   console.log("city, state: " + city + ", " + state);
+  console.log("lat, lng: " + lat + ", " + lng);
 
   $('#search-terms').show();
 
@@ -63,7 +64,9 @@ function trending(lat, lng, city, state)
       $('#trending').html(html);
       trending_load();
     },
-    error: function(e) {}
+    error: function(e) {
+      console.log("error: " + e);
+    }
   });
 
 } // end function trending

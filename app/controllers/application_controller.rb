@@ -19,6 +19,21 @@ class ApplicationController < ActionController::Base
 
   def set_cookies
     cookies[:referrer] = { value: params[:referrer], expires: 1.day.from_now } if params[:referrer]
+
+    unless cookies[:lat].nil? && cookies[:lng].nil && cookies[:city].nil? && cookies[:state].nil?
+      logger.info "No geocode cookies!"
+      if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?)
+        cookies[:city] = { value: current_user.profile.city, expires: 365.day.from_now }
+        cookies[:state] = { value: current_user.profile.state, expires: 365.day.from_now }
+
+        geocode = Geocode.where(city: current_user.profile.city).where(state: current_user.profile.state).first
+
+        unless geocode.nil?
+          cookies[:lat] = { value: geocode.latitude, expires: 365.day.from_now }
+          cookies[:lng] = { value: geocode.longitude, expires: 365.day.from_now }
+        end
+      end
+    end
   end
 
   protected

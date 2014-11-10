@@ -28,6 +28,7 @@ class WelcomeController < ApplicationController
       search_coordinates = [params[:lat].to_f, params[:lng].to_f]
       logger.info "using passed in coords"
     else
+      # Need to have this look at the GeoCodecache
       search_location = Geocoder.search(params[:location]).first
       search_coordinates = search_location.coordinates
       lat = search_location.latitude
@@ -97,6 +98,19 @@ class WelcomeController < ApplicationController
     @activities = @activities.order('datetime ASC')
 
     @showCreateAlert = false
+
+    if @activities.blank?
+      @showCreateAlert = true
+
+      @activities = Activity.all
+      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+      @activities = @activities.where('cancelled = ?', false)
+      unless @outsideSupportedArea
+        @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
+      end
+      @activities = @activities.order('datetime ASC')
+    end
 
     if @activities.blank?
       @showCreateAlert = true

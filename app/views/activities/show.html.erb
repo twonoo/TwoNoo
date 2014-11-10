@@ -54,7 +54,7 @@
             <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %><br/>
             <font size="1">
             Add to:
-            <a id='eventdate'>Google Calendar</a> | 
+            <a id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
             <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>
             </font>
             <script>

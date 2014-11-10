@@ -59,8 +59,20 @@
             miles of
             <input type="hidden" id="lat" name="lat" value="39.737567"></input>
             <input type="hidden" id="lng" name="lng" value="-104.9847179"></input>
-            <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;" value="Denver, CO" placeholder="City or ZIP">
-            <a id="selection" class="selection search-term-links">Denver, CO</a> </div>
+            <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;"
+            <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+              value="<%=current_user.profile.city%>, <%=current_user.profile.state%>"
+            <% else %>
+              value="Denver, CO"
+            <% end %>
+            placeholder="City or ZIP">
+            <a id="selection" class="selection search-term-links">
+              <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+                <%=current_user.profile.city%>, <%=current_user.profile.state%>
+              <% else %>
+                Denver, CO
+              <% end %>
+            </a> </div>
             <div class="box-center" style="width:100%;text-align:center;padding-top:30px;white-space:nowrap;">
               <div class="fb-like" data-href="https://www.facebook.com/pages/Twonoo/652492941462596" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"
               style="padding: 0px; vertical-align: top; height: 24px;"></div>

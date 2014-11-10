@@ -125,7 +125,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def new_follower(user, follower)
     @user = user
 
-    if (@user.profile.notification_setting.new_follower)
+    if (@user.profile.notification_setting.new_follower == 1)
 #      @follower = follower
 #      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
 #      mail(to: @user.email, subject: "#{@follower.name} is now following you.")
@@ -155,7 +155,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def new_message(user, sender, message)
     @user = user
 
-    if (@user.profile.notification_setting.new_message)
+    if (@user.profile.notification_setting.new_message == 1)
 #      @message = message
 #      @sender = sender
 #      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
@@ -187,7 +187,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def new_rsvp(user, attendee, activity)
     @user = user
 
-    if (@user.profile.notification_setting.new_rsvp)
+    if (@user.profile.notification_setting.new_rsvp == 1)
 #      @attendee = attendee
 #      @activity = activity
 #      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
@@ -220,7 +220,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def new_following_activity(user, organizer, activity)
     @user = user
 
-    if (@user.profile.notification_setting.new_following_activity)
+    if (@user.profile.notification_setting.new_following_activity == 1)
 #      @organizer = organizer
 #      @activity = activity
 #      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
@@ -254,7 +254,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def attending_activity_update(user, activity)
     @user = user
 
-    if (@user.profile.notification_setting.attending_activity_update)
+    if (@user.profile.notification_setting.attending_activity_update == 1)
 #      @activity = activity
 #      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
 #      mail(to: @user.email, subject: "#{@activity.activity_name} has been updated on TwoNoo!")
@@ -285,7 +285,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def comment_on_owned_activity(user, activity, commenter, comment)
     @user = user
 
-    if (@user.profile.notification_setting.comment_on_owned_activity)
+    if (@user.profile.notification_setting.comment_on_owned_activity == 1)
 #      @activity = activity
 #      @commenter = commenter
 #      @comment = comment
@@ -320,7 +320,7 @@ ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   def comment_on_attending_activity(user, activity, commenter, comment)
     @user = user
 
-    if (@user.profile.notification_setting.comment_on_attending_activity)
+    if (@user.profile.notification_setting.comment_on_attending_activity == 1)
 #      @activity = activity
 #      @commenter = commenter
 #      @comment = comment
