@@ -83,12 +83,15 @@ Rails.application.routes.draw do
 
   post 'activities/invite_people/:id' => 'activities#invite_people', as: :invite_people
   post 'activities/comment' => 'activities#comment', as: :activity_comment
+  get 'activities/add_to_gcal/:id' => 'activities#add_to_gcal', as: :google_calendar
+  match "/auth/:provider/callback" => "activities#add_to_gcal", via: [:get, :post], as: :google_cal_callback
 
 
   resources :activities
   resources :credits
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
 
   resources :conversations, only: [:index, :show, :new, :create] do
     member do

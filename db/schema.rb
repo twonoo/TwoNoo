@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102005613) do
+ActiveRecord::Schema.define(version: 20141108015331) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -145,13 +145,13 @@ ActiveRecord::Schema.define(version: 20141102005613) do
 
   create_table "notification_settings", force: true do |t|
     t.integer  "profile_id"
-    t.boolean  "new_follower",                  default: true
-    t.boolean  "new_message",                   default: true
-    t.boolean  "new_rsvp",                      default: true
-    t.boolean  "new_following_activity",        default: true
-    t.boolean  "attending_activity_update",     default: true
-    t.boolean  "comment_on_owned_activity",     default: true
-    t.boolean  "comment_on_attending_activity", default: true
+    t.integer  "new_follower",                  default: 1
+    t.integer  "new_message",                   default: 1
+    t.integer  "new_rsvp",                      default: 1
+    t.integer  "new_following_activity",        default: 1
+    t.integer  "attending_activity_update",     default: 1
+    t.integer  "comment_on_owned_activity",     default: 1
+    t.integer  "comment_on_attending_activity", default: 1
     t.boolean  "weekly_summary",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -240,6 +240,10 @@ ActiveRecord::Schema.define(version: 20141102005613) do
     t.string   "last_search_location"
     t.string   "last_search_lat"
     t.string   "last_search_lon"
+    t.string   "gcal_token"
+    t.datetime "gcal_token_issued_at"
+    t.integer  "gcal_token_expires_in"
+    t.string   "gcal_refresh_token"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

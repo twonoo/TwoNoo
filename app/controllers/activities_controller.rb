@@ -2,6 +2,101 @@ class ActivitiesController < ApplicationController
   require 'mandrill'
   before_filter :authenticate_user!, :except => [:index, :search, :show]
 
+  def add_to_gcal
+    cookies[:activityid] = params[:id] if params[:id].present?
+    user = current_user
+    access_token = nil
+
+    # If we are gettign the callback from the authorization request or we have a refresh token then get a new authorization token
+    # do we need to ask the user for authorization?
+    if params[:code].present? || (user.gcal_token.present? && ((user.gcal_token_issued_at + user.gcal_token_expires_in) > Time.now())) || user.gcal_refresh_token.present?
+      logger.info "do not need authorization"
+      #Do we need to get an access token
+      if params[:code].present? || ((user.gcal_token_issued_at + user.gcal_token_expires_in) < Time.now())
+        if params[:code].present?
+          logger.info "have the code: " + params[:code]
+          data = {
+            :code => params[:code],
+            :redirect_uri => 'http://dev-steve.twonoo.com/auth/google_oauth2/callback',
+            :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
+            :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
+            :grant_type => 'authorization_code'
+          }
+        elsif user.gcal_refresh_token.present?
+          logger.info "refresh token present"
+          data = {
+            :redirect_uri => 'http://dev-steve.twonoo.com/auth/google_oauth2/callback',
+            :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
+            :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
+            :refresh_token => user.gcal_refresh_token,
+            :grant_type => 'refresh_token'
+          }
+        else
+          redirect_to '/users/auth/google_oauth2'
+        end
+
+        @response = ActiveSupport::JSON.decode(RestClient.post("https://accounts.google.com/o/oauth2/token", data))
+        logger.info "response: " + @response.to_s
+
+        if @response["access_token"].present?
+          logger.info "access token present"
+          # Save your token
+          access_token = @response["access_token"]
+          expires_in = @response["expires_in"]
+          refresh_token = @response["refresh_token"]
+
+          # Save the tokens to the DB
+          user.gcal_token = access_token
+          user.gcal_token_issued_at = Time.now()
+          user.gcal_token_expires_in = expires_in
+          user.gcal_refresh_token = refresh_token
+          user.save!
+        else
+          logger.info "no access token!!!"
+          # we have nothing and we need to tell the user about it
+        end
+      else
+        access_token = user.gcal_token
+      end
+
+      # Can I make the call to the calendar as a JSON request?
+      # doesnt' matter because we are in a new window!
+      activity = Activity.find(cookies[:activityid])
+
+      logger.info "datetime: " + activity.datetime.to_s
+      logger.info "datetime: " + activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')
+      logger.info "datetime: " + activity.datetime.to_datetime.rfc3339
+      logger.info "timezone: " + activity.tz
+      
+      Time.zone = activity.tz
+      logger.info "utc: " + Time.zone.formatted_offset(colon: false)
+
+      event = {
+        'summary' => activity.activity_name,
+        'description' => activity.description,
+        'location' => "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}",
+        'start' => {
+          'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{Time.zone.formatted_offset}"
+        },
+        'end' => {
+          'dateTime' => (activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S') + Time.zone.formatted_offset
+        }
+      }
+
+      client = Google::APIClient.new
+      client.authorization.access_token = access_token
+      service = client.discovered_api('calendar', 'v3')
+      @result = client.execute(:api_method => service.events.insert,
+                              :parameters => {'calendarId' => 'primary'},
+                              :body => JSON.dump(event),
+                              :headers => {'Content-Type' => 'application/json'})
+
+      logger.info @result.data.id
+    else
+      redirect_to '/users/auth/google_oauth2'
+    end
+  end
+
   def attending
     @rsvps = Rsvp.where(user_id: params[:id])
   end

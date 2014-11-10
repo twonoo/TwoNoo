@@ -54,7 +54,12 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     acts_as_commentable (4.0.2)
+    addressable (2.3.6)
     arel (5.0.1.20140414130214)
+    autoparse (0.3.3)
+      addressable (>= 2.3.1)
+      extlib (>= 0.9.15)
+      multi_json (>= 1.0.0)
     bcrypt (3.1.7)
     bootstrap-sass (3.1.1.1)
       sass (~> 3.2)
@@ -98,6 +103,7 @@ GEM
       ffi (>= 1.3.0)
     excon (0.40.0)
     execjs (2.2.2)
+    extlib (0.9.16)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.9.1)
@@ -110,6 +116,17 @@ GEM
     geokit-rails (2.0.1)
       geokit (~> 1.5)
       rails (>= 3.0)
+    google-api-client (0.7.1)
+      addressable (>= 2.3.2)
+      autoparse (>= 0.3.3)
+      extlib (>= 0.9.15)
+      faraday (>= 0.9.0)
+      jwt (>= 0.1.5)
+      launchy (>= 2.1.1)
+      multi_json (>= 1.0.0)
+      retriable (>= 1.4)
+      signet (>= 0.5.0)
+      uuidtools (>= 2.1.0)
     hashie (3.3.1)
     hike (1.2.3)
     i18n (0.6.11)
@@ -121,6 +138,8 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     jwt (1.0.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     libv8 (3.16.14.7)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -153,6 +172,9 @@ GEM
       rack (~> 1.0)
     omniauth-facebook (2.0.0)
       omniauth-oauth2 (~> 1.2)
+    omniauth-google-oauth2 (0.2.6)
+      omniauth (> 1.0)
+      omniauth-oauth2 (~> 1.1)
     omniauth-oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       multi_json (~> 1.3)
@@ -197,6 +219,7 @@ GEM
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    retriable (1.4.1)
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -212,6 +235,11 @@ GEM
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
+    signet (0.5.1)
+      addressable (>= 2.2.3)
+      faraday (>= 0.9.0.rc5)
+      jwt (>= 0.1.5)
+      multi_json (>= 1.0.0)
     slop (3.6.0)
     spring (1.1.3)
     sprockets (2.11.0)
@@ -241,6 +269,7 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uuidtools (2.1.5)
     warden (1.2.3)
       rack (>= 1.0)
 
@@ -258,6 +287,7 @@ DEPENDENCIES
   geoip2!
   geokit
   geokit-rails
+  google-api-client
   jbuilder (~> 2.0)
   jquery-rails
   mailboxer
@@ -266,9 +296,11 @@ DEPENDENCIES
   mysql2
   newrelic_rpm
   omniauth-facebook
+  omniauth-google-oauth2
   paperclip (~> 4.1)
   quiet_assets
   rails (= 4.1.1)
+  rest-client
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   sidekiq

@@ -49,7 +49,17 @@
           </br>
 					<p class="lead"><%= @activity.description %>
 </p>
-					<p class="lead"><b><%= link_to @activity.location_name, @activity.website %></b></br><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></p>
+					<p class="lead">
+            <b><%= link_to @activity.location_name, @activity.website %></b></br>
+            <a id='eventdate'><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></a>
+            <script>
+              $(function(){
+                $('#eventdate').bind('click', function(){
+                  window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                });
+              });
+            </script>
+          </p>
 					<div id="map-canvas"></div>
           <div id="directions-from"
             style="position:relative;
@@ -69,6 +79,7 @@
               <%= render partial: 'comments', locals: {:activity => @activity} %>
             </div>
           </div>
+
 				</div>
 			</div>
 		</div>

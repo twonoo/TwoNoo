@@ -99,6 +99,17 @@ class WelcomeController < ApplicationController
     end
     @activities = @activities.order('datetime ASC')
 
+    @showCreateAlert = false
+    if @activity.blank?
+      @showCreateAlert = true
+      
+      @activities = Activity.all
+      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+      @activities = @activities.where('cancelled = ?', false)
+      @activities = @activities.order('datetime ASC')
+    end
+
 
     @users = Profile.terms(params[:terms])
 
@@ -117,9 +128,10 @@ class WelcomeController < ApplicationController
     end
 
     
-    if @activities.blank? && @users.blank? && @showNoResults
-      render 'noresults' 
-    end
+   
+#    if @activities.blank? && @users.blank? && @showNoResults
+#      render 'noresults' 
+#    end
   end
 
   def invite_people

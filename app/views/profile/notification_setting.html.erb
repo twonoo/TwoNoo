@@ -6,36 +6,67 @@
         <div class="panel-body">
           <div class="col-md-9">
             <h1>E-mail settings</h1>
-            <p>Check the notifications you want to get e-mails for.</p>
+            <p>Cconfigure your notification e-mail settings.</p>
           <%= form_for @notification_setting, html: {class: "form form-horizontal"} do |ns| %>
-            <div class="form-group" style="vertical-align: bottom;"> 
-              <%= ns.check_box :new_follower %> 
+          <table>
+            <tr>
+            <td width="100%">
               <%= ns.label 'New follower'  %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :new_message %> 
+            </td>
+            <td>
+              <%= ns.select :new_follower, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%> 
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'New message' %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :new_rsvp %> 
+            </td>
+            <td>
+              <%= ns.select :new_message, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'RSVPs to an activity you organized' %>
-            </div>
-            <div class="form-group"> 
-              <%= ns.check_box :new_following_activity %> 
+            </td>
+            <td>
+              <%= ns.select :new_rsvp, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'New activity from someone you follow' %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :attending_activity_update %>
+            </td>
+            <td>
+              <%= ns.select :new_following_activity, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'Update to an activity you are attending' %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :comment_on_owned_activity %>
+            </td>
+            <td>
+              <%= ns.select :attending_activity_update, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'New comment on an actvity you organized' %>
-            </div>
-            <div class="form-group">
-              <%= ns.check_box :comment_on_attending_activity %>
+            </td>
+            <td>
+              <%= ns.select :comment_on_owned_activity, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+            <tr>
+            <td width="100%">
               <%= ns.label 'New comment on an actvity you are attending' %>
-            </div>
+            </td>
+            <td>
+              <%= ns.select :comment_on_attending_activity, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+            </td>
+            </tr>
+
+            </table>
             <%= ns.submit 'Save', class: 'btn btn-primary' %> </div>
           <% end %>
         </div>
