@@ -4,7 +4,7 @@ class ActivitiesController < ApplicationController
 
   def add_to_gcal
     respond_to do |format|
-      format.html
+      format.html do
         cookies[:activityid] = params[:id] if params[:id].present?
         user = current_user
         access_token = nil
@@ -93,6 +93,7 @@ class ActivitiesController < ApplicationController
           redirect_to '/users/auth/google_oauth2'
           return
         end
+      end
       format.ics do
         activity = Activity.find_by_id(params[:id])
         event = Icalendar::Event.new
