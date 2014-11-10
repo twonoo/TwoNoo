@@ -102,6 +102,16 @@ class WelcomeController < ApplicationController
     if @activities.blank?
       @showCreateAlert = true
 
+      @activities = Activity.terms(params[:terms])
+      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
+      @activities = @activities.where('cancelled = ?', false)
+      @activities = @activities.order('datetime ASC')
+    end
+
+    if @activities.blank?
+      @showCreateAlert = true
+
       @activities = Activity.all
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
       @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
@@ -109,16 +119,6 @@ class WelcomeController < ApplicationController
       unless @outsideSupportedArea
         @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
       end
-      @activities = @activities.order('datetime ASC')
-    end
-
-    if @activities.blank?
-      @showCreateAlert = true
-
-      @activities = Activity.terms(params[:terms])
-      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
-      @activities = @activities.where('cancelled = ?', false)
       @activities = @activities.order('datetime ASC')
     end
 
