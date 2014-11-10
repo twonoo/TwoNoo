@@ -141,7 +141,8 @@ namespace :summaries do
       puts "user_id: #{user_id}"
 
       # select the activities where the user is rsvp'd
-      updated_activities = Activity.joins(:rsvps).where('rsvps.user_id = ?', user_id).where('activities.updated_at > ?', Time.now - time_period)
+      updated_activities = Activity.joins(:rsvps).where('rsvps.user_id = ?', user_id).where('activities.updated_at > ?', Time.now - time_period).
+        where("activities.user_id != ?", user_id)
 
       if updated_activities.present?
         user = User.find(user_id)
@@ -329,7 +330,7 @@ namespace :summaries do
         puts "processing new activities for #{user.name}"
 
         html = ''
-        updated_activities.each do |activity|
+        new_activities.each do |activity|
           puts "#{activity.activity_name} has been created!"
           organizer = User.find(activity.user_id)
 
@@ -392,7 +393,7 @@ namespace :summaries do
 
       # select the activities where the user is rsvp'd
       activities = Activity.where("user_id = ?", user_id).pluck("id")
-      new_rsvps = Rsvp.where('activity_id in (?)', activities).where('created_at > ?', Time.now - time_period)
+      new_rsvps = Rsvp.where('activity_id in (?)', activities).where('created_at > ?', Time.now - time_period).where("user_id != ?", user_id)
 
       if new_rsvps.present?
         user = User.find(user_id)

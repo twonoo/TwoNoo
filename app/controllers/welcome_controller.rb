@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   def index
-    #@trending = Activity.trending('Denver, CO')
+    @trending = Activity.trending(nil)
   end
 
   def trending
@@ -15,7 +15,6 @@ class WelcomeController < ApplicationController
   end
 
   def search
-    @showNoResults = true
     @outsideSupportedArea = false
   	# Setup location constraints
     denver = [39.737567, -104.9847179]
@@ -38,8 +37,6 @@ class WelcomeController < ApplicationController
     unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
            Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
            Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
-      #redirect_to root_path, notice: "You're trying to search outside of the area"
-      #@showNoResults = false
       flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
       @outsideSupportedArea = true
     end
@@ -100,12 +97,23 @@ class WelcomeController < ApplicationController
     @activities = @activities.order('datetime ASC')
 
     @showCreateAlert = false
-    if @activity.blank?
+
+    if @activities.blank?
+      @showCreateAlert = true
+
+      @activities = Activity.terms(params[:terms])
+      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
+      @activities = @activities.where('cancelled = ?', false)
+      @activities = @activities.order('datetime ASC')
+    end
+
+    if @activities.blank?
       @showCreateAlert = true
       
       @activities = Activity.all
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
       @activities = @activities.where('cancelled = ?', false)
       @activities = @activities.order('datetime ASC')
     end
@@ -126,12 +134,6 @@ class WelcomeController < ApplicationController
         u.save!
       end
     end
-
-    
-   
-#    if @activities.blank? && @users.blank? && @showNoResults
-#      render 'noresults' 
-#    end
   end
 
   def invite_people

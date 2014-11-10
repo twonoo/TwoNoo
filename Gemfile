@@ -33,6 +33,7 @@ gem 'devise'
 gem 'google-api-client', :require => 'google/api_client'
 gem 'omniauth-google-oauth2'
 gem 'rest-client'
+gem 'icalendar'
 
 gem 'momentjs-rails', '~> 2.5.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 3.0.0'

@@ -71,7 +71,7 @@ class Activity < ActiveRecord::Base
 	def self.terms(terms)
 		query = []
 		terms.split.each do |t|
-			query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%')"
+			query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%' OR street_address_1 LIKE '%#{t}%' OR street_address_2 LIKE '%#{t}%' OR city LIKE '%#{t}%' OR state LIKE '%#{t}%' OR website LIKE '%#{t}%')"
 		end
 		where(query.join(" AND "))
 	end
@@ -97,34 +97,50 @@ class Activity < ActiveRecord::Base
 
 		# Cycle Through Activity Types and Store Each 
 		ActivityType.all.each do |a|
+      results["#{a.id}"] = []
       if in_network
         result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+          .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+          .where(cancelled: false)
+          .where(activity_types: {id: a.id})
+          .within(25, origin: location)
+          .joins(:rsvps)
+          .joins(:activity_types)
+          .group('rsvps.activity_id')
+          .order('rsvp_count DESC')
+          .limit(16)
+
+        result.each do |r|
+          results["#{a.id}"] << r
+        end
+
+        resultIds = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+          .where(cancelled: false)
+          .where(activity_types: {id: a.id})
+          .joins(:activity_types)
+          .within(25, origin: location)
+          .limit(16)
+      end
+
+      result2 = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
         .select('activities.*, COUNT(rsvps.id) as rsvp_count')
         .where(cancelled: false)
-        .where(activity_types: {id: a.id})
-        .within(25, origin: location)
+      result2 = result2.where('activities.id not in (?)', resultIds.pluck('id')) unless resultIds.nil?
+      result2 = result2.where(activity_types: {id: a.id})
         .joins(:rsvps)
         .joins(:activity_types)
         .group('rsvps.activity_id')
         .order('rsvp_count DESC')
-        .limit(16)
-        results["#{a.id}"] = result
-      else
-        result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
-        .select('activities.*, COUNT(rsvps.id) as rsvp_count')
-        .where(cancelled: false)
-        .where(activity_types: {id: a.id})
-        .joins(:rsvps)
-        .joins(:activity_types)
-        .group('rsvps.activity_id')
-        .order('rsvp_count DESC')
-        .limit(16)
-        results["#{a.id}"] = result
+        .limit(16 - results["#{a.id}"].count)
+
+      result2.each do |r|
+        results["#{a.id}"] << r
       end
 
 		end
 
 		# Calculate Top Trending
+    results['top'] = []
     if in_network
       top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
@@ -134,16 +150,28 @@ class Activity < ActiveRecord::Base
       .group('rsvps.activity_id')
       .order('rsvp_count DESC')
       .limit(16)
-      results['top'] = top
-    else
-      top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+
+      topIds = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      .where(cancelled: false)
+      .within(25, origin: location)
+      .limit(16)
+
+      top.each do |t|
+        results['top'] << t
+      end
+    end
+
+    top = where('datetime BETWEEN ? AND ?', Time.now, Date.today + 15)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
-      .joins(:rsvps)
+    top = top.where('activities.id not in (?)', topIds.pluck('id')) unless topIds.nil?
+    top = top.joins(:rsvps)
       .group('rsvps.activity_id')
       .order('rsvp_count DESC')
-      .limit(16)
-      results['top'] = top
+      .limit(16 - results['top'].count)
+
+    top.each do |t|
+      results['top'] << t
     end
 
 		return results

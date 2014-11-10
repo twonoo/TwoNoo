@@ -238,6 +238,11 @@ function confirmSearch()
       $('#location').val(city + ', ' + state);
       console.log(city + ', ' + state);
 
+      $.cookie("lat", results[0].geometry.location.lat(), {expires: 365, path: '/'})
+      $.cookie("lng", results[0].geometry.location.lng(), {expires: 365, path: '/'})
+      $.cookie("city", city, {expires: 365, path: '/'})
+      $.cookie("state", state, {expires: 365, path: '/'})
+
     }
     else
     {

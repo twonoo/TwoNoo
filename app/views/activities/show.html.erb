@@ -51,7 +51,12 @@
 </p>
 					<p class="lead">
             <b><%= link_to @activity.location_name, @activity.website %></b></br>
-            <a id='eventdate'><%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %></a>
+            <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %><br/>
+            <font size="1">
+            Add to:
+            <a id='eventdate'>Google Calendar</a> | 
+            <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>
+            </font>
             <script>
               $(function(){
                 $('#eventdate').bind('click', function(){
