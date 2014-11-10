@@ -1,4 +1,4 @@
-  <h2 class="subTitle" style="margin-bottom:-10px; margin-top:px">Trending</h2>
+<div style="background-image: url(<%= asset_url 'backgrounds/crossword.png' %>); margin-top:-10px">
   <div class="container clearfix" style="padding:0">
     <div class="row">
       <nav id="filter" class="col-md-12 text-center">
@@ -23,6 +23,7 @@
             <% else %>
               <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
             <% end %>
+            <p style="position:absolute;top:137px; background-color:rgba(0, 0, 0, 0.8); width:270px;color:white; font-size:25px; line-height:70px; padding-left:10px"><%= t.datetime.strftime('%b %e') %></p>
           </section>
           <div class="mediaHover">
             <div class="mask"></div>
@@ -43,3 +44,4 @@
       </div>
     </div>
   </div>
+</div>
