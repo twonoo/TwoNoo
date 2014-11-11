@@ -33,6 +33,28 @@ class ApplicationController < ActionController::Base
           cookies[:lat] = { value: geocode.latitude, expires: 365.day.from_now }
           cookies[:lng] = { value: geocode.longitude, expires: 365.day.from_now }
         end
+      else
+        logger.info "IP Address: #{request.remote_ip}"
+        results = Geocoder.search(request.remote_ip)
+        logger.info "results: #{results}"
+
+        result = results.first
+        unless result.nil?
+          logger.info "city: #{result.city}"
+          logger.info "state: #{result.state_code}"
+
+          if result.city.present? and result.state_code.present?
+            cookies[:city] = { value: result.city, expires: 365.day.from_now }
+            cookies[:state] = { value: result.state_code, expires: 365.day.from_now }
+
+            geocode = Geocode.where(city: result.city).where(state: result.state_code).first
+
+            unless geocode.nil?
+              cookies[:lat] = { value: geocode.latitude, expires: 365.day.from_now }
+              cookies[:lng] = { value: geocode.longitude, expires: 365.day.from_now }
+            end
+          end
+        end
       end
     end
   end
