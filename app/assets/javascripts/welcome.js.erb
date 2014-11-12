@@ -95,7 +95,7 @@ function trending_default()
   }});
 }
 
-$(function () {
+$(document).ready(function () {
   // Get browser location and set selectors
   var getLocation = function() {
     if ( ($.cookie("lat")) && ($.cookie("lng")) && ($.cookie("city")) && ($.cookie("state")))
