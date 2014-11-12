@@ -67,28 +67,19 @@ display:block;
 .navbar-default .navbar-toggle {
 	margin-top: 22px;
 }
-/*** MEDIA QUERIES ***/
 
-@media(max-width:859px){
-	.tagline {
-		display: none;
-	}
-	#search-group {
-		padding-top:50px;
-	}
-  .trending-cats>ul>li>a
-  {
-    font-size:xx-small;
-  }
+.search_criteria, .location_selection {
+  display: block;
+  vertical-align: middle;
+  color:#7DC24F;
+  /*text-shadow:#7DC24F*/
+  margin-top:-3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color:rgba(42,42,42,0.5);
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-@media(min-width:860px){}
-
-@media(min-width:992px){}
-
-@media(min-width:1200px){}
-
-/*** END MEDIA QUERIES ***/
 
 /* END BOOSTRAP CUSTOMIZATION
 ================================================== */
@@ -264,7 +255,6 @@ h2 {
 	font-style: normal;
 	padding:0;
 	margin-bottom:17px;
-  text-align: center;
 }
 h2.subTitle{
 	font-size:24px;
@@ -1056,3 +1046,76 @@ body#comingSoon{padding-top:0; background: #4B4A4A}
 
 /* END MISCELANIOUS
 ================================================== */
+
+/*** MEDIA QUERIES ***/
+
+@media(max-height:660px) {
+}
+
+@media(max-width:859px){
+  li.narrow>a, .navbar-nav>li>a
+  {
+    font-size:xx-small;
+  }
+  li.wide
+  {
+    display:none;
+  }
+	.tagline {
+		display: none;
+	}
+	#search-group {
+		padding-top:100px;
+	}
+  .trending-cats>ul>li>a
+  {
+    font-size:xx-small;
+  }
+}
+
+@media(min-width: 860px)
+{
+  li.narrow
+  {
+    display:none;
+  }
+  li.wide
+  {
+  }
+}
+
+@media(min-width: 860px) and (max-width:944px)
+{
+  .navbar-nav>li>a
+  {
+    font-size:8px;
+  }
+}
+
+@media(min-width: 945px) and (max-width:1024px)
+{
+  .navbar-nav>li>a
+  {
+    font-size:10px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1070px)
+{
+  .navbar-nav>li>a
+  {
+    font-size:12px;
+  }
+}
+
+@media (max-width:1199px)
+{
+  #search-terms
+  {
+    font-size:small;
+  }
+}
+
+@media(min-width:1200px){}
+
+/*** END MEDIA QUERIES ***/

@@ -95,7 +95,7 @@ function trending_default()
   }});
 }
 
-$(window).load(function () {
+$(function () {
   // Get browser location and set selectors
   var getLocation = function() {
     if ( ($.cookie("lat")) && ($.cookie("lng")) && ($.cookie("city")) && ($.cookie("state")))
@@ -198,6 +198,22 @@ $(document).ready(function() {
     });
 
 });
+
+var minmargintop = -85
+$(document).ready(function() {
+  var height = $(window).height() - 650; 
+  $("#home").height(height);
+
+  var margintop = (height - 330);
+  $("#search-group").css('margin-top', (margintop >= minmargintop)?((margintop <= 10)?margintop:10):minmargintop)
+});
+
+window.onresize = function() {
+ var height = $(window).height() - 550; 
+  $("#home").height(height);
+  var margintop = (height - 330);
+  $("#search-group").css('margin-top', (margintop >= minmargintop)?((margintop <= 10)?margintop:10):minmargintop)
+}
 
 var bsubmit = false;
 
