@@ -1,12 +1,45 @@
 class UserMailer < ActionMailer::Base
   require 'mandrill'
-
   include ActionView::Helpers::UrlHelper
-
-ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
-
-
+  ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   default from: "no-reply@twonoo.com"
+
+  def activity_reminder(user, activity)
+    @user = user
+
+    # Mandrill integration
+    mandrill_to = [{:email => user.email, :type => 'to'}]
+    mandrill = Mandrill::API.new
+    template = 'alert_activity'
+    tc = [{"name" => "inviter", "content" => "TwoNoo"}]
+    message = {  
+     :to=>mandrill_to,  
+     :merge_language=>"mailchimp",
+     :global_merge_vars=>[
+      {"name"=>"USER_NAME", "content"=>user.name},
+      {"name"=>"USER_EMAIL", "content"=>user.email},
+      {"name"=>"ACTIVITY_ID", "content"=>activity.id},
+      {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
+      {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
+      {"name"=>"ACTIVITY_LOCN", "content"=>activity.address},
+      {"name"=>"ACTIVITY_LAT", "content"=>activity.latitude},
+      {"name"=>"ACTIVITY_LNG", "content"=>activity.longitude},
+      {"name"=>"ACTIVITY_IMG", "content"=>activity_img(activity)},
+      {"name"=>"ACTIVITY_DATETIME", "content"=>activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p')}
+      ]
+    }  
+
+    sending = mandrill.messages.send_template template, tc, message  
+    logger.info sending
+  end
+
+  def activity_img(activity)
+    if activity.image.exists?
+      "<img src='https://www.twonoo.com#{activity.image.url}' style=\"-moz-border-radius: 350px/350px; -webkit-border-radius: 350px 350px; border-radius: 350px/350px; border:solid 0px #FFF; width:30px;\"></img>".html_safe
+    else
+      "<span style='padding:5px 9px 5px 9px; background-color:#4DBFF5; font-size:20px; color:#FFFFFF; -moz-border-radius: 200px/200px; -webkit-border-radius: 200px 200px; border-radius: 200px/200px; border:solid 1px #FFF; width:100px; margin:10px;'>#{activity.activity_name[0]}</span>".html_safe
+    end
+  end
 
   def twonoo_invite(user, emails)
     @user = user

@@ -1,136 +1,7 @@
 namespace :summaries do
-	task :new_attending_activity_updates_daily => :environment do
-    attending_activity_update_summary(2, 1.day)
+	task :morning_of => :environment do
+    morning_alert()
 	end
-  
-	task :new_attending_activity_updates_weekly => :environment do
-    attending_activity_update_summary(3, 7.day)
-	end
-
-	task :new_comments_on_attending_activities_daily => :environment do
-    new_comments_on_attending_activity_summary(2, 1.day)
-	end
-  
-	task :new_comments_on_attending_activities_weekly => :environment do
-    new_comments_on_attending_activity_summary(3, 7.day)
-	end
-
-	task :new_comments_on_owned_activities_daily => :environment do
-    new_comments_on_owned_activity_summary(2, 1.day)
-	end
-  
-	task :new_comments_on_owned_activities_weekly => :environment do
-    new_comments_on_owned_activity_summary(3, 7.day)
-	end
-
-	task :new_followers_daily => :environment do
-    follower_summary(2, 1.day)
-	end
-  
-	task :new_followers_weekly => :environment do
-    follower_summary(3, 7.day)
-	end
-
-	task :new_following_activities_daily => :environment do
-    new_following_activities_summary(2, 1.day)
-	end
-  
-	task :new_following_activities_weekly => :environment do
-    new_following_activities_summary(3, 7.day)
-	end
-
-	task :new_messages_daily => :environment do
-    new_messages_summary(2, 1.day)
-	end
-  
-	task :new_messages_weekly => :environment do
-    new_messages_summary(3, 7.day)
-	end
-
-	task :new_rsvps_daily => :environment do
-    new_rsvps_summary(2, 1.day)
-	end
-  
-	task :new_rsvps_weekly => :environment do
-    new_rsvps_summary(3, 7.day)
-	end
-
-  task :recommended_followers => :environment do
-    # Get a unique list of people that have recommended followers
-    users_ids = RecommendedFollower.where('recommended_at is null').distinct.pluck('user_id')
-
-    users_ids.each do |user_id|
-      puts "processing recommendations for user #{user_id}"  
-      
-      # for each unique user get their top 3 recommended followers
-      recommended_followers = RecommendedFollower.where('user_id = ?', user_id).limit(3)
-
-      html = ''
-      recommended_followers.each do |recommended_follower|
-        puts "processing recommended follower #{recommended_follower.recommended_follower_id}"
-        # verify they are not already following each other
-
-        follow_relationship = FollowRelationship.where('follower_id = ?', user_id).where('followed_id = ?', recommended_follower.recommended_follower_id).first
-
-        if follow_relationship.nil?
-          puts "recommending #{recommended_follower.recommended_follower_id} follows #{user_id}"
-
-          # get the user
-          recommended_user = User.find_by_id(recommended_follower.recommended_follower_id)
-
-          unless recommended_user.nil?
-            # for each recommended follower generate a table row with the user profile icon and name
-            html = html + "<tr><td>#{profile_img_small(recommended_user)}</td><td><a href=\"https://www.twonoo.com/profile/#{recommended_user.id}\">#{recommended_user.name}</a></td><td><a href=\"https://www.twonoo.com/users/follow/#{recommended_user.id}\" style='display: inline; padding: .2em .6em .3em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: #5bc0de;'>Follow</a></td></tr>"
-
-            recommended_follower.recommended_at = Time.now
-            recommended_follower.save
-          else
-            puts "user doesn't exist"
-          end
-
-        else
-          puts "#{user_id} is already following #{recommended_follower.recommended_follower_id}"
-        end
-
-      end
-
-      unless html.length == 0
-        # send e-mail
-        puts "html: " + html
-
-        # Mandrill integration
-        user = User.find_by_id(user_id)
-
-        unless user.nil?
-          #mandrill_to = [{:email => 'skeefe15@gmail.com', :type => 'to'}]
-          mandrill_to = [{:email => user.email, :type => 'to'}]
-          m = Mandrill::API.new
-          t = 'recommended_followers'
-          tc = [{"name" => "inviter", "content" => "TwoNoo Testerino"}]
-          message = {  
-           :to=>mandrill_to,  
-           :merge_language=>"mailchimp",
-           :global_merge_vars=>[
-            {"name"=>"HTML", "content"=>html},
-            ] 
-          }  
-
-          sending = m.messages.send_template t, tc, message  
-          puts sending
-
-          puts "sent email"
-
-          # update the following recommendations that they were sent
-          puts "updated that they were sent the recommendations"
-        else
-          puts "user doesn't exist"
-        end
-      else
-        puts 'no html'
-      end
-
-    end
-  end
 
   def attending_activity_update_summary(config_setting, time_period)
     # Get the people that want to be informed once a week
@@ -154,7 +25,7 @@ namespace :summaries do
           puts "#{activity.activity_name} has been updated!"
 
           # for each recommended follower generate a table row with the activity image and name
-          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td><td>"
+          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td><td>"
           html = html + activity.description[0...149]
           html = html + "</td></tr>"
 
@@ -229,7 +100,7 @@ namespace :summaries do
           puts "#{activity.activity_name} has been commented on!"
 
           # for each activity that was commented on follower generate a table row with the activity image and name
-          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td><td>"
+          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td><td>"
 
           html = html + "<table>"
           activity.comments.where('created_at > ?', Time.now - time_period).each do |comment|
@@ -282,7 +153,7 @@ namespace :summaries do
           puts "#{activity.activity_name} has been commented on!"
 
           # for each activity that was commented on follower generate a table row with the activity image and name
-          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td><td>"
+          html = html + "<tr><td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td><td>"
 
           html = html + "<table>"
           activity.comments.where('created_at > ?', Time.now - time_period).each do |comment|
@@ -337,7 +208,7 @@ namespace :summaries do
           # for each recommended follower generate a table row with the activity image and name
           html = html + "<tr>"
           html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
-          html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
+          html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td>"
           html = html + "<td>#{activity.description[0...149]}</td>"
           html = html + "</tr>"
 
@@ -410,7 +281,7 @@ namespace :summaries do
           # for each recommended follower generate a table row with the activity image and name
           html = html + "<tr>"
           html = html + "<td>#{profile_img_small(rsvp_user)}</td><td><a href=\"https://www.twonoo.com/profile/#{rsvp_user.id}\">#{rsvp_user.name}</a></td>"
-          html = html + "<td>is going to: #{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
+          html = html + "<td>is going to: #{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activity/#{activity.id}\">#{activity.activity_name}</a></td>"
           html = html + "</tr>"
 
         end
@@ -463,5 +334,4 @@ namespace :summaries do
     else
       puts 'no html'
     end
-  end
-end
+  end end

@@ -17,4 +17,21 @@ namespace :alerts do
       a.save!
 		end
 	end
+
+	task :activity_reminder => :environment do
+    User.all.each do |user|
+      # select the activities where the user is rsvp'd that are taking place in the next day
+      upcoming_activities = Activity.joins(:rsvps).where('rsvps.user_id = ?', user.id).where('activities.datetime between ? and ?', Time.now, Time.now + 1.day)
+
+      if upcoming_activities.present?
+        puts "processing upcoming activities for #{user.name}"
+
+        upcoming_activities.each do |activity|
+          puts "#{activity.activity_name} is about to take place!"
+          UserMailer.delay.activity_reminder(user, activity)
+          puts "#{user.email} was notified about #{activity.activity_name}"
+        end
+      end
+    end
+  end
 end
