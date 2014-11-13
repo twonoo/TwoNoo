@@ -95,58 +95,65 @@ function trending_default()
   }});
 }
 
-$(document).ready(function () {
+$(function () {
+  var getTrending = null;
+
   // Get browser location and set selectors
   var getLocation = function() {
     if ( ($.cookie("lat")) && ($.cookie("lng")) && ($.cookie("city")) && ($.cookie("state")))
     {
       trending($.cookie("lat"), $.cookie("lng"), $.cookie("city"), $.cookie("state"));
     }
-    else if (navigator.geolocation)
+    else if ("geolocation" in navigator) //navigator.geolocation)
     {
-        console.log('getting current position');
-        navigator.geolocation.getCurrentPosition(getCity, getCityError, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
+      getTrending = setTimeout(trending_default, 3000);
+      navigator.geolocation.getCurrentPosition(getCity, getCityError, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
     }
     else
     {
+      console.log('else');
       trending_default();
     }
   }
 
   var getCity = function(position) {
+    clearTimeout(getTrending);
 
-      var geocoder = new google.maps.Geocoder();
+    var geocoder = new google.maps.Geocoder();
 
-      var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      console.log(latlng);
+    var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    console.log(latlng);
 
-      var city = 'Pittsburgh';
-      var state = 'PA';
+    var city = 'Pittsburgh';
+    var state = 'PA';
 
-      geocoder.geocode({'latLng': latlng}, function(results, status){
-        $.each(results[0].address_components, function (i, address_component) {
-            console.log('address_component:'+i);
+    geocoder.geocode({'latLng': latlng}, function(results, status){
+      $.each(results[0].address_components, function (i, address_component) {
+          console.log('address_component:'+i);
 
-            var type = address_component.types[0];
-            console.log(i+": "+type+":"+address_component.short_name);
+          var type = address_component.types[0];
+          console.log(i+": "+type+":"+address_component.short_name);
 
-            if (type == 'locality')
-              city = address_component.short_name;
-            else if (type == 'administrative_area_level_1')
-              state = address_component.short_name;
-        });
-
-        $.cookie("lat", position.coords.latitude, {expires: 365, path: '/'})
-        $.cookie("lng", position.coords.longitude, {expires: 365, path: '/'})
-        $.cookie("city", city, {expires: 365, path: '/'})
-        $.cookie("state", state, {expires: 365, path: '/'})
-
-        trending(position.coords.latitude,position.coords.longitude,city,state);
+          if (type == 'locality')
+            city = address_component.short_name;
+          else if (type == 'administrative_area_level_1')
+            state = address_component.short_name;
       });
 
-    }
+      $.cookie("lat", position.coords.latitude, {expires: 365, path: '/'})
+      $.cookie("lng", position.coords.longitude, {expires: 365, path: '/'})
+      $.cookie("city", city, {expires: 365, path: '/'})
+      $.cookie("state", state, {expires: 365, path: '/'})
+
+      trending(position.coords.latitude,position.coords.longitude,city,state);
+    });
+
+  }
 
   var getCityError = function(error) {
+    clearTimeout(getTrending);
+    trending_default();
+
     switch(error.code) {
       case error.PERMISSION_DENIED:
           console.log("User denied the request for Geolocation.");
@@ -161,8 +168,6 @@ $(document).ready(function () {
           console.log("An unknown error occurred.");
           break;
     } 
-
-    trending_default();
   };
 
   getLocation();

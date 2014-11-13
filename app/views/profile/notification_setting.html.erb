@@ -6,7 +6,13 @@
         <div class="panel-body">
           <div class="col-md-9">
             <h1>E-mail settings</h1>
-            <p>Cconfigure your notification e-mail settings.</p>
+            <p>Configure your notification e-mail settings.</p>
+            <style>
+              #edit_notification_setting_3 select
+              {
+                width:130px;
+                }
+            </style>
           <%= form_for @notification_setting, html: {class: "form form-horizontal"} do |ns| %>
           <table>
             <tr>
@@ -58,12 +64,20 @@
             </td>
             </tr>
             <tr>
-            <td width="100%">
-              <%= ns.label 'New comment on an actvity you are attending' %>
-            </td>
-            <td>
-              <%= ns.select :comment_on_attending_activity, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
-            </td>
+              <td width="100%">
+                <%= ns.label 'New comment on an actvity you are attending' %>
+              </td>
+              <td>
+                <%= ns.select :comment_on_attending_activity, [['Immediately', 1], ['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+              </td>
+            </tr>
+            <tr>
+              <td width="100%">
+                <%= ns.label 'Summary of upcoming activities and events' %>
+              </td>
+              <td>
+                <%= ns.select :activity_summary, [['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+              </td>
             </tr>
 
             </table>

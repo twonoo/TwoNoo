@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141110171505) do
+ActiveRecord::Schema.define(version: 20141113003014) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -145,16 +145,16 @@ ActiveRecord::Schema.define(version: 20141110171505) do
 
   create_table "notification_settings", force: true do |t|
     t.integer  "profile_id"
-    t.integer  "new_follower",                  default: 1
+    t.integer  "new_follower",                  default: 2
     t.integer  "new_message",                   default: 1
     t.integer  "new_rsvp",                      default: 1
-    t.integer  "new_following_activity",        default: 1
+    t.integer  "new_following_activity",        default: 2
     t.integer  "attending_activity_update",     default: 1
     t.integer  "comment_on_owned_activity",     default: 1
     t.integer  "comment_on_attending_activity", default: 1
-    t.boolean  "weekly_summary",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "activity_summary",              default: 3
   end
 
   create_table "profiles", force: true do |t|
