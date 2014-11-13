@@ -1,4 +1,7 @@
 <% @followers.each do |f| %>
+  <% unless (current_user.following?(f))%>
+    <div class="pull-right" style="margin-top:44px"><%=(link_to 'Follow', follow_path(f.id), class: 'label label-info')%></div>
+  <% end %>
 	<p class="lead">
 		<p class="lead"><%= profile_img(f) %> 
 		<%= link_to (f.profile.first_name + ' ' + f.profile.last_name), profile_path(f) %>

@@ -112,7 +112,12 @@
 
           <% Rsvp.where(activity_id: @activity.id).each do |rsvp|
             @going = User.find(rsvp.user_id) %>
-            <p><%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %></p>
+            <p>
+              <% unless (current_user.following?(@going))%>
+                <div class="pull-right"><%=(link_to 'Follow', follow_path(@going.id), class: 'label label-info')%></div>
+              <% end %>
+              <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
+            </p>
           <% end %>
         </div>
       </div>
