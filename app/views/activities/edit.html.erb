@@ -24,36 +24,40 @@
 	    	<%= form_for @activity, html: { class: "form-horizontal", :multipart => true } do |f| %>
           <div class="form-group">
             <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-5">
+            <div class="col-sm-6">
               <%= f.text_field :activity_name, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000"  %>
-            <div class='input-group date col-sm-5' style='padding-left:15px' id='datetimepicker1'>
-              <%= f.text_field :datetime, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.datetime.strftime('%m/%d/%Y %l:%M %p')) %>
+            <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
+              <%= f.text_field :date, class: "form-control", value: (@activity.datetime.blank? ? Time.now.strftime('%m/%d/%Y') : @activity.date) %>
               <span class="input-group-addon"><span class="icon-calendar"></span></span>
+            </div>
+            <div class='input-group date col-sm-3' id='timepicker1'>
+              <%= f.text_field :time, class: "form-control", value: (@activity.datetime.blank? ? Time.now.strftime('%l:%M %p') : @activity.time) %>
+              <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :venue, class: "col-sm-3 control-label" %>
-            <div class="col-sm-5">
+            <div class="col-sm-6">
               <%= f.text_field :location_name, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :address, class: "col-sm-3 control-label" %>
-            <div class="col-sm-5">
+            <div class="col-sm-6">
               <%= f.text_field :street_address_1, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :address_2, class: "col-sm-3 control-label" %>
-            <div class="col-sm-5">
+            <div class="col-sm-6">
               <%= f.text_field :street_address_2, class: "form-control" %>
             </div>
           </div>
@@ -119,7 +123,8 @@
 
       <script type="text/javascript">
             $(function () {
-                $('#datetimepicker1').datetimepicker();
+                $('#datepicker1').datetimepicker({pickTime:false});
+                $('#timepicker1').datetimepicker({pickDate:false});
             });
       </script>
   </div>

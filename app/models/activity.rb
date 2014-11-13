@@ -8,6 +8,7 @@ class Activity < ActiveRecord::Base
 	#geocoded_by :address
 	before_validation :geocodecache
 	before_save :assign_timezone
+	before_save :convert_to_datetime
 	has_many :rsvps
 
 	validates :activity_name, :datetime, :city, :state, :description, presence: true
@@ -23,6 +24,27 @@ class Activity < ActiveRecord::Base
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
 	end
 
+  def date
+    datetime.strftime("%m/%d/%Y")
+  end
+
+  def date=(d)
+    logger.info "date: #{d}"
+    @date = d
+  end 
+
+  def time
+    datetime.strftime("%l:%M %p")
+  end
+
+  def time=(t)
+    logger.info "time: #{@time}"
+    @time = t #Date.parse(t).strftime("%l:%M %p") 
+  end 
+
+  def convert_to_datetime
+    self.datetime = Time.strptime("#{@date} #{@time}", "%m/%d/%Y %l:%M %p")
+  end
 
 	def distance_cannot_be_greater_than_100_miles
 		unless city.blank?
