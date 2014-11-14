@@ -90,7 +90,7 @@ Rails.application.routes.draw do
   resources :activities
   resources :credits
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "users/registrations" }
 
 
   resources :conversations, only: [:index, :show, :new, :create] do

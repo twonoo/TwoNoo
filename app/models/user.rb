@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :activities
 
 	before_save :geocode_ip
+	after_save :default_follow
   after_create :initial_credits
 
   default_scope { includes(:profile, :activities) }
@@ -103,10 +104,17 @@ class User < ActiveRecord::Base
     return self.profile.first_name + ' ' + self.profile.last_name
   end
 
+  def sign_up_ip=(ip)
+    @sign_up_ip = ip
+  end
+
   def geocode_ip
-    if self.profile.city.nil? || self.profile.state.nil?
-      logger.info "IP Address: #{self.current_sign_in_ip}"
-      results = Geocoder.search(self.current_sign_in_ip)
+    if profile.city.nil? || profile.state.nil?
+      logger.info "IP Address: #{current_sign_in_ip}"
+      logger.info "IP Address: #{@sign_up_ip}"
+
+      ip = (current_sign_in_ip.nil? ? @sign_up_ip : current_sign_in_ip)
+      results = Geocoder.search(ip)
       logger.info "results: #{results}"
 
       result = results.first
@@ -115,9 +123,32 @@ class User < ActiveRecord::Base
         logger.info "state: #{result.state_code}"
 
         if result.city.present? and result.state_code.present?
-          self.profile.city = result.city
-          self.profile.state = result.state_code
+          profile.city = result.city
+          profile.state = result.state_code
         end
+      end
+    end
+  end
+
+  def default_follow
+    if profile.city.present? and profile.state.present?
+
+      case profile.state
+        when "CO"
+          user1 = User.find_by_id(2) #Keefe
+          user2 = User.find_by_id(231) #TwoNoo Denver
+          follow!(2) unless following?(user1)
+          follow!(231) unless following? (user2)
+        when "AK"
+          user1 = User.find_by_id(3) # Betts
+          user2 = User.find_by_id(16) # TwoNoo Alaska
+          follow!(3) unless (following?(user1) || (self == user1))
+          follow!(16) unless (following?(user2) || (self == user2))
+        when "PA"
+          user1 = User.find_by_id(4) # Eric
+          user2 = User.find_by_id(241) # TwoNoo Pittsburgh
+          follow!(4) unless following?(user1)
+          follow!(241) unless following?(user2)
       end
     end
   end

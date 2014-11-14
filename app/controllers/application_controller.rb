@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) << [:uid, :provider, profile_attributes: [:id, :first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit, :referrer]]
+    devise_parameter_sanitizer.for(:sign_up) << [:uid, :provider, :sign_up_ip, profile_attributes: [:id, :first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit, :referrer]]
     devise_parameter_sanitizer.for(:account_update) << [:uid, :provider, profile_attributes: [:first_name, :last_name, :birthday, :gender, :postcode, :about_me, :profile_picture, :nonprofit, :ambassador]]
   end
 
