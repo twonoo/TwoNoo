@@ -366,7 +366,8 @@ namespace :summaries do
       puts "user_id: #{user_id}"
 
       # Get the user's location
-      user = User.find(user_id)
+      user = User.find_by_id(user_id)
+      next if user.nil?
       city = user.profile.city
       state = user.profile.state
 
