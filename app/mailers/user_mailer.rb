@@ -254,13 +254,7 @@ class UserMailer < ActionMailer::Base
     @user = user
 
     if (@user.profile.notification_setting.new_following_activity == 1)
-#      @organizer = organizer
-#      @activity = activity
-#      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
-#      mail(to: @user.email, subject: "#{@organizer.name} just created #{@activity.activity_name} on TwoNoo!")
-
       # Mandrill integration
-
       mandrill_to = [{:email => user.email, :type => 'to'}]
       m = Mandrill::API.new
       t = 'new_following_activity'
@@ -270,12 +264,18 @@ class UserMailer < ActionMailer::Base
        :to=>mandrill_to,  
        :merge_language=>"mailchimp",
        :global_merge_vars=>[
+        {"name"=>"USER_ID", "content"=>user.id},
         {"name"=>"USER_NAME", "content"=>user.name},
         {"name"=>"USER_EMAIL", "content"=>user.email},
         {"name"=>"ORGANIZER", "content"=>organizer.name},
         {"name"=>"ORGANIZER_ID", "content"=>organizer.id},
         {"name"=>"ACTIVITY_ID", "content"=>activity.id},
-        {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name}
+        {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
+        {"name"=>"ACTIVITY_LOCN", "content"=>activity.address},
+        {"name"=>"ACTIVITY_LAT", "content"=>activity.latitude},
+        {"name"=>"ACTIVITY_LNG", "content"=>activity.longitude},
+        {"name"=>"ACTIVITY_IMG", "content"=>activity_img(activity)},
+        {"name"=>"ACTIVITY_DATETIME", "content"=>activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p')}
         ] 
       }  
 
