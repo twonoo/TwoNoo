@@ -17,13 +17,9 @@
               <span class="selection" id="activitytype-selection-phrase">All</span><i class='glyphicon glyphicon-chevron-down'></i></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#">All</a></li>
-                <li><a href="#">Sport</a></li>
-                <li><a href="#">Art</a></li>
-                <li><a href="#">Business</a></li>
-                <li><a href="#">Outdoor</a></li>
-                <li><a href="#">Eat & Drink</a></li>
-                <li><a href="#">Nightlife</a></li>
-                <li><a href="#">Community</a></li>
+                <% ActivityType.all.each do |at| %>
+                <li><a href="#"><%=at.activity_type%></a></li>
+                <% end %>
               </ul>
             </div>
              activities 

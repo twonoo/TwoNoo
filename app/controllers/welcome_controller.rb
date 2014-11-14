@@ -50,24 +50,7 @@ class WelcomeController < ApplicationController
     end
 
     # Determine Type
-    case params[:type]
-      when "Sport"
-        type = 1
-      when "Art"
-        type = 2
-      when "Business"
-        type = 3
-      when "Outdoor"
-        type = 4
-      when "Eat & Drink"
-        type = 5
-      when "Nightlife"
-        type = 6
-      when "Community"
-        type = 7
-      else
-        type = nil
-    end
+    type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
 
     params[:distance] = 25 unless params[:distance].present?
     params[:terms] = '' unless params[:terms].present?
