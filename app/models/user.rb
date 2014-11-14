@@ -137,18 +137,18 @@ class User < ActiveRecord::Base
         when "CO"
           user1 = User.find_by_id(2) #Keefe
           user2 = User.find_by_id(231) #TwoNoo Denver
-          follow!(2) unless following?(user1)
-          follow!(231) unless following? (user2)
+          follow!(2) unless (following?(user1) || (self == user1))
+          follow!(231) unless (user2.nil? || following?(user2))
         when "AK"
           user1 = User.find_by_id(3) # Betts
           user2 = User.find_by_id(16) # TwoNoo Alaska
           follow!(3) unless (following?(user1) || (self == user1))
-          follow!(16) unless (following?(user2) || (self == user2))
+          follow!(16) unless (user2.nil? || following?(user2) || (self == user2))
         when "PA"
           user1 = User.find_by_id(4) # Eric
           user2 = User.find_by_id(241) # TwoNoo Pittsburgh
-          follow!(4) unless following?(user1)
-          follow!(241) unless following?(user2)
+          follow!(4) unless (following?(user1) || (self == user1))
+          follow!(241) unless (user2.nil? || following?(user2) || self == user1)
       end
     end
   end
