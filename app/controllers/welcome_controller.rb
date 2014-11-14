@@ -22,11 +22,18 @@ class WelcomeController < ApplicationController
     fairbanks = [64.8377778, -147.7163889]
 
     # Convert search parameter to coordinates
-    unless params[:lat].empty? && params[:lng].empty?
+    if params[:lat].present? || params[:lng].present?
       lat = params[:lat]
       lon = params[:lng]
       search_coordinates = [params[:lat].to_f, params[:lng].to_f]
       logger.info "using passed in coords"
+    elsif !(params[:location].present?)
+      # TODO: add in looking cookies
+
+      # try to get it by the IP address
+      search_coordinates = Geocode.coordinates_by_ip(request.remote_ip)
+      lat = search_coordinates[0]
+      lon = search_coordinates[1]
     else
       # Need to have this look at the GeoCodecache
       search_location = Geocoder.search(params[:location]).first
@@ -62,6 +69,9 @@ class WelcomeController < ApplicationController
         type = nil
     end
 
+    params[:distance] = 25 unless params[:distance].present?
+    params[:terms] = '' unless params[:terms].present?
+
     # Determine date range
     if params[:when].present?
       case params[:when]
@@ -79,12 +89,16 @@ class WelcomeController < ApplicationController
       end
       from_date = DateTime.now.beginning_of_day unless from_date
     else
-      from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
-      end_date = Time.strptime(params[:to_date], '%m/%d/%Y')
+      from_date = (params[:from_date].present? ? Time.strptime(params[:from_date], '%m/%d/%Y') : Time.now )
+      end_date = (params[:to_date].present? ? Time.strptime(params[:to_date], '%m/%d/%Y') : Time.now + 14.days )
     end
 
     # Get Timezone
-    tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
+    begin
+      tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
+    rescue
+      tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
+    end
 
     # Build search query for activities
     @activities = Activity.terms(params[:terms])
