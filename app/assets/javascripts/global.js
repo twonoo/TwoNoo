@@ -9,7 +9,29 @@ $(document).ready(function(){
   $('#messages_link').dblclick(function(){
     window.location.href=$(this).attr('href');
   });
+
+  prepare_follow_links();
 });
+
+function prepare_follow_links()
+{
+  $('.follow_link').bind('click', function(){
+    div = $(this);
+    div.unbind('click');
+    div.find('a').html('Processing...');
+
+    $.ajax({
+      type: "GET",
+      url: "/users/follow/" + $(this).attr('user_id'),
+      success: function(html) {
+        alert('You are now following ' + div.attr('user_name'));
+        div.toggle();
+      },
+      error: function(e) {
+      }
+    });
+  });
+}
 
 function trending_load() {
 

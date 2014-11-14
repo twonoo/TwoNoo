@@ -39,6 +39,14 @@ namespace :summaries do
     new_following_activities_summary(3, 7.day)
 	end
 
+	task :new_local_activities_daily => :environment do
+    new_local_activities_summary(2, 1.day)
+	end
+  
+	task :new_local_activities_weekly => :environment do
+    new_local_activities_summary(3, 7.day)
+	end
+
 	task :new_messages_daily => :environment do
     new_messages_summary(2, 1.day)
 	end
@@ -346,6 +354,50 @@ namespace :summaries do
         send_mandrill_table_email('new_following_activities_summary', user.email, html)
 
       end
+		end
+  end
+
+  def new_local_activities_summary(config_setting, time_period)
+    # Get the people that want to be informed once a week
+    profile_ids = NotificationSetting.where('local_activity_summary  = ?', config_setting).pluck('profile_id')
+
+    profile_ids.each do |id|
+      user_id = Profile.where('id = ?', id).pluck('user_id').first
+      puts "user_id: #{user_id}"
+
+      # Get the user's location
+      user = User.find(user_id)
+      city = user.profile.city
+      state = user.profile.state
+
+      unless city.nil? || state.nil?
+        coords = Geocode.coordinates(city, state)
+        puts "coordinate #{coords}"
+        new_activities = Activity.where('activities.created_at > ?', Time.now - time_period).within(25, origin: coords)
+
+        if new_activities.present?
+          user = User.find(user_id)
+          
+          puts "processing new activities for #{user.name}"
+
+          html = ''
+          new_activities.each do |activity|
+            puts "#{activity.activity_name} has been created!"
+            organizer = User.find(activity.user_id)
+
+            # for each recommended follower generate a table row with the activity image and name
+            html = html + "<tr>"
+            html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
+            html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
+            html = html + "<td>#{activity.description[0...149]}</td>"
+            html = html + "</tr>"
+
+          end
+
+          send_mandrill_table_email('summary_new_local_activities', user.email, html)
+
+        end
+      end 
 		end
   end
 

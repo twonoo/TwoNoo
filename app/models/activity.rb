@@ -11,8 +11,9 @@ class Activity < ActiveRecord::Base
 	before_save :convert_to_datetime
 	has_many :rsvps
 
-	validates :activity_name, :datetime, :city, :state, :description, presence: true
+	validates :activity_name, :date, :time, :city, :state, :description, presence: true
 	validate :distance_cannot_be_greater_than_100_miles
+  validates_format_of :time, :with => /\A([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
 
 	acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
@@ -25,7 +26,14 @@ class Activity < ActiveRecord::Base
 	end
 
   def date
-    datetime.strftime("%m/%d/%Y")
+    begin
+      @date = datetime.strftime("%m/%d/%Y")
+    rescue
+				errors[:base] << "#{@date} is not a valid date. User the format MM/DD/YYYY" unless @date.blank?
+    end
+
+    return @date
+
   end
 
   def date=(d)
@@ -34,7 +42,17 @@ class Activity < ActiveRecord::Base
   end 
 
   def time
-    datetime.strftime("%l:%M %p")
+    begin
+      if datetime.nil?
+        Time.zone.parse(@time)
+      else
+        @time = datetime.strftime("%l:%M %p")
+      end
+    rescue
+				errors[:base] << "#{@time} is not a valid time. User the format MM/DD/YYYY" unless @time.blank?
+    end
+
+    return @time
   end
 
   def time=(t)
@@ -43,7 +61,9 @@ class Activity < ActiveRecord::Base
   end 
 
   def convert_to_datetime
-    self.datetime = Time.strptime("#{@date} #{@time}", "%m/%d/%Y %l:%M %p")
+    unless @date.blank? || @time.blank?
+      self.datetime = Time.strptime("#{@date} #{@time}", "%m/%d/%Y %l:%M %p")
+    end
   end
 
 	def distance_cannot_be_greater_than_100_miles

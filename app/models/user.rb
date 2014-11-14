@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   acts_as_messageable
   has_many :alerts
   has_one :profile, dependent: :destroy
+  has_one :notification_setting
   has_many :follow_relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :follow_relationships, source: :followed
   has_many :searches

@@ -79,6 +79,22 @@
                 <%= ns.select :activity_summary, [['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
               </td>
             </tr>
+            <tr>
+              <td width="100%">
+                <%= ns.label 'Summary of new local activities' %>
+              </td>
+              <td>
+                <%= ns.select :local_activity_summary, [['Daily', 2], ['Weekly', 3], ['Never', 0]]%>
+              </td>
+            </tr>
+            <tr>
+              <td width="100%">
+                <%= ns.label 'Activity reminder (e-mail the day of the activity)' %>
+              </td>
+              <td>
+                <%= ns.select :activity_reminder, [['Yes', 1], ['No', 0]]%>
+              </td>
+            </tr>
 
             </table>
             <%= ns.submit 'Save', class: 'btn btn-primary' %> </div>

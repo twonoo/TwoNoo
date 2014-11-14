@@ -114,7 +114,7 @@
             @going = User.find(rsvp.user_id) %>
             <p>
               <% unless (current_user.following?(@going))%>
-                <div class="pull-right"><%=(link_to 'Follow', follow_path(@going.id), class: 'label label-info')%></div>
+                <div class="pull-right follow_link" style="cursor:pointer;" user_id="<%=rsvp.user_id%>" user_name="<%=@going.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
               <% end %>
               <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
             </p>

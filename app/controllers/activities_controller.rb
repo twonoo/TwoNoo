@@ -242,13 +242,13 @@ class ActivitiesController < ApplicationController
 
   def create
     parms = activity_params
-    dt_invalid = false
-    begin
-      parms[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
-    rescue
-      dt_invalid = true
-      parms[:datetime] = Time.now
-    end
+#    dt_invalid = false
+#    begin
+#      parms[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
+#    rescue
+#      dt_invalid = true
+#      parms[:datetime] = Time.now
+#    end
 
     if params[:lat].present? && params[:lng].present?
       parms[:latitude] = params[:lat]
@@ -274,10 +274,10 @@ class ActivitiesController < ApplicationController
 
       redirect_to @activity
     else
-      if dt_invalid
-        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
-        @activity.datetime = Time.now
-      end
+#      if dt_invalid
+#        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
+#        @activity.datetime = Time.now
+#      end
       render :new
     end
   end
@@ -341,6 +341,6 @@ class ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :datetime, :rsvp, :latitude, :longitude, :image, :date, :time, activity_type_ids: [])
+    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image, :date, :time, activity_type_ids: [])
   end
 end

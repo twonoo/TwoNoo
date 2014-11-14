@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141113003014) do
+ActiveRecord::Schema.define(version: 20141113231722) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -155,6 +155,8 @@ ActiveRecord::Schema.define(version: 20141113003014) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "activity_summary",              default: 3
+    t.integer  "activity_reminder",             default: 1
+    t.integer  "local_activity_summary",        default: 2
   end
 
   create_table "profiles", force: true do |t|
