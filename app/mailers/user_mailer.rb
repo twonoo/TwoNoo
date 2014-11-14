@@ -271,6 +271,7 @@ class UserMailer < ActionMailer::Base
         {"name"=>"ORGANIZER_ID", "content"=>organizer.id},
         {"name"=>"ACTIVITY_ID", "content"=>activity.id},
         {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
+        {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
         {"name"=>"ACTIVITY_LOCN", "content"=>activity.address},
         {"name"=>"ACTIVITY_LAT", "content"=>activity.latitude},
         {"name"=>"ACTIVITY_LNG", "content"=>activity.longitude},
