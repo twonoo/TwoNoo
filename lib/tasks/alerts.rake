@@ -6,6 +6,7 @@ namespace :alerts do
 			activities = Activity.terms(a.keywords)
 			activities = activities.where("created_at > ?", a.updated_at)
 	    activities = activities.within(a.distance, origin: a.location)
+      activities = activities.where('cancelled = ?', false)
 
       # We need to roll these up. maybe we add the notifications, but we need to summarize all the activities that match the alert
 	    activities.each do |activity|
@@ -22,7 +23,7 @@ namespace :alerts do
     User.all.each do |user|
       if user.profile.notification_setting.activity_reminder
         # select the activities where the user is rsvp'd that are taking place in the next day
-        upcoming_activities = Activity.joins(:rsvps).where('rsvps.user_id = ?', user.id).where('activities.datetime between ? and ?', Time.now, Time.now + 1.day)
+        upcoming_activities = Activity.joins(:rsvps).where('rsvps.user_id = ?', user.id).where('activities.datetime between ? and ?', Time.now, Time.now + 1.day).where('cancelled = ?', false)
 
         if upcoming_activities.present?
           puts "processing upcoming activities for #{user.name}"

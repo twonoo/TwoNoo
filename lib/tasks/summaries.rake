@@ -329,7 +329,7 @@ namespace :summaries do
 
       # Get the users this one if following
       followed_users = FollowRelationship.where('follower_id = ?', user_id).pluck("followed_id")
-      new_activities = Activity.where('user_id in (?)', followed_users).where('activities.created_at > ?', Time.now - time_period)
+      new_activities = Activity.where('user_id in (?)', followed_users).where('activities.created_at > ?', Time.now - time_period).where('cancelled = ?', false)
 
       if new_activities.present?
         user = User.find(user_id)
@@ -373,7 +373,7 @@ namespace :summaries do
       unless city.nil? || state.nil?
         coords = Geocode.coordinates(city, state)
         puts "coordinate #{coords}"
-        new_activities = Activity.where('activities.created_at > ?', Time.now - time_period).within(25, origin: coords)
+        new_activities = Activity.where('activities.created_at > ?', Time.now - time_period).within(25, origin: coords).where('cancelled = ?', false)
 
         if new_activities.present?
           user = User.find(user_id)
