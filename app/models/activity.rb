@@ -9,11 +9,12 @@ class Activity < ActiveRecord::Base
 	before_validation :geocodecache
 	before_save :assign_timezone
 	before_save :convert_to_datetime
+	before_save :format_url
 	has_many :rsvps
 
 	validates :activity_name, :date, :time, :city, :state, :description, presence: true
 	validate :distance_cannot_be_greater_than_100_miles
-  validates_format_of :time, :with => /\A([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
+  validates_format_of :time, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
 
 	acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
@@ -27,9 +28,13 @@ class Activity < ActiveRecord::Base
 
   def date
     begin
-      @date = datetime.strftime("%m/%d/%Y")
-    rescue
-				errors[:base] << "#{@date} is not a valid date. User the format MM/DD/YYYY" unless @date.blank?
+      unless @date.nil?
+        Time.strptime("#{@date}", "%m/%d/%Y")
+      else
+        @date = datetime.strftime("%m/%d/%Y")
+      end
+    rescue => e
+				errors[:base] << "#{@date} is not a valid date. Use the format MM/DD/YYYY" unless @date.blank?
     end
 
     return @date
@@ -43,26 +48,25 @@ class Activity < ActiveRecord::Base
 
   def time
     begin
-      if datetime.nil?
+      unless @time.nil?
         Time.zone.parse(@time)
       else
         @time = datetime.strftime("%l:%M %p")
       end
     rescue
-				errors[:base] << "#{@time} is not a valid time. User the format MM/DD/YYYY" unless @time.blank?
+				errors[:base] << "#{@time} is not a valid time" unless @time.blank?
     end
 
     return @time
   end
 
   def time=(t)
-    logger.info "time: #{@time}"
-    @time = t #Date.parse(t).strftime("%l:%M %p") 
+    @time = t
   end 
 
   def convert_to_datetime
     unless @date.blank? || @time.blank?
-      self.datetime = Time.strptime("#{@date} #{@time}", "%m/%d/%Y %l:%M %p")
+      self.datetime = Time.strptime("#{@date} #{@time.lstrip}", "%m/%d/%Y %l:%M %p")
     end
   end
 
@@ -255,5 +259,13 @@ logger.info "count: #{results['top'].count}"
 	def assign_timezone
 		self.tz = get_timezone
 	end
+
+	def format_url
+    if (self.website =~ /\Ahttp[s]?/i).nil?
+      self.website = "http://#{self.website}"
+    end
+    logger.info "format_url: #{self.website}"
+	end
+
 
 end

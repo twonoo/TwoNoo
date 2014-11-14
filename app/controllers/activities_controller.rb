@@ -311,14 +311,6 @@ class ActivitiesController < ApplicationController
     params = activity_params
     @activity.activity_type_ids=params[:activity_type_ids]
 
-    dt_invalid = false
-    begin
-      params[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
-    rescue
-      dt_invalid = true
-      params[:datetime] = Time.now
-    end
-
     @activity.update(params)
 
     if @activity.save

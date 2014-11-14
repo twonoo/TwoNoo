@@ -32,11 +32,11 @@
           <div class="form-group">
             <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000"  %>
             <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
-              <%= f.text_field :date, class: "form-control", value: (@activity.datetime.blank? ? Time.now.strftime('%m/%d/%Y') : @activity.date) %>
+              <%= f.text_field :date, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.date) %>
               <span class="input-group-addon"><span class="icon-calendar"></span></span>
             </div>
             <div class='input-group date col-sm-3' id='timepicker1'>
-              <%= f.text_field :time, class: "form-control", value: (@activity.datetime.blank? ? Time.now.strftime('%l:%M %p') : @activity.time) %>
+              <%= f.text_field :time, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.time) %>
               <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
             </div>
           </div>
