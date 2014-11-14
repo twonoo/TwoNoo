@@ -1,6 +1,6 @@
 <%= content_tag_for(:p, conversations) do |conversation| %>
   <p id="conversation_<%=conversation.id.to_s%>">
-    <% unless !(conversation.originator.nil? || conversation.recipients[0].nil?) %>
+    <% unless conversation.originator.nil? || conversation.recipients[0].nil? %>
       <% if (conversation.originator == current_user) %>
         <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
         <script>
