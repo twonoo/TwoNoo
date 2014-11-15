@@ -51,4 +51,5 @@ Rails.application.configure do
     password: "FWDtyP_2VA85dpsXhuudoA"
   }
 
+  config.middleware.delete Rack::Lock
 end

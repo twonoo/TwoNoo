@@ -60,3 +60,4 @@ gem 'coffee-rails'
 
 gem 'geoip2', git: 'https://github.com/YotpoLtd/geoip2.git'
 
+gem 'websocket-rails'

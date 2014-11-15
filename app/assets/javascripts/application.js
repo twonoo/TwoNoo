@@ -35,3 +35,6 @@
 //= require holder
 //= require signed_in_nav.js
 //= require global.js
+//= require twonoo_im.js
+//= require websocket_rails/main
+

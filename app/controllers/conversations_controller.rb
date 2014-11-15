@@ -61,6 +61,9 @@ class ConversationsController < ApplicationController
   def send_message
     recipient = User.where(email: params[:recipient]).first
 
+    message = {body: params[:body]}
+    WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message)
+
     logger.info("recipient: " + params[:recipient])
 
     logger.info recipient.email
@@ -68,6 +71,7 @@ class ConversationsController < ApplicationController
     conversation = nil
 
     @conversations.each do |c|
+      next if c.originator.nil? || c.recipients.first.nil?
       if (((c.originator.id == current_user.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == current_user.id))) then
         conversation = c
         break
@@ -76,7 +80,7 @@ class ConversationsController < ApplicationController
 
     if conversation.nil? then
       conversation = current_user.
-        send_message(recipients, *params[:body], current_user.email).conversation
+        send_message(recipient, *params[:body], current_user.email).conversation
     else
       current_user.reply_to_conversation(conversation, *params[:body])
     end

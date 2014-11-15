@@ -22,5 +22,8 @@ class UsersController < ApplicationController
 		redirect_to request.referer
 	end
 
+  def connected
+    logger.info "user is connected!"
+  end
 
 end

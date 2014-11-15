@@ -25,7 +25,7 @@
   %>
   <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
   <%=(current_user != message.sender)?'color:#1111FF;':''%>
-  ">
+  " messageId="<%=receipt.id%>" conversationId="<%=conversation.id%>">
     <div class="col-xs-3" style="overflow:hidden;white-space: nowrap;">
       <b><%= message.sender.profile.first_name %>
             <% if message.created_at < (Time.now - 1.day) %>
@@ -50,8 +50,6 @@
 <script>
   $('#last_id_shown').val(<%=lastmessageid%>)
 
-  $("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
-
   <% if bStartRefresh %>
   var conversation_id = <%=(conversation.nil?)?0:conversation.id.to_s%>;
   var interval = 5000;   //number of mili seconds between each call
@@ -65,8 +63,7 @@
       type: "POST",
       url: "<%=show_messages_path(conversation.id)%>",
       cache: false,
-      data: { last_id_shown: $('#last_id_shown').val(),
-              last_user_shown: $('#last_user_shown').val()
+      data: { last_id_shown: $('#last_id_shown').val()
       },
       success: function(html) {
         $('#conversation').append(html);

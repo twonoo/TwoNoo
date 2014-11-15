@@ -19,6 +19,8 @@
 #messages {
   padding: 0px;
   margin: 0px;
+  z-index: 1001;
+  background: #EEE;
   }
 
 #body {
@@ -28,81 +30,22 @@
 }
 
 </style>
-<div id="messages" class="col-md-12">
+<div id="messages" class="col-md-12 messages">
   <%= hidden_field_tag "first_id_shown" %>
   <%= hidden_field_tag "last_id_shown" %>
   <%= hidden_field_tag "last_user_shown" %>
 
   <div id="chatbox_header">
-    <p><%=recipient.profile.first_name %> <%=recipient.profile.last_name%></p>
+    <p><%=recipient.name%></p>
     <div style="clear:both"></div>
   </div>
 
-  <div id='conversation' class="col-md-12">
+  <div id='conversation' class="col-md-12 conversation">
   </div>
 
-  <%= text_area_tag :body, nil, rows: "2" %>
-  <a id="send_message" class="btn btn-success btn-sm" recipient="<%=recipient.email%>">Send Message</a>
+  <%= text_area_tag :body, nil, rows: "2", class: 'body' %>
+  <a id="send_message" class="btn btn-success btn-sm send_message" 
+    recipient="<%=recipient.id%>" sender="<%=current_user.id%>"
+    recipient_name="<%=recipient.profile.first_name%>" sender_name="<%=current_user.profile.first_name%>"
+  >Send Message</a>
 </div>
-
-<script>
-  $(document).ready(function() {
-    $('#message_body').focus();
-  });
-
-  $(function(){
-    $('#body').keyup(function(e) {
-      if (e.keyCode == 13 && !e.shiftKey) {
-        e.preventDefault();
-        $(this).next('#send_message').trigger("click");
-      }
-      else if (e.keyCode == 27)
-      {
-        $('#message_body').val('');
-      }
-    });
-  });
-
-  $(function(){
-    $('#send_message').unbind('click');
-    $('#send_message').bind('click', function(e){
-      if ($(this).attr('clicked') == 'true'){
-        e.preventDefault();
-      }
-      else {
-        sendMessage($(this));
-      }
-
-      $(this).attr('clicked', 'true');
-    });
-
-    var sendMessage = function(link) {
-        $.ajax({
-          type: "POST",
-          url: "<%=send_message_path%>",
-          data: { recipient: link.attr('recipient'),
-                  body: link.prev().val(),
-                  last_id_shown: $('#last_id_shown').val(),
-                  orderBy: 'id ASC'
-          },
-          success: function(html) {
-            if ($('#conversation'))
-            {
-              $('#conversation').append(html);
-
-              //scroll to the bottom
-              //$('#conversation').scrollTop($("#conversation").scrollHeight);
-              //$("#conversation").animate({scrollTop: $("#conversation").prop('scrollHeight')}, 3000);
-            }
-            link.prev('#body').val('');
-            link.attr('clicked', 'false');    
-          },
-          error: function(e) {
-            link.attr('clicked', 'false');    
-          }
-         });
-
-    };
-  });
-
-</script>
