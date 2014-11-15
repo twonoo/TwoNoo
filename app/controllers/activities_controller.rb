@@ -66,17 +66,18 @@ class ActivitiesController < ApplicationController
           # doesnt' matter because we are in a new window!
           activity = Activity.find(cookies[:activityid])
           
-          Time.zone = activity.tz
 
+          logger.info "Start: #{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+          logger.info "End: #{(activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
           event = {
             'summary' => activity.activity_name,
             'description' => activity.description,
             'location' => "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}",
             'start' => {
-              'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{Time.zone.formatted_offset}"
+              'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
             },
             'end' => {
-              'dateTime' => (activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S') + Time.zone.formatted_offset
+              'dateTime' => "#{(activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
             }
           }
 
