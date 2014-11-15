@@ -77,16 +77,16 @@ class WelcomeController < ApplicationController
     end
 
     # Get Timezone
-    begin
-      tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
-    rescue
+    #begin
+      #tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
+    #rescue
       tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
-    end
+    #end
 
     # Build search query for activities
     @activities = Activity.terms(params[:terms])
     @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-    @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+    @activities = @activities.where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc, from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
     #logger.info "**********!!!!!!!**********     #{from_date.in_time_zone(tz).utc} -  #{end_date.in_time_zone(tz).utc}"
     @activities = @activities.where('cancelled = ?', false)
     unless @outsideSupportedArea
@@ -101,7 +101,7 @@ class WelcomeController < ApplicationController
 
       @activities = Activity.terms(params[:terms])
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
+      @activities = @activities.where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc, from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       @activities = @activities.where('cancelled = ?', false)
       @activities = @activities.order('datetime ASC')
     end
@@ -111,7 +111,7 @@ class WelcomeController < ApplicationController
 
       @activities = Activity.all
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+      @activities = @activities.where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc, from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       @activities = @activities.where('cancelled = ?', false)
       unless @outsideSupportedArea
         @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
@@ -124,7 +124,7 @@ class WelcomeController < ApplicationController
       
       @activities = Activity.all
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-      @activities = @activities.where('datetime BETWEEN ? AND ?', from_date, end_date)
+      @activities = @activities.where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc, from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       @activities = @activities.where('cancelled = ?', false)
       @activities = @activities.order('datetime ASC')
     end

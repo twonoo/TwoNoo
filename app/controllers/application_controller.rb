@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_cache_buster, :set_cookies#, :set_city
 
+  config.time_zone = 'Mountain Time (US & Canada)'
+
   def set_city
     # session[:city] = request.location.city if session[:city].blank?
   end

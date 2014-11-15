@@ -50,9 +50,22 @@
 					<p class="lead"><%= @activity.description %>
 </p>
 					<p class="lead">
-            <b><%= link_to @activity.location_name, @activity.website %></b></br>
-            <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %><br/>
-            <font size="1">
+            <b>
+            <% if @activity.location_name.present? %>
+              <%= link_to @activity.location_name, @activity.website %>
+            <% elsif @activity.website.present? %>
+              <%= link_to @activity.website, @activity.website %>
+            <% end %>
+            </b></br>
+            <span style="white-space:nowrap;font-size:.85em;">
+            <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
+            </span>
+            <% unless @activity.enddatetime.nil? %>
+            <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
+            - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
+            </span>
+            <% end %>
+            <font size="1" style="white-space:nowrap;float:right;">
             Add to:
             <a id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
             <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>

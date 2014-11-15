@@ -9,12 +9,17 @@ class Activity < ActiveRecord::Base
 	before_validation :geocodecache
 	before_save :assign_timezone
 	before_save :convert_to_datetime
+	before_save :convert_to_enddatetime
 	before_save :format_url
 	has_many :rsvps
 
 	validates :activity_name, :date, :time, :city, :state, :description, presence: true
-	validate :distance_cannot_be_greater_than_100_miles
+
   validates_format_of :time, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
+  validates_format_of :endtime, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid', unless: "endtime.blank?"
+
+	validate :distance_cannot_be_greater_than_100_miles
+	validate :end_not_more_than_30_days
 
 	acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
@@ -46,10 +51,32 @@ class Activity < ActiveRecord::Base
     @date = d
   end 
 
+  def enddate
+    begin
+      if !(@enddate.nil?)
+        Time.strptime("#{@enddate}", "%m/%d/%Y")
+      elsif self.enddatetime.nil?
+        return nil
+      else
+        @enddate = self.enddatetime.strftime("%m/%d/%Y")
+      end
+    rescue => e
+				errors[:base] << "#{@enddate} is not a valid date. Use the format MM/DD/YYYY" unless @enddate.blank?
+    end
+
+    return @enddate
+
+  end
+
+  def enddate=(d)
+    logger.info "enddate: #{d}"
+    @enddate = d
+  end 
+
   def time
     begin
       unless @time.nil?
-        Time.zone.parse(@time)
+        Time.parse(@time)
       else
         @time = datetime.strftime("%l:%M %p")
       end
@@ -61,15 +88,54 @@ class Activity < ActiveRecord::Base
   end
 
   def time=(t)
+    logger.info "time: #{t}"
     @time = t
+    logger.info "time2: #{t}"
+  end 
+
+  def endtime
+    begin
+      if !(@endtime.nil?)
+        Time.zone.parse(@endtime)
+      elsif self.enddatetime.nil?
+        return nil
+      else
+        @endtime = self.enddatetime.strftime("%l:%M %p")
+      end
+    rescue
+				errors[:base] << "#{@endtime} is not a valid time" unless @endtime.blank?
+    end
+
+    return @endtime
+  end
+
+  def endtime=(t)
+    @endtime = t
   end 
 
   def convert_to_datetime
     unless @date.blank? || @time.blank?
-      self.datetime = Time.strptime("#{@date} #{@time.lstrip}", "%m/%d/%Y %l:%M %p")
+      logger.info "time3: #{@time}"
+      logger.info "zone: #{Time.zone}"
+      self.datetime = Time.strptime("#{@date} #{@time.lstrip}-07:00", "%m/%d/%Y %l:%M %p%z")
+      logger.info "datetime: #{self.datetime}"
     end
   end
 
+  def convert_to_enddatetime
+    unless @enddate.blank? || @endtime.blank?
+      self.enddatetime = Time.strptime("#{@enddate} #{@endtime.lstrip}-07:00", "%m/%d/%Y %l:%M %p%z")
+    else
+      self.enddatetime = nil
+    end
+  end
+
+	def end_not_more_than_30_days
+    unless enddatetime.nil? || (datetime - enddatetime) < 30.days
+				errors[:base] << "End date cannot be more than 30 days after the start"
+    end
+  end
+  
 	def distance_cannot_be_greater_than_100_miles
 		unless city.blank?
       denver = [39.737567, -104.9847179]
@@ -145,7 +211,7 @@ class Activity < ActiveRecord::Base
 		ActivityType.all.each do |a|
       results["#{a.id}"] = []
       if in_network
-        result = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+        result = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
           .select('activities.*, COUNT(rsvps.id) as rsvp_count')
           .where(cancelled: false)
           .where(activity_types: {id: a.id})
@@ -160,7 +226,7 @@ class Activity < ActiveRecord::Base
           results["#{a.id}"] << r
         end
 
-        resultIds = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+        resultIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
           .where(cancelled: false)
           .where(activity_types: {id: a.id})
           .joins(:activity_types)
@@ -168,7 +234,7 @@ class Activity < ActiveRecord::Base
           .limit(16)
       end
 
-      result2 = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      result2 = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
         .select('activities.*, COUNT(rsvps.id) as rsvp_count')
         .where(cancelled: false)
       unless results["#{a.id}"].count
@@ -190,8 +256,7 @@ class Activity < ActiveRecord::Base
 		# Calculate Top Trending
     results['top'] = []
     if in_network
-logger.info "get some"
-      top = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
       .within(25, origin: location)
@@ -200,7 +265,7 @@ logger.info "get some"
       .order('rsvp_count DESC')
       .limit(16)
 
-      topIds = where('datetime BETWEEN ? AND ?', Time.now.utc, Date.today + 15)
+      topIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
       .where(cancelled: false)
       .within(25, origin: location)
       .limit(16)
@@ -210,9 +275,7 @@ logger.info "get some"
       end
     end
 
-logger.info "get some more"
-logger.info "count: #{results['top'].count}"
-    top = where('datetime BETWEEN ? AND ?', Time.now, Date.today + 15)
+    top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
     unless results['top'].count
@@ -261,10 +324,12 @@ logger.info "count: #{results['top'].count}"
 	end
 
 	def format_url
-    if (self.website =~ /\Ahttp[s]?/i).nil?
-      self.website = "http://#{self.website}"
+    if self.website.present?
+      if (self.website =~ /\Ahttp[s]?/i).nil?
+        self.website = "http://#{self.website}"
+      end
+      logger.info "format_url: #{self.website}"
     end
-    logger.info "format_url: #{self.website}"
 	end
 
 
