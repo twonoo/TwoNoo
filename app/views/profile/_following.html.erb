@@ -2,7 +2,7 @@
 	<div id="results-row" class="row row-md-height col-md-12">
 		<% if current_user == User.find(params[:id]) %>
 			<div class="pull-right" style="margin-top:44px"><%=(link_to 'Unfollow', unfollow_path(f.id), class: 'label label-info')%></div>
-		<% elsif !(current_user.following?(f))%>
+		<% elsif !(current_user.following?(f) || (current_user == f))%>
       <div class="pull-right follow_link" style="cursor:pointer;margin-top:44px;" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
 		<% end %>
 		<p class="lead"><%= profile_img(f) %>

@@ -1,5 +1,5 @@
 <% @followers.each do |f| %>
-  <% unless (current_user.following?(f))%>
+  <% unless (current_user == f) || (current_user.following?(f))%>
     <div class="pull-right follow_link" style="cursor:pointer;margin-top:44px;" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
   <% end %>
 	<p class="lead">
