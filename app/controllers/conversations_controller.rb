@@ -38,24 +38,8 @@ class ConversationsController < ApplicationController
 
   def load_earlier_messages
     respond_to do |format|
-      format.html { render :partial => 'load_earlier_messages', :locals => { :conversation => conversation } }
+      format.html { render :partial => 'conversation', :locals => { :conversation => conversation } }
     end
-  end
-
-  def reply
-    current_user.reply_to_conversation(conversation, params[:message_body])
-
-    if conversation.originator == current_user
-      recipient = conversation.recipients[0]
-    else
-      recipient = conversation.originator
-    end
-
-    respond_to do |format|
-      format.html { render :partial => 'recent_messages', :locals => { :conversation => conversation } }
-    end
-
-    UserMailer.delay.new_message(recipient, current_user, params[:message_body])
   end
 
   def new_messages
@@ -103,11 +87,12 @@ class ConversationsController < ApplicationController
     sender = nil
     respond_to do |format|
       format.html do
+        logger.info "send_message html format"
         recipient = User.where(email: params[:recipient]).first
         sender - current_user
 
         message = {body: params[:body]}
-        WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message)
+        WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message.to_json)
 
         logger.info("recipient: " + params[:recipient])
 
@@ -129,8 +114,6 @@ class ConversationsController < ApplicationController
         else
           current_user.reply_to_conversation(conversation, *params[:body])
         end
-
-        render :partial => '/conversations/recent_messages', :locals => { :conversation => conversation } 
       end
       format.json do
         recipient_id = params[:recipient]
@@ -180,12 +163,6 @@ class ConversationsController < ApplicationController
 
   def show
     redirect_to conversations_path(:id => conversation.id)
-  end
-
-  def show_messages
-    respond_to do |format|
-      format.html { render :partial => 'recent_messages', :locals => { :conversation => conversation } }
-    end
   end
 
   def trash

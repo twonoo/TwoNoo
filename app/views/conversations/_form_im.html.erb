@@ -31,10 +31,6 @@
 
 </style>
 <div id="messages" class="col-md-12 messages">
-  <%= hidden_field_tag "first_id_shown" %>
-  <%= hidden_field_tag "last_id_shown" %>
-  <%= hidden_field_tag "last_user_shown" %>
-
   <div id="chatbox_header">
     <p><%=recipient.name%></p>
     <div style="clear:both"></div>
@@ -44,8 +40,11 @@
   </div>
 
   <%= text_area_tag :body, nil, rows: "2", class: 'body' %>
-  <a id="send_message" class="btn btn-success btn-sm send_message" 
+  <a id="send_message" class="btn btn-success btn-sm <%=(activity.nil?)?'send_message':'send_activity_message'%>" 
     recipient="<%=recipient.id%>" sender="<%=current_user.id%>"
     recipient_name="<%=recipient.profile.first_name%>" sender_name="<%=current_user.profile.first_name%>"
+    <% unless activity.nil? %>
+      activity_name="<%=activity.activity_name%>"
+    <% end %>
   >Send Message</a>
 </div>

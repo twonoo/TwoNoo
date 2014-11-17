@@ -1,21 +1,27 @@
-<% prevuserid = nil %>
-<% lastmessageid= nil %>
-<% firstmessageid= nil %>
-<% messagecount = 0 %>
-<% oldestunreadmessages = conversation.receipts_for(current_user).where(is_read: false).order("id ASC").first
-   oldestid = (oldestunreadmessages.nil?)?nil:oldestunreadmessages.id
-   messagecount = conversation.receipts_for(current_user).where('mailboxer_receipts.id >= ?', oldestid).count
+<%
+   firstmessageid = params[:first_id_shown]
+   messagecount = 0
+   num_messages = 20
+   oldestid = 0
+
+   unless (firstmessageid.present?)
+     oldestunreadmessages = conversation.receipts_for(current_user).where(is_read: false).order("id ASC").first
+     unless oldestunreadmessages.nil?
+       oldestid = oldestunreadmessages.id
+       num_messages = conversation.receipts_for(current_user).where('mailboxer_receipts.id >= ?', oldestid).count
+     end
+   end
+
+   where = (firstmessageid.present?) ? "mailboxer_receipts.id < #{firstmessageid}":"mailboxer_receipts.id >= 0"
+%>
   
-  conversation.receipts_for(current_user).order("id DESC").first(((20>messagecount)?20:messagecount)).each do |receipt| %>
+<% conversation.receipts_for(current_user).where(where).order("id DESC").first(((20>num_messages)?20:num_messages)).each do |receipt| %>
   <%
     message = receipt.message
-    userid = message.sender.id
-    firstmessageid = receipt.id if firstmessageid.nil? || receipt.id < firstmessageid
     messagecount = messagecount + 1
   %>
   <div class="row" style="background-color:#EEEEEE;padding-top:0px;padding-bottom:0px;margin-top:0px;border-bottom-style:solid;border-bottom-width:thin;border-bottom-color:#DDDDDD;
-    <%=(current_user != message.sender)?'color:#1111FF;':''%>
-    ">
+    <%=(current_user != message.sender)?'color:#1111FF;':''%>" receipt_id="<%=receipt.id%>">
     <div class="col-xs-3" style="background-color:#EEEEEE;">
       <b><%= message.sender.profile.first_name %>
             <% if message.created_at < (Time.now - 1.day) %>
@@ -32,17 +38,10 @@
     </div>
   </div>
   <%
-    if lastmessageid.nil? || (receipt.id > lastmessageid)
-      prevuserid = message.sender.id
-      lastmessageid = receipt.id
-    end
     message.mark_as_read(current_user)
   %>
 <% end %>
 
 <script>
-  $('#first_id_shown').val(<%=firstmessageid%>)
-  $('#last_id_shown').val(<%=lastmessageid%>)
-  $('#last_user_shown').val(<%=prevuserid%>)
   <% if messagecount < 20 %> $('#earlier_messages').html('No More Messages To Load') <% end %>
 </script>

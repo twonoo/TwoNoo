@@ -89,13 +89,3 @@
 <section class="slice" id="trending" name="trending" style="padding:0px"></section>
 
 <%= javascript_include_tag "welcome" %>
-
-<script>
-  var dispatcher = new WebSocketRails('dev-steve.twonoo.com:3001/websocket');
-
-  dispatcher.on_open = function(data) {
-    console.log('Connection has been established: ', data);
-    // You can trigger new server events inside this callback if you wish.
-  }
-
-</script>

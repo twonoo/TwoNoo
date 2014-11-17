@@ -7,9 +7,9 @@
     </div>
     <div class="col-md-6 panel panel-right" style="background-color:#fff">
       <% if !current_user.nil? && (current_user != f) then %>
-        <div class="pull-right" style="width:230px;z-index:1000"><font size="+1"><%= link_to "Send #{f.profile.first_name} a message", '#', id: 'messageMe', class: 'messageMe'  %></font>
+        <div class="pull-right" style="width:230px;z-index:1000"><%= link_to "Send #{f.profile.first_name} a message", '#', id: 'messageMe', class: 'messageMe'  %>
           <div style="display:none;padding:0px;margin:0px;position:absolute;" class="pull-right draggable">
-            <%= render '/conversations/form_im', :recipient => f%></font>
+            <%= render partial: '/conversations/form_im', :locals => {:recipient => f, :activity => nil}%>
           </div>
           <% if current_user == User.find(params[:id]) %>
             <div class="pull-right" style="margin-top:1.2em;"><%=(link_to 'Unfollow', unfollow_path(f.id), class: 'label label-info')%></div>
@@ -21,16 +21,3 @@
     </div>
   </div>
 <% end %>
-
-<script>
-  $(function() {
-    $( ".draggable").draggable();
-
-    $('.messageMe').bind('click', function(e){
-      $(this).parent().next('.draggable').is(':visible')?  $(this).parent().next('.draggable').hide(): $(this).parent().next('.draggable').show();
-      e.preventDefault();
-    });
-
-    init_im();
-  });
-</script>

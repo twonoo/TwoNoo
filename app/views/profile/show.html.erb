@@ -15,9 +15,9 @@
 			</div>
 			<div class="col-md-3">
         <% if !current_user.nil? && (current_user != @profile) then %>
-          <div class="pull-right" style="width:230px;z-index:1000"><font size="+1"><%= link_to "Send #{@profile.profile.first_name} a message", '#', class: 'label', id: 'messageMe'  %></font>
-            <div id="draggable" style="display:none;padding:0px;margin:0px;" class="pull-right">
-              <%= render '/conversations/form_im', :recipient => @profile%></font>
+          <div class="pull-right" style="width:230px;z-index:1000"><%= link_to "Send #{@profile.profile.first_name} a message", '#', class: 'label messageMe', id: 'messageMe'  %>
+            <div id="draggable" style="display:none;padding:0px;margin:0px;" class="pull-right draggable">
+              <%= render partial: '/conversations/form_im', :locals => {:recipient => @profile, :activity => nil}%>
             </div>
           </div>
         <% end %>
@@ -52,21 +52,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-<script>
-  $(function() {
-    $( "#draggable").draggable();
-    $( "#draggable").resizable();
-
-    $('#messageMe').bind('click', function(e){
-      $('#draggable').is(':visible')?  $('#draggable').hide(): $('#draggable').show();
-      e.preventDefault();
-    });
-  });
-</script>
-
 
 <style type="text/css">
 	.navbar {margin-bottom: 0;}

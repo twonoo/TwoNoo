@@ -3,3 +3,4 @@ $('#profile_data').html("<%=escape_javascript  render(partial: 'following')  %>"
 $('[id^=profile_]').removeClass('active');
 $('#profile_following').addClass('active');
 prepare_follow_links();
+init_im();

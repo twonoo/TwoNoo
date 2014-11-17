@@ -118,8 +118,10 @@
             <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
 	      <div class="text-left">
-              Send <%=@organizer.profile.first_name%> a message:
-              <%= render '/conversations/form', :organizer => @organizer.email %>
+              <%= link_to "Send #{@organizer.profile.first_name} a message", '#', id: 'messageMe', class: 'messageMe'  %>
+              <div style="display:none;padding:0px;margin:0px;position:absolute;" class="pull-right draggable">
+                <%= render partial: '/conversations/form_im', :locals => {:recipient => @organizer, :activity => @activity } %>
+              </div>
 			</div>
             <% end %>
 				</div>
