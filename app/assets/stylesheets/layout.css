@@ -1071,17 +1071,22 @@ body#comingSoon{padding-top:0; background: #4B4A4A}
   {
     font-size:xx-small;
   }
+  .logo
+  {
+    height:25px;
+  }
 }
 
 @media(min-width: 860px)
 {
-  li.narrow
+  li.narrow, .navbar-ex2-collapse
   {
     display:none;
   }
   li.wide
   {
   }
+  
 }
 
 @media(min-width: 860px) and (max-width:944px)

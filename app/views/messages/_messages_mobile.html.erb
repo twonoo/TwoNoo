@@ -1,0 +1,37 @@
+<div class="collapse navbar-ex3-collapse" id="scrollTarget">
+  <style>
+    #messages_dropdown_narrow
+    {
+      overflow-y:hidden;
+      overflow-x:hidden;
+      font-size:.9em;
+    }
+    #messages_dropdown_narrow:hover
+    {
+      overflow-y:auto;
+    }
+    #messages_dropdown_narrow .divider
+    {
+      height: 1px;
+      margin: 9px 0px;
+      overflow: hidden;
+      background-color: #E5E5E5;
+    }
+  </style>
+  <ul class="dropdown" id="messages_dropdown_narrow">
+    <div style="text-align: center;"><b>Conversations</b></div>
+    <hr style="margin:0px;padding:0px;"/>
+    <% current_user.mailbox.inbox({:read => false}).first(5).each do |conversation| %>
+      <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
+        <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
+      <%= link_to conversation_path(conversation) do %>
+        <b><%=message.sender.profile.first_name%>:</b> <%=message.body[0..99]%>
+        <% if message.body.length > 100 then %>...<% end %>
+      <% end %>
+        <% end %>
+      <% end %>
+      <hr style="margin:0px;padding:0px;"/>
+    <% end %>
+    <div style="text-align: center;"><b><%= link_to 'View All', conversations_path %></b></div>
+  </ul>
+</div>

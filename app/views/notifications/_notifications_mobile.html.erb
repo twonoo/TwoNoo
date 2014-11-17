@@ -1,0 +1,44 @@
+<div class="collapse navbar-ex2-collapse" id="scrollTarget">
+  <style>
+    #notifications_dropdown_narrow
+    {
+      overflow-y:hidden;
+      overflow-x:hidden;
+      font-size:.9em;
+    }
+    #notifications_dropdown_narrow:hover
+    {
+      overflow-y:auto;
+    }
+    #notifications_dropdown_narrow .divider
+    {
+      height: 1px;
+      margin: 9px 0px;
+      overflow: hidden;
+      background-color: #E5E5E5;
+    }
+  </style>
+  <ul class="dropdown" id="notifications_dropdown_narrow">
+    <div style="text-align: center;"><b>Notifications</b></div>
+    <hr style="margin:0px;padding:0px;"/>
+    <% current_user.mailbox.notifications.first(5).each do |notif| %>
+      <% if notif.is_unread?(current_user) then %>
+        <div style='word-wrap: break-word; margin-left: 5px; background-color: #F0F0F0;'>
+      <% else %>
+        <div style='word-wrap: break-word; margin-left: 5px;'>
+      <% end %>
+        <%
+          @user = User.find_by_id(notif.subject)
+          if @user.nil? then %>
+        <b><%=notif.subject%>:</b>
+        <% else %>
+          <b><%=link_to @user.name, profile_path(@user)%>:</b>
+        <% end %>
+        <%=notif.body.html_safe%>
+        <li class="divider"></li>
+      </div>
+      <% notif.mark_as_read(current_user) %>
+    <% end %>
+    <div style="text-align: center;"><b><%= link_to 'View More', notifications_mobile_path %></b></div>
+  </ul>
+</div>

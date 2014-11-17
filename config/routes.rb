@@ -110,6 +110,7 @@ Rails.application.routes.draw do
 
   get 'notifications/display' => 'notifications#display_notifications', as: :display_notifications
   get 'notifications/number' => 'notifications#num_notifications', as: :num_notifications
+  get 'notifications/notifications_mobile' => 'notifications#notifications_mobile', as: :notifications_mobile
 
   get 'users/:id/following' => 'users#following', as: :following
   get 'users/:id/followers' => 'users#followers', as: :followers

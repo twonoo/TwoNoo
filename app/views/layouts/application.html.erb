@@ -72,6 +72,22 @@
       js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1524267501137363&version=v2.0";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+    $(function(){
+      $('.navbar-toggle').click(function(){
+        var buttons_before = $(this).prevAll('.navbar-toggle')
+        var buttons_after = $(this).nextAll('.navbar-toggle');
+        buttons = $.merge(buttons_before, buttons_after);
+
+        for (var i = 0; i < buttons.length; i++)
+        {
+          if (!($(buttons[i]).hasClass('collapsed')))
+          {
+            $(buttons[i]).click();
+          }
+        }
+      });
+    });
   });
   </script>
 </head>
@@ -83,12 +99,24 @@
 			<div class="container-fluid">
 				<nav class="navbar navbar-default scrollMenu" role="navigation">
 					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-						<a class="navbar-brand" href="/"><img height="35px" src="<%= asset_path 'main-logo.png' %>"></a>
+            <div data-toggle="buttons-radio">
+              <button id="main_menu" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse" style="width:36px;height:34px;"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+              <% if current_user.present? %>
+                <button id="notifications_mobile" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex2-collapse" style="font-size:.8em;width:36px;height:34px;padding:0px;vertical-align:middle;"> <span class="sr-only">Toggle navigation</span><span class="glyphicon glyphicon-exclamation-sign"></span><span class="badge" id="notifications_badge_mobile"><%=current_user.mailbox.notifications({:read => false}).count%></span></button>
+                <button id="messages_mobile" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex3-collapse" style="font-size:.8em;width:36px;height:34px;padding:0px;vertical-align:middle;"> <span class="sr-only">Toggle navigation</span><span class="glyphicon-envelope"></span><span class="badge" id="messages_badge_mobile"><%=current_user.mailbox.inbox({:read => false}).count%></span></button>
+              <% end %>
+            </div>
+						<a class="navbar-brand" href="/"><img class="logo" height="35px" src="<%= asset_path 'main-logo.png' %>"></a>
           </div>
           <div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget">
             <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
           </div>
+          <% if current_user.present? %>
+            <%= render partial: '/notifications/notifications_mobile' %>
+          <% end %>
+          <% if current_user.present? %>
+            <%= render partial: '/messages/messages_mobile' %>
+          <% end %>
         </nav>
       </div>
     </header>

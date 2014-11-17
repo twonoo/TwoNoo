@@ -1,0 +1,36 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+      <style>
+        .notification
+        {
+          word-wrap: break-word;
+          margin-left:5px;
+          border-bottom-width:1px;
+          border-bottom-color:#DDD;
+          padding:5px;
+        }
+      </style>
+      <h2>Notifications</h2>
+      <hr style="margin:0px;padding:0px;"/>
+      <% current_user.mailbox.notifications.where('mailboxer_notifications.created_at > ?', Time.now - 7.days).each do |notif| %>
+        <% if notif.is_unread?(current_user) then %>
+          <div class="notification" style='background-color: #F0F0F0;'>
+        <% else %>
+          <div class="notification">
+        <% end %>
+          <%
+            @user = User.find_by_id(notif.subject)
+            if @user.nil? then %>
+          <b><%=notif.subject%>:</b>
+          <% else %>
+            <b><%=link_to @user.name, profile_path(@user)%>:</b>
+          <% end %>
+          <%=notif.body.html_safe%>
+        </div>
+        <hr style="margin:0px;padding:0px;"/>
+        <% notif.mark_as_read(current_user) %>
+      <% end %>
+    </div>
+  </div>
+</div>
