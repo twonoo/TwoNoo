@@ -4,6 +4,35 @@ class UserMailer < ActionMailer::Base
   ActionMailer::Base.default_url_options[:host] = "www.twonoo.com"
   default from: "no-reply@twonoo.com"
 
+  def activity_cancelled(user, activity)
+    @user = user
+
+    # Mandrill integration
+    mandrill_to = [{:email => user.email, :type => 'to'}]
+    mandrill = Mandrill::API.new
+    template = 'activity_cancelled'
+    tc = [{"name" => "inviter", "content" => "TwoNoo"}]
+    message = {  
+     :to=>mandrill_to,  
+     :merge_language=>"mailchimp",
+     :global_merge_vars=>[
+      {"name"=>"USER_NAME", "content"=>user.name},
+      {"name"=>"USER_EMAIL", "content"=>user.email},
+      {"name"=>"ACTIVITY_ID", "content"=>activity.id},
+      {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
+      {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
+      {"name"=>"ACTIVITY_LOCN", "content"=>activity.address},
+      {"name"=>"ACTIVITY_LAT", "content"=>activity.latitude},
+      {"name"=>"ACTIVITY_LNG", "content"=>activity.longitude},
+      {"name"=>"ACTIVITY_IMG", "content"=>activity_img(activity)},
+      {"name"=>"ACTIVITY_DATETIME", "content"=>activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p')}
+      ]
+    }  
+
+    sending = mandrill.messages.send_template template, tc, message  
+    logger.info sending
+  end
+
   def activity_reminder(user, activity)
     @user = user
 

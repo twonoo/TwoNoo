@@ -190,10 +190,14 @@ class ActivitiesController < ApplicationController
       @rsvps = Rsvp.where(activity_id: @activity.id).all
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
-        if !@user.nil?
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
-
-          UserMailer.delay.attending_activity_update(@user, @activity)
+        unless @user.nil? || @user == @activity.user
+          if @activity.cancelled
+            @user.notify("#{@activity.activity_name} has been cancelled", "(<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>)")
+            UserMailer.delay.activity_cancelled(@user, @activity)
+          else
+            @user.notify("#{@activity.activity_name} is back on!!", "(<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>)")
+            UserMailer.delay.attending_activity_update(@user, @activity)
+          end
         end
       end
       redirect_to @activity
@@ -214,7 +218,7 @@ class ActivitiesController < ApplicationController
       @rsvp_ids.each do |rsvp_id|
         @user = User.find_by_id(rsvp_id)
         if !@user.nil? && @user != current_user
-          @user.notify("#{current_user.name} commented on an activity", "#{current_user.name} has commentd on an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+          @user.notify("#{current_user.name} commented on an activity you're going to", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
           UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
         end
@@ -270,7 +274,7 @@ class ActivitiesController < ApplicationController
       # Notfiy all followers of this organizer that a new activity has been created.
       current_user.followers.each do |follower|
         UserMailer.delay.new_following_activity(follower, current_user, @activity)
-        follower.notify("#{current_user.name} created a new activity", "#{current_user.name} has created a new activity:  <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
 
       redirect_to @activity
@@ -291,7 +295,7 @@ class ActivitiesController < ApplicationController
     @organizer = User.find(@activity.user_id)
 
     unless current_user == @organizer
-      @organizer.notify("#{current_user.name} is coming!", "#{current_user.name} is attending your activity: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+      @organizer.notify("#{current_user.name} is coming to your activity!", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
       UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
     end
@@ -320,7 +324,7 @@ class ActivitiesController < ApplicationController
       @rsvps.each do |rsvp|
         @user = User.find_by_id(rsvp.user_id)
         unless @user.nil? || (current_user == @user)
-          @user.notify("#{current_user.name} updated an activity", "#{current_user.name} has updated an activity you're going to: <a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+          @user.notify("#{current_user.name} updated an activity you're going to", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
           UserMailer.delay.attending_activity_update(@user, @activity)
         end
