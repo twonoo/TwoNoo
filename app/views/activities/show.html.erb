@@ -47,8 +47,15 @@
             <% end %>
           </div>
           </br>
-					<p class="lead"><%= @activity.description %>
-</p>
+					<p class="lead">
+            <%
+              desc = @activity.description
+                .gsub("\n", "<br/>")
+                .gsub(" ", "&nbsp;")
+                .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
+            %>
+            <%= desc.html_safe %>
+          </p>
 					<p class="lead">
             <b>
             <% if @activity.location_name.present? %>

@@ -11,6 +11,7 @@ class Activity < ActiveRecord::Base
 	before_save :convert_to_datetime
 	before_save :convert_to_enddatetime
 	before_save :format_url
+	before_save :format_description
 	has_many :rsvps
 
 	validates :activity_name, :date, :time, :city, :state, :description, presence: true
@@ -332,5 +333,13 @@ class Activity < ActiveRecord::Base
     end
 	end
 
+  def format_description
+    logger.info "format_description"
+    if self.description.present?
+      logger.info "description before: #{self.description}"
+      self.description = self.description.gsub(/<[^>]*>/, '') #remove all html tags
+      logger.info "description after: #{self.description}"
+    end
+  end
 
 end

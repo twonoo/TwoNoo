@@ -58,38 +58,124 @@ class ConversationsController < ApplicationController
     UserMailer.delay.new_message(recipient, current_user, params[:message_body])
   end
 
+  def new_messages
+    logger.info "new_messages"
+    respond_to do |format|
+      format.json do
+        logger.info ""
+        # get all of the messages sent to the user since check time
+        recipient_id = params[:recipient]
+        logger.info "recipient_id: #{recipient_id}"
+
+        sender_id = params[:sender]
+        logger.info "sender_id: #{sender_id}"
+
+        recipient = User.find(recipient_id)
+        sender = User.find(sender_id)
+
+        @conversations = mailbox.conversations
+        conv = nil
+
+        @conversations.each do |c|
+          next if c.originator.nil? || c.recipients.first.nil?
+          if (((c.originator.id == sender.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == sender.id))) then
+            conv = c
+            break
+          end
+        end
+
+        r = []
+        orderBy = "id ASC"
+        conv.receipts_for(sender).where("mailboxer_receipts.created_at > '#{params[:check]}'").order(orderBy).each do |receipt|
+          logger.info "message.sender.id: #{receipt.message.sender.id}"
+          unless recipient == receipt.message.sender
+            r << {body: receipt.message.body }
+          end
+        end
+        
+        render text: r.to_json
+      end
+    end
+  end
+
   def send_message
-    recipient = User.where(email: params[:recipient]).first
+    recipient = nil
+    sender = nil
+    respond_to do |format|
+      format.html do
+        recipient = User.where(email: params[:recipient]).first
+        sender - current_user
 
-    message = {body: params[:body]}
-    WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message)
+        message = {body: params[:body]}
+        WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message)
 
-    logger.info("recipient: " + params[:recipient])
+        logger.info("recipient: " + params[:recipient])
 
-    logger.info recipient.email
-    @conversations = mailbox.conversations
-    conversation = nil
+        logger.info recipient.email
+        @conversations = mailbox.conversations
+        conversation = nil
 
-    @conversations.each do |c|
-      next if c.originator.nil? || c.recipients.first.nil?
-      if (((c.originator.id == current_user.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == current_user.id))) then
-        conversation = c
-        break
+        @conversations.each do |c|
+          next if c.originator.nil? || c.recipients.first.nil?
+          if (((c.originator.id == current_user.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == current_user.id))) then
+            conversation = c
+            break
+          end
+        end
+
+        if conversation.nil? then
+          conversation = current_user.
+            send_message(recipient, *params[:body], current_user.email).conversation
+        else
+          current_user.reply_to_conversation(conversation, *params[:body])
+        end
+
+        render :partial => '/conversations/recent_messages', :locals => { :conversation => conversation } 
+      end
+      format.json do
+        recipient_id = params[:recipient]
+        logger.info "recipient_id: #{recipient_id}"
+
+        sender_id = params[:sender]
+        logger.info "sender_id: #{sender_id}"
+
+        recipient = User.find(recipient_id)
+        sender = User.find(sender_id)
+
+        logger.info "Let the other person see the message"
+
+        # Evenb though we are doing an ajax post the person listening might be using websockets
+        WebsocketRails["#{recipient_id}_#{sender_id}"].trigger('new_message', params.to_json)
+
+        logger.info "Here we be"
+
+        logger.info "email: #{recipient.email}"
+        @conversations = sender.mailbox.conversations
+        conversation = nil
+
+        logger.info "Is this a new conv"
+        @conversations.each do |c|
+          next if c.originator.nil? || c.recipients.first.nil?
+          if (((c.originator.id == sender.id) && (c.recipients.first.id == recipient.id)) || ((c.originator.id == recipient.id) && (c.recipients.first.id == sender.id))) then
+            conversation = c
+            break
+          end
+        end
+
+        logger.info "record is"
+        if conversation.nil? then
+          conversation = sender.
+            send_message(recipient, params[:body], sender.email).conversation
+        else
+          sender.reply_to_conversation(conversation, params[:body])
+        end
+        logger.info "return value"
+
+        render text: "success".to_json
       end
     end
 
-    if conversation.nil? then
-      conversation = current_user.
-        send_message(recipient, *params[:body], current_user.email).conversation
-    else
-      current_user.reply_to_conversation(conversation, *params[:body])
-    end
-
-    respond_to do |format|
-      format.html { render :partial => '/conversations/recent_messages', :locals => { :conversation => conversation } }
-    end
-
-    UserMailer.delay.new_message(recipient, current_user, *params[:body])
+    UserMailer.delay.new_message(recipient, sender, *params[:body])
   end
 
   def show
