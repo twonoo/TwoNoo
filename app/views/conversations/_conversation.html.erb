@@ -2,7 +2,11 @@
 <% lastmessageid= nil %>
 <% firstmessageid= nil %>
 <% messagecount = 0 %>
-<% conversation.receipts_for(current_user).order("id DESC").first(20).each do |receipt| %>
+<% oldestunreadmessages = conversation.receipts_for(current_user).where(is_read: false).order("id ASC").first
+   oldestid = (oldestunreadmessages.nil?)?nil:oldestunreadmessages.id
+   messagecount = conversation.receipts_for(current_user).where('mailboxer_receipts.id >= ?', oldestid).count
+  
+  conversation.receipts_for(current_user).order("id DESC").first(((20>messagecount)?20:messagecount)).each do |receipt| %>
   <%
     message = receipt.message
     userid = message.sender.id
