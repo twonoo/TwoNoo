@@ -19,7 +19,7 @@ class Activity < ActiveRecord::Base
   validates_format_of :time, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
   validates_format_of :endtime, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid', unless: "endtime.blank?"
 
-	validate :distance_cannot_be_greater_than_100_miles
+	#validate :distance_cannot_be_greater_than_100_miles
 	validate :end_not_more_than_30_days
 
 	acts_as_mappable :default_units => :miles,

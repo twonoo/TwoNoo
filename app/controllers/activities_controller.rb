@@ -77,7 +77,7 @@ class ActivitiesController < ApplicationController
               'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
             },
             'end' => {
-              'dateTime' => "#{(activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+              'dateTime' => "#{(activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
             }
           }
 
@@ -99,7 +99,7 @@ class ActivitiesController < ApplicationController
         activity = Activity.find_by_id(params[:id])
         event = Icalendar::Event.new
         event.dtstart = activity.datetime.strftime("%Y%m%dT%H%M%S")
-        event.dtend = (activity.datetime + 1.hour).strftime("%Y%m%dT%H%M%S")
+        event.dtend = (activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime("%Y%m%dT%H%M%S")
         event.summary = activity.activity_name
         event.description = activity.description
         event.location = "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}"

@@ -22,7 +22,7 @@ class WelcomeController < ApplicationController
     fairbanks = [64.8377778, -147.7163889]
 
     # Convert search parameter to coordinates
-    if params[:lat].present? || params[:lng].present?
+    if (params[:lat].present? || params[:lng].present?)
       lat = params[:lat]
       lon = params[:lng]
       search_coordinates = [params[:lat].to_f, params[:lng].to_f]
@@ -31,23 +31,37 @@ class WelcomeController < ApplicationController
       # TODO: add in looking cookies
 
       # try to get it by the IP address
-      search_coordinates = Geocode.coordinates_by_ip(request.remote_ip)
-      lat = search_coordinates[0]
-      lon = search_coordinates[1]
-    else
-      # Need to have this look at the GeoCodecache
-      search_location = Geocoder.search(params[:location]).first
-      search_coordinates = search_location.coordinates
-      lat = search_location.latitude
-      lon = search_location.longitude
+      begin
+        search_coordinates = Geocode.coordinates_by_ip(request.remote_ip)
+        lat = search_coordinates[0]
+        lon = search_coordinates[1]
+      rescue
+        logginer.info "Geocode by IP failed"
+      end
     end
-    
-    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
-           Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
-           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
-      flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
+
+    if (!defined?(search_coordinates) || search_coordinates.nil?)
+      # Need to have this look at the GeoCodecache
+      begin
+        search_location = Geocoder.search(params[:location]).first
+        search_coordinates = search_location.coordinates
+        lat = search_location.latitude
+        lon = search_location.longitude
+      rescue
+        logginer.info "Geocode by location failed"
+      end
+    end
+
+    if !defined?(search_coordinates) || search_coordinates.nil?
       @outsideSupportedArea = true
     end
+    
+#    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
+#           Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
+#           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
+#      flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
+#      @outsideSupportedArea = true
+#    end
 
     # Determine Type
     type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
