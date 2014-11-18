@@ -15,11 +15,18 @@
 			</div>
 			<div class="col-md-3">
         <% if !current_user.nil? && (current_user != @profile) then %>
-          <div class="im-container pull-right" style="width:230px;z-index:1000"
+          <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
             alink="Send <%=@profile.profile.first_name%> a message"
             recipient="<%=@profile.id%>" recipient_firstname="<%=@profile.profile.first_name%>" recipient_lastname="<%=@profile.profile.last_name%>"
             sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
           ></div>
+          <script>
+            (function(){
+              $('#profile-im').bind('on_init_complete', function(){
+                $('#profile-im #messageMe').addClass('label');
+              });
+            })();
+          </script>
         <% end %>
       </div>
 		</div>

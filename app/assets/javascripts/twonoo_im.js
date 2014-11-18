@@ -14,8 +14,6 @@ Dispatcher.handle = false;
 Dispatcher.init_dispatcher = function(){
   if (!(Dispatcher.initialized))
   {
-    $(Dispatcher).bind('onopen onerror', function(){Dispatcher.initialized = true;});
-
     Dispatcher.dispatcher = new WebSocketRails('dev-steve.twonoo.com:3001/websocket');
 
     Dispatcher.dispatcher.on_open = function(data) {
@@ -23,12 +21,15 @@ Dispatcher.init_dispatcher = function(){
       console.log('Connection has been established: ', data);
       // You can trigger new server events inside this callback if you wish.
 
-      if (Dispatcher.handle) {
-        cleearInterval(Dispatcher.handle);
-        Dispatcher.handle = false;
-      }
-
       $(Dispatcher).trigger('onopen',data);
+
+      Dispatcher.dispatcher.bind('connection_closed', function(data) {
+        Dispatcher.supportsWebsockets = false;
+        Dispatcher.initialized = false; /* reset to false so we can attempt to reinitialize at some point */
+        console.log("connection closed!", data) 
+
+        $(Dispatcher).trigger('onclose',data);
+      });
     }
 
     Dispatcher.dispatcher.bind('connection_error', function(data) {
@@ -38,19 +39,12 @@ Dispatcher.init_dispatcher = function(){
       $(Dispatcher).trigger('onerror',data);
     });
 
-    Dispatcher.dispatcher.bind('connection_closed', function(data) {
-      Dispatcher.supportsWebsockets = false;
-      Dispatcher.initialized = false; /* reset to false so we can attempt to reinitialize at some point */
-      console.log("connection closed!", data) 
-
-      $(Dispatcher).trigger('onclose',data);
-    });
+    Dispatcher.initialized = true;
   }
 };
 
 function init_im()
 {
-  Dispatcher.init_dispatcher();
   IM.init('.im-container');
   AIM.init('.aim-container');
   CIM.init('.cim-container');
@@ -70,8 +64,8 @@ User.prototype.name = function(){
 };
 
 var IM = function(im_container) {
-
   /* The basics, need this for all chat boxes */
+  Dispatcher.init_dispatcher();
   this.im_container = im_container;
   this.recipient = new User(im_container.attr('recipient'), im_container.attr('recipient_firstname'), im_container.attr('recipient_lastname'));
   this.sender = new User(im_container.attr('sender'), im_container.attr('sender_firstname'), im_container.attr('sender_lastname'));
@@ -99,6 +93,8 @@ var IM = function(im_container) {
   });
 
   im_container.attr('initialized', this.channelName);
+
+  this.im_container.trigger('on_init_complete');
 };
 
 IM.prototype.create_parts = function(){
