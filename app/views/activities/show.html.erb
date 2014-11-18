@@ -51,7 +51,7 @@
             <%
               desc = @activity.description
                 .gsub("\n", "<br/>")
-                .gsub(" ", "&nbsp;")
+                .gsub("  ", "&nbsp;")
                 .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
             %>
             <%= desc.html_safe %>
@@ -117,14 +117,14 @@
             <h4><%= @organizer.profile.about_me %></h4>
             <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
-	      <div class="text-left">
-              <%= link_to "Send #{@organizer.profile.first_name} a message", '#', id: 'messageMe', class: 'messageMe'  %>
-              <div style="display:none;padding:0px;margin:0px;position:absolute;" class="pull-right draggable">
-                <%= render partial: '/conversations/form_im', :locals => {:recipient => @organizer, :activity => @activity } %>
-              </div>
-			</div>
             <% end %>
 				</div>
+              <div class="aim-container" style="width:230px;z-index:1000;"
+                alink="Send <%=@organizer.profile.first_name%> a message"
+                activity_name="<%=@activity.activity_name%>"
+                recipient="<%=@organizer.id%>" recipient_firstname="<%=@organizer.profile.first_name%>" recipient_lastname="<%=@organizer.profile.last_name%>"
+                sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
+              ></div>
 			</div>
       <div class="panel panel-default">
         <div class="panel-body">

@@ -50,50 +50,46 @@ Dispatcher.init_dispatcher = function(){
 
 function init_im()
 {
-  /*$( ".draggable").draggable(); disabling because it's kinda funky on IE and safari */
-
-  $('.messageMe').unbind('click');
-  $('.messageMe').bind('click', function(e){
-    $(this).next('.draggable').is(':visible')?  $(this).next('.draggable').hide(): $(this).next('.draggable').show();
-    e.preventDefault();
-  });
-
   Dispatcher.init_dispatcher();
-  IM.init('.send_message');
-  AIM.init('.send_activity_message');
-  CIM.init('.send_conversation_message');
+  IM.init('.im-container');
+  AIM.init('.aim-container');
+  CIM.init('.cim-container');
 }
 
-var IM = function(link){
-  this.link = link;
-  this.body = link.prev('.body');
-  this.conversation = this.body.prev('.conversation');
+var User = function(id, firstname, lastname){
+  console.log("id: ", id);
+  console.log("firstname: ", firstname);
+  console.log("lastname: ", lastname);
+  this.id = id;
+  this.firstname = firstname;
+  this.lastname = lastname;
+};
 
-  this.recipient_id = link.attr('recipient');
-  this.recipient_name = link.attr('recipient_name');
+User.prototype.name = function(){
+  return Template.printf("#{firstname} #{lastname}", {firstname: this.firstname, lastname: this.lastname});
+};
 
-  this.sender_id = link.attr('sender');
-  this.sender_name = link.attr('sender_name');
-  
-  this.channelName = link.attr('sender') + '_' + link.attr('recipient');
+var IM = function(im_container) {
+
+  /* The basics, need this for all chat boxes */
+  this.im_container = im_container;
+  this.recipient = new User(im_container.attr('recipient'), im_container.attr('recipient_firstname'), im_container.attr('recipient_lastname'));
+  this.sender = new User(im_container.attr('sender'), im_container.attr('sender_firstname'), im_container.attr('sender_lastname'));
+  this.channelName = this.sender.id + '_' + this.recipient.id;
+
+  /* The parts, probably want to provide a way to override these */
+  this.create_parts();
+
+  /* Put it all together */
+  this.build();
+
+  /* Style it */
+  this.style();
+
+  /* Bind the events */
+  this.bind();
 
   var m = this;
-  this.body.keyup(function(e) {
-    if (e.keyCode == 13 && !e.shiftKey) {
-      e.preventDefault();
-      m.link.trigger('click');
-    }
-    else if (e.keyCode == 27)
-    {
-      $(this).val('');
-    }
-  });
-
-  this.link.unbind('click'); /* make sure there aren't any other click handlers */
-  this.link.bind('click', function(e){
-    m.send_message();
-  });
-
   $(Dispatcher).bind('onclose onopen', function(data){
     /* reset the channels */
     console.log('the connection was closed. reset the channels and listeners');
@@ -101,25 +97,117 @@ var IM = function(link){
     m.channel = false;
     m.listen(); /* start the listeners back up - this might get a litte funky if the listener was never started */
   });
+
+  im_container.attr('initialized', this.channelName);
 };
 
-IM.init = function(selector){
+IM.prototype.create_parts = function(){
+  this.alink = $('<a>', {id: 'messageMe', class: 'messageMe', text: this.im_container.attr('alink')});
+  this.chatbox = $('<div>', {id: 'chatbox', class: 'chatbox col-md-12', style: 'display:none;padding:0px;margin:0px'});
+  this.header = $('<div>', {id: 'header', class: 'header', text: this.recipient.name()});
+  this.conversation = $('<div>', {id: 'conversation', class: 'conversation col-md-12'});
+  this.body = $('<textarea>', {id: 'body', class: 'body', rows: 2});
+  this.sendlink = $('<a>', {id: 'sendlink', class: 'sendlink btn btn-success btn-sm', text: 'Send Message'});
+};
+
+IM.prototype.build = function(){
+  this.im_container.append(this.alink);
+  this.im_container.after(this.chatbox);
+  this.chatbox.append(this.header);
+  this.chatbox.append(this.conversation);
+  this.chatbox.append(this.body);
+  this.chatbox.append(this.sendlink);
+};
+
+IM.prototype.style = function(){
+  this.header.css({
+    'background-color':'#4DBFF5',
+    'color':'#FFFFFF',
+    'padding':'0px',
+    'margin':'0px',
+    'text-align':'center'
+  });
+
+  this.conversation.css({
+    'font-size': '.8em',
+    'padding': '0px',
+    'margin': '0px',
+    'max-height': '200px',
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+  });
+
+  this.chatbox.css({
+    'padding': '0px',
+    'margin': '0px',
+    'margin-right': '30px',
+    'z-index': '1001',
+    'background': '#EEE',
+    'position':'absolute',
+    'top': this.im_container.height(),
+    'right':'0px',
+    'width': '230px'
+  });
+
+  this.body.css({
+    'font-size': '.8em',
+    'width': '100%',
+    'resize': 'vertical'
+  });
+};
+
+IM.prototype.bind = function(){
+  this.bind_alink();
+
+  this.bind_body();
+
+  this.bind_sendlink();
+};
+
+IM.prototype.bind_alink = function(){
+  var m = this;
+  this.alink.unbind('click');
+  this.alink.bind('click', function(e){
+    m.chatbox.is(':visible')? m.chatbox.hide(): m.chatbox.show();
+    m.body.focus();
+    e.preventDefault();
+  });
+};
+
+IM.prototype.bind_body = function(){
+  var m = this;
+  this.body.keyup(function(e) {
+    if (e.keyCode == 13 && !e.shiftKey) {
+      e.preventDefault();
+      m.sendlink.trigger('click');
+    }
+    else if (e.keyCode == 27)
+    {
+      $(this).val('');
+    }
+  });
+};
+
+IM.prototype.bind_sendlink = function(){
+  var m = this;
+  this.sendlink.unbind('click'); /* make sure there aren't any other click handlers */
+  this.sendlink.bind('click', function(e){
+    m.send_message();
+  });
+};
+
+IM.init = function(selector) {
   console.log("initializing IM messengers");
   IM.messengers = IM.messengers || new Object();
 
   $(selector).each(function(){
-    if (!(IM.messengers[IM.channelName($(this))]))
+    if (!($(this).attr('initialized')))
     {
       var messenger = new IM($(this));
-      IM.messengers[messenger.channelName] = messenger;
     }
   });
   
 }
-
-IM.channelName = function(link){
-  return link.attr('sender') + '_' + link.attr('recipient');
-};
 
 IM.prototype.add_to_conversation = function(message, recipient) {
   console.log("add_to_conversation: ", message)
@@ -128,7 +216,7 @@ IM.prototype.add_to_conversation = function(message, recipient) {
 
   message_row = new Template(message_row_template);
   var body = message.body;
-  var name = recipient?this.recipient_name:this.sender_name;
+  var name = recipient?this.recipient.firstname:this.sender.firstname;
   var color = recipient?'color:#1111FF;':'';
 
   this.conversation.append(message_row.run({color: color, name: name, body: body}));
@@ -137,10 +225,10 @@ IM.prototype.add_to_conversation = function(message, recipient) {
 IM.prototype.clicked = function(clicked) {
   if (!(typeof clicked === "undefined"))
   {
-    this.link.attr('clicked', clicked);    
+    this.sendlink.attr('clicked', clicked);    
   }
 
-  return (this.link.attr('clicked') == 'true');
+  return (this.sendlink.attr('clicked') == 'true');
 };
 
 IM.prototype.listen = function(){
@@ -191,9 +279,8 @@ IM.prototype.refresh = function()
   console.log("checkTime: ", checkTime.toJSON());
 
   var message = {
-    body: this.body.val(),
-    recipient: this.sender_id,
-    sender: this.recipient_id,
+    recipient: this.sender.id,
+    sender: this.recipient.id,
     check: checkTime.toJSON()
   };
 
@@ -224,8 +311,8 @@ IM.prototype.send_message = function()
 
   var message = {
     body: this.message_text(),
-    recipient: this.recipient_id,
-    sender: this.sender_id
+    recipient: this.recipient.id,
+    sender: this.sender.id
   };
 
   if (Dispatcher.supportsWebsockets)
@@ -293,21 +380,26 @@ IM.prototype.toggle_sending = function(clearText)
 
     if (clearText) { this.body.val(''); }
 
-    this.link.html('SEND MESSAGE');
+    this.sendlink.html('SEND MESSAGE');
   }
   else
   {
     this.clicked('true');
     this.body.prop('disabled', true);
-    this.link.html('SENDING MESSAGE...');
+    this.sendlink.html('SENDING MESSAGE...');
   }
 }; /* END toggle_sending */
 
 
-var AIM = function(link){
-  IM.call(this, link);
+var AIM = function(container){
+  IM.call(this, container);
 
-  this.activity_name = link.attr('activity_name');
+  this.activity_name = container.attr('activity_name');
+
+  this.chatbox.css({
+    'top': '',
+    'right': ''
+  });
 };
 
 AIM.prototype = Object.create(IM.prototype);
@@ -326,13 +418,37 @@ AIM.prototype.message_text = function(){
   return this.body.val() + ' - (Sent from: ' + this.activity_name + ')';
 };
 
-var CIM = function(link){
-  IM.call(this, link);
+var CIM = function(container){
+  console.log("CIM");
+  IM.call(this, container);
+};
+CIM.prototype = Object.create(IM.prototype);
 
+CIM.prototype.create_parts = function(){
+  console.log("creating parts");
   this.conversation = $('#conversation');
+  this.body = $('<textarea>', {id: 'body', class: 'body', rows: 4});
+  this.sendlink = $('<a>', {id: 'sendlink', class: 'sendlink btn btn-success btn-sm', text: 'Send Message'});
 };
 
-CIM.prototype = Object.create(IM.prototype);
+CIM.prototype.build = function(){
+  console.log("build");
+  this.im_container.append(this.body);
+  this.im_container.append(this.sendlink);
+};
+
+CIM.prototype.style = function(){
+  console.log("style");
+  this.body.css({
+    'width': '100%',
+  });
+};
+
+CIM.prototype.bind = function(){
+  this.bind_body();
+
+  this.bind_sendlink();
+};
 
 CIM.init = function(selector){
   console.log("initializing CIM messengers");
@@ -373,7 +489,7 @@ CIM.prototype.add_to_conversation = function(message, recipient) {
 
   message_row = new Template(message_row_template);
   var body = message.body;
-  var name = recipient?this.recipient_name:this.sender_name;
+  var name = recipient?this.recipient.firstname:this.sender.firstname;
   var color = recipient?'color:#1111FF;':'';
 
   this.conversation.prepend(message_row.run({color: color, name: name, body: body}));
@@ -390,3 +506,10 @@ Template.prototype.run = function(attrs){
   }
   return str;
 }; /* END run */
+
+Template.printf = function (str, attrs){
+  for (attr in attrs) {
+    str = str.replace('#{' + attr + '}', attrs[attr]);
+  }
+  return str;
+};

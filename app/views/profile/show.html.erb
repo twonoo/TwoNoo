@@ -15,11 +15,11 @@
 			</div>
 			<div class="col-md-3">
         <% if !current_user.nil? && (current_user != @profile) then %>
-          <div class="pull-right" style="width:230px;z-index:1000"><%= link_to "Send #{@profile.profile.first_name} a message", '#', class: 'label messageMe', id: 'messageMe'  %>
-            <div id="draggable" style="display:none;padding:0px;margin:0px;" class="pull-right draggable">
-              <%= render partial: '/conversations/form_im', :locals => {:recipient => @profile, :activity => nil}%>
-            </div>
-          </div>
+          <div class="im-container pull-right" style="width:230px;z-index:1000"
+            alink="Send <%=@profile.profile.first_name%> a message"
+            recipient="<%=@profile.id%>" recipient_firstname="<%=@profile.profile.first_name%>" recipient_lastname="<%=@profile.profile.last_name%>"
+            sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
+          ></div>
         <% end %>
       </div>
 		</div>

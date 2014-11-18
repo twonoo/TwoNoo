@@ -5,16 +5,16 @@
         <%= link_to (f.name), profile_path(f) %>
       </p>
     </div>
-    <div class="col-md-6 panel panel-right" style="background-color:#fff">
+    <div class="col-md-6 panel panel-right" style="background-color:#fff;vertical-align:middle;">
       <% if !current_user.nil? && (current_user != f) then %>
-        <div class="pull-right" style="width:230px;z-index:1000"><%= link_to "Send #{f.profile.first_name} a message", '#', id: 'messageMe', class: 'messageMe'  %>
-          <div style="display:none;padding:0px;margin:0px;position:absolute;" class="pull-right draggable">
-            <%= render partial: '/conversations/form_im', :locals => {:recipient => f, :activity => nil}%>
-          </div>
+        <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;"
+          alink="Send <%=f.profile.first_name%> a message"
+          recipient="<%=f.id%>" recipient_firstname="<%=f.profile.first_name%>" recipient_lastname="<%=f.profile.last_name%>"
+          sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
+        ></div>
           <% unless (current_user == f) || (current_user.following?(f))%>
-            <div class="pull-right follow_link" style="cursor:pointer;padding-top:1.2em;" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
+            <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
           <% end %>
-        </div>
       <% end %>
     </div>
   </div>
