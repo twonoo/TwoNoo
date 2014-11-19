@@ -51,7 +51,9 @@
           <div class="tab-pane <%= 'active' if @activities.blank? %>" id="users">
             <% @users.each do |u| %>
               <p class="lead">
+                <% unless u.user.nil? %>
                 <p class="lead"><%= profile_img(u.user) %> 
+                <% end %>
                 <%= link_to (u.first_name + ' ' + u.last_name), profile_path(u.user_id) %>
               </p>
             <% end %>
