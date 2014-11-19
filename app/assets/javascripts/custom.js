@@ -661,7 +661,7 @@ $(".portfolioSheet").pageslide({
 */
 $('.nav a').on('click', function(){
 
-  $('.navbar-toggle:not(.collapsed)').click()
+  $('.navbar-toggle:not(.collapsed)').click();
 
 });
 

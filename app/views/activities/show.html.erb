@@ -119,7 +119,7 @@
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
             <% end %>
 				</div>
-            <% unless current_user.nil? || (@organzier == current_user)%>
+            <% unless current_user.nil? || (@organizer == current_user)%>
               <div class="aim-container" style="width:230px;z-index:1000;"
                 alink="Send <%=@organizer.profile.first_name%> a message"
                 activity_name="<%=@activity.activity_name%>"
