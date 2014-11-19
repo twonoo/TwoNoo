@@ -1,21 +1,16 @@
 <% @followers.each do |f| %>
-  <div id="results-row" class="row row-sm-height">
-    <div class="col-md-6 panel" style="background-color:#fff">
-      <p class="lead"><%= profile_img(f) %>
+    <div class="col-md-12 panel " style="background-color:#fff;vertical-align:middle;">
+        <%= profile_img(f) %>
         <%= link_to (f.name), profile_path(f) %>
-      </p>
-    </div>
-    <div class="col-md-6 panel panel-right" style="background-color:#fff;vertical-align:middle;">
       <% if !current_user.nil? && (current_user != f) then %>
-        <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;"
+        <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
           alink="Send <%=f.profile.first_name%> a message"
           recipient="<%=f.id%>" recipient_firstname="<%=f.profile.first_name%>" recipient_lastname="<%=f.profile.last_name%>"
           sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
         ></div>
           <% unless (current_user == f) || (current_user.following?(f))%>
-            <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
+            <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;vertical-align:middle;"">Follow</a></div>
           <% end %>
       <% end %>
     </div>
-  </div>
 <% end %>
