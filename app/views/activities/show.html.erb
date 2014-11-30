@@ -5,6 +5,7 @@
 				<div class="panel-body">
 					<h2>
 						<%= @activity.activity_name %>
+            <small class="pull-right"><%= @activity.views %> views </small>
 						<% if @activity.cancelled %>
 							<font color='red'>(Cancelled)</font>
 						<% end %>
