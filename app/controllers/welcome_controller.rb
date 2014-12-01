@@ -36,7 +36,7 @@ class WelcomeController < ApplicationController
         lat = search_coordinates[0]
         lon = search_coordinates[1]
       rescue
-        logginer.info "Geocode by IP failed"
+        logger.info "Geocode by IP failed"
       end
     end
 
@@ -48,7 +48,7 @@ class WelcomeController < ApplicationController
         lat = search_location.latitude
         lon = search_location.longitude
       rescue
-        logginer.info "Geocode by location failed"
+        logger.info "Geocode by location failed"
       end
     end
 

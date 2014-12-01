@@ -32,6 +32,14 @@ class Activity < ActiveRecord::Base
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
 	end
 
+  def increase_view
+    if views.nil? 
+      update_attribute(:views, 1)
+    else
+      update_attribute(:views, views + 1)
+    end
+  end
+
   def date
     begin
       unless @date.nil?
@@ -257,16 +265,16 @@ class Activity < ActiveRecord::Base
 		# Calculate Top Trending
     results['top'] = []
     if in_network
-      top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
+      top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
       .within(25, origin: location)
       .joins(:rsvps)
       .group('rsvps.activity_id')
-      .order('rsvp_count DESC')
+      .order('rsvp_count, views DESC')
       .limit(16)
 
-      topIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
+      topIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
       .where(cancelled: false)
       .within(25, origin: location)
       .limit(16)
@@ -276,7 +284,7 @@ class Activity < ActiveRecord::Base
       end
     end
 
-    top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
+    top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
       .select('activities.*, COUNT(rsvps.id) as rsvp_count')
       .where(cancelled: false)
     unless results['top'].count
@@ -285,7 +293,7 @@ class Activity < ActiveRecord::Base
 
     top = top.joins(:rsvps)
       .group('rsvps.activity_id')
-      .order('rsvp_count DESC')
+      .order('rsvp_count, views DESC')
       .limit(16 - results['top'].count)
 
     top.each do |t|
@@ -341,5 +349,6 @@ class Activity < ActiveRecord::Base
       logger.info "description after: #{self.description}"
     end
   end
+
 
 end

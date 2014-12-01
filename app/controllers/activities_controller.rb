@@ -153,6 +153,8 @@ class ActivitiesController < ApplicationController
       redirect_to root_url
       return
     end
+    
+    @activity.increase_view
 
     @organizer = User.find(@activity.user_id)
   end

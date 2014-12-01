@@ -5,6 +5,7 @@
 				<div class="panel-body">
 					<h2>
 						<%= @activity.activity_name %>
+            <small class="pull-right"><%= @activity.views %> views </small>
 						<% if @activity.cancelled %>
 							<font color='red'>(Cancelled)</font>
 						<% end %>
@@ -14,6 +15,7 @@
             <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
             <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
             <% end %>
+
             <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success btn-sm pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger btn-sm pull-right') %>
             <!-- share buttons -->
 
@@ -38,6 +40,8 @@
             <a href="//www.pinterest.com/pin/create/button/?url=<%=activity_url(id: @activity.id)%>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%=@imageURL%>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
 
           <%end%>
+
+          <%= !current_user ? (link_to "Join Us!", new_user_session_path, class: 'btn btn-success btn-sm pull-right') : nil %>
 					<!-- Please call pinit.js only once per page -->
 					<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
 
@@ -117,6 +121,8 @@
             <h4><%= @organizer.profile.about_me %></h4>
             <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
+            <% elsif !current_user %>
+              <%= (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %>
             <% end %>
 				</div>
             <% unless current_user.nil? || (@organizer == current_user)%>
