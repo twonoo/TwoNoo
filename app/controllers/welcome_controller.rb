@@ -1,6 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    @trending = Activity.trending(nil)
   end
 
   def trending
