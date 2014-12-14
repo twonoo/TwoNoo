@@ -1,13 +1,11 @@
 development:
   adapter: mysql2
-  database: toonoo_development
-  host: 127.0.0.1
-  username: sgedbadmin
-  password: sG3@dm1n90
-  pool: 5
-  reconnect: true
   encoding: utf8
-  collation: utf8_unicode_ci
+  database: twonoo_dev
+  pool: 5
+  username: twonoo
+  password: Tw0#oo
+  host: db1.twonoo.com
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
