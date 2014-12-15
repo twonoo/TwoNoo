@@ -28,6 +28,12 @@ class Activity < ActiveRecord::Base
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
+  scope :between_dates, lambda{|from_date, end_date| where('(datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?) OR ((? < enddatetime) AND (? > datetime))',
+                                                           from_date, end_date, from_date, end_date, from_date, end_date) }
+
+  scope :after_date, lambda{|from_date| where('(datetime > ?) OR (enddatetime > ?) ',
+                                                           from_date, from_date) }
+
 	def address
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
 	end
