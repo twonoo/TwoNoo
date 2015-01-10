@@ -538,61 +538,122 @@ hr {
 /* HEADER
 ================================================== */
 #mainHeader{
-    background:#eee;
+  background:#eee;
 
-    #mobile-nav {
+  #mobile-nav {
 
-        margin: 0;
-        padding: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    list-style-type: none;
+    li {
+      a {
         width: 100%;
+        height: 100%;
 
-        list-style-type: none;
-        li {
-          a {
-            width: 100%;
-            height: 100%;
-            color: #777;
-            display: block;
-            position: relative;
-            z-index: 10;
-          }
-          text-align: center;
-          display: block;
-          padding: 0;
-          margin: 0;
-          float: left;
+        display: block;
+        position: relative;
+        z-index: 10;
 
-          width: 16.6666%;
-          height: 50px;
-          //white-space:nowrap;
-          //background:gray;
-
-          border:2px solid #DDD;
-          border-width:2px 1px;
-
-          .glyphicon {
-            line-height: 25px;
-            height: 25px;
-          }
-          .fa {
-            line-height: 35px;
-            height: 25px;
-          }
-          span {
-            hight: 30px;
-            display: block;
-          }
-
-          .fa-bell, .fa-bars {
-            font-size: 33px;
-            line-height: 46px;
-          }
-          .fa-users {
-            line-height: 33px;
-          }
+        .counter {
+          position: absolute;
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          top: 0px;
+          left: 56%;
+          font-weight: 600;
+          margin-right: -20px;
+          font-size: 14px;
+          line-height: 17px;
         }
 
+        color: #777;
+        background-color: #FFF;
+      }
+      a:hover {
+        color: #fff;
+        background-color: #777;
+      }
+      text-align: center;
+      display: block;
+      padding: 0;
+      margin: 0;
+      float: left;
+
+      width: 16.6666%;
+      height: 50px;
+
+      border:2px solid #DDD;
+      border-width:2px 1px;
+
+      .glyphicon {
+        line-height: 25px;
+        height: 25px;
+      }
+      .fa {
+        line-height: 35px;
+        height: 25px;
+      }
+      span {
+        hight: 30px;
+        display: block;
+      }
+
+      .fa-bell, .fa-bars {
+        font-size: 33px;
+        line-height: 46px;
+      }
+      .fa-users {
+        line-height: 33px;
+      }
     }
+  }
+  #mobile-signup-signin {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    list-style-type: none;
+    li {
+      a {
+        width: 100%;
+        height: 100%;
+        color: #FFF;
+        display: block;
+        position: relative;
+        z-index: 10;
+        font-size: 2em;
+        line-height: 1.5em;
+
+
+      }
+
+      text-align: center;
+      display: block;
+      padding: 0;
+      margin: 0;
+      float: left;
+
+      width: 50%;
+      height: 50px;
+
+
+      border:2px solid #DDD;
+      border-width:0px 1px 2px 1px;
+
+    }
+
+    #sign-up {
+      background-color: #0DB635;
+    }
+    #sign-in {
+      background-color: #214FCA;
+    }
+  }
 }
 .navbar-brand{
     padding:0;
