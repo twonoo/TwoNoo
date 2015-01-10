@@ -91,17 +91,35 @@
 
 <div id="fb-root"></div>
 
-
-
 		<!-- header -->
 		<header id="mainHeader" class="navbar-fixed-top" role="banner">
 			<div class="container-fluid">
               <ul id="mobile-nav" class="navbar-toggle collapsed">
-                <li id="my-stuff"><a href="<%= user_activities_path(current_user) if current_user.present? %>"><span class="glyphicon glyphicon-user"></span>MY STUFF<span class="counter" style="display: none"></span></a></li>
-                <li id="create"><a href="<%= activities_create_path %>"><span class="glyphicon glyphicon-plus"></span>CREATE<span class="counter" style="display: none"></span></a></li>
-                <li id="activities"><a href="<%= root_path %>"><span class="fa fa-users"></span>ACTIVITIES<span class="counter" style="display: none"></span></a></li>
-                <li id="messages"><a href="<%= conversations_path %>"><span class="glyphicon glyphicon-envelope"></span>MESSAGES<span class="counter">2</span></a></li>
-                <li id="alert"><a href="<%= alerts_path %>"><span class="fa fa-bell"></span><span class="counter">8</span></a></li>
+                <li id="my-stuff"><a href="<%= user_activities_path(current_user) if current_user.present? %>">
+                  <span class="glyphicon glyphicon-user"></span>MY STUFF
+                  <% if num_alerts > 0 %>
+                      <span class="counter"><%= num_alerts > 99 ? "*" : num_alerts %></span>
+                  <% end %>
+                </a></li>
+
+                <li id="create"><a href="<%= activities_new_path %>"><span class="glyphicon glyphicon-plus"></span>CREATE
+                </a></li>
+
+                <li id="activities"><a href="<%= root_path %>"><span class="fa fa-users"></span>ACTIVITIES
+                </a></li>
+
+                <li id="messages"><a href="<%= conversations_path %>"><span class="glyphicon glyphicon-envelope"></span>MESSAGES
+                  <% if num_inbox > 0 %>
+                      <span class="counter"><%= num_inbox > 99 ? "*" : num_inbox %></span>
+                  <% end %>
+                </a></li>
+
+                <li id="alert"><a href="<%= alerts_path %>"><span class="fa fa-bell"></span>
+                  <% if num_notifications > 0 %>
+                    <span class="counter"><%= num_notifications > 99 ? "*" : num_notifications %></span>
+                  <% end %>
+                </a></li>
+
                 <li id="menu"><a href="#" data-toggle="collapse" data-target=".navbar-ex1-collapse"><span class="fa fa-bars"></span></a></li>
               </ul>
               <% unless current_user.present? %>
@@ -110,7 +128,6 @@
                     <li id="sign-in"><a href="<%= user_session_path %>">SIGN IN</a></li>
                   </ul>
               <% end %>
-
                   <nav class="navbar navbar-default scrollMenu" role="navigation">
 					<div class="navbar-header">
                       <!--<button id="main_menu" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse" style="width:40px;height:34px;"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>-->

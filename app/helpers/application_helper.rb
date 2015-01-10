@@ -87,4 +87,27 @@ module ApplicationHelper
     end
   end
 
+  def num_notifications
+    if current_user.present?
+      current_user.mailbox.notifications({read: false}).count
+    else
+      0
+    end
+  end
+
+  def num_inbox
+    if current_user.present?
+      current_user.mailbox.inbox({read: false}).count
+    else
+      0
+    end
+  end
+
+  def num_alerts
+    if current_user.present?
+      current_user.alerts.count
+    else
+      0
+    end
+  end
 end
