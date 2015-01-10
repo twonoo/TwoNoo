@@ -537,7 +537,63 @@ hr {
 
 /* HEADER
 ================================================== */
-#mainHeader{background:#eee;}
+#mainHeader{
+    background:#eee;
+
+    #mobile-nav {
+
+        margin: 0;
+        padding: 0;
+        width: 100%;
+
+        list-style-type: none;
+        li {
+          a {
+            width: 100%;
+            height: 100%;
+            color: #777;
+            display: block;
+            position: relative;
+            z-index: 10;
+          }
+          text-align: center;
+          display: block;
+          padding: 0;
+          margin: 0;
+          float: left;
+
+          width: 16.6666%;
+          height: 50px;
+          //white-space:nowrap;
+          //background:gray;
+
+          border:2px solid #DDD;
+          border-width:2px 1px;
+
+          .glyphicon {
+            line-height: 25px;
+            height: 25px;
+          }
+          .fa {
+            line-height: 35px;
+            height: 25px;
+          }
+          span {
+            hight: 30px;
+            display: block;
+          }
+
+          .fa-bell, .fa-bars {
+            font-size: 33px;
+            line-height: 46px;
+          }
+          .fa-users {
+            line-height: 33px;
+          }
+        }
+
+    }
+}
 .navbar-brand{
     padding:0;
     line-height: 55px;
