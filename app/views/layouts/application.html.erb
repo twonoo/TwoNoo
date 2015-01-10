@@ -96,29 +96,30 @@
 		<!-- header -->
 		<header id="mainHeader" class="navbar-fixed-top" role="banner">
 			<div class="container-fluid">
-              <ul id="mobile-nav">
-                <li id="my-stuff"><a href="<%= user_activities_path(current_user) %>"><span class="glyphicon glyphicon-user"></span>MY STUFF<span class="counter" style="display: none"></span></a></li>
+              <ul id="mobile-nav" class="navbar-toggle collapsed">
+                <li id="my-stuff"><a href="<%= user_activities_path(current_user) if current_user.present? %>"><span class="glyphicon glyphicon-user"></span>MY STUFF<span class="counter" style="display: none"></span></a></li>
                 <li id="create"><a href="<%= activities_create_path %>"><span class="glyphicon glyphicon-plus"></span>CREATE<span class="counter" style="display: none"></span></a></li>
                 <li id="activities"><a href="<%= root_path %>"><span class="fa fa-users"></span>ACTIVITIES<span class="counter" style="display: none"></span></a></li>
                 <li id="messages"><a href="<%= conversations_path %>"><span class="glyphicon glyphicon-envelope"></span>MESSAGES<span class="counter">2</span></a></li>
                 <li id="alert"><a href="<%= alerts_path %>"><span class="fa fa-bell"></span><span class="counter">8</span></a></li>
                 <li id="menu"><a href="#" data-toggle="collapse" data-target=".navbar-ex1-collapse"><span class="fa fa-bars"></span></a></li>
               </ul>
-              <ul id="mobile-signup-signin">
-                <li id="sign-up"><a href="<%= new_user_registration_path %>">SIGN UP</a></li>
-                <li id="sign-in"><a href="<%= user_session_path %>">SIGN IN</a></li>
-              </ul>
-              <br style="clear: both" />
+              <% unless current_user.present? %>
+                  <ul id="mobile-signup-signin" class="navbar-toggle collapsed">
+                    <li id="sign-up"><a href="<%= new_user_registration_path %>">SIGN UP</a></li>
+                    <li id="sign-in"><a href="<%= user_session_path %>">SIGN IN</a></li>
+                  </ul>
+                  <br style="clear: both" />
+              <% end %>
 
-
-				<!--<nav class="navbar navbar-default scrollMenu" role="navigation">-->
-					<!--<div class="navbar-header">-->
+                  <nav class="navbar navbar-default scrollMenu" role="navigation">
+					<div class="navbar-header">
                       <!--<button id="main_menu" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse" style="width:40px;height:34px;"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>-->
               <!--<% if current_user.present? %>-->
                 <!--<button id="notifications_mobile" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex2-collapse" style="font-size:.8em;width:40px;height:34px;padding:0px;vertical-align:middle;"> <span class="sr-only">Toggle navigation</span><span class="glyphicon glyphicon-exclamation-sign"></span><span class="badge" id="notifications_badge_mobile" style="font-size:.5em;"><%=current_user.mailbox.notifications({:read => false}).count%></span></button>-->
                 <!--<button id="messages_mobile" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex3-collapse" style="font-size:.8em;width:40px;height:34px;padding:0px;vertical-align:middle;"> <span class="sr-only">Toggle navigation</span><span class="glyphicon-envelope"></span><span class="badge" id="messages_badge_mobile" style="font-size:.5em;"><%=current_user.mailbox.inbox({:read => false}).count%></span></button>-->
               <!--<% end %>-->
-						<!--<a class="navbar-brand" href="/"><img class="logo" height="35px" src="<%= asset_path 'main-logo.png' %>"></a>-->
+						<a class="collapse navbar-collapse navbar-brand" href="/"><img class="logo" height="35px" src="<%= asset_path 'main-logo.png' %>"></a>
           </div>
           <div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget" style="height: 1px;">
             <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>

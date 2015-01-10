@@ -544,9 +544,18 @@ hr {
 
     margin: 0;
     padding: 0;
+    border: 0;
+    
     width: 100%;
 
     list-style-type: none;
+
+
+    @media only screen and (max-width : 500px) {
+      font-size: 11px;
+    }
+
+
     li {
       a {
         width: 100%;
