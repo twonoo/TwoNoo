@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   acts_as_messageable
   has_many :alerts
   has_one :profile, dependent: :destroy
@@ -6,18 +7,19 @@ class User < ActiveRecord::Base
   has_many :follow_relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :follow_relationships, source: :followed
   has_many :searches
+  has_many :recommended_followers
 
   accepts_nested_attributes_for :profile
 
   has_many :reverse_relationships, foreign_key: "followed_id",
-                                   class_name:  "FollowRelationship",
-                                   dependent:   :destroy
+           class_name: "FollowRelationship",
+           dependent: :destroy
   has_many :followers, through: :reverse_relationships
 
   has_many :activities
 
-	before_save :geocode_ip
-	after_save :default_follow
+  before_save :geocode_ip
+  after_save :default_follow
   after_create :initial_credits
 
   default_scope { includes(:profile, :activities) }
@@ -46,6 +48,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  def facebook_friends?(other_user)
+    if self.provider == 'facebook' && other_user.provider == 'facebook' && other_user.fb_token.present?
+      response = HTTParty.get("https://graph.facebook.com/v2.2/#{other_user.uid}/friends/#{self.uid}?access_token=#{other_user.fb_token}")
+      if response.present?
+        data_set = JSON.parse(response)
+        return true if data_set['data'].present?
+      end
+    end
+    false
+  end
+
   def following?(other_user)
     follow_relationships.find_by(followed_id: other_user.id)
   end
@@ -58,11 +71,15 @@ class User < ActiveRecord::Base
     follow_relationships.find_by(followed_id: other_user).destroy
   end
 
+  def recommend_follow!(other_user, order)
+    recommended_followers.create!(recommended_follower_id: other_user.id, order: order) unless RecommendedFollower.exists?(user_id: self.id, recommended_follower_id: other_user.id)
+  end
+
   def self.from_omniauth(auth)
-    where(auth.slice(:provider, :uid)).first_or_create do |user|
+    user = where(auth.slice(:provider, :uid)).first_or_create do |user|
       user.skip_confirmation!
       user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
+      user.password = Devise.friendly_token[0, 20]
       # Begin Profile Build
       user.build_profile
       user.profile.first_name = auth.info.first_name
@@ -76,6 +93,13 @@ class User < ActiveRecord::Base
       user.profile.profile_picture = oauth_picture
       logger.info "created account for facebook user: #{user.email}"
     end
+
+    #These should always be updated on a new log in to ensure the token expiration is updated and to retrofit existing
+    #users prior to this update
+    user.fb_token = auth.credentials[:token]
+    user.fb_token_expires_in = auth.credentials[:expires_at]
+
+    user
   end
 
   def self.new_with_session(params, session)
