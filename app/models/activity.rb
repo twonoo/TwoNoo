@@ -33,6 +33,7 @@ class Activity < ActiveRecord::Base
 
   scope :after_date, lambda{|from_date| where('(datetime > ?) OR (enddatetime > ?) ',
                                                            from_date, from_date) }
+  scope :upcoming, lambda{ where("datetime >= ?", Time.now()) }
 
 	def address
 		[street_address_1, street_address_2, city, state].grep(String).join(', ')
