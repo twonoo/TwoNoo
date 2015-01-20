@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav pull-right">
+<ul class="nav navbar-nav pull-right navbar-toggle collapse">
   <% if request.original_url == root_url %>
     <li><%= link_to 'Invite Friends', '#', id: 'invite', style: 'background-color:#49AFCD; color:#FFF', title: "Earn referral credit!", rel: "tooltip" %></li>
       <script>
@@ -8,7 +8,7 @@
   	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#49AFCD; color:#FFF' %></li>
     <li><%= link_to 'Home', root_path  %></li>
   <% end %>
-  <li><%= link_to "Feedback", '#', id: 'feedback' %></li>
+  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
   <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
 
   <li class="dropdown wide" id="notifications_menu">
@@ -65,5 +65,15 @@
 
   <li class="narrow"><%= link_to 'My Profile', profile_path(current_user) %></li>
   <li class="narrow"><%= link_to 'Settings', profile_edit_path %></li>
+  <li class="narrow"><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
+</ul>
+
+
+<ul class="nav navbar-nav pull-right navbar-toggle collapsed">
+  <li><%= link_to 'Home', root_path  %></li>
+  <li class="narrow"><%= link_to 'My Profile', profile_path(current_user) %></li>
+  <li class="narrow"><%= link_to 'Settings', profile_edit_path %></li>
+  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
+  <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
   <li class="narrow"><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
 </ul>
