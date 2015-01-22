@@ -1,4 +1,4 @@
-<section id="user-menu" class="sub-nav" style="background-color:#000000; padding-bottom:55px">
+<section id="user-menu" class="sub-nav collapse navbar-collapse" style="background-color:#000000; padding-bottom:55px">
   <ul class="nav navbar-nav">
   	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#49AFCD; color:#FFF' %></li>
   	<li><%= link_to "My Activities <span class='badge'> #{current_user.activities.where("datetime >= ?", Time.now()).count}</span>".html_safe, user_activities_path(current_user.id) %></li>
