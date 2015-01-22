@@ -181,7 +181,7 @@
                  value="Denver, CO"
                  <% end %>
                  placeholder="City or ZIP">
-          <a id="selection" class="selection location_selection_mobile" style="color: inherit; text-decoration: underline;">
+          <a id="selection" class="selection location_selection_mobile" style="color: inherit;">
             <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                 <%=current_user.profile.city%>, <%=current_user.profile.state%>
             <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
@@ -210,7 +210,7 @@
 
         <input class="btn" name="commit" type="submit" value="Search" style="display: none">
     <% end %>
-    
+
     <div style="padding-bottom: 50px;">
         <%= flash_messages %>
         <%= yield %>
