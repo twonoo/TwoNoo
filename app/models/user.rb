@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
 
   def facebook_friends?(other_user)
     if self.provider == 'facebook' && other_user.provider == 'facebook' && other_user.fb_token.present?
-      response = HTTParty.get("https://graph.facebook.com/v2.2/#{other_user.uid}/friends/#{self.uid}?access_token=#{other_user.fb_token}")
+      response = HTTParty.get("https://graph.facebook.com/v2.2/me/friends/#{self.uid}?access_token=#{other_user.fb_token}")
       if response.present?
         data_set = JSON.parse(response)
         return true if data_set['data'].present?
