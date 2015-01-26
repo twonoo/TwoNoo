@@ -95,26 +95,32 @@
 		<header id="mainHeader" class="navbar-fixed-top" role="banner">
 			<div class="container-fluid">
               <ul id="mobile-nav" class="navbar-toggle collapsed">
-                <li id="my-stuff"><a href="<%= user_activities_path(current_user) if current_user.present? %>">
+                <li id="my-stuff">
+                  <% if current_user.present? %>
+                      <a href="<%= user_activities_path(current_user) %>">
+                  <% else %>
+                      <a href="<%= user_session_path %>">
+                  <% end %>
                   <span class="glyphicon glyphicon-user"></span>MY STUFF
                   <% if num_alerts > 0 %>
                       <span class="counter"><%= num_alerts > 99 ? "*" : num_alerts %></span>
                   <% end %>
+                </a>
+                </li>
+
+                <li id="create"><a href="<%= activities_new_path %>"><span class="icon glyphicon glyphicon-plus"></span>CREATE
                 </a></li>
 
-                <li id="create"><a href="<%= activities_new_path %>"><span class="glyphicon glyphicon-plus"></span>CREATE
+                <li id="activities"><a href="<%= root_path %>"><span class="icon fa fa-users"></span>ACTIVITIES
                 </a></li>
 
-                <li id="activities"><a href="<%= root_path %>"><span class="fa fa-users"></span>ACTIVITIES
-                </a></li>
-
-                <li id="messages"><a href="<%= conversations_path %>"><span class="glyphicon glyphicon-envelope"></span>MESSAGES
+                <li id="messages"><a href="<%= conversations_path %>"><span class="icon glyphicon glyphicon-envelope"></span>MESSAGES
                   <% if num_inbox > 0 %>
                       <span class="counter"><%= num_inbox > 99 ? "*" : num_inbox %></span>
                   <% end %>
                 </a></li>
 
-                <li id="alert"><a href="<%= alerts_path %>"><span class="fa fa-bell"></span>
+                <li id="alert"><a href="<%= alerts_path %>"><span class="icon fa fa-bell"></span>ALERTS
                   <% if num_notifications > 0 %>
                     <span class="counter"><%= num_notifications > 99 ? "*" : num_notifications %></span>
                   <% end %>
@@ -150,13 +156,70 @@
       </div>
     </header>
 				<!-- header -->
-      <div style="padding-bottom: 50px;">
+    <% unless current_user.present? %>
+        <div id="mobile-signup-signin-space" class="navbar-toggle collapsed">
+          &nbsp
+        </div>
+    <% end %>
+
+    <%= form_tag("/search", method: "get", id: "search_form", onsubmit: "return confirmSearch();") do %>
+    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0">
+        <div class="" style="padding-bottom: 10px">
+          <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Find activities/events...blank shows all" type="search" title="Find activities/events...blank shows all">
+          <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: 72px; right: 22px;"></span>
+        </div>
+
+        <div class="btn-group" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; float: left;">
+          <input type="hidden" id="lat" name="lat" value="39.737567"></input>
+          <input type="hidden" id="lng" name="lng" value="-104.9847179"></input>
+          <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;"
+                 <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+                 value="<%=current_user.profile.city%>, <%=current_user.profile.state%>"
+                 <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+                 value="<%=cookies["city"]%>, <%=cookies["state"]%>"
+                 <% else %>
+                 value="Denver, CO"
+                 <% end %>
+                 placeholder="City or ZIP">
+          <a id="selection" class="selection location_selection_mobile" style="color: inherit;">
+            <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+                <%=current_user.profile.city%>, <%=current_user.profile.state%>
+            <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+                <%=cookies["city"]%>, <%=cookies["state"]%>
+            <% else %>
+                Denver, CO
+            <% end %>
+            <i class='glyphicon glyphicon-chevron-down'></i>
+          </a>
+        </div>
+
+        <div class="" style="padding-bottom: 10px;width: 49%; float: left;">
+          <div class="btn-group" id="date-dropdown">
+            <a style="cursor: pointer; background-color: inherit; border: none; color: inherit;" class="dropdown-toggle search_criteria" data-toggle="dropdown" >
+            <input type="hidden" name="type" class="hidden-input" id="type-selection" value="All">
+            <span class="selection" id="activitytype-selection-phrase" sytle="">All</span> <i class='glyphicon glyphicon-chevron-down'></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">All</a></li>
+              <% ActivityType.all.each do |at| %>
+                  <li><a href="#"><%=at.activity_type%></a></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+    </div>
+
+        <input class="btn" name="commit" type="submit" value="Search" style="display: none">
+    <% end %>
+
+    <div style="padding-bottom: 50px;">
         <%= flash_messages %>
         <%= yield %>
       </div>
-      <%= render 'layouts/footer' %> 
+      <%= render 'layouts/footer' %>
 
-	  <script>
+    <%= javascript_include_tag "welcome" %>
+
+    <script>
 	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
