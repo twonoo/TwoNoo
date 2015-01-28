@@ -3,8 +3,11 @@ class RecommendedFollower < ActiveRecord::Base
 
 	after_initialize :init
 
-
 	def init
-	end
+  end
+
+  def follower_profile
+    @profile ||= Profile.find_by_user_id(self.recommended_follower_id)
+  end
 
 end
