@@ -22,7 +22,8 @@ $(function(){
       datatype: 'script',
       cache: false,
       success: function(html) {
-	$('#notifications_badge').html(html);
+          $('#notifications_badge').html(html);
+          $('#notifications_badge_mobile').html(html);
 
 	setTimeout(function() {
 	  refresh_num_notifs();

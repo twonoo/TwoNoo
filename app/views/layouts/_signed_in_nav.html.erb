@@ -13,7 +13,7 @@
 
   <li class="dropdown wide" id="notifications_menu">
     <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
-      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span>
+      <span class="badge" id="notifications_badge"><%= num_notifications %></span>
     </a>
     <style>
       #notifications_dropdown, #messages_dropdown
@@ -66,15 +66,4 @@
   <li class="narrow"><%= link_to 'My Profile', profile_path(current_user) %></li>
   <li class="narrow"><%= link_to 'Settings', profile_edit_path %></li>
   <li class="narrow"><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
-</ul>
-
-
-<ul class="nav navbar-nav pull-right navbar-toggle collapsed" style="padding-top: 0; margin-top: 0;">
-  <li><%= link_to 'Home', root_path  %></li>
-  <li class="divider"></li>
-  <li class=""><%= link_to 'My Profile', profile_path(current_user) %></li>
-  <li class=""><%= link_to 'Settings', profile_edit_path %></li>
-  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
-  <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
-  <li class=""><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
 </ul>

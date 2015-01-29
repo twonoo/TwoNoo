@@ -5,10 +5,15 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  before_filter :set_cache_buster, :set_cookies, :store_location
+  before_filter :set_cache_buster, :set_cookies, :store_location, :check_flash_alert_param
 
   config.time_zone = 'Mountain Time (US & Canada)'
 
+  def check_flash_alert_param
+    if params[:flash_alert].present?
+      flash[:alert] = params[:flash_alert]
+    end
+  end
 
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.
