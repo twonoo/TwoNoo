@@ -13,7 +13,7 @@
 
   <li class="dropdown wide" id="notifications_menu">
     <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
-      <span class="badge" id="notifications_badge"><%=current_user.mailbox.notifications({:read => false}).count%></span>
+      <span class="badge" id="notifications_badge"><%= num_notifications %></span>
     </a>
     <style>
       #notifications_dropdown, #messages_dropdown
