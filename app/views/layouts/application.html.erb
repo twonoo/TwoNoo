@@ -102,9 +102,6 @@
                       <a href="<%= user_session_path %>">
                   <% end %>
                   <span class="glyphicon glyphicon-user"></span>MY STUFF
-                  <% if num_alerts > 0 %>
-                      <span class="counter"><%= num_alerts > 99 ? "*" : num_alerts %></span>
-                  <% end %>
                 </a>
                 </li>
 
@@ -145,6 +142,7 @@
           </div>
           <div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget" style="height: 1px;">
             <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
+            <%= render "layouts/mobile_nav" %>
           </div>
           <% if current_user.present? %>
             <%= render partial: '/notifications/notifications_mobile' %>
@@ -163,10 +161,10 @@
     <% end %>
 
     <%= form_tag("/search", method: "get", id: "search_form", onsubmit: "return confirmSearch();") do %>
-    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0">
+    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0; ">
         <div class="" style="padding-bottom: 10px">
           <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Find activities/events...blank shows all" type="search" title="Find activities/events...blank shows all">
-          <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: 72px; right: 22px;"></span>
+          <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;"></span>
         </div>
 
         <div class="btn-group" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; float: left;">
