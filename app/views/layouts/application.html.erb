@@ -160,62 +160,12 @@
         </div>
     <% end %>
 
-    <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
-    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0; ">
-        <div class="" style="padding-bottom: 10px">
-          <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Find activities/events...blank shows all" type="search" title="Find activities/events...blank shows all">
-          <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;" onclick="document.search_form_mobile.submit(); return false;"></span>
-        </div>
-
-        <div class="btn-group" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; float: left;">
-          <input type="hidden" id="lat-mobile"" name="lat" value="39.737567"></input>
-          <input type="hidden" id="lng-mobile"" name="lng" value="-104.9847179"></input>
-          <input type="text" id="location-mobile" name="location" class="form-control input-md" style="width:125px;display:none;"
-                 <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-                 value="<%=current_user.profile.city%>, <%=current_user.profile.state%>"
-                 <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-                 value="<%=cookies["city"]%>, <%=cookies["state"]%>"
-                 <% else %>
-                 value="Denver, CO"
-                 <% end %>
-                 placeholder="City or ZIP">
-          <a id="selection-mobile"" class="selection location_selection_mobile" style="color: inherit;">
-            <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-                <%=current_user.profile.city%>, <%=current_user.profile.state%>
-            <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-                <%=cookies["city"]%>, <%=cookies["state"]%>
-            <% else %>
-                Denver, CO
-            <% end %>
-            <i class='glyphicon glyphicon-chevron-down'></i>
-          </a>
-        </div>
-
-        <div class="" style="padding-bottom: 10px;width: 49%; float: left;">
-          <div class="btn-group" id="date-dropdown-mobile"">
-            <a style="cursor: pointer; background-color: inherit; border: none; color: inherit;" class="dropdown-toggle search_criteria" data-toggle="dropdown" >
-            <input type="hidden" name="type" class="hidden-input" id="type-selection-mobile"" value="All">
-            <span class="selection" id="activitytype-selection-phrase" sytle="">All</span> <i class='glyphicon glyphicon-chevron-down'></i></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">All</a></li>
-              <% ActivityType.all.each do |at| %>
-                  <li><a href="#"><%=at.activity_type%></a></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-    </div>
-
-        <input class="btn" name="commit" type="submit" value="Search" style="display: none">
-    <% end %>
-
     <div style="padding-bottom: 50px;">
         <%= flash_messages %>
         <%= yield %>
       </div>
       <%= render 'layouts/footer' %>
 
-    <%= javascript_include_tag "welcome" %>
 
     <script>
 	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
