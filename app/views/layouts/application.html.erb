@@ -122,12 +122,14 @@
                     <span class="counter"><%= num_notifications > 99 ? "*" : num_notifications %></span>
                   <% end %>
                 </a>
+                <% if current_user.present? %> 
                   <ul class="dropdown-menu pull-right" id="notifications_dropdown_mobile" style="width:300px;max-height:300px;">
                     <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 280px; margin-left: 5px;') do |notif| %>
                         <b><%=notif.subject%>:</b> <%=notif.body.html_safe%>
                         <li class="divider"></li>
                     <% end %>
                   </ul>
+                <% end %>
                 </li>
 
                 <li id="menu"><a href="#" data-toggle="collapse" data-target=".navbar-ex1-collapse"><span class="fa fa-bars"></span></a></li>
