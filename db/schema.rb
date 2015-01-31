@@ -223,6 +223,11 @@ ActiveRecord::Schema.define(version: 20141217190623) do
     t.integer  "user_id"
   end
 
+  create_table "user_engagement", id: false, force: true do |t|
+    t.string  "email",                      default: "", null: false
+    t.integer "time_since_login", limit: 8
+  end
+
   create_table "users", force: true do |t|
     t.string   "email",                              default: "", null: false
     t.string   "encrypted_password",                 default: "", null: false

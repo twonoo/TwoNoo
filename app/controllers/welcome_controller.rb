@@ -3,7 +3,17 @@ class WelcomeController < ApplicationController
   end
 
   def trending
-    @trending = Activity.trending(params[:location].present? ? params[:location] : nil)
+    @trending = Activity.trending(params[:location])
+
+    case @trending.length
+    when 13..15
+      @trending = @trending.limit(12)
+    when 9..11
+      @trending = @trending.limit(8)
+    when 0..7
+      @trending = @trending.limit(4)
+    end
+
      respond_to do |format|
        format.html { render :partial => 'trending' }
      end

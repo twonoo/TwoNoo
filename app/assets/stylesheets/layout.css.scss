@@ -84,7 +84,16 @@ display:block;
 /* END BOOSTRAP CUSTOMIZATION
 ================================================== */
 
+/* TRENDING MEDIA QUERIES */
 
+@media(max-width:859px){
+	.trending-card-container {
+	  	margin-left: 25px;
+	  	margin-right: 25px;
+	  }
+}
+
+/* END TRENDING MEDIA QUERIES */
 
 /* NEKO CSS FRAMEWORK
 ================================================== */
