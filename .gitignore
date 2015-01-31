@@ -36,3 +36,5 @@ config/database.yml
 sidekiq.pid
 
 config/database.yml
+
+config/database.yml

@@ -212,11 +212,11 @@ class Activity < ActiveRecord::Base
     where('datetime > ?', Time.now.utc)
     .select('activities.*, COUNT(rsvps.id) as rsvp_count')
     .where(cancelled: false)
-    .by_distance(origin: (location.nil? ? denver : location))
     .joins(:rsvps)
     .joins(:activity_types)
     .group(:id)
-    .order('rsvp_count DESC')
+    .order('datetime ASC, rsvp_count DESC')
+    .by_distance(origin: (location.nil? ? denver : location))
     .limit(16)
   end
 

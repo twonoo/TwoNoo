@@ -70,14 +70,11 @@ display:block;
 
 .search_criteria, .location_selection {
   display: block;
-  vertical-align: middle;
-  color:#7DC24F;
-  /*text-shadow:#7DC24F*/
   margin-top:-3px;
-  border: 1px solid #ccc;
+  border: 1px solid #FFF;
   border-radius: 4px;
-  background-color:rgba(42,42,42,0.5);
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  background-color:rgba(0,0,0,0.2);
+  padding: 1px 6px 1px 6px;
 }
 
 
@@ -394,7 +391,7 @@ hr {
 }
 
 .search-terms {
-    font-size:18px;
+    font-size:16px;
     line-height:20px;
 }
 /*** MEDIA QUERIES ***/

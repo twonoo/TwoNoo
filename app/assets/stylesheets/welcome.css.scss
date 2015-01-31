@@ -1,7 +1,10 @@
-body {background-color:#F8F8F8}
+body {
+
+  background-color:#F8F8F8;
+  font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
+}
 
 .headline { 
-  font-family: 'PT Sans Narrow', sans-serif; 
   font-size:72px; 
   color:white; 
   background:rgba(0,0,0,0.8); 
@@ -17,7 +20,7 @@ body {background-color:#F8F8F8}
 }
 
 .announcement { 
-  font-family: 'PT Sans Narrow', sans-serif; 
+
   font-size:32px; 
   color:white; 
   background:rgba(0,0,0,0.8); 
