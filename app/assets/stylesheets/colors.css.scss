@@ -179,14 +179,14 @@ h2.subTitle:after, h1.noSubtitle:after{
 	background-color:#333;
 }
 #home {
-	background-image: image-url("background.jpg");
+	background-image: asset-url("background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position:center;
     height:500px;
 }
 #paralaxSlice1 {
-	background-image: image-url("background.jpg");
+	background-image: asset-url("background.jpg");
 }
 #paralaxSlice2 {
 	background-image: url('../images/theme-pics/paralax-grey-2.jpg');
