@@ -215,8 +215,9 @@ class Activity < ActiveRecord::Base
     .joins(:rsvps)
     .joins(:activity_types)
     .group(:id)
-    .order('datetime ASC, rsvp_count DESC')
+    .order('datetime ASC')
     .by_distance(origin: (location.nil? ? denver : location))
+    .order('rsvp_count DESC')
     .limit(16)
   end
 
