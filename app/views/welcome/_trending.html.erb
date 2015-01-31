@@ -5,7 +5,7 @@
       <% @trending.each do |t| %>
         <a href="<%= activity_path(t.id) %>">
           <div class="col-sm-3 trending-card-container">
-            <div  style="background: #0071BC url('http://twonoo.com<%= t.image.url(:trending) %>') no-repeat left top; background-size: cover;" class="trending-card">
+            <div  style="background: #0071BC url('<%= t.image.url(:trending) %>') no-repeat left top; background-size: cover;" class="trending-card">
               <div class="trending-title-container">
                 <span class="trending-title"><%= truncate(t.activity_name, :length => 31, separator: ' ') %></span>
               </div>
