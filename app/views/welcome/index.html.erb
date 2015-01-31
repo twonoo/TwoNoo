@@ -2,82 +2,88 @@
   <div class="container" style="min-height:150px;">
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2"> <%= form_tag("/search", method: "get", id: "search_form", onsubmit: "return confirmSearch();") do %>
-        <div class="form-group" id="search-group" >
-          <h1 class="tagline" style="font-weight:600;padding-bottom:0px;margin-bottom:0;white-space:nowrap;font-family:Arial;background-color:rgba(100,100,100,.3);">MEET PEOPLE. DO STUFF.</h1>
-          <h1 class="tagline" style="padding-top:0;padding-bottom:45px;margin-bottom:0;white-space:nowrap;font-family:Arial;background-color:rgba(100,100,100,.3);"></h1>
-          <div class="input-group input-group-lg">
-            <input class="form-control" id="terms" name="terms" placeholder="Find Activities and Friends…or just leave it blank to see everything!" type="search" title="Leave empty to see all activities" autofocus>
+            <div class="form-group" id="search-group">
+              <h1 class="tagline" style="font-weight:600;padding-bottom:0px;margin-bottom:0;white-space:nowrap;font-family:Arial;background-color:rgba(100,100,100,.3);">MEET
+                PEOPLE. DO STUFF.</h1>
+
+              <h1 class="tagline" style="padding-top:0;padding-bottom:45px;margin-bottom:0;white-space:nowrap;font-family:Arial;background-color:rgba(100,100,100,.3);"></h1>
+
+              <div class="input-group input-group-lg">
+                <input class="form-control" id="terms" name="terms" placeholder="Find Activities and Friends…or just leave it blank to see everything!" type="search" title="Leave empty to see all activities" autofocus>
             <span class="input-group-btn">
             <input class="btn" name="commit" type="submit" value="Search">
-            </span> </div>
-          <!-- /input-group -->
-          <div class="row search-terms col-sm-12" style="margin-top:5px" id="search-terms">
-            <div class="btn-group" id="date-dropdown"> <a style="cursor: pointer; " class="dropdown-toggle search_criteria" data-toggle="dropdown" >
-              <input type="hidden" name="type" class="hidden-input" id="type-selection" value="All">
-              <span class="selection" id="activitytype-selection-phrase">All</span><i class='glyphicon glyphicon-chevron-down'></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">All</a></li>
-                <% ActivityType.all.each do |at| %>
-                <li><a href="#"><%=at.activity_type%></a></li>
-                <% end %>
-              </ul>
-            </div>
-             activities 
-            <div class="btn-group" id="date-dropdown"> <a style="cursor: pointer;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
-              <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Anytime">
-              <span class="selection" id="daterange-selection-phrase">Anytime</span><i class='glyphicon glyphicon-chevron-down'></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Today</a></li>
-                <li><a href="#">This Week</a></li>
-                <li><a href="#">This Weekend</a></li>
-                <li><a href="#">Next Two Weeks</a></li>
-                <li><a href="#">Anytime</a></li>
-                <li class="divider"></li>
-                <div class="form-group" style="padding:5px">
-                  <h5>Start</h5>
-                  <input type="text" id="startDatePicker" class="form-control input-sm keep_open" name="from_date">
-                  <h5>End</h5>
-                  <input type="text" id="endDatePicker" class="form-control input-sm keep_open" name="to_date">
+            </span></div>
+              <!-- /input-group -->
+              <div class="row search-terms col-sm-12" style="margin-top:5px" id="search-terms">
+                <div class="btn-group" id="date-dropdown">
+                  <a style="cursor: pointer; " class="dropdown-toggle search_criteria" data-toggle="dropdown">
+                    <input type="hidden" name="type" class="hidden-input" id="type-selection" value="All">
+                    <span class="selection" id="activitytype-selection-phrase">All</span><i class='glyphicon glyphicon-chevron-down'></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">All</a></li>
+                    <% ActivityType.all.each do |at| %>
+                        <li><a href="#"><%= at.activity_type %></a></li>
+                    <% end %>
+                  </ul>
                 </div>
-              </ul>
+                activities
+                <div class="btn-group" id="date-dropdown">
+                  <a style="cursor: pointer;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
+                    <input type="hidden" name="when" class="hidden-input" id="daterange-selection" value="Anytime">
+                    <span class="selection" id="daterange-selection-phrase">Anytime</span><i class='glyphicon glyphicon-chevron-down'></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Today</a></li>
+                    <li><a href="#">This Week</a></li>
+                    <li><a href="#">This Weekend</a></li>
+                    <li><a href="#">Next Two Weeks</a></li>
+                    <li><a href="#">Anytime</a></li>
+                    <li class="divider"></li>
+                    <div class="form-group" style="padding:5px">
+                      <h5>Start</h5>
+                      <input type="text" id="startDatePicker" class="form-control input-sm keep_open" name="from_date">
+                      <h5>End</h5>
+                      <input type="text" id="endDatePicker" class="form-control input-sm keep_open" name="to_date">
+                    </div>
+                  </ul>
+                </div>
+                within
+                <div class="btn-group" id="distance-dropdown">
+                  <a style="cursor: pointer;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
+                    <input type="hidden" name="distance" class="hidden-input" value="25">
+                    <span class="selection">25</span><i class='glyphicon glyphicon-chevron-down'></i> </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">25</a></li>
+                    <li><a href="#">50</a></li>
+                    <li><a href="#">100</a></li>
+                    <li><a href="#">200</a></li>
+                  </ul>
+                </div>
+                miles of
+                <div class="btn-group" id="location-selection">
+                  <input type="hidden" id="lat" name="lat" value="39.737567" />
+                  <input type="hidden" id="lng" name="lng" value="-104.9847179" />
+                  <input type="text" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="width:125px;display:none;"
+                         <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+                         value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
+                         <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+                         value="<%= cookies["city"] %>, <%= cookies["state"] %>"
+                         <% else %>
+                         value="Denver, CO"
+                         <% end %>
+                         placeholder="City or ZIP">
+                  <a id="selection" class="selection location_selection">
+                    <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+                        <%= current_user.profile.city %>, <%= current_user.profile.state %>
+                    <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+                        <%= cookies["city"] %>, <%= cookies["state"] %>
+                    <% else %>
+                        Denver, CO
+                    <% end %>
+                  </a>
+                </div>
+              </div>
             </div>
-            within
-            <div class="btn-group" id="distance-dropdown"> <a style="cursor: pointer;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
-              <input type="hidden" name="distance" class="hidden-input" value="25">
-              <span class="selection">25</span><i class='glyphicon glyphicon-chevron-down'></i> </a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">5</a></li>
-                <li><a href="#">25</a></li>
-                <li><a href="#">50</a></li>
-                <li><a href="#">100</a></li>
-                <li><a href="#">200</a></li>
-              </ul>
-            </div>
-            miles of
-            <div class="btn-group" id="location-selection">
-              <input type="hidden" id="lat" name="lat" value="39.737567"></input>
-              <input type="hidden" id="lng" name="lng" value="-104.9847179"></input>
-              <input type="text" id="location" name="location" class="form-control input-md" style="width:125px;display:none;"
-              <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-                value="<%=current_user.profile.city%>, <%=current_user.profile.state%>"
-              <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-                value="<%=cookies["city"]%>, <%=cookies["state"]%>"
-              <% else %>
-                value="Denver, CO"
-              <% end %>
-              placeholder="City or ZIP">
-              <a id="selection" class="selection location_selection">
-                <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-                  <%=current_user.profile.city%>, <%=current_user.profile.state%>
-              <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-                  <%=cookies["city"]%>, <%=cookies["state"]%>
-                <% else %>
-                  Denver, CO
-                <% end %>
-              </a>
-            </div>
-          </div>
-        </div>
         <% end %>
       </div>
     </div>
@@ -92,22 +98,24 @@
       </div>
 
       <div class="btn-group" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; float: left;">
-        <input type="hidden" id="lat-mobile"" name="lat" value="39.737567"></input>
-        <input type="hidden" id="lng-mobile"" name="lng" value="-104.9847179"></input>
+        <!--<input type="hidden" id="lat-mobile"" name="lat" value="39.737567"></input>-->
+        <!--<input type="hidden" id="lng-mobile"" name="lng" value="-104.9847179"></input>-->
+        <input type="hidden" id="lat-mobile" name="lat" value=""/>
+        <input type="hidden" id="lng-mobile" name="lng" value=""/>
         <input type="text" id="location-mobile" name="location" class="form-control input-md" style="width:125px;display:none;"
                <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-               value="<%=current_user.profile.city%>, <%=current_user.profile.state%>"
+               value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
                <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-               value="<%=cookies["city"]%>, <%=cookies["state"]%>"
+               value="<%= cookies["city"] %>, <%= cookies["state"] %>"
                <% else %>
                value="Denver, CO"
                <% end %>
                placeholder="City or ZIP">
-        <a id="selection-mobile"" class="selection location_selection_mobile" style="color: inherit;">
+        <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;">
         <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-            <%=current_user.profile.city%>, <%=current_user.profile.state%>
+            <%= current_user.profile.city %>, <%= current_user.profile.state %>
         <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-            <%=cookies["city"]%>, <%=cookies["state"]%>
+            <%= cookies["city"] %>, <%= cookies["state"] %>
         <% else %>
             Denver, CO
         <% end %>
@@ -116,18 +124,19 @@
       </div>
 
       <div class="" style="padding-bottom: 10px;width: 49%; float: left;">
-        <div class="btn-group" id="date-dropdown-mobile"">
-        <a style="cursor: pointer; background-color: inherit; border: none; color: inherit;" class="dropdown-toggle search_criteria" data-toggle="dropdown" >
-          <input type="hidden" name="type" class="hidden-input" id="type-selection-mobile"" value="All">
-          <span class="selection" id="activitytype-selection-phrase" sytle="">All</span> <i class='glyphicon glyphicon-chevron-down'></i></a>
-        <ul class="dropdown-menu" role="menu">
-          <li><a href="#">All</a></li>
-          <% ActivityType.all.each do |at| %>
-              <li><a href="#"><%=at.activity_type%></a></li>
-          <% end %>
-        </ul>
+        <div class="btn-group" id="date-dropdown-mobile">
+          <a style="cursor: pointer; background-color: inherit; border: none; color: inherit;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
+            <input type="hidden" name="type" class="hidden-input" id="type-selection-mobile" value="All">
+            <span class="selection" id="activitytype-selection-phrase" sytle="">All</span>
+            <i class='glyphicon glyphicon-chevron-down'></i></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">All</a></li>
+            <% ActivityType.all.each do |at| %>
+                <li><a href="#"><%= at.activity_type %></a></li>
+            <% end %>
+          </ul>
+        </div>
       </div>
-    </div>
     </div>
 
     <input class="btn" name="commit" type="submit" value="Search" style="display: none">

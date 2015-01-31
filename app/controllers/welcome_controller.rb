@@ -4,18 +4,18 @@ class WelcomeController < ApplicationController
 
   def trending
     @trending = Activity.trending(params[:location].present? ? params[:location] : nil)
-     respond_to do |format|
-       format.html { render :partial => 'trending' }
-     end
+    respond_to do |format|
+      format.html { render :partial => 'trending' }
+    end
   end
 
   def coming_soon
-  	@title = 'TwoNoo is Coming Soon!'
+    @title = 'TwoNoo is Coming Soon!'
   end
 
   def search
     @outsideSupportedArea = false
-  	# Setup location constraints
+    # Setup location constraints
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
     fairbanks = [64.8377778, -147.7163889]
@@ -28,10 +28,17 @@ class WelcomeController < ApplicationController
       logger.info "using passed in coords"
     elsif !(params[:location].present?)
       # TODO: add in looking cookies
-
       # try to get it by the IP address
       begin
         search_coordinates = Geocode.coordinates_by_ip(request.remote_ip)
+        lat = search_coordinates[0]
+        lon = search_coordinates[1]
+      rescue
+        logger.info "Geocode by IP failed"
+      end
+    else
+      begin
+        search_coordinates = Geocoder.search("#{params[:location].split(',').first}, #{params[:location].split(',').first}").first.coordinates
         lat = search_coordinates[0]
         lon = search_coordinates[1]
       rescue
@@ -54,13 +61,13 @@ class WelcomeController < ApplicationController
     if !defined?(search_coordinates) || search_coordinates.nil?
       @outsideSupportedArea = true
     end
-    
-#    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
-#           Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
-#           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
-#      flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
-#      @outsideSupportedArea = true
-#    end
+
+    #    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
+    #           Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
+    #           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
+    #      flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
+    #      @outsideSupportedArea = true
+    #    end
 
     # Determine Type
     type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
@@ -83,19 +90,20 @@ class WelcomeController < ApplicationController
         when "Anytime"
           end_date = nil
         else
-          end_date = 1.month.from_now 
+          end_date = 1.month.from_now
       end
       from_date = DateTime.now.beginning_of_day unless from_date
-    else
-      from_date = (params[:from_date].present? ? Time.strptime(params[:from_date], '%m/%d/%Y') : Time.now )
-      end_date = (params[:to_date].present? ? Time.strptime(params[:to_date], '%m/%d/%Y') : Time.now + 14.days )
+    else #if this else is hit, we wan't to it to represent "Anytime"
+      from_date = DateTime.now.beginning_of_day
+      end_date = nil
     end
 
+    #fdsafasd
     # Get Timezone
     #begin
-      #tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
+    #tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
     #rescue
-      tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
+    tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
     #end
 
     # Build search query for activities
@@ -149,7 +157,7 @@ class WelcomeController < ApplicationController
 
     if @activities.blank?
       @showCreateAlert = true
-      
+
       @activities = Activity.all
       @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
       if end_date.present?

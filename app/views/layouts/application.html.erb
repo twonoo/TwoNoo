@@ -6,8 +6,8 @@
 <html lang="en">
 <!--<![endif]-->
 <head profile="http://www.w3.org/2005/10/profile">
-<link rel="icon" 
-      type="image/png" 
+<link rel="icon"
+      type="image/png"
       href="<%=asset_url 'TwoNoo-Logo-compact3.png'%>">
 	<!-- Basic Page Needs ================================================== -->
   <meta charset="utf-8">
@@ -64,8 +64,8 @@
           'callback=initialize';
       document.body.appendChild(script);
       console.log('done getting google stuff');
-    }); 
-    
+    });
+
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -98,11 +98,13 @@
                 <li id="my-stuff">
                   <% if current_user.present? %>
                       <a href="<%= user_activities_path(current_user) %>">
+                        <span class="glyphicon glyphicon-user"></span>MY STUFF
+                      </a>
                   <% else %>
                       <a href="<%= user_session_path %>">
+                        <span class="glyphicon glyphicon-user"></span>MY STUFF
+                      </a>
                   <% end %>
-                  <span class="glyphicon glyphicon-user"></span>MY STUFF
-                </a>
                 </li>
 
                 <li id="create"><a href="<%= activities_new_path %>"><span class="icon glyphicon glyphicon-plus"></span>CREATE
@@ -122,7 +124,7 @@
                     <span class="counter"><%= num_notifications > 99 ? "*" : num_notifications %></span>
                   <% end %>
                 </a>
-                <% if current_user.present? %> 
+                <% if current_user.present? %>
                   <ul class="dropdown-menu pull-right" id="notifications_dropdown_mobile" style="width:300px;max-height:300px;">
                     <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 280px; margin-left: 5px;') do |notif| %>
                         <b><%=notif.subject%>:</b> <%=notif.body.html_safe%>
@@ -181,7 +183,7 @@
 	   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	 
+
 	   ga('create', 'UA-55676731-1', 'auto');
 	   ga('send', 'pageview');
      <% if params[:terms] %>
