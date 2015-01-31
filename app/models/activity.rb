@@ -205,110 +205,20 @@ class Activity < ActiveRecord::Base
 	end
 
 	def self.trending(location)
-		# Get Coordinates
-    in_network = false
+    denver = [39.737567, -104.9847179]
+    pittsburgh = [40.44062479999999, -79.9958864]
+    fairbanks = [64.8377778, -147.7163889]
 
-    unless location.nil?
-      denver = [39.737567, -104.9847179]
-      pittsburgh = [40.44062479999999, -79.9958864]
-      fairbanks = [64.8377778, -147.7163889]
-
-      if (Geocoder::Calculations.distance_between(denver, location) < 300 ||
-          Geocoder::Calculations.distance_between(pittsburgh, location) < 100 ||
-          Geocoder::Calculations.distance_between(fairbanks, location) < 600)
-      then
-        in_network = true
-      end
-    end
-
-		results = Hash.new
-
-		# Cycle Through Activity Types and Store Each 
-		ActivityType.all.each do |a|
-      results["#{a.id}"] = []
-      if in_network
-        result = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
-          .select('activities.*, COUNT(rsvps.id) as rsvp_count')
-          .where(cancelled: false)
-          .where(activity_types: {id: a.id})
-          .within(25, origin: location)
-          .joins(:rsvps)
-          .joins(:activity_types)
-          .group('rsvps.activity_id')
-          .order('rsvp_count DESC')
-          .limit(16)
-
-        result.each do |r|
-          results["#{a.id}"] << r
-        end
-
-        resultIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
-          .where(cancelled: false)
-          .where(activity_types: {id: a.id})
-          .joins(:activity_types)
-          .within(25, origin: location)
-          .limit(16)
-      end
-
-      result2 = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 15.days, Time.now.utc, Time.now.utc + 15.days)
-        .select('activities.*, COUNT(rsvps.id) as rsvp_count')
-        .where(cancelled: false)
-      unless results["#{a.id}"].count
-        result2 = result2.where('activities.id not in (?)', resultIds.pluck('id'))
-      end
-      result2 = result2.where(activity_types: {id: a.id})
-        .joins(:rsvps)
-        .joins(:activity_types)
-        .group('rsvps.activity_id')
-        .order('rsvp_count DESC')
-        .limit(16 - results["#{a.id}"].count)
-
-      result2.each do |r|
-        results["#{a.id}"] << r
-      end
-
-		end
-
-		# Calculate Top Trending
-    results['top'] = []
-    if in_network
-      top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
-      .select('activities.*, COUNT(rsvps.id) as rsvp_count')
-      .where(cancelled: false)
-      .within(25, origin: location)
-      .joins(:rsvps)
-      .group('rsvps.activity_id')
-      .order('rsvp_count, views DESC')
-      .limit(16)
-
-      topIds = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
-      .where(cancelled: false)
-      .within(25, origin: location)
-      .limit(16)
-
-      top.each do |t|
-        results['top'] << t
-      end
-    end
-
-    top = where('(enddatetime is null AND datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?)', Time.now.utc, Time.now.utc + 365.days, Time.now.utc, Time.now.utc + 365.days)
-      .select('activities.*, COUNT(rsvps.id) as rsvp_count')
-      .where(cancelled: false)
-    unless results['top'].count
-      top = top.where('activities.id not in (?)', topIds.pluck('id'))
-    end
-
-    top = top.joins(:rsvps)
-      .group('rsvps.activity_id')
-      .order('rsvp_count, views DESC')
-      .limit(16 - results['top'].count)
-
-    top.each do |t|
-      results['top'] << t
-    end
-
-		return results
-	end
+    where('datetime > ?', Time.now.utc)
+    .select('activities.*, COUNT(rsvps.id) as rsvp_count')
+    .where(cancelled: false)
+    .by_distance(origin: (location.nil? ? denver : location))
+    .joins(:rsvps)
+    .joins(:activity_types)
+    .group(:id)
+    .order('rsvp_count DESC')
+    .limit(16)
+  end
 
 	private
 

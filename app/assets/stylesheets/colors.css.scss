@@ -82,6 +82,63 @@ h2.subTitle:after, h1.noSubtitle:after{
 	color:#333;
 }
 
+/* Trending */
+.trending-card-container {
+	margin-bottom: 25px;
+}
+
+.trending-card {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 153px;
+  padding-top: 80px;
+}
+
+.trending-card-details {
+  background-color: #FFFFFF;
+  height:46px;
+  padding: 3px;
+  font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
+}
+
+.trending-date {
+  color: #000000;
+  font-size: 20px;
+  margin: 0;
+  padding-top:3px;
+}
+
+.trending-location {
+  font-size: 14px;
+  color: #FE0075;
+  line-height: 14px;
+  margin:0;
+}
+
+.trending-title-container {
+  display: table;
+  width: 100%;
+  min-height: 80px;
+  background: -webkit-gradient(linear, center top, center bottom, color-stop(10%, rgba(0, 0, 0, 0)),to(rgba(0, 0, 0, 0.75)));
+  background: -webkit-linear-gradient(top,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0.75) );
+  background: -o-linear-gradient(top,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0.75) );
+  background: linear-gradient(to bottom,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0.75) );
+  padding: 4px;
+  padding-bottom: 7px;
+  font-size: 20px;
+  color: #FFFFFF;
+  font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: -1.5px;
+}
+
+.trending-title {
+  display: table-cell;
+  vertical-align: bottom;
+}
+
+/* End Trending */
+
 /*** END CUSTOM TWONOO ***/
 
 /*** parallax sections ***/
