@@ -85,6 +85,9 @@ h2.subTitle:after, h1.noSubtitle:after{
 	color:#333;
 }
 
+#search-group {
+	margin-bottom:100px;
+}
 #search-group a {
 	color: #FFF;
 }
@@ -326,8 +329,7 @@ p.credits a {
 	text-transform: uppercase;
 	position: relative;
 	letter-spacing: 0;
-	margin-bottom: 17px;
-	margin-top: 65px;
+	margin-bottom: 20px;
 	font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
 	text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
 }
