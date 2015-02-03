@@ -81,7 +81,7 @@
             </style>
             <% @activities.each do |a| %>
 
-            <div style="background: #FFFFFF url('http://twonoo.com<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-10 col-md-offset-1 search-result-list">
+            <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-10 col-md-offset-1 search-result-list">
                 <div class="col-md-6 col-md-offset-3 search-result-list-details">
                   <span><%= link_to a.activity_name, activity_path(a.id), class: "search-result-list-activity-name" %></span>
                   <span class="search-result-list-location"><%= a.location_name %> </span>
