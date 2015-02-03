@@ -48,7 +48,7 @@ class WelcomeController < ApplicationController
       end
     else
       begin
-        search_coordinates = Geocoder.search("#{params[:location].split(',').first}, #{params[:location].split(',').first}").first.coordinates
+        search_coordinates = Geocoder.search("#{params[:location].split(',').first}, #{params[:location].split(',').last}").first.coordinates
         lat = search_coordinates[0]
         lon = search_coordinates[1]
       rescue
