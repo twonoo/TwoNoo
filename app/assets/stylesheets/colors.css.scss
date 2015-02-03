@@ -95,10 +95,11 @@ h2.subTitle:after, h1.noSubtitle:after{
     color: #000;
  }
 
- #search-group .dropdown-menu > li > a:hover {
+ .dropdown-menu > li > a:hover {
     background-color: #FE0075;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
  }
+
 
 #search-terms .glyphicon {
  font-size: 12px;
@@ -285,8 +286,8 @@ ul.iconsList li a:hover, ul.iconsList i {
 	color:#444;
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-	background: #7DC24F;
-	color:#fff;
+	background: #e7e7e7;
+	color:#333;
 }
 
 /* END MAIN MENU 
