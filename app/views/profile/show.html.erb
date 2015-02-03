@@ -4,31 +4,31 @@
 			<div class="col-md-6 col-md-offset-3">
 				<div class="text-center" style="margin-top:30px;color:#FFF;">
 					<%= profile_img(@profile) %>
-            <h2 style="color:white"><strong><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></strong></h2> 
-            <p><%= @profile.profile.about_me %></p>
-            <% if !current_user.nil? && (current_user != @profile) then %>
-            <h3>
-              <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
-            </h3>
-            <% end %>
 				</div>
-			</div>
-			<div class="col-md-3">
-        <% if !current_user.nil? && (current_user != @profile) then %>
-          <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
-            alink="Send <%=@profile.profile.first_name%> a message"
-            recipient="<%=@profile.id%>" recipient_firstname="<%=@profile.profile.first_name%>" recipient_lastname="<%=@profile.profile.last_name%>"
-            sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
-          ></div>
-          <script>
-            (function(){
-              $('#profile-im').bind('on_init_complete', function(){
-                $('#profile-im #messageMe').addClass('label');
-              });
-            })();
-          </script>
-        <% end %>
-      </div>
+				<div>
+		            <h2 style="color:white; margin-top:20px"><strong><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></strong></h2> 
+		            <p><%= @profile.profile.about_me %></p>
+		            <% if !current_user.nil? && (current_user != @profile) then %>
+		            <h3>
+		              <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
+		            </h3>
+		            <% end %>
+				</div>
+		        <% if !current_user.nil? && (current_user != @profile) then %>
+			        <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
+			          alink="Send <%=@profile.profile.first_name%> a message"
+			          recipient="<%=@profile.id%>" recipient_firstname="<%=@profile.profile.first_name%>" recipient_lastname="<%=@profile.profile.last_name%>"
+			          sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>">
+			        </div>
+			          <script>
+			            (function(){
+			              $('#profile-im').bind('on_init_complete', function(){
+			                $('#profile-im #messageMe').addClass('label');
+			              });
+			            })();
+			          </script>
+		        <% end %>
+	      	</div>
 		</div>
 	</div>
 <% if user_signed_in? %>

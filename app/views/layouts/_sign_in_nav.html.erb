@@ -1,16 +1,6 @@
 <ul class="nav navbar-nav navbar-right collapse navbar-collapse">
-  <li>
-    <div><%= link_to 'Home', root_path, :class => 'btn navbar-btn btn-success btn-sm', :type => 'button', :style => 'margin-left:5px' %></div>
-  </li>
-  <li>
-    <div><%= link_to 'Feedback', '#', :class => 'btn navbar-btn btn-success btn-sm feedback', :type => 'button', :style => 'margin-left:5px', id: 'feedback' %></div>
-  </li>
-  <li>
-    <div><%= link_to 'Sign Up', new_user_registration_path, :class => 'btn navbar-btn btn-success btn-sm', :type => 'button', :style => 'margin-left:5px' %></div>
-  </li>
-  <li>
-    <div><%= link_to 'Sign In', new_user_session_path, :class => 'btn navbar-btn btn-primary btn-sm', :type => 'button', :style => 'margin-left:5px' %></div>
-  </li>
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
+  <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+  <li><%= link_to 'Sign In', new_user_session_path %></li>
 </ul>
-
-

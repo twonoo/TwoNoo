@@ -1,6 +1,20 @@
+<style type="text/css">
+
+	#user-menu > ul > li > a:link {
+		color: #FFFFFF;
+		line-height: 35px;
+	}
+
+	#user-menu > ul > li > a:hover {
+		color: #000000;
+		line-height: 35px;
+	}
+
+</style>
+
 <section id="user-menu" class="sub-nav collapse navbar-collapse" style="background-color:#000000; padding-bottom:55px">
   <ul class="nav navbar-nav">
-  	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#49AFCD; color:#FFF' %></li>
+  	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#FE0075; color:#FFFFFF' %></li>
   	<li><%= link_to "My Activities <span class='badge'> #{current_user.activities.where("datetime >= ?", Time.now()).count}</span>".html_safe, user_activities_path(current_user.id) %></li>
     <li><%= link_to "I'm Attending <span class='badge'> #{Activity.where("datetime >= ?", Time.now()).where("id in (?)", Rsvp.where(user_id: current_user.id).pluck(:activity_id)).count}</span>".html_safe, attending_activities_path(current_user.id) %></li>
     <li><%= link_to "Followers <span class='badge'> #{current_user.followers.count}</span>".html_safe, profile_followers_path(current_user) %></li>

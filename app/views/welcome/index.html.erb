@@ -11,7 +11,7 @@
             <input class="btn" name="commit" type="submit" value="Search">
             </span></div>
               <!-- /input-group -->
-              <div class="row search-terms col-sm-12" id="search-terms">
+              <div class="row search-terms col-sm-12 text-center" id="search-terms">
                 <div class="btn-group" id="date-dropdown">
                   <a style="cursor: pointer; " class="dropdown-toggle search_criteria" data-toggle="dropdown">
                     <input type="hidden" name="type" class="hidden-input" id="type-selection" value="All">
@@ -83,8 +83,25 @@
             </div>
         <% end %>
       </div>
+      <style type="text/css">
+
+        #social > a > img {
+          width: 32px;
+          height: 32px;
+          margin-bottom:5px;
+        }
+
+
+      </style>
+
     </div>
+
   </div>
+            <div id="social" class="pull-right">
+        <%= link_to image_tag("fb.png"), 'http://www.facebook.com/meetexplorelive' %>
+        <%= link_to image_tag("tw.png"), 'http://twitter.com/MeetExploreLive' %>
+        <%= link_to image_tag("gp.png"), 'http://plus.google.com/118324650798603527769/posts' %>
+      </div>
 </section>
 
 <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
