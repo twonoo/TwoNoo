@@ -92,6 +92,23 @@ display:block;
 
 /* END TRENDING MEDIA QUERIES */
 
+
+
+/* SEARCH RESULTS MEDIA QUERIES */
+
+@media(max-width:859px){
+	.search-result-list-join,
+	.search-result-list-attending {
+	  	display:none;
+	  }
+
+	.search-result-list-details {
+		margin-left:175px;
+	}
+}
+
+/* END TRENDING MEDIA QUERIES */
+
 /* NEKO CSS FRAMEWORK
 ================================================== */
 

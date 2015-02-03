@@ -81,9 +81,9 @@ module ApplicationHelper
 
   def profile_img_small(user)
     if user.profile.profile_picture_file_name
-      "#{image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img-icon'}".html_safe
+      "#{image_tag user.profile.profile_picture.url(:thumb), class: 'profile-img-icon'}".html_safe
     else
-      "<span style='padding:5px 9px 5px 9px; background-color:#4DBFF5; font-size:20px; color:#FFFFFF; line-height:50px' class='profile-img'>#{current_user.profile.first_name[0] + current_user.profile.last_name[0]}</span>".html_safe
+      "<div class='profile-img-small'>#{user.profile.first_name[0].capitalize + user.profile.last_name[0].capitalize}</div>".html_safe
     end
   end
 

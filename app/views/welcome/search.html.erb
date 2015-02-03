@@ -1,67 +1,104 @@
 <div class="container">
   <div class="row center-block" style="margin-bottom:5px">
     <div class="content">
-      
-        <ul class="nav nav-tabs" role="tablist">
-          <% if @activities.present? %>
-            <li class="<%= 'active' %>"><a href="#activities" role="tab" data-toggle="tab">Activities</a></li>
-          <% end %>
-          <% if @users.present? %> 
-            <li class="<%= 'active' if @activities.blank? %>"><a href="#users" role="tab" data-toggle="tab">Users</a></li>
-          <% end %>
-        </ul>
-        <div class="panel">
-        <div class="tab-content">
-          <div class="tab-pane <%= 'active' if @activities %>" id="activities">
-            <% if @showCreateAlert %>
-                <div class="row center-block" style="margin-bottom:0px;margin-top:0px;padding-top:0px;">
-                    <div class="row" style="margin-top:0px;">
-                      <div class="panel panel-body text-center">
-                        <p class="lead" style="text-size:smaller;">No activities matched search criteria, showing expanded results. Create an alert to be notified of future activities!</p>
-                        <%= link_to 'Create Alert', alert_create_path(params), method: 'POST', class: 'btn btn-sm btn-info' %>
-                      </div>
-                    </div>
-                </div>
-            <% end %>
+
+            <style type="text/css">
+
+
+            body {
+              background-color: #e2e2e2;
+            }
+
+            .search-result-list {
+              height: 150px;
+              background-color: #FFFFFF;
+              margin-bottom: 2px;
+            }
+
+
+            .search-result-list-details {
+              line-height: 17px;
+              padding-top: 49px;
+              padding-right: 0px;
+            }
+
+            .search-result-list-location {
+              padding:0;
+              font-size: 15px;
+              color: #FE0075;
+              margin:0;
+              display:block;
+            }
+
+            .search-result-list-date {
+              padding:0;
+              font-size: 15px;
+              display:block;
+            }
+
+
+            .search-result-list-activity-name {
+              color: #000000;
+              font-family: Helvetica, Helvetica Neue;
+            }
+            .search-result-list-activity-name:link {
+              padding:0;
+              display:block;
+              font-size: 20px;
+              font-weight: 600;
+              color: #000000;
+              font-family: Helvetica, Helvetica Neue;
+            }
+
+            .search-result-list-activity-name:hover {
+              padding:0;
+              display:block;
+              font-size: 20px;
+              font-weight: 600;
+              color: #000000;
+              font-family: Helvetica, Helvetica Neue;
+            }
+
+            .search-result-list-attending {
+              line-height: 25px;
+              text-align: right;
+              margin-top:17px;
+            }
+
+            .search-result-list-join {
+              margin-top: 53px;
+              line-height: 10px;
+              text-align: right;
+            }
+
+            .search-result-list-join > a {
+              background-color: #e2e2e2;
+              color: #333333;
+              font-weight: 600;
+              font-size: 14px;
+            }
+
+            </style>
             <% @activities.each do |a| %>
-              <div id="results-row" class="row row-md-height">
-                <div class="col-md-2 panel panel-left">
-                  <h2 style="color:white"><strong><%= a.datetime.strftime('%^b %e') %></strong></h2>
-                  <h3 style="color:white"><%= a.datetime.strftime('%-I:%M %p') %></h3>
-                  <font size="1" style="color:white"><%=a.city%>, <%=a.state%></font>
+
+            <div style="background: #FFFFFF url('http://twonoo.com<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-10 col-md-offset-1 search-result-list">
+                <div class="col-md-6 col-md-offset-3 search-result-list-details">
+                  <span><%= link_to a.activity_name, activity_path(a.id), class: "search-result-list-activity-name" %></span>
+                  <span class="search-result-list-location"><%= a.location_name %> </span>
+                  <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
                 </div>
-                <div class="col-md-8 panel panel-middle" style="background-color:#fff">
-                  <h2>
-                    <%= link_to a.activity_name, activity_path(a.id) %>
-                    <% if a.cancelled %>
-                      <font color='red'>(Cancelled)</font>
-                    <% end %>
-                  </h2>
-                  <p class="lead"><%= truncate(a.description, :length => 150) %></p>
+                <div class="search-result-list-join">
+                  <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
                 </div>
-                <div class="col-md-2 panel panel-right" style="background-color:#fff">
-                  <% if a.image.exists? %>
-                    <%= image_tag a.image.url, style: 'max-height:150px' %>
+                <div class="search-result-list-attending">
+                  <% User.limit(4).find(a.rsvps.map {|r| r.user_id}).each do |u| %>
+                    <%= profile_img_small(u) unless u.nil? %>
                   <% end %>
+                  <%= "+#{a.rsvps.count - 4}" if a.rsvps.count > 4 %>
                 </div>
-              </div>
-            <% end %>
-          </div>
-          <% if @users.present? %>
-          <div class="tab-pane <%= 'active' if @activities.blank? %>" id="users">
-            <% @users.each do |u| %>
-              <p class="lead">
-                <% unless u.user.nil? %>
-                <p class="lead"><%= profile_img(u.user) %> 
-                <% end %>
-                <%= link_to (u.first_name + ' ' + u.last_name), profile_path(u.user_id) %>
-              </p>
-            <% end %>
-          </div>
+            </div>
+   
           <% end %>
         </div>
-       </div>
       </div>
     </div>
-  </div>
-</div>
