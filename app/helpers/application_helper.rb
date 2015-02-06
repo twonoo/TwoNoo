@@ -75,7 +75,7 @@ module ApplicationHelper
     if user.profile.profile_picture_file_name 
       "#{image_tag user.profile.profile_picture.url(:thumb), class: 'profile-img'}".html_safe
     else
-      "<div class='profile-img-big'>#{user.profile.first_name[0].capitalize + user.profile.last_name[0].capitalize}</span>".html_safe
+      "<div class='profile-img-big'>#{user.profile.first_name[0].capitalize + user.profile.last_name[0].capitalize}</div>".html_safe
     end
   end
 
