@@ -161,7 +161,7 @@
                     <% @users.each do |u| %>
                       <div style="background: #FFFFFF" class="col-md-12 search-result-list">
                         <div class="col-md-6 people-search-result-list-details">
-                         <span><%#= profile_img(User.find(u.user_id)) %></span>
+                         <span><%= profile_img(u.user) %></span>
                          <%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: "search-result-list-name", style: "margin-left:50px" %>
                         </div>
                         <div class="search-result-list-follow">
