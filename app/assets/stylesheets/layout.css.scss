@@ -98,13 +98,19 @@ display:block;
 
 @media(max-width:859px){
 	.search-result-list-join,
-	.search-result-list-attending {
+	.search-result-list-attending,
+	.search-result-list-follow {
 	  	display:none;
 	  }
 
 	.search-result-list-details {
 		margin-left:175px;
 	}
+
+	.side-nav {
+		margin:-30px 30px 30px 30px;
+	}
+
 }
 
 /* END TRENDING MEDIA QUERIES */

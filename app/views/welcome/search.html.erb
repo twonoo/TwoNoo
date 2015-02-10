@@ -15,6 +15,11 @@
               margin-bottom: 2px;
             }
 
+            .people-search-result-list-details {
+              line-height: 17px;
+              padding-top: 26px;
+              padding-right: 0px;
+            }
 
             .search-result-list-details {
               line-height: 17px;
@@ -37,22 +42,20 @@
             }
 
 
-            .search-result-list-activity-name {
+            .search-result-list-name {
               color: #000000;
               font-family: Helvetica, Helvetica Neue;
             }
-            .search-result-list-activity-name:link {
+            .search-result-list-name:link {
               padding:0;
-              display:block;
               font-size: 20px;
               font-weight: 600;
               color: #000000;
               font-family: Helvetica, Helvetica Neue;
             }
 
-            .search-result-list-activity-name:hover {
+            .search-result-list-name:hover {
               padding:0;
-              display:block;
               font-size: 20px;
               font-weight: 600;
               color: #000000;
@@ -66,9 +69,22 @@
             }
 
             .search-result-list-join {
-              margin-top: 53px;
+              padding-top: 53px;
               line-height: 10px;
               text-align: right;
+            }
+
+            .search-result-list-follow {
+              padding-top: 53px;
+              line-height: 10px;
+              text-align: right;
+            }
+
+            .search-result-list-follow > a {
+              background-color: #e2e2e2;
+              color: #333333;
+              font-weight: 600;
+              font-size: 14px;
             }
 
             .search-result-list-join > a {
@@ -78,27 +94,91 @@
               font-size: 14px;
             }
 
-            </style>
-            <% @activities.each do |a| %>
+            .side-nav {
+              padding:0;
+            }
 
-            <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-10 col-md-offset-1 search-result-list">
-                <div class="col-md-6 col-md-offset-3 search-result-list-details">
-                  <span><%= link_to a.activity_name, activity_path(a.id), class: "search-result-list-activity-name" %></span>
-                  <span class="search-result-list-location"><%= a.location_name %> </span>
-                  <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
+            .side-nav>ul>li {
+              background: #FFFFFF;
+            }
+            
+            .side-nav>ul>li>a {
+              border-radius: 0px;
+              color: #333;
+            }
+
+            .side-nav>ul>li.active>a, .side-nav>ul>li.active>a:hover {
+              background-color:#f5f5f5;
+              color: #333;
+            }
+
+            .side-nav>ul>li>a:hover {
+              background-color:#FE0075;
+              color: #fff;
+            }
+
+            </style>
+<!--             <div class="row">
+
+              <div style="background-color:#FFF; margin-right:15px">
+                <span> test </span>
+              </div>
+            </div> -->
+            <div class="row" role="tabpanel">
+              <div class="col-md-3 side-nav">
+                <ul class="nav nav-pills nav-stacked">
+                  <li style="<%= @activities.blank? ? 'display:none' : nil %>"><a aria-controls="activity" role="tab" data-toggle="tab" href="#activity">Activities</a></li>
+                  <li style="<%= @users.blank? ? 'display:none' :  nil %>"><a aria-controls="people" role="tab" data-toggle="tab" href="#people">People</a></li>
+                </ul>
+              </div>
+              <!-- BEGIN RESULTS --> 
+              <div class="col-md-9 tab-content">
+                <!-- TAB ALL THE ACTIVITIES! -->
+                <div role="tabpanel" class="tab-pane fade in <%= @activities.blank? ? nil :  'active' %>" id="activity">
+                <% @activities.each do |a| %>
+                  <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-12 search-result-list">
+                    <div class="col-md-6 col-md-offset-3 search-result-list-details">
+                      <span><%= link_to a.activity_name, activity_path(a.id), class: "search-result-list-name" %></span>
+                      <span class="search-result-list-location"><%= a.location_name %> </span>
+                      <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
+                    </div>
+                    <div class="search-result-list-join">
+                      <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
+                    </div>
+                    <div class="search-result-list-attending">
+                      <% User.limit(4).find(a.rsvps.map {|r| r.user_id}).each do |u| %>
+                        <%= profile_img_small(u) unless u.nil? %>
+                      <% end %>
+                      <%= "+#{a.rsvps.count - 4}" if a.rsvps.count > 4 %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+             <!--  END ACTIVITY TAB -->
+             <!-- TAB ALL THE PEOPLE! -->
+                <div role="tabpanel" class="tab-pane <%= @activities.blank? ? 'fade in active' :  nil %>" id="people">
+                  <% if @users.present? %>
+                    <% @users.each do |u| %>
+                      <div style="background: #FFFFFF" class="col-md-12 search-result-list">
+                        <div class="col-md-6 people-search-result-list-details">
+                         <span><%= profile_img(u.user) %></span>
+                         <%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: "search-result-list-name", style: "margin-left:50px" %>
+                        </div>
+                        <div class="search-result-list-follow">
+                          <% if current_user %>
+                          <%= current_user.following?(u.user) ? (link_to 'Unfollow', unfollow_path(u.user.id), class: 'btn btn-default btn-sm') : (link_to 'Follow', follow_path(u.user.id), class: 'btn btn-default btn-sm') %>
+                          <% else %>
+                          <%= link_to("View", profile_path(u.user), class: 'btn btn-default btn-sm') %>
+                          <% end %>
+                        </div>
+                      </div>
+                    <% end %>
+                 <% end %>
                 </div>
-                <div class="search-result-list-join">
-                  <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
-                </div>
-                <div class="search-result-list-attending">
-                  <% User.limit(4).find(a.rsvps.map {|r| r.user_id}).each do |u| %>
-                    <%= profile_img_small(u) unless u.nil? %>
-                  <% end %>
-                  <%= "+#{a.rsvps.count - 4}" if a.rsvps.count > 4 %>
-                </div>
-            </div>
-   
-          <% end %>
+            <!-- END PEOPLE TAB -->
+          <!-- END RESULTS -->
         </div>
       </div>
     </div>
+  </div>
+</div>
