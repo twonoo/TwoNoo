@@ -237,7 +237,7 @@ Devise.setup do |config|
       '2MpNyC_RjDUdADBDQs752GLz', {
         access_type: 'offline',
         scope: 'https://www.googleapis.com/auth/calendar',
-        redirect_uri:'http://www.twonoo.com/auth/google_oauth2/callback'
+        redirect_uri:'https://www.twonoo.com/auth/google_oauth2/callback'
       }
 
   # ==> Warden configuration
