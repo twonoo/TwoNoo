@@ -64,6 +64,7 @@ class CreateInterests < ActiveRecord::Migration
     drop_table :interests
     drop_table :interests_options
     drop_table :interests_users
+    drop_table :view_logs
 
   end
 end

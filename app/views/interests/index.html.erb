@@ -22,7 +22,7 @@
                               <%= select_tag "interests_options[#{interest.code}]",
                                              options_from_collection_for_select(interest.interests_options.order(:option_value),
                                                                                 'id', 'option_value', interest.interests_option_id(current_user.id)),
-                                             prompt: interest.interests_options.first.option_name %>
+                                             prompt: interest.interests_options.first.option_name, style: 'display:none' %>
                           <% end %>
                         </div>
 
@@ -46,12 +46,25 @@
 </div>
 
 <script type="text/javascript">
-    steve = null;
-    duck = null;
+
     $(function () {
+        $('input:checked').each(function () {
+            var optionBox = $('#' + getOptionBoxId($(this).attr('id')));
+            if(optionBox){
+                optionBox.show();
+            }
+        });
+
         $('input[type="checkbox"]').click(function (e) {
-            e.target
+            $('#' + getOptionBoxId(e.target.id)).toggle();
         });
     });
+
+    function getOptionBoxId(checkBoxId) {
+        var splitId = checkBoxId.split('_');
+        splitId.splice(1, 0, 'options');
+        return splitId.join('_');
+    }
+
 </script>
 

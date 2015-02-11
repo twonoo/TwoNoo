@@ -111,10 +111,9 @@ ActiveRecord::Schema.define(version: 20150209210412) do
   end
 
   create_table "interests_users", id: false, force: true do |t|
-    t.integer "user_id",               null: false
-    t.integer "interest_id",           null: false
+    t.integer "user_id",             null: false
+    t.integer "interest_id",         null: false
     t.integer "interests_option_id"
-    t.string  "interests_option_code"
   end
 
   create_table "mailboxer_conversation_opt_outs", force: true do |t|
