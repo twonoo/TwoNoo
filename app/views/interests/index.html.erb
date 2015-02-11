@@ -10,7 +10,7 @@
               <%= form_tag '/interests/update', method: :put do %>
                   <%= hidden_field_tag :first_time, @first_time %>
                   <% @interests.each do |interest| %>
-                      <div class="col-lg-4">
+                      <div class="col-sm-6 col-md-6 col-lg-4">
                         <%= check_box_tag "interests[#{interest.code}]", 1, (current_user.interests.pluck(:id).include?(interest.id)) %>
                         <%= label_tag "interests[#{interest.code}]", interest.name %>
                         <% if interest.interests_options.present? %>
@@ -21,15 +21,14 @@
                         <% end %>
                       </div>
                   <% end %>
-                  <div class="row" style="padding-top: 10px;">
-                    <div class="col-md-6">
-                      <%= submit_tag @first_time ? 'Save' : 'Update', class: 'btn btn-primary', style: 'margin-left: 14px;' %>
+                  <div class="clearfix"></div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <%= submit_tag @first_time ? 'Save' : 'Update', class: 'btn btn-primary pull-left' %>
+                      <% if true %>
+                          <%= link_to 'Not now', root_path, class: 'pull-right m-t-sm m-r-25-o' %>
+                      <% end %>
                     </div>
-                    <% if @first_time %>
-                        <div class="col-md-4">
-                            <%= link_to 'Not now', root_path %>
-                        </div>
-                    <% end %>
                   </div>
               <% end %>
             </div>
