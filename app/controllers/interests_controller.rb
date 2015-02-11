@@ -10,8 +10,10 @@ class InterestsController < ApplicationController
   end
 
   def update
+
+    current_user.interests.delete_all
+
     if params[:interests].present?
-      current_user.interests.delete_all
 
       params[:interests].each do |interest|
         interest_record = Interest.where(code: interest).first
@@ -26,10 +28,10 @@ class InterestsController < ApplicationController
         interests_user_record.save
       end
 
-      flash[:success] = 'Interests saved'
     end
 
-    redirect_to root_path
+    flash[:success] = 'Interests saved'
+    redirect_to params[:first_time].present? ? root_path : profile_edit_path
   end
 
 end

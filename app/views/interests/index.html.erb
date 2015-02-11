@@ -8,6 +8,7 @@
             <div class="row">
               <h2>Tell us a little about your interests...</h2>
               <%= form_tag '/interests/update', method: :put do %>
+                  <%= hidden_field_tag :first_time, @first_time %>
                   <% @interests.each do |interest| %>
                       <div class="col-lg-4">
                         <%= check_box_tag "interests[#{interest.code}]", 1, (current_user.interests.pluck(:id).include?(interest.id)) %>
