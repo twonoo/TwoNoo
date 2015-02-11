@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  
+
   before_filter :set_cache_buster, :set_cookies, :store_location, :check_flash_alert_param
 
   config.time_zone = 'Mountain Time (US & Canada)'
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.
-    return unless request.get? 
+    return unless request.get?
     if (request.path != "/users/sign_in" &&
         request.path != "/users/sign_up" &&
         request.path != "/users/password/new" &&
@@ -26,12 +26,16 @@ class ApplicationController < ActionController::Base
         request.path != "/users/sign_out" &&
         request.path != "/users/auth/facebook/callback" &&
         !request.xhr?) # don't store ajax calls
-      session[:previous_url] = request.fullpath 
+      session[:previous_url] = request.fullpath
     end
   end
 
   def after_sign_in_path_for(resource)
-    session[:previous_url] || root_path
+    if !current_user.view_logs.where(view_name: 'interests/index').exists?
+      interests_index_path || session[:previous_url] || root_path
+    else
+      session[:previous_url] || root_path
+    end
   end
 
   def set_city

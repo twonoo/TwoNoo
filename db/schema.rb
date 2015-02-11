@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217190623) do
+ActiveRecord::Schema.define(version: 20150209210412) do
 
   create_table "activities", force: true do |t|
     t.string   "activity_name"
@@ -94,6 +94,27 @@ ActiveRecord::Schema.define(version: 20141217190623) do
     t.string   "timezone"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "interests", force: true do |t|
+    t.string  "name",                  null: false
+    t.string  "code",                  null: false
+    t.boolean "active", default: true, null: false
+  end
+
+  create_table "interests_options", force: true do |t|
+    t.integer "interest_id",                 null: false
+    t.string  "option_name",                 null: false
+    t.string  "option_value"
+    t.string  "code",                        null: false
+    t.boolean "active",       default: true, null: false
+  end
+
+  create_table "interests_users", id: false, force: true do |t|
+    t.integer "user_id",               null: false
+    t.integer "interest_id",           null: false
+    t.integer "interests_option_id"
+    t.string  "interests_option_code"
   end
 
   create_table "mailboxer_conversation_opt_outs", force: true do |t|
@@ -223,11 +244,6 @@ ActiveRecord::Schema.define(version: 20141217190623) do
     t.integer  "user_id"
   end
 
-  create_table "user_engagement", id: false, force: true do |t|
-    t.string  "email",                      default: "", null: false
-    t.integer "time_since_login", limit: 8
-  end
-
   create_table "users", force: true do |t|
     t.string   "email",                              default: "", null: false
     t.string   "encrypted_password",                 default: "", null: false
@@ -261,6 +277,11 @@ ActiveRecord::Schema.define(version: 20141217190623) do
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "view_logs", force: true do |t|
+    t.integer "user_id"
+    t.string  "view_name"
+  end
 
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", name: "mb_opt_outs_on_conversations_id", column: "conversation_id"
 

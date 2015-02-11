@@ -6,8 +6,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
     logger.info "Devise create"
-    params['user']['sign_up_ip'] = request.env['REMOTE_ADDR']   
+    params['user']['sign_up_ip'] = request.env['REMOTE_ADDR']
     super
   end
 
-end 
+end

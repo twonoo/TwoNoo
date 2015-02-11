@@ -20,10 +20,14 @@ Rails.application.routes.draw do
   get 'credits/purchase'
 
   authenticated :user do
-    root :to => "welcome#index", as: :authenticated_root
+    root :to => 'welcome#index', as: :authenticated_root
   end
 
-  root :to => "welcome#index"
+  root :to => 'welcome#index'
+
+  get 'interests', to: 'interests#index', as: :interests_index
+  get 'interests/update', to: 'interests#index'
+  resources :interests
 
   get 'profile/index'
 
@@ -83,14 +87,13 @@ Rails.application.routes.draw do
   post 'activities/invite_people/:id' => 'activities#invite_people', as: :invite_people
   post 'activities/comment' => 'activities#comment', as: :activity_comment
   get 'activities/add_to_gcal/:id' => 'activities#add_to_gcal', as: :google_calendar
-  match "/auth/:provider/callback" => "activities#add_to_gcal", via: [:get, :post], as: :google_cal_callback
+  match '/auth/:provider/callback' => 'activities#add_to_gcal', via: [:get, :post], as: :google_cal_callback
 
 
   resources :activities
   resources :credits
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "users/registrations" }
-
+  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks', :registrations => 'users/registrations'}
 
   resources :conversations, only: [:index, :show, :new, :create] do
     member do
