@@ -1,42 +1,36 @@
 <div class="container">
   <div class="row">
     <%= render 'profile/edit_nav' %>
-    <div class="col-md-9">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="col-md-9">
-            <div class="form-group">
-              <div class="row">
-                <h2>Tell us a little about your interests...</h2>
-                <%= form_tag '/interests/update', method: :put do %>
-                    <% @interests.each do |interest| %>
-                        <div class="col-lg-4">
-
-                          <% if current_user.interests.pluck(:id).include? interest.id %>
-                              <div class="col-sm-3"><%= check_box_tag "interests[#{interest.code}]", 1, true %></div>
-                          <% else %>
-                              <div class="col-sm-3"><%= check_box_tag "interests[#{interest.code}]", 1, false %></div>
-                          <% end %>
-                          <div class="col-sm-9"><%= interest.name %></div>
-                          <% if interest.interests_options.present? %>
-                              <%= select_tag "interests_options[#{interest.code}]",
-                                             options_from_collection_for_select(interest.interests_options.order(:option_value),
-                                                                                'id', 'option_value', interest.interests_option_id(current_user.id)),
-                                             prompt: interest.interests_options.first.option_name, style: 'display:none' %>
-                          <% end %>
-                        </div>
-
-                    <% end %>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <%= submit_tag 'Update', class: 'btn btn-primary' %>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-md-9">
+          <div class="form-group">
+            <div class="row">
+              <h2>Tell us a little about your interests...</h2>
+              <%= form_tag '/interests/update', method: :put do %>
+                  <% @interests.each do |interest| %>
+                      <div class="col-lg-4">
+                        <%= check_box_tag "interests[#{interest.code}]", 1, (current_user.interests.pluck(:id).include?(interest.id)) %>
+                        <%= label_tag "interests[#{interest.code}]", interest.name %>
+                        <% if interest.interests_options.present? %>
+                            <%= select_tag "interests_options[#{interest.code}]",
+                                           options_from_collection_for_select(interest.interests_options.order(:option_value),
+                                                                              'id', 'option_value', interest.interests_option_id(current_user.id)),
+                                           prompt: interest.interests_options.first.option_name, style: 'display:none' %>
+                        <% end %>
                       </div>
-                      <div class="col-md-6">
-                        <%= link_to 'Not now', root_path %>
-                      </div>
+                  <% end %>
+                  <div class="row" style="padding-top: 10px;">
+                    <div class="col-md-6">
+                      <%= submit_tag @first_time ? 'Save' : 'Update', class: 'btn btn-primary', style: 'margin-left: 14px;' %>
                     </div>
-                <% end %>
-              </div>
+                    <% if true %>
+                        <div class="col-md-4">
+                            <%= link_to 'Not now', root_path %>
+                        </div>
+                    <% end %>
+                  </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -50,7 +44,7 @@
     $(function () {
         $('input:checked').each(function () {
             var optionBox = $('#' + getOptionBoxId($(this).attr('id')));
-            if(optionBox){
+            if (optionBox) {
                 optionBox.show();
             }
         });

@@ -1,7 +1,11 @@
 class InterestsController < ApplicationController
 
   def index
-    ViewLog.find_or_create_by(user_id: current_user.id, view_name: 'interests/index')
+    view_log = ViewLog.find_or_initialize_by(user_id: current_user.id, view_name: 'interests/index')
+    unless view_log.persisted?
+      view_log.save
+      @first_time = true
+    end
     @interests = Interest.all.order(:name)
   end
 
