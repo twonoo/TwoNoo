@@ -6,15 +6,26 @@ class InterestsController < ApplicationController
   end
 
   def update
-    current_user.interests.delete_all
+    if params[:interests].present?
+      current_user.interests.delete_all
 
-    params[:interests].each do |interest|
-      interest_record = Interest.where(code: interest).first
-      current_user.interests << interest_record
+      params[:interests].each do |interest|
+        interest_record = Interest.where(code: interest).first
+        interests_user_record = InterestsUser.new(
+            user_id: current_user.id,
+            interest_id: interest_record.id
+        )
+        if params[:interests_options].present? && params[:interests_options][interest_record.code].present?
+          interests_user_record.interests_option_id = params[:interests_options][interest_record.code]
+        end
+
+        interests_user_record.save
+      end
+
+      flash[:success] = 'Interests saved'
     end
 
-    flash[:success] = 'Interests saved'
-    redirect_to interests_index_path
+    redirect_to root_path
   end
 
 end

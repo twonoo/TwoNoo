@@ -2,10 +2,11 @@ development:
   adapter: mysql2
   encoding: utf8
   database: twonoo_dev
-  username: twonoo
-  password: Tw0#oo
-  port: 3306
-  host: 104.131.156.51
+  pool: 5
+  username: root
+  host: db1.twonoo.com
+
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

@@ -9,6 +9,10 @@ class Interest < ActiveRecord::Base
 
   default_scope { where(:active => true) }
 
+  def interests_option_id(user_id)
+    InterestsUser.where(user_id: user_id, interest_id: self.id).pluck(:interests_option_id).first
+  end
+
   private
 
   def generate_code

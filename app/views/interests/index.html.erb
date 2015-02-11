@@ -9,19 +9,33 @@
               <div class="row">
                 <h2>Tell us a little about your interests...</h2>
                 <%= form_tag '/interests/update', method: :put do %>
-                    <% @interests.each_with_index do |interest, index| %>
+                    <% @interests.each do |interest| %>
                         <div class="col-lg-4">
+
                           <% if current_user.interests.pluck(:id).include? interest.id %>
                               <div class="col-sm-3"><%= check_box_tag "interests[#{interest.code}]", 1, true %></div>
                           <% else %>
                               <div class="col-sm-3"><%= check_box_tag "interests[#{interest.code}]", 1, false %></div>
                           <% end %>
                           <div class="col-sm-9"><%= interest.name %></div>
+                          <% if interest.interests_options.present? %>
+                              <%= select_tag "interests_options[#{interest.code}]",
+                                             options_from_collection_for_select(interest.interests_options.order(:option_value),
+                                                                                'id', 'option_value', interest.interests_option_id(current_user.id)),
+                                             prompt: interest.interests_options.first.option_name %>
+                          <% end %>
                         </div>
+
                     <% end %>
-                    <%= submit_tag 'Update', class: 'btn btn-primary' %>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <%= submit_tag 'Update', class: 'btn btn-primary' %>
+                      </div>
+                      <div class="col-md-6">
+                        <%= link_to 'Not now', root_path %>
+                      </div>
+                    </div>
                 <% end %>
-                <%= link_to 'Not now', root_path %>
               </div>
             </div>
           </div>
@@ -30,4 +44,14 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+    steve = null;
+    duck = null;
+    $(function () {
+        $('input[type="checkbox"]').click(function (e) {
+            e.target
+        });
+    });
+</script>
 
