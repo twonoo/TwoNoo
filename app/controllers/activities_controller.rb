@@ -20,16 +20,16 @@ class ActivitiesController < ApplicationController
               data = {
                 :code => params[:code],
                 :redirect_uri => google_cal_callback_url,
-                :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
-                :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
+                :client_id => '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com',
+                :client_secret => 'vD_9BiLj-oD7WlHR47IBy6Cw',
                 :grant_type => 'authorization_code'
               }
             elsif user.gcal_refresh_token.present?
               logger.info "refresh token present"
               data = {
                 :redirect_uri => google_cal_callback_url,
-                :client_id => '508640691064-qtaddpu6k177crtm6ed4eher140gb999.apps.googleusercontent.com',
-                :client_secret => '2MpNyC_RjDUdADBDQs752GLz',
+                :client_id => '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com',
+                :client_secret => 'vD_9BiLj-oD7WlHR47IBy6Cw',
                 :refresh_token => user.gcal_refresh_token,
                 :grant_type => 'refresh_token'
               }
