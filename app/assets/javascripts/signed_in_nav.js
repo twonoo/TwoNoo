@@ -1,5 +1,6 @@
 $(function(){
   $('#notifications_link').click(function(e) {
+    console.log('notifications_link clicked');
     var $notifMenu = $('#notifications_menu');
     var isActive = $notifMenu.hasClass('open');
     if (!isActive)
@@ -9,7 +10,28 @@ $(function(){
         datatype: 'html',
         cache: false,
          success: function(html) {
+         console.log('got the notifs');
 	   $('#notifications_dropdown').html(html);
+         console.log('notifs displayed' + html);
+	 }
+      });
+    }
+  });
+
+  $('#notifications_link_mobile').click(function(e) {
+    console.log('notifications_link clicked');
+    var $notifMenu = $('#alerts');
+    var isActive = $notifMenu.hasClass('open');
+    if (!isActive)
+    {
+      $.ajax({
+        url: "/notifications/notifications_mobile",
+        datatype: 'html',
+        cache: false,
+         success: function(html) {
+           console.log('got the notifs');
+           $('#notifications_dropdown_mobile').html(html);
+           console.log('notifs displayed' + html);
 	 }
       });
     }

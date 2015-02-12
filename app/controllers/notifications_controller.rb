@@ -20,7 +20,6 @@ class NotificationsController < ApplicationController
     end
   end
 
-
   private
 
 end

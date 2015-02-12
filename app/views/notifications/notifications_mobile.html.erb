@@ -13,24 +13,40 @@
       </style>
       <h2>Notifications</h2>
       <hr style="margin:0px;padding:0px;"/>
-      <% current_user.mailbox.notifications.where('mailboxer_notifications.created_at > ?', Time.now - 7.days).each do |notif| %>
-        <% if notif.is_unread?(current_user) then %>
+<%
+  @numNotifs = 10
+  @numUnreadNotifs = current_user.mailbox.notifications({:read => false}).count
+  @numAdjustedNotifs = 0
+  if @numUnreadNotifs > 0 then
+     oldestunreadnotif = current_user.mailbox.notifications({:read => false}).order("id ASC").first
+     oldestid = oldestunreadmessages.id
+
+     unless @oldestid.nill? then
+       @numAdjustedNotifs = current_user.mailbox.notifications({:read => false}).where('mailboxer_notifications.id >= ?', oldestid).count
+     end
+  end
+
+  @numNotifs = (@numAdjustedNotifs > @numNotifs)?@numAdjustedNotifs:@numNotifs
+%>
+
+<% current_user.mailbox.notifications.first(@numNotifs).each do |notif| %>
+  <% if notif.is_unread?(current_user) then %>
           <div class="notification" style='background-color: #F0F0F0;'>
-        <% else %>
+  <% else %>
           <div class="notification">
-        <% end %>
-          <%
-            @user = User.find_by_id(notif.subject)
-            if @user.nil? then %>
-          <b><%=notif.subject%>:</b>
-          <% else %>
-            <b><%=link_to @user.name, profile_path(@user)%>:</b>
-          <% end %>
-          <%=notif.body.html_safe%>
-        </div>
+  <% end %>
+    <%
+      @user = User.find_by_id(notif.subject)
+      if @user.nil? then %>
+    <b><%=notif.subject%>:</b>
+    <% else %>
+      <b><%=link_to @user.name, profile_path(@user)%>:</b>
+    <% end %>
+    <%=notif.body.html_safe%>
         <hr style="margin:0px;padding:0px;"/>
-        <% notif.mark_as_read(current_user) %>
-      <% end %>
+  </div>
+  <% notif.mark_as_read(current_user) %>
+<% end %>
     </div>
   </div>
 </div>
