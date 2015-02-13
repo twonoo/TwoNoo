@@ -13,6 +13,14 @@ class Interest < ActiveRecord::Base
     InterestsUser.where(user_id: user_id, interest_id: self.id).pluck(:interests_option_id).first
   end
 
+  def interests_option_value(user_id)
+    InterestsOption.where(id: interests_option_id(user_id)).pluck(:option_value).first
+  end
+
+  def interests_option_name(user_id)
+    InterestsOption.where(id: interests_option_id(user_id)).pluck(:option_name).first
+  end
+
   private
 
   def generate_code

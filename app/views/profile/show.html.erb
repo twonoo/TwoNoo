@@ -1,90 +1,99 @@
 <div class="container-fluid">
-	<div class="row" style="margin-top:0px">
-		<div style="background-color:#333;height:275px">
-			<div class="col-md-6 col-md-offset-3">
-				<div class="text-center" style="margin-top:30px;color:#FFF;">
-					<%= profile_img(@profile) %>
-		            <h2 style="color:white; margin-top:20px"><strong><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></strong></h2> 
-		            <p><%= @profile.profile.about_me %></p>
-		            <% if !current_user.nil? && (current_user != @profile) then %>
-		            <h3>
-		              <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
-		            </h3>
-		            <% end %>
-				</div>
-		        <% if !current_user.nil? && (current_user != @profile) then %>
-			        <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
-			          alink="Send <%=@profile.profile.first_name%> a message"
-			          recipient="<%=@profile.id%>" recipient_firstname="<%=@profile.profile.first_name%>" recipient_lastname="<%=@profile.profile.last_name%>"
-			          sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>">
-			        </div>
-			          <script>
-			            (function(){
-			              $('#profile-im').bind('on_init_complete', function(){
-			                $('#profile-im #messageMe').addClass('label');
-			              });
-			            })();
-			          </script>
-		        <% end %>
-	      	</div>
-		</div>
-	</div>
-<% if user_signed_in? %>
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="text-center">
-			<ul class="nav nav-pills nav-justified">
-		      <li id="profile_activities" class="active">
-						<%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
-					</li>
-		      <li id="profile_attending">
-						<%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
-					</li>
-		      <li id="profile_followers">
-						<%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
-					</li>
-		      <li id="profile_following">
-						<%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
-					</li>
-		    </ul>
-			</div>
-		</div>
-	</div>
-<% end %>
-	<div class="row">
-		<div id="profile_data" class="col-md-8 col-md-offset-2" style="margin-top:50px">
-			<%= render '/activities/activities' %>
-		</div>
-	</div>
+  <div class="row" style="margin-top:0px">
+    <div style="background-color:#333;height:285px">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="text-center" style="margin-top:15px;color:#FFF;">
+          <%= profile_img(@profile) %>
+
+          <h2 style="color:white; margin-top:20px">
+            <strong><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></strong>
+          </h2>
+
+          <p><%= @profile.profile.about_me %></p>
+
+          <p class="interests-small"><%= interests_tag(@profile) %></p>
+
+          <% if !current_user.nil? && (current_user != @profile) then %>
+              <h3>
+                <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
+              </h3>
+          <% end %>
+        </div>
+        <% if !current_user.nil? && (current_user != @profile) then %>
+            <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
+                 alink="Send <%= @profile.profile.first_name %> a message"
+                 recipient="<%= @profile.id %>" recipient_firstname="<%= @profile.profile.first_name %>" recipient_lastname="<%= @profile.profile.last_name %>"
+                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>">
+            </div>
+            <script>
+                (function () {
+                    $('#profile-im').bind('on_init_complete', function () {
+                        $('#profile-im #messageMe').addClass('label');
+                    });
+                })();
+            </script>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% if user_signed_in? %>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="text-center">
+            <ul class="nav nav-pills nav-justified">
+              <li id="profile_activities" class="active">
+                <%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
+              </li>
+              <li id="profile_attending">
+                <%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
+              </li>
+              <li id="profile_followers">
+                <%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
+              </li>
+              <li id="profile_following">
+                <%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  <% end %>
+  <div class="row">
+    <div id="profile_data" class="col-md-8 col-md-offset-2" style="margin-top:50px">
+      <%= render '/activities/activities' %>
+    </div>
+  </div>
 </div>
 
 <style type="text/css">
-	.navbar {margin-bottom: 0;}
+    .navbar {
+        margin-bottom: 0;
+    }
 
-	body {
-		background-color: white;
-	}
+    body {
+        background-color: white;
+    }
 
-	.nav-pills { 
-		margin-top: 10px;
-		color: black;
-	}
+    .nav-pills {
+        margin-top: 10px;
+        color: black;
+    }
 
-	.nav-pills > li > a {
-		color: #777;
-		border: 1px solid #ddd;
-		margin-left:15px;
-		margin-right:15px;
-		padding:5px 0px 5px 0px;
+    .nav-pills > li > a {
+        color: #777;
+        border: 1px solid #ddd;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 5px 0px 5px 0px;
 
-	}
+    }
 
-  #draggable {
-    width: 200px;
-    padding: 0.5em;
-    z-index:100;
-    position:absolute;
-    background-color:white;
-  }
+    #draggable {
+        width: 200px;
+        padding: 0.5em;
+        z-index: 100;
+        position: absolute;
+        background-color: white;
+    }
 
 </style>

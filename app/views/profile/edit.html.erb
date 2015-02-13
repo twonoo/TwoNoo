@@ -18,7 +18,7 @@
               <div class="col-sm-3"> <%= p.select :gender, [['Male', 0], ['Female', 1], ['Other', 2], ['Not Disclosed', 3]], {}, class: "form-control" %> </div>
             </div>
             <div class="form-group"> <%= p.label :about_me, class: "col-sm-2 control-label" %>
-              <div class="col-sm-6"> <%= p.text_area :about_me, class: "form-control" %> </div>
+              <div class="col-sm-6"> <%= p.text_area :about_me, class: "form-control limit-160", maxlength: 160 %> </div>
             </div>
             <%= u.submit 'Save', class: 'btn btn-primary' %> </div>
           <div class="col-md-2"> <%= profile_img(@user) %>

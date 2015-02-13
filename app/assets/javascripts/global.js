@@ -6,12 +6,22 @@ $(document).ready(function(){
     $(this).attr('clicked', 'true');
   });
 
+    $('.limit-160').keyup(function(e){
+        limitText(e.target, 160)
+    })
+
   $('#messages_link').dblclick(function(){
     window.location.href=$(this).attr('href');
   });
 
   prepare_follow_links();
 });
+
+function limitText(element, maxLength){
+    if(element && element.value.length > maxLength){
+        element.value = element.value.substring(0, maxLength);
+    }
+}
 
 function prepare_follow_links()
 {
