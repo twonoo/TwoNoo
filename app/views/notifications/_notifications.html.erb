@@ -1,15 +1,24 @@
 <%
   @numNotifs = 10
-  if current_user.mailbox.notifications({:read => false}).count > @numNotifs then
-    @numNotifs = current_user.mailbox.notifications({:read => false}).count
+  @numUnreadNotifs = current_user.mailbox.notifications({:read => false}).count
+  @numAdjustedNotifs = 0
+  if @numUnreadNotifs > 0 then
+     oldestunreadnotif = current_user.mailbox.notifications({:read => false}).order("id ASC").first
+     oldestid = oldestunreadmessages.id
+
+     unless @oldestid.nill? then
+       @numAdjustedNotifs = current_user.mailbox.notifications({:read => false}).where('mailboxer_notifications.id >= ?', oldestid).count
+     end
   end
+
+  @numNotifs = (@numAdjustedNotifs > @numNotifs)?@numAdjustedNotifs:@numNotifs
 %>
 
 <% current_user.mailbox.notifications.first(@numNotifs).each do |notif| %>
   <% if notif.is_unread?(current_user) then %>
-    <div style='word-wrap: break-word; width: 290px; margin-left: 5px; background-color: #F0F0F0;'>
+    <div style='word-wrap: break-word; width: 275px; margin-left: 5px; background-color: #F0F0F0;'>
   <% else %>
-    <div style='word-wrap: break-word; width: 290px; margin-left: 5px;'>
+    <div style='word-wrap: break-word; width: 275px; margin-left: 5px;'>
   <% end %>
     <%
       @user = User.find_by_id(notif.subject)
