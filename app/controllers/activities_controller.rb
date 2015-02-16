@@ -18,20 +18,20 @@ class ActivitiesController < ApplicationController
             if params[:code].present?
               logger.info "have the code: " + params[:code]
               data = {
-                :code => params[:code],
-                :redirect_uri => google_cal_callback_url,
-                :client_id => '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com',
-                :client_secret => 'vD_9BiLj-oD7WlHR47IBy6Cw',
-                :grant_type => 'authorization_code'
+                  :code => params[:code],
+                  :redirect_uri => google_cal_callback_url,
+                  :client_id => ENV['GOOGLE_KEY'],
+                  :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
+                  :grant_type => 'authorization_code'
               }
             elsif user.gcal_refresh_token.present?
               logger.info "refresh token present"
               data = {
-                :redirect_uri => google_cal_callback_url,
-                :client_id => '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com',
-                :client_secret => 'vD_9BiLj-oD7WlHR47IBy6Cw',
-                :refresh_token => user.gcal_refresh_token,
-                :grant_type => 'refresh_token'
+                  :redirect_uri => google_cal_callback_url,
+                  :client_id => ENV['GOOGLE_KEY'],
+                  :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
+                  :refresh_token => user.gcal_refresh_token,
+                  :grant_type => 'refresh_token'
               }
             else
               redirect_to '/users/auth/google_oauth2'
@@ -65,29 +65,29 @@ class ActivitiesController < ApplicationController
           # Can I make the call to the calendar as a JSON request?
           # doesnt' matter because we are in a new window!
           activity = Activity.find(cookies[:activityid])
-          
+
 
           logger.info "Start: #{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
           logger.info "End: #{(activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
           event = {
-            'summary' => activity.activity_name,
-            'description' => activity.description,
-            'location' => "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}",
-            'start' => {
-              'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
-            },
-            'end' => {
-              'dateTime' => "#{(activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
-            }
+              'summary' => activity.activity_name,
+              'description' => activity.description,
+              'location' => "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}",
+              'start' => {
+                  'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+              },
+              'end' => {
+                  'dateTime' => "#{(activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+              }
           }
 
           client = Google::APIClient.new
           client.authorization.access_token = access_token
           service = client.discovered_api('calendar', 'v3')
           @result = client.execute(:api_method => service.events.insert,
-                                  :parameters => {'calendarId' => 'primary'},
-                                  :body => JSON.dump(event),
-                                  :headers => {'Content-Type' => 'application/json'})
+                                   :parameters => {'calendarId' => 'primary'},
+                                   :body => JSON.dump(event),
+                                   :headers => {'Content-Type' => 'application/json'})
 
           logger.info @result.data.id
         else
@@ -106,7 +106,7 @@ class ActivitiesController < ApplicationController
         #event.klass = "PUBLIC"
         event.created = activity.created_at
         event.last_modified = activity.updated_at
-        event.uid = event.url = "https://www.twonoo.com/activity/#{activity.id}" 
+        event.uid = event.url = "https://www.twonoo.com/activity/#{activity.id}"
 
         calendar = Icalendar::Calendar.new
         calendar.add_event(event)
@@ -114,7 +114,7 @@ class ActivitiesController < ApplicationController
         render :text => calendar.to_ical
         return
       end
-    end 
+    end
 
   end
 
@@ -126,7 +126,7 @@ class ActivitiesController < ApplicationController
   end
 
   def search
-    
+
   end
 
   def user
@@ -135,32 +135,32 @@ class ActivitiesController < ApplicationController
       @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
     else
       @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).
-        where('cancelled = false').
-        order('datetime ASC')
+          where('cancelled = false').
+          order('datetime ASC')
 
       @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).
-        where('cancelled = false').
-        order('datetime DESC')
+          where('cancelled = false').
+          order('datetime DESC')
     end
 
   end
 
   def show
-  
+
     @activity = Activity.find_by_id(params[:id])
 
     if @activity.nil?
       redirect_to root_url
       return
     end
-    
+
     @activity.increase_view
 
     @organizer = User.find(@activity.user_id)
   end
 
   def new
-    if     (Transaction.get_balance(current_user) > 0) \
+    if (Transaction.get_balance(current_user) > 0) \
         || (current_user.profile.nonprofit == 1) \
         || (current_user.profile.ambassador == 1) \
     then
@@ -182,9 +182,9 @@ class ActivitiesController < ApplicationController
   def cancel
     @activity = Activity.find(params[:id])
     if @activity.cancelled
-    	@activity.cancelled = false
+      @activity.cancelled = false
     else
-    	@activity.cancelled = true
+      @activity.cancelled = true
     end
 
     if @activity.save
@@ -228,7 +228,7 @@ class ActivitiesController < ApplicationController
 
       @organizer = User.find(@activity.user_id)
       if current_user != @organizer
-          UserMailer.delay.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment)
+        UserMailer.delay.comment_on_owned_activity(@organizer, @activity, current_user, @comment.comment)
       end
     end
 
@@ -267,7 +267,7 @@ class ActivitiesController < ApplicationController
 
     if @activity.save
       # Charge the organizer
-      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1)?Transaction.get_balance(current_user):(Transaction.get_balance(current_user) - 1))
+      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
 
       # Have the organizer RSVP to their own activity
       rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)

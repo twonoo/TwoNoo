@@ -1,1 +1,32 @@
-MANDRILL_APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
+facebook_defaults: &facebook_defaults
+  SCOPE: 'user_friends,email'
+
+google_defaults: &google_defaults
+  KEY: '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com'
+  SECRET: 'vD_9BiLj-oD7WlHR47IBy6Cw'
+  ACCESS_TYPE: 'offline'
+  SCOPE: 'https://www.googleapis.com/auth/calendar'
+  REDIRECT_URI: 'https://www.twonoo.com/auth/google_oauth2/callback'
+
+mandrill_defaults: &mandril_defaults
+  APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
+
+development:
+  FACEBOOK:
+    KEY: '1016888825004383'
+    SECRET: '099c1ccccaf640d61ba8f022b7465c53'
+    <<: *facebook_defaults
+  GOOGLE:
+    <<: *google_defaults
+  MANDRIL:
+    <<: *mandril_defaults
+
+production:
+  FACEBOOK:
+    KEY: '1524267501137363'
+    SECRET: '6f6e76f615fcf6c4a552cce0f51e71c4'
+    <<: *facebook_defaults
+  GOOGLE:
+    <<: *google_defaults
+  MANDRIL:
+    <<: *mandril_defaults

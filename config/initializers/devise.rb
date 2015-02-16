@@ -32,7 +32,7 @@ Devise.setup do |config|
   # config.authentication_keys = [ :email ]
 
   # Configure omniauth for Facebook
-  config.omniauth :facebook, '1524267501137363', '6f6e76f615fcf6c4a552cce0f51e71c4', image_size: 'large', secure_image_url: true, scope: 'user_friends'
+  config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], image_size: 'large', secure_image_url: true, scope: ENV['FACEBOOK_SCOPE']
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -44,12 +44,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email ]
+  config.case_insensitive_keys = [:email]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email ]
+  config.strip_whitespace_keys = [:email]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -233,11 +233,10 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :google_oauth2, '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com',
-      'vD_9BiLj-oD7WlHR47IBy6Cw', {
-        access_type: 'offline',
-        scope: 'https://www.googleapis.com/auth/calendar',
-        redirect_uri:'https://www.twonoo.com/auth/google_oauth2/callback'
+  config.omniauth :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], {
+          access_type: ENV['GOOGLE_ACCESS_TYPE'],
+          scope: ENV['GOOGLE_SCOPE'],
+          redirect_uri: ENV['GOOGLE_REDIRECT_URI']
       }
 
   # ==> Warden configuration

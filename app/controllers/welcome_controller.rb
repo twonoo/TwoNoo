@@ -179,7 +179,6 @@ class WelcomeController < ApplicationController
       @activities = @activities.order('datetime ASC')
     end
 
-
     @users = Profile.terms(params[:terms])
 
     search_history = Search.new(search: params[:terms], location: params[:location])

@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
   def self.from_omniauth(auth)
     user = where(auth.slice(:provider, :uid)).first_or_create do |user|
       user.skip_confirmation!
-      user.email = auth.info.email
+      user.email = auth.info.email if user.email.blank?
       user.password = Devise.friendly_token[0, 20]
       # Begin Profile Build
       user.build_profile
