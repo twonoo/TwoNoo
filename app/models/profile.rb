@@ -21,18 +21,23 @@ class Profile < ActiveRecord::Base
 
   def self.terms(terms)
     query = []
-    interest_ids = []
-    interest_option_ids = []
+    interests_query = []
+    options_query = []
     terms.split.each do |t|
       query << "(first_name LIKE '%#{t}%' OR last_name LIKE '%#{t}%')"
-      interest_ids << Interest.where('name like ?', "%#{t}%").pluck(:id)
-      interest_option_ids << InterestsOption.where('option_value like ?', "%#{t}%").pluck(:id)
+      interests_query << "(name LIKE '%#{t}%')"
+      options_query << "(option_value LIKE '%#{t}%')"
     end
 
+    interests_query = interests_query.join(' AND ')
+    options_query = options_query.join(' AND ')
+
+    interest_ids = Interest.where(interests_query).pluck(:id)
+    interest_option_ids = InterestsOption.where(options_query).pluck(:id)
     user_ids = InterestsUser.where('interest_id in (?) or interests_option_id in (?)',
                                    interest_ids.flatten.uniq, interest_option_ids.flatten.uniq).pluck(:user_id)
 
-    query = query.join(" AND ")
+    query = query.join(' AND ')
     query << " OR user_id IN (#{user_ids.uniq.join(',')})" unless user_ids.blank?
 
     where(query) unless query.blank?
