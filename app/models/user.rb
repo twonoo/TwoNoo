@@ -82,7 +82,10 @@ class User < ActiveRecord::Base
     #facebooks uid is not always the same any more, so in the event they return a different one, we need to look up the user by email.
     user = where(provider: 'facebook', uid: auth.uid).first
     user = where(email: auth.info.email).first if user.blank?
-    user = new do |user|
+
+    if user.blank?
+
+      user = new
       user.skip_confirmation!
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
@@ -97,12 +100,13 @@ class User < ActiveRecord::Base
       end
       oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
       user.profile.profile_picture = oauth_picture
+      user.save
       logger.info "created account for facebook user: #{user.email}"
-    end if user.blank?
+
+    end
 
     #These should always be updated on a new log in to ensure the token expiration is updated and to retrofit existing
     #users prior to this update.
-
     user.uid = auth.uid
     user.fb_token = auth.credentials[:token]
     user.fb_token_expires_in = auth.credentials[:expires_at]
