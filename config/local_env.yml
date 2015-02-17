@@ -6,12 +6,13 @@ google_defaults: &google_defaults
   SECRET: 'vD_9BiLj-oD7WlHR47IBy6Cw'
   ACCESS_TYPE: 'offline'
   SCOPE: 'https://www.googleapis.com/auth/calendar'
-  REDIRECT_URI: 'https://www.twonoo.com/auth/google_oauth2/callback'
+  REDIRECT_URI: '/auth/google_oauth2/callback'
 
 mandrill_defaults: &mandril_defaults
   APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
 
 development:
+  BASEURL: http://staging.twonoo.com:8080
   FACEBOOK:
     KEY: '1016888825004383'
     SECRET: '099c1ccccaf640d61ba8f022b7465c53'
@@ -22,6 +23,7 @@ development:
     <<: *mandril_defaults
 
 production:
+  BASEURL: https://twonoo.com
   FACEBOOK:
     KEY: '1524267501137363'
     SECRET: '6f6e76f615fcf6c4a552cce0f51e71c4'
