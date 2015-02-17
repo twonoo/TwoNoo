@@ -22,9 +22,9 @@ class ActivitiesController < ApplicationController
             }
 
             if params[:code].present?
-              data.merge(code: params[:code], grant_type: 'authorization_code')
+              data.merge!(code: params[:code], grant_type: 'authorization_code')
             elsif user.gcal_refresh_token.present?
-              data.merge(refresh_token: user.gcal_refresh_token, grant_type: 'refresh_token')
+              data.merge!(refresh_token: user.gcal_refresh_token, grant_type: 'refresh_token')
             else
               redirect_to '/users/auth/google_oauth2' and return
             end
