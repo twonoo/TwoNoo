@@ -3,7 +3,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            {
                access_type: ENV['GOOGLE_ACCESS_TYPE'],
                scope: ENV['GOOGLE_SCOPE'],
-               redirect_uri: ENV['GOOGLE_REDIRECT_URI']
+               redirect_uri: ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI']
            }
 end
 

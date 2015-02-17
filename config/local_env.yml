@@ -12,7 +12,7 @@ mandrill_defaults: &mandril_defaults
   APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
 
 development:
-  BASEURL: 'http://staging.twonoo.com:8080'
+  BASEURL: 'http://localhost:3002'
   FACEBOOK:
     KEY: '1016888825004383'
     SECRET: '099c1ccccaf640d61ba8f022b7465c53'

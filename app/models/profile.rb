@@ -23,6 +23,7 @@ class Profile < ActiveRecord::Base
     query = []
     interests_query = []
     options_query = []
+
     terms.split.each do |t|
       query << "(first_name LIKE '%#{t}%' OR last_name LIKE '%#{t}%')"
       interests_query << "(name LIKE '%#{t}%')"

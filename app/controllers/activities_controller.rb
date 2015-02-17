@@ -12,37 +12,26 @@ class ActivitiesController < ApplicationController
         # If we are gettign the callback from the authorization request or we have a refresh token then get a new authorization token
         # do we need to ask the user for authorization?
         if params[:code].present? || (user.gcal_token.present? && ((user.gcal_token_issued_at + user.gcal_token_expires_in) > Time.now())) || user.gcal_refresh_token.present?
-          logger.info 'do not need authorization'
+
           #Do we need to get an access token
           if params[:code].present? || ((user.gcal_token_issued_at + user.gcal_token_expires_in) < Time.now())
+            data = {
+                :redirect_uri => ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI'],
+                :client_id => ENV['GOOGLE_KEY'],
+                :client_secret => ENV['GOOGLE_SECRET']
+            }
+
             if params[:code].present?
-              logger.info 'have the code: ' + params[:code]
-              data = {
-                  :code => params[:code],
-                  :redirect_uri => ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI'],
-                  :client_id => ENV['GOOGLE_KEY'],
-                  :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
-                  :grant_type => 'authorization_code'
-              }
+              data.merge(code: params[:code], grant_type: 'authorization_code')
             elsif user.gcal_refresh_token.present?
-              logger.info 'refresh token present'
-              data = {
-                  :redirect_uri => ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI'],
-                  :client_id => ENV['GOOGLE_KEY'],
-                  :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
-                  :refresh_token => user.gcal_refresh_token,
-                  :grant_type => 'refresh_token'
-              }
+              data.merge(refresh_token: user.gcal_refresh_token, grant_type: 'refresh_token')
             else
-              redirect_to '/users/auth/google_oauth2'
-              return
+              redirect_to '/users/auth/google_oauth2' and return
             end
 
-            @response = ActiveSupport::JSON.decode(RestClient.post("https://accounts.google.com/o/oauth2/token", data))
-            logger.info "response: " + @response.to_s
+            @response = HTTParty.post('https://accounts.google.com/o/oauth2/token', body: data)
 
             if @response["access_token"].present?
-              logger.info "access token present"
               # Save your token
               access_token = @response["access_token"]
               expires_in = @response["expires_in"]
@@ -55,24 +44,24 @@ class ActivitiesController < ApplicationController
               user.gcal_refresh_token = refresh_token
               user.save!
             else
-              logger.info "no access token!!!"
-              # we have nothing and we should tell the user about it
+              redirect_to '/users/auth/google_oauth2' and return
             end
           else
             access_token = user.gcal_token
           end
 
-          # Can I make the call to the calendar as a JSON request?
-          # doesnt' matter because we are in a new window!
-          activity = Activity.find(cookies[:activityid])
+          activity = Activity.where(id: cookies[:activityid]).first
 
+          location = ''
+          location << activity.location_name + ', ' if activity.location_name.present?
+          location << activity.street_address_2 + ', ' if activity.street_address_2.present?
+          location << activity.city + ', ' if activity.city.present?
+          location << activity.state + ', ' if activity.state.present?
 
-          logger.info "Start: #{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
-          logger.info "End: #{(activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
           event = {
               'summary' => activity.activity_name,
               'description' => activity.description,
-              'location' => "#{activity.location_name}, #{activity.street_address_1}, #{activity.street_address_2}, #{activity.city}, #{activity.state}",
+              'location' => location,
               'start' => {
                   'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
               },
@@ -81,18 +70,10 @@ class ActivitiesController < ApplicationController
               }
           }
 
-          client = Google::APIClient.new
-          client.authorization.access_token = access_token
-          service = client.discovered_api('calendar', 'v3')
-          @result = client.execute(:api_method => service.events.insert,
-                                   :parameters => {'calendarId' => 'primary'},
-                                   :body => JSON.dump(event),
-                                   :headers => {'Content-Type' => 'application/json'})
-
-          logger.info @result.data.id
+          response = HTTParty.post("https://www.googleapis.com/calendar/v3/calendars/primary/events?access_token=#{access_token}", body: event.to_json, headers: {'Content-Type' => 'application/json'})
+          logger.info response.inspect
         else
-          redirect_to '/users/auth/google_oauth2'
-          return
+          redirect_to '/users/auth/google_oauth2' and return
         end
       end
       format.ics do
