@@ -12,22 +12,22 @@ class ActivitiesController < ApplicationController
         # If we are gettign the callback from the authorization request or we have a refresh token then get a new authorization token
         # do we need to ask the user for authorization?
         if params[:code].present? || (user.gcal_token.present? && ((user.gcal_token_issued_at + user.gcal_token_expires_in) > Time.now())) || user.gcal_refresh_token.present?
-          logger.info "do not need authorization"
+          logger.info 'do not need authorization'
           #Do we need to get an access token
           if params[:code].present? || ((user.gcal_token_issued_at + user.gcal_token_expires_in) < Time.now())
             if params[:code].present?
-              logger.info "have the code: " + params[:code]
+              logger.info 'have the code: ' + params[:code]
               data = {
                   :code => params[:code],
-                  :redirect_uri => google_cal_callback_url,
+                  :redirect_uri => ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI'],
                   :client_id => ENV['GOOGLE_KEY'],
                   :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
                   :grant_type => 'authorization_code'
               }
             elsif user.gcal_refresh_token.present?
-              logger.info "refresh token present"
+              logger.info 'refresh token present'
               data = {
-                  :redirect_uri => google_cal_callback_url,
+                  :redirect_uri => ENV['BASEURL'] + ENV['GOOGLE_REDIRECT_URI'],
                   :client_id => ENV['GOOGLE_KEY'],
                   :client_secret => ENV['GOOGLE_ACCESS_TYPE'],
                   :refresh_token => user.gcal_refresh_token,
