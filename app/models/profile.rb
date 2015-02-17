@@ -20,28 +20,35 @@ class Profile < ActiveRecord::Base
   end
 
   def self.terms(terms)
-    query = []
-    interests_query = []
-    options_query = []
 
-    terms.split.each do |t|
-      query << "(first_name LIKE '%#{t}%' OR last_name LIKE '%#{t}%')"
-      interests_query << "(name LIKE '%#{t}%')"
-      options_query << "(option_value LIKE '%#{t}%')"
+    if terms.present?
+
+      query = []
+      interests_query = []
+      options_query = []
+
+      terms.split.each do |t|
+        query << "(first_name LIKE '%#{t}%' OR last_name LIKE '%#{t}%')"
+        interests_query << "(name LIKE '%#{t}%')"
+        options_query << "(option_value LIKE '%#{t}%')"
+      end
+
+      interests_query = interests_query.join(' OR ')
+      options_query = options_query.join(' OR ')
+
+      interest_ids = Interest.where(interests_query).pluck(:id)
+      interest_option_ids = InterestsOption.where(options_query).pluck(:id)
+
+      user_ids = InterestsUser.where('interest_id in (?) or interests_option_id in (?)',
+                                     interest_ids.flatten.uniq, interest_option_ids.flatten.uniq).pluck(:user_id)
+
+      query = query.join(' AND ')
+      query << " OR user_id IN (#{user_ids.uniq.join(',')})" unless user_ids.blank?
+
+      where(query) unless query.blank?
+
     end
 
-    interests_query = interests_query.join(' OR ')
-    options_query = options_query.join(' OR ')
-
-    interest_ids = Interest.where(interests_query).pluck(:id)
-    interest_option_ids = InterestsOption.where(options_query).pluck(:id)
-    user_ids = InterestsUser.where('interest_id in (?) or interests_option_id in (?)',
-                                   interest_ids.flatten.uniq, interest_option_ids.flatten.uniq).pluck(:user_id)
-
-    query = query.join(' AND ')
-    query << " OR user_id IN (#{user_ids.uniq.join(',')})" unless user_ids.blank?
-
-    where(query) unless query.blank?
   end
 
   def init
