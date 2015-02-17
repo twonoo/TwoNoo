@@ -23,7 +23,7 @@ development:
     <<: *mandril_defaults
 
 production:
-  BASEURL: 'https://twonoo.com'
+  BASEURL: 'https://www.twonoo.com'
   FACEBOOK:
     KEY: '1524267501137363'
     SECRET: '6f6e76f615fcf6c4a552cce0f51e71c4'
