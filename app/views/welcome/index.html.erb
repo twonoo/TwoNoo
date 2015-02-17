@@ -104,7 +104,7 @@
 <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
     <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0; ">
       <div class="" style="padding-bottom: 10px">
-        <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Find activities/events...blank shows all" type="search" title="Find activities/events...blank shows all">
+        <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Enter what interests you...blank shows all" type="search" title="Find activities/events...blank shows all">
         <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;" onclick="document.search_form_mobile.submit(); return false;"></span>
       </div>
 
