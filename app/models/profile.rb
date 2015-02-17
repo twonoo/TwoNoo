@@ -29,8 +29,8 @@ class Profile < ActiveRecord::Base
       options_query << "(option_value LIKE '%#{t}%')"
     end
 
-    interests_query = interests_query.join(' AND ')
-    options_query = options_query.join(' AND ')
+    interests_query = interests_query.join(' OR ')
+    options_query = options_query.join(' OR ')
 
     interest_ids = Interest.where(interests_query).pluck(:id)
     interest_option_ids = InterestsOption.where(options_query).pluck(:id)
