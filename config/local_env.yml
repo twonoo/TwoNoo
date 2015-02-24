@@ -8,9 +8,6 @@ google_defaults: &google_defaults
   SCOPE: 'https://www.googleapis.com/auth/calendar'
   REDIRECT_URI: '/auth/google_oauth2/callback'
 
-mandrill_defaults: &mandril_defaults
-  APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
-
 development:
   BASEURL: 'http://staging.twonoo.com:8080'
   FACEBOOK:
@@ -20,7 +17,7 @@ development:
   GOOGLE:
     <<: *google_defaults
   MANDRIL:
-    <<: *mandril_defaults
+    APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
 
 production:
   BASEURL: 'https://www.twonoo.com'
@@ -31,4 +28,4 @@ production:
   GOOGLE:
     <<: *google_defaults
   MANDRIL:
-    <<: *mandril_defaults
+    APIKEY: 'FWDtyP_2VA85dpsXhuudoA'
