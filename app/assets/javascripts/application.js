@@ -37,4 +37,6 @@
 //= require global.js
 //= require websocket_rails/main
 //= require twonoo_im.js
+//= require intelligent-search
+//= require jquery.typehead.js
 

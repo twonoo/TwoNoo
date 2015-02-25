@@ -1,15 +1,18 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 <section id="home" data-stellar-background-ratio="0.5" style="min-height:300px;max-height:450px;" class="collapse navbar-collapse">
   <div class="container" style="min-height:150px;">
     <div class="row">
-      <div class="col-sm-8 col-sm-offset-2"> 
+      <div class="col-sm-8 col-sm-offset-2">
         <%= form_tag("/search", method: "get", id: "search_form", onsubmit: "return confirmSearch();") do %>
             <div class="form-group" id="search-group">
               <h1>MEET PEOPLE. DO STUFF.</h1>
-              <div class="input-group input-group-lg">
-                <input class="form-control" id="terms" name="terms" placeholder="Enter what interests you…or just leave it blank to see everything!" type="search" title="Leave empty to see all activities" autofocus>
-            <span class="input-group-btn">
-            <input class="btn" name="commit" type="submit" value="Search">
-            </span></div>
+
+              <div class="input-group input-group-lg inteli-search">
+                <input class="form-control" id="terms" name="terms" placeholder="Find Activities and Friends… or just leave it blank to see everything!" autocomplete='off' type="search" title="Leave empty to see all activities" autofocus>
+                <span class="input-group-btn">
+                    <input class="btn" name="commit" type="submit" value="Search">
+                </span>
+              </div>
               <!-- /input-group -->
               <div class="row search-terms col-sm-12 text-center" id="search-terms">
                 <div class="btn-group" id="date-dropdown">
@@ -58,8 +61,8 @@
                 </div>
                 miles of
                 <div class="btn-group" id="location-selection">
-                  <input type="hidden" id="lat" name="lat" value="39.737567" />
-                  <input type="hidden" id="lng" name="lng" value="-104.9847179" />
+                  <input type="hidden" id="lat" name="lat" value="39.737567"/>
+                  <input type="hidden" id="lng" name="lng" value="-104.9847179"/>
                   <input type="text" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="width:125px;display:none;"
                          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                          value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
@@ -84,11 +87,11 @@
         <% end %>
       </div>
       <style type="text/css">
-        #social > a > img {
-          width: 32px;
-          height: 32px;
-          margin-bottom:15px;
-        }
+          #social > a > img {
+              width: 32px;
+              height: 32px;
+              margin-bottom: 15px;
+          }
       </style>
 
     </div>
@@ -104,7 +107,7 @@
 <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
     <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0; ">
       <div class="" style="padding-bottom: 10px">
-        <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Enter what interests you...blank shows all" type="search" title="Find activities/events...blank shows all">
+        <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Find activities/events...blank shows all" type="search" title="Find activities/events...blank shows all">
         <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;" onclick="document.search_form_mobile.submit(); return false;"></span>
       </div>
 
@@ -123,14 +126,14 @@
                <% end %>
                placeholder="City or ZIP">
         <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;">
-        <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
-            <%= current_user.profile.city %>, <%= current_user.profile.state %>
-        <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
-            <%= cookies["city"] %>, <%= cookies["state"] %>
-        <% else %>
-            Denver, CO
-        <% end %>
-        <i class='glyphicon glyphicon-chevron-down'></i>
+          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+              <%= current_user.profile.city %>, <%= current_user.profile.state %>
+          <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+              <%= cookies["city"] %>, <%= cookies["state"] %>
+          <% else %>
+              Denver, CO
+          <% end %>
+          <i class='glyphicon glyphicon-chevron-down'></i>
         </a>
       </div>
 
@@ -153,10 +156,15 @@
     <input class="btn" name="commit" type="submit" value="Search" style="display: none">
 <% end %>
 
-
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
 
 <section class="slice" id="trending" name="trending" style="padding:0px"></section>
 
-
 <%= javascript_include_tag "welcome" %>
+<script type='text/javascript'>
+    $(function () {
+        suggestedValues = <%= raw @suggested_search_terms %>;
+        setupSuggestedSearch(suggestedValues)
+    });
+
+</script>
