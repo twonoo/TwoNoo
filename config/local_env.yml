@@ -16,7 +16,7 @@ development:
     <<: *facebook_defaults
   GOOGLE:
     <<: *google_defaults
-  MANDRIL:
+  MANDRILL:
     APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
 
 production:
@@ -27,5 +27,5 @@ production:
     <<: *facebook_defaults
   GOOGLE:
     <<: *google_defaults
-  MANDRIL:
+  MANDRILL:
     APIKEY: 'FWDtyP_2VA85dpsXhuudoA'
