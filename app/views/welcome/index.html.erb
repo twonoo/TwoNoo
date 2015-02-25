@@ -5,7 +5,17 @@
       <div class="col-sm-8 col-sm-offset-2">
         <%= form_tag("/search", method: "get", id: "search_form", onsubmit: "return confirmSearch();") do %>
             <div class="form-group" id="search-group">
-              <h1>MEET PEOPLE. DO STUFF.</h1>
+              <div class='tag-lines-h'>
+
+                <h1>MEET PEOPLE. DO STUFF.</h1>
+
+                <div class='tag-lines'>
+                  Find & connect with others that have the same Interests&nbsp;&#8226;
+                  Meet your next tennis opponent, soccer teammate, brewing mentor, wine aficionado, or improv partner&nbsp;&#8226;
+                  Search for local events and activities or create them for others to join
+                </div>
+
+              </div>
 
               <div class="input-group input-group-lg inteli-search">
                 <input class="form-control" id="terms" name="terms" placeholder="Enter what interests you…or just leave it blank to see everything!" autocomplete='off' type="search" title="Enter what interests you…or just leave it blank to see everything!" autofocus>
