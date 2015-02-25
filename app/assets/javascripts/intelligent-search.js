@@ -17,7 +17,7 @@ substringMatcher = function (strs) {
 };
 
 function setupSuggestedSearch(terms) {
-    if(terms && terms.length > 0){
+    if (terms && terms.length > 0) {
         $('#terms').typeahead(
             {
                 hint: true,
@@ -28,6 +28,12 @@ function setupSuggestedSearch(terms) {
                 name: 'interests',
                 displayKey: 'value',
                 source: substringMatcher(terms)
+            }
+        ).on('typehead:selected',function () {
+                $('.typeahead').typeahead('close');
+            }
+        ).on('typeahead:autocompleted', function () {
+                $('.typeahead').typeahead('close');
             }
         );
     }
