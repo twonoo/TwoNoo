@@ -260,7 +260,8 @@ class ActivitiesController < ApplicationController
         follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
       end
 
-      redirect_to @activity
+      #s=t in querystring will display the share modal
+      redirect_to "/activities/#{@activity.id}/?s=t"
     else
 #      if dt_invalid
 #        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")

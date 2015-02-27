@@ -33,8 +33,12 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if !current_user.view_logs.where(view_name: 'interests/index').exists?
       interests_index_path || session[:previous_url] || root_path
+    elsif session[:previous_url].present? && session[:previous_url].include?('?')
+      session[:previous_url] + '&s=t'
+    elsif session[:previous_url].present?
+      session[:previous_url] + '?s=t'
     else
-      session[:previous_url] || root_path
+      root_path
     end
   end
 
