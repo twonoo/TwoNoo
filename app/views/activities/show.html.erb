@@ -1,17 +1,20 @@
 <% content_for :head do %>
 
-    <meta property="og:title" content="<%= @activity.activity_name %>" />
-    <meta property="og:site_name" content="TwoNoo" />
-    <meta property="og:url" content="<%= 'https://www.twonoo.com' + '/activites/' + @activity.id.to_s %>" />
-    <meta property="og:description" content="<%= @activity.description %>" />
-    <meta property="og:image" content="<%= 'https://www.twonoo.com' + ENV['FACEBOOK_LOGO_URL'] %>" />
-    <meta property="og:app_id" content="<%= ENV['FACEBOOK_KEY'] %>" />
+    <meta property="og:title" content="<%= @activity.activity_name %>"/>
+    <meta property="og:site_name" content="TwoNoo"/>
+    <meta property="og:url" content="<%= 'https://www.twonoo.com' + '/activites/' + @activity.id.to_s %>"/>
+    <meta property="og:description" content="<%= @activity.description %>"/>
+    <meta property="og:image" content="<%= 'https://www.twonoo.com' + ENV['FACEBOOK_LOGO_URL'] %>"/>
+    <meta property="og:app_id" content="<%= ENV['FACEBOOK_KEY'] %>"/>
 
 <% end %>
 
 <div class="container">
 
-  <div class="overlay">
+  <div class="overlay" id='overlay'>
+
+    <i class='fa fa-close' id='close_overlay'></i>
+
     <p class='overlay-content'>
       You’re all RSVP’d - now share it with your friends!</br>
       ...and add it to your calendar
@@ -33,6 +36,7 @@
       <a class='overlay-links' id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' %>
     </div>
+
   </div>
 
   <div class="row">
@@ -142,7 +146,7 @@
                        top:-50px;
                        left:50px;"
           >
-            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions" />
+            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions"/>
           </div>
           <div id="directions-panel"></div>
           <div class="panel panel-default">
@@ -295,78 +299,102 @@
     }
 
     .overlay-content {
-        padding: 10px 10px 0 10px;
+        padding: 15px 15px 0 15px;
         font-weight: 600;
         text-align: center;
-        font-size: 14px
+        font-size: 14px;
     }
 
     .overlay {
         position: absolute;
         top: 40%;
         left: 50%;
-        transform: translate(-50%, -50%);
         height: 73%;
         width: 64%;
         z-index: 10;
+        transform: translate(-50%, -50%);
         background-color: white;
         border: 2px solid black;
-        max-height: 200px;
+        max-height: 210px;
         max-width: 400px;
         min-height: 125px;
+        padding: 10px;
+        display: none;
+    }
+
+    .overlay i {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 22px;
+        cursor: pointer;
     }
 
 </style>
 
 <script type='text/javascript'>
     <% if current_user %>
-        $(function () {
-            <% if @rsvps.where(user_id: current_user.id).present? %>
-            setupUnRsvp();
-            <% else %>
-            setupRsvp();
-            <% end %>
+    $(function () {
+        <% if @rsvps.where(user_id: current_user.id).present? %>
+        setupUnRsvp();
+        <% else %>
+        setupRsvp();
+        <% end %>
+
+        $('#close_overlay').click(function(){
+            hideOverlay();
         })
 
-        function setupRsvp() {
-            var button = $('#rsvp_button');
-            button.html("Join Us!");
-            button.removeClass('btn-danger');
-            button.addClass('btn-success');
-            button.unbind('click');
-            attachRsvpHandler(button, 'rsvp');
-        }
+    })
 
-        function setupUnRsvp() {
-            var button = $('#rsvp_button');
-            button.html("You're Going!");
-            button.removeClass('btn-success');
-            button.addClass('btn-danger');
-            button.unbind('click');
-            attachRsvpHandler(button, 'unrsvp');
-        }
+    function hideOverlay(){
+        $('#overlay').hide();
+    }
 
-        function attachRsvpHandler(button, type) {
-            button.click(function () {
-                $.ajax({
-                    url: '/activities/' + type,
-                    type: 'GET',
-                    dataType: 'JSON',
-                    data: {activity_id:<%= @activity.id %>, user_id:<%= current_user.id %>},
-                    success: function (data) {
-                        console.log('success');
-                        if (type == 'rsvp') {
-                            setupUnRsvp();
-                        } else {
-                            setupRsvp();
-                        }
-                    },
-                    error: function (data) {
-                        console.log('error');
+    function showOverlay(){
+        $('#overlay').show();
+    }
+
+    function setupRsvp() {
+        var button = $('#rsvp_button');
+        button.html("Join Us!");
+        button.removeClass('btn-danger');
+        button.addClass('btn-success');
+        button.unbind('click');
+        attachRsvpHandler(button, 'rsvp');
+    }
+
+    function setupUnRsvp() {
+        var button = $('#rsvp_button');
+        button.html("You're Going!");
+        button.removeClass('btn-success');
+        button.addClass('btn-danger');
+        button.unbind('click');
+        attachRsvpHandler(button, 'unrsvp');
+    }
+
+    function attachRsvpHandler(button, type) {
+        button.click(function () {
+            $.ajax({
+                url: '/activities/' + type,
+                type: 'GET',
+                dataType: 'JSON',
+                data: {activity_id:<%= @activity.id %>, user_id:<%= current_user.id %>},
+                success: function (data) {
+                    if (type == 'rsvp') {
+                        showOverlay();
+                        setupUnRsvp();
+                    } else {
+                        hideOverlay();
+                        setupRsvp();
                     }
-                });
-            })
-        }
+                },
+                error: function (data) {
+                    console.log('error');
+                }
+            });
+        })
+    }
     <% end %>
 
 </script>
