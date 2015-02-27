@@ -2,7 +2,7 @@
 
     <meta property="og:title" content="<%= @activity.activity_name %>"/>
     <meta property="og:site_name" content="TwoNoo"/>
-    <meta property="og:url" content="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>"/>
+    <meta property="og:url" content="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>"/>
     <meta property="og:description" content="<%= @activity.description %>"/>
     <meta property="og:image" content="<%= 'https://www.twonoo.com' + ENV['FACEBOOK_LOGO_URL'] %>"/>
     <meta property="og:app_id" content="<%= ENV['FACEBOOK_KEY'] %>"/>
@@ -20,9 +20,9 @@
     </p>
 
     <div class='overlay-buttons'>
-      <fb:send href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>"></fb:send>
+      <fb:send href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>"></fb:send>
       &nbsp;|&nbsp;
-      <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>" data-layout="button"></div>
+      <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-layout="button"></div>
       &nbsp;|&nbsp;
       <a href="#" class="label label-danger" data-toggle="modal" data-target="#invite_people_form">Mail</a>
     </div>
