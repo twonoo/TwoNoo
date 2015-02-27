@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   get 'activities/copy/:id' => 'activities#copy', as: :activity_copy
   get 'activities/create'
   get 'activities/rsvp'
+  get 'activities/unrsvp'
 
   post 'activities/invite_people/:id' => 'activities#invite_people', as: :invite_people
   post 'activities/comment' => 'activities#comment', as: :activity_comment

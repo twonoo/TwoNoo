@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :searches
   has_many :recommended_followers
   has_many :view_logs
+  has_many :rsvps
+  has_many :activities
   has_and_belongs_to_many :interests
 
   accepts_nested_attributes_for :profile

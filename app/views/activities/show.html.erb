@@ -1,238 +1,372 @@
+<% content_for :head do %>
+
+    <meta property="og:title" content="<%= @activity.activity_name %>" />
+    <meta property="og:site_name" content="TwoNoo" />
+    <meta property="og:url" content="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>" />
+    <meta property="og:description" content="<%= @activity.description %>" />
+    <meta property="og:image" content="<%= ENV['BASEURL'] + ENV['FACEBOOK_LOGO_URL'] %>" />
+    <meta property="og:app_id" content="<%= ENV['FACEBOOK_KEY'] %>" />
+
+<% end %>
+
 <div class="container">
-	<div class="row">
-		<div class="col-md-8">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h2>
-						<%= @activity.activity_name %>
-            <small class="pull-right"><%= @activity.views %> views </small>
-						<% if @activity.cancelled %>
-							<font color='red'>(Cancelled)</font>
-						<% end %>
-					</h2>
-          <% if current_user %>
-            <% if @organizer == current_user %>
-            <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
-            <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+
+  <div class="overlay">
+    <p class='overlay-content'>
+      You’re all RSVP’d - now share it with your friends!</br>
+      ...and add it to your calendar
+    </p>
+
+    <div class='overlay-buttons'>
+      <fb:send href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>"></fb:send>
+      &nbsp;|&nbsp;
+      <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>" data-layout="button"></div>
+      &nbsp;|&nbsp;
+      <button class='label label-danger' onClick="location.href='mailto:?body=<%= @activity.description %>&subject=Event: <%= @activity.activity_name %>'">Mail</button>
+    </div>
+
+    <p class='overlay-content'>
+      ...and add it to your calendar
+    </p>
+
+    <div class='overlay-buttons'>
+      <a class='overlay-links' id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h2>
+            <%= @activity.activity_name %>
+            <small class="pull-right"><%= @activity.views %> views</small>
+            <% if @activity.cancelled %>
+                <font color='red'>(Cancelled)</font>
             <% end %>
+          </h2>
+          <% if current_user %>
 
-            <%= Rsvp.user_rsvp?(@activity, current_user).blank? ? (link_to "Join Us!", rsvp_path(@activity.id, current_user.id), class: 'btn btn-success btn-sm pull-right') : (link_to "You're Going!", unrsvp_path(@activity.id, current_user.id), class: 'btn btn-danger btn-sm pull-right') %>
-            <!-- share buttons -->
+              <% if @organizer == current_user %>
+                  <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+                  <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+              <% end %>
 
-            <div class="fb-share-button"
-              data-href="<%=activity_url(id: @activity.id, referrer: current_user.id)%>"
-              data-layout="button_count"
-              style="padding: 0px; vertical-align: top; width: 106px; height: 24px;"></div>
+              <a href='#' id='rsvp_button' title='Test Hover' class='btn btn-success btn-sm pull-right'>Join Us!</a>
+              <!-- share buttons -->
 
-            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-            <div class="g-plusone"
-              data-height="24"
-              data-href="<%=activity_url(id: @activity.id, referrer: current_user.id)%>"></div>
+              <div class="fb-share-button"
+                   data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"
+                   data-layout="button_count"
+                   style="padding: 0px; vertical-align: top; width: 106px; height: 24px;"></div>
 
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= activity_url(id: @activity.id, referrer: current_user.id) %>" data-hashtags="twonoo" data-text="Check out <%= @activity.activity_name %> on TwoNoo!">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+              <div class="g-plusone"
+                   data-height="24"
+                   data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"></div>
 
-            <% if @activity.image.exists? 
-              @imageURL = root_url + @activity.image.url
-             else
-              @imageURL =  asset_url('TwoNoo-Logo.png')
-             end %>
-            <a href="//www.pinterest.com/pin/create/button/?url=<%=activity_url(id: @activity.id)%>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%=@imageURL%>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
+              <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= activity_url(id: @activity.id, referrer: current_user.id) %>" data-hashtags="twonoo" data-text="Check out <%= @activity.activity_name %> on TwoNoo!">Tweet</a>
+              <script>!function (d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                  if (!d.getElementById(id)) {
+                      js = d.createElement(s);
+                      js.id = id;
+                      js.src = p + '://platform.twitter.com/widgets.js';
+                      fjs.parentNode.insertBefore(js, fjs);
+                  }
+              }(document, 'script', 'twitter-wjs');</script>
 
-          <%end%>
+              <% if @activity.image.exists?
+                   @imageURL = root_url + @activity.image.url
+                 else
+                   @imageURL = asset_url('TwoNoo-Logo.png')
+                 end %>
+              <a href="//www.pinterest.com/pin/create/button/?url=<%= activity_url(id: @activity.id) %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%= @imageURL %>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png"/></a>
 
-          <%= !current_user ? (link_to "Join Us!", new_user_session_path, class: 'btn btn-success btn-sm pull-right') : nil %>
-					<!-- Please call pinit.js only once per page -->
-					<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+          <% else %>
+              <%= link_to "Join Us!", new_user_session_path, class: 'btn btn-success btn-sm pull-right' %>
+          <% end %>
+
+          <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
 
           <div>
             <% @activity.activity_types.each do |a| %>
-              <span class="label label-danger"><%= a.activity_type %></span>
+                <span class="label label-danger"><%= a.activity_type %></span>
             <% end %>
           </div>
           </br>
-					<p class="lead">
+          <p class="lead">
             <%
-              desc = @activity.description
-                .gsub("\n", "<br/>")
-                .gsub("  ", "&nbsp;")
-                .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
+               desc = @activity.description
+               .gsub("\n", "<br/>")
+               .gsub("  ", "&nbsp;")
+               .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
             %>
             <%= desc.html_safe %>
           </p>
-					<p class="lead">
+
+          <p class="lead">
             <b>
-            <% if @activity.location_name.present? %>
-              <%= link_to @activity.location_name, @activity.website %>
-            <% elsif @activity.website.present? %>
-              <%= link_to @activity.website, @activity.website %>
-            <% end %>
+              <% if @activity.location_name.present? %>
+                  <%= link_to @activity.location_name, @activity.website %>
+              <% elsif @activity.website.present? %>
+                  <%= link_to @activity.website, @activity.website %>
+              <% end %>
             </b></br>
             <span style="white-space:nowrap;font-size:.85em;">
             <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
             <% unless @activity.enddatetime.nil? %>
-            <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
+                <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
             - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
             <% end %>
             <font size="1" style="white-space:nowrap;float:right;">
-            Add to:
-            <a id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-            <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>
+              Add to:
+              <a id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+              <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>
             </font>
             <script>
-              $(function(){
-                $('#eventdate').bind('click', function(){
-                  window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                $(function () {
+                    $('#eventdate').bind('click', function () {
+                        window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                    });
                 });
-              });
             </script>
           </p>
-					<div id="map-canvas"></div>
+          <div id="map-canvas"></div>
           <div id="directions-from"
-            style="position:relative;
-            z-index:100;
-            top:-50px;
-            left:50px;"
-            >
-            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions"></input>
+               style="position:relative;
+                       z-index:100;
+                       top:-50px;
+                       left:50px;"
+          >
+            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions" />
           </div>
           <div id="directions-panel"></div>
           <div class="panel panel-default">
             <div class="panel-body">
               <h4>Activity Comments:</h4>
               <% if user_signed_in? %>
-                <%= render partial: 'form', locals: {:activity => @activity} %>
+                  <%= render partial: 'form', locals: {:activity => @activity} %>
               <% end %>
               <%= render partial: 'comments', locals: {:activity => @activity} %>
             </div>
           </div>
 
-				</div>
-			</div>
-		</div>
+        </div>
+      </div>
+    </div>
 
-		<div class="col-md-4">
-			<div class="panel panel-default">
-				<div class="panel-body text-center">
-            <%= profile_img(@organizer) %>
-            <h3><%= link_to @organizer.profile.first_name + ' ' +  @organizer.profile.last_name, @organizer %></h3> 
-            <h4><%= @organizer.profile.about_me %></h4>
-            <% if @organizer != current_user && current_user %>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body text-center">
+          <%= profile_img(@organizer) %>
+          <h3><%= link_to @organizer.profile.first_name + ' ' + @organizer.profile.last_name, @organizer %></h3>
+          <h4><%= @organizer.profile.about_me %></h4>
+          <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
-            <% elsif !current_user %>
+          <% elsif !current_user %>
               <%= (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %>
-            <% end %>
-				</div>
-            <% unless current_user.nil? || (@organizer == current_user)%>
-              <div class="aim-container" style="width:230px;z-index:1000;"
-                alink="Send <%=@organizer.profile.first_name%> a message"
-                activity_name="<%=@activity.activity_name%>"
-                recipient="<%=@organizer.id%>" recipient_firstname="<%=@organizer.profile.first_name%>" recipient_lastname="<%=@organizer.profile.last_name%>"
-                sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
-              ></div>
-            <% end %>
-			</div>
+          <% end %>
+        </div>
+        <% unless current_user.nil? || (@organizer == current_user) %>
+            <div class="aim-container" style="width:230px;z-index:1000;"
+                 alink="Send <%= @organizer.profile.first_name %> a message"
+                 activity_name="<%= @activity.activity_name %>"
+                 recipient="<%= @organizer.id %>" recipient_firstname="<%= @organizer.profile.first_name %>" recipient_lastname="<%= @organizer.profile.last_name %>"
+                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
+            ></div>
+        <% end %>
+      </div>
       <div class="panel panel-default">
         <div class="panel-body">
-          <h4>Who's Going (<%=Rsvp.where(activity_id: @activity.id).count%>)</h4>
+          <h4>Who's Going (<%= @rsvps.length %>)</h4>
 
           <%= render partial: 'invite_people', locals: {:activity => @activity} %>
 
-          <% Rsvp.where(activity_id: @activity.id).each do |rsvp|
-            @going = User.find(rsvp.user_id) %>
-            <p>
-              <% unless current_user.nil? || (@going == current_user) || (current_user.following?(@going))%>
-                <div class="pull-right follow_link" style="cursor:pointer;" user_id="<%=rsvp.user_id%>" user_name="<%=@going.name%>"><a class='label label-info' style="color:#FFF;">Follow</a></div>
+          <% @rsvps.each do |rsvp|
+            @going = rsvp.user %>
+              <p>
+                <% unless current_user.nil? || (@going == current_user) || (current_user.following?(@going)) %>
+                  <div class="pull-right follow_link" style="cursor:pointer;" user_id="<%= rsvp.user_id %>" user_name="<%= @going.name %>">
+                    <a class='label label-info' style="color:#FFF;">Follow</a></div>
               <% end %>
               <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
-            </p>
+              </p>
           <% end %>
         </div>
       </div>
-		</div>
+    </div>
   </div>
 </div>
 
 <script type="text/javascript">
-  var myLatlng = null;
-var directionsDisplay;
-var directionsService;
-var map;
+    var myLatlng = null;
+    var directionsDisplay;
+    var directionsService;
+    var map;
 
-  function calcRoute() {
-    var end = $('#from_address').val()
-    var request = {
-        origin:end,
-        destination:myLatlng,
-        travelMode: google.maps.TravelMode.DRIVING
-    };
-    directionsService.route(request, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      }
-    }); 
+    function calcRoute() {
+        var end = $('#from_address').val()
+        var request = {
+            origin: end,
+            destination: myLatlng,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+            }
+        });
 
-  }
+    }
 
-  function initialize() {
-    // Let's try to get teh latlon from the activity info
-    var address = '<%=@activity.address%>';
-    console.log("address: " + address);
-          
-    // Get the lat long of the city, state
-    var geocoder = new google.maps.Geocoder();
+    function initialize() {
+        // Let's try to get teh latlon from the activity info
+        var address = '<%=@activity.address%>';
+        console.log("address: " + address);
 
-    geocoder.geocode({'address': address}, function(results, status){
+        // Get the lat long of the city, state
+        var geocoder = new google.maps.Geocoder();
 
-      if (status == google.maps.GeocoderStatus.OK) {
-        console.log('results[0].geometry.location:'+results[0].geometry.location);
+        geocoder.geocode({'address': address}, function (results, status) {
 
-        myLatlng = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-      }
-      else
-      {
-        myLatlng = new google.maps.LatLng(<%= @activity.latitude %>, <%= @activity.longitude %>);
-      }
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log('results[0].geometry.location:' + results[0].geometry.location);
 
-      var mapOptions = {
-        center: myLatlng,
-        zoom: 11,
-        scrollwheel: true
-      };
-      directionsService = new google.maps.DirectionsService();
-      directionsDisplay = new google.maps.DirectionsRenderer();
-      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                myLatlng = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+            }
+            else {
+                myLatlng = new google.maps.LatLng(<%= @activity.latitude %>, <%= @activity.longitude %>);
+            }
 
-      directionsDisplay.setMap(map);
-      directionsDisplay.setPanel(document.getElementById('directions-panel'));
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 11,
+                scrollwheel: true
+            };
+            directionsService = new google.maps.DirectionsService();
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-      var contentString = '<div>'+
-        '<h4><%= @activity.location_name %></h4>' +
-        '<%= @activity.address %></br>' +
-        '<%= @activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p") %>' +
-        '<%= render("activity_img").gsub(/\n/, '').html_safe %>' +
-        '</div>';
+            directionsDisplay.setMap(map);
+            directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
-      var infowindow = new google.maps.InfoWindow({
-          content: contentString
-      });
+            var contentString = '<div>' +
+                    '<h4><%= @activity.location_name %></h4>' +
+                    '<%= @activity.address %></br>' +
+                    '<%= @activity.datetime.strftime("%A, %B %e, %Y @ %l:%M %p") %>' +
+                    '<%= render("activity_img").gsub(/\n/, '').html_safe %>' +
+                    '</div>';
 
-      var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: map,
-          title: "<%= @activity.activity_name %>"
-      });
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
 
-      google.maps.event.addListenerOnce(map, 'idle', function() {
-        infowindow.open(map, marker);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: "<%= @activity.activity_name %>"
+            });
+
+            google.maps.event.addListenerOnce(map, 'idle', function () {
+                        infowindow.open(map, marker);
+                    }
+            );
+            google.maps.event.addListener(marker, 'click', function () {
+                        infowindow.open(map, marker);
+                    }
+            );
+        });
+    }
+</script>
+
+<style type='text/css'>
+
+    .overlay-links {
+        cursor: pointer;
+    }
+
+    .overlay-buttons {
+        padding: 0 10px 0 10px;
+        text-align: center;
+    }
+
+    .overlay-content {
+        padding: 10px 10px 0 10px;
+        font-weight: 600;
+        text-align: center;
+        font-size: 14px
+    }
+
+    .overlay {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 73%;
+        width: 64%;
+        z-index: 10;
+        background-color: white;
+        border: 2px solid black;
+        max-height: 200px;
+        max-width: 400px;
+        min-height: 125px;
+    }
+
+</style>
+
+<script type='text/javascript'>
+    <% if current_user %>
+        $(function () {
+            <% if @rsvps.where(user_id: current_user.id).present? %>
+            setupUnRsvp();
+            <% else %>
+            setupRsvp();
+            <% end %>
+        })
+
+        function setupRsvp() {
+            var button = $('#rsvp_button');
+            button.html("Join Us!");
+            button.removeClass('btn-danger');
+            button.addClass('btn-success');
+            button.unbind('click');
+            attachRsvpHandler(button, 'rsvp');
         }
-      );
-      google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map,marker);
+
+        function setupUnRsvp() {
+            var button = $('#rsvp_button');
+            button.html("You're Going!");
+            button.removeClass('btn-success');
+            button.addClass('btn-danger');
+            button.unbind('click');
+            attachRsvpHandler(button, 'unrsvp');
         }
-      );
-    });
-  }
+
+        function attachRsvpHandler(button, type) {
+            button.click(function () {
+                $.ajax({
+                    url: '/activities/' + type,
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: {activity_id:<%= @activity.id %>, user_id:<%= current_user.id %>},
+                    success: function (data) {
+                        console.log('success');
+                        if (type == 'rsvp') {
+                            setupUnRsvp();
+                        } else {
+                            setupRsvp();
+                        }
+                    },
+                    error: function (data) {
+                        console.log('error');
+                    }
+                });
+            })
+        }
+    <% end %>
+
 </script>

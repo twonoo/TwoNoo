@@ -1,5 +1,6 @@
 facebook_defaults: &facebook_defaults
   SCOPE: 'user_friends,email'
+  LOGO_URL: /assets/main-logo-dash.png
 
 google_defaults: &google_defaults
   KEY: '18950285410-066kiriporohq1c426q4hdhldqrbohvu.apps.googleusercontent.com'
@@ -9,7 +10,7 @@ google_defaults: &google_defaults
   REDIRECT_URI: '/auth/google_oauth2/callback'
 
 development:
-  BASEURL: 'http://staging.twonoo.com:8080'
+  BASEURL: 'http://localhost:3002'
   FACEBOOK:
     KEY: '1016888825004383'
     SECRET: '099c1ccccaf640d61ba8f022b7465c53'

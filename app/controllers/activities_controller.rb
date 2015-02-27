@@ -130,14 +130,14 @@ class ActivitiesController < ApplicationController
 
     @activity = Activity.find_by_id(params[:id])
 
-    if @activity.nil?
+    if @activity.present?
+      @rsvps = Rsvp.includes(:user).where(activity_id: @activity.id)
+      @activity.increase_view
+      @organizer = User.find(@activity.user_id)
+    else
       redirect_to root_url
-      return
     end
 
-    @activity.increase_view
-
-    @organizer = User.find(@activity.user_id)
   end
 
   def new
@@ -271,27 +271,36 @@ class ActivitiesController < ApplicationController
   end
 
   def rsvp
-    rsvp = Rsvp.new(activity_id: params[:activity_id], user_id: params[:user_id])
+    rsvp = Rsvp.create(activity_id: params[:activity_id], user_id: params[:user_id])
+    activity = Activity.where(id: params[:activity_id]).first
 
-    # Notfiy the creator that a new user is going
-    @activity = Activity.find(params[:activity_id])
-    @organizer = User.find(@activity.user_id)
+    respond_to do |format|
 
-    unless current_user == @organizer
-      @organizer.notify("#{current_user.name} is coming to your activity!", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+      if rsvp.persisted? && activity
+        if current_user != activity.user
+          activity.user.notify("#{current_user.name} is coming to your activity!", "<a href='#{root_url}/activities/#{activity.id}'>#{activity.activity_name}</a>")
+          UserMailer.delay.new_rsvp(activity.user, current_user, activity)
+        end
 
-      UserMailer.delay.new_rsvp(@organizer, current_user, @activity)
-    end
+        format.html { redirect_to activity_path(activity), notice: "You're now going to #{activity.activity_name}!" }
+        format.json { render json: {rsvp_id: rsvp.id}, status: :ok }
+      else
+        format.html { redirect_to activity_path(activity), error: 'An error has occured, please try again later.' }
+        format.json { render json: {errors: rsvp.errors.full_messages.join('<br />').html_safe}, status: :not_found }
+      end
 
-    if rsvp.save
-      redirect_to activity_path(@activity), notice: "You're now going to #{@activity.activity_name}!"
     end
   end
 
   def unrsvp
     rsvp = Rsvp.where(activity_id: params[:activity_id], user_id: params[:user_id]).first
     rsvp.delete
-    redirect_to request.referer
+
+    respond_to do |format|
+      format.html { redirect_to request.referer }
+      format.json { render json: {deleted: true}, status: :ok }
+    end
+
   end
 
   def update
