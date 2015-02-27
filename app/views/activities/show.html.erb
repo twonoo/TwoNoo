@@ -18,9 +18,9 @@
     </p>
 
     <div class='overlay-buttons'>
-      <fb:send href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>"></fb:send>
+      <fb:send href="https://www.twonoo.com/activities/366"></fb:send>
       &nbsp;|&nbsp;
-      <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activites/' + @activity.id.to_s %>" data-layout="button"></div>
+      <div class="fb-share-button" data-href="https://www.twonoo.com/activities/366" data-layout="button"></div>
       &nbsp;|&nbsp;
       <button class='label label-danger' onClick="location.href='mailto:?body=<%= @activity.description %>&subject=Event: <%= @activity.activity_name %>'">Mail</button>
     </div>
