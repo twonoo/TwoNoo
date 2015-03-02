@@ -32,7 +32,7 @@
   </p>
 
   <div class='overlay-buttons'>
-    <a class='overlay-links' id='eventdate'>
+    <a class='overlay-links' id='overlay_eventdate'>
       <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
     </a>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -138,6 +138,9 @@
           </font>
           <script>
               $(function () {
+                  $('#overlay_eventdate').bind('click', function () {
+                      window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                  });
                   $('#eventdate').bind('click', function () {
                       window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
                   });
