@@ -399,7 +399,7 @@
                         setupUnRsvp();
                     } else {
                         hideOverlay();
-                        $("#whos_going p:contains('Daniel Logan')").remove();
+                        $("#whos_going p:contains('<%= current_user.profile.first_name + ' ' + current_user.profile.last_name %>')").remove();
                         setupRsvp();
                     }
                 },
