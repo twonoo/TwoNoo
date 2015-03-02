@@ -94,7 +94,7 @@
             <a href="//www.pinterest.com/pin/create/button/?url=<%= activity_url(id: @activity.id) %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%= @imageURL %>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png"/></a>
 
         <% else %>
-            <%= link_to "Join Us!", new_user_session_path, class: 'btn btn-success btn-sm pull-right' %>
+            <%= link_to "Join Us!", new_user_session_path + '?s=t', class: 'btn btn-success btn-sm pull-right' %>
         <% end %>
 
         <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
@@ -347,10 +347,6 @@
         setupUnRsvp();
         <% else %>
         setupRsvp();
-        <% end %>
-
-        <% if params[:s] == 't' %>
-        $('#rsvp_button').click();
         <% end %>
 
         $('#close_overlay').click(function () {

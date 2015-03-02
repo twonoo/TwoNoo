@@ -33,10 +33,8 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if !current_user.view_logs.where(view_name: 'interests/index').exists?
       interests_index_path || session[:previous_url] || root_path
-    elsif session[:previous_url].present? && session[:previous_url].include?('?')
-      session[:previous_url] + '&s=t'
     elsif session[:previous_url].present?
-      session[:previous_url] + '?s=t'
+      session[:previous_url]
     else
       root_path
     end
@@ -53,20 +51,20 @@ class ApplicationController < ActionController::Base
   end
 
   def set_cookies
-    cookies[:referrer] = { value: params[:referrer], expires: 1.day.from_now } if params[:referrer]
+    cookies[:referrer] = {value: params[:referrer], expires: 1.day.from_now} if params[:referrer]
 
     logger.info "cookies: #{cookies[:lat]} #{cookies[:lng]} #{cookies[:city]} #{cookies[:state]}"
     if cookies[:lat].nil? || cookies[:lng].nil? || cookies[:city].nil? || cookies[:state].nil?
       logger.info "No geocode cookies!"
       if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?)
-        cookies[:city] = { value: current_user.profile.city, expires: 365.day.from_now }
-        cookies[:state] = { value: current_user.profile.state, expires: 365.day.from_now }
+        cookies[:city] = {value: current_user.profile.city, expires: 365.day.from_now}
+        cookies[:state] = {value: current_user.profile.state, expires: 365.day.from_now}
 
         geocode = Geocode.where(city: current_user.profile.city).where(state: current_user.profile.state).first
 
         unless geocode.nil?
-          cookies[:lat] = { value: geocode.latitude, expires: 365.day.from_now }
-          cookies[:lng] = { value: geocode.longitude, expires: 365.day.from_now }
+          cookies[:lat] = {value: geocode.latitude, expires: 365.day.from_now}
+          cookies[:lng] = {value: geocode.longitude, expires: 365.day.from_now}
         end
       else
         begin
@@ -80,14 +78,14 @@ class ApplicationController < ActionController::Base
             logger.info "state: #{result.state_code}"
 
             if result.city.present? and result.state_code.present?
-              cookies[:city] = { value: result.city, expires: 365.day.from_now }
-              cookies[:state] = { value: result.state_code, expires: 365.day.from_now }
+              cookies[:city] = {value: result.city, expires: 365.day.from_now}
+              cookies[:state] = {value: result.state_code, expires: 365.day.from_now}
 
               geocode = Geocode.where(city: result.city).where(state: result.state_code).first
 
               unless geocode.nil?
-                cookies[:lat] = { value: geocode.latitude, expires: 365.day.from_now }
-                cookies[:lng] = { value: geocode.longitude, expires: 365.day.from_now }
+                cookies[:lat] = {value: geocode.latitude, expires: 365.day.from_now}
+                cookies[:lng] = {value: geocode.longitude, expires: 365.day.from_now}
               end
             end
           end
