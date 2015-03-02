@@ -33,10 +33,10 @@
 
     <div class='overlay-buttons'>
       <a class='overlay-links' id='eventdate'>
-        <%= image_tag 'google-cal-icon.svg', width: '50', height: '50'  %>
+        <%= image_tag 'google-cal-icon.svg', width: '50', height: 'auto'  %>
       </a>
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <%= link_to image_tag('ical-icon.svg', width: '50', height: '50'), :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' %>
+      <%= link_to image_tag('ical-icon.svg', width: '50', height: 'auto'), :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' %>
     </div>
 
   </div>
