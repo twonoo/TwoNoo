@@ -14,6 +14,12 @@ end
 
 module Twonoo
   class Application < Rails::Application
+
+    Obscenity.configure do |config|
+      config.blacklist   = File.join(Rails.root, 'config', 'profanity.yml')
+      config.replacement = :default
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

@@ -1,146 +1,159 @@
 <div class="container">
   <div class="row">
-    <div class="panel panel-default" >
-        <h4 class="panel-title">Edit your Activity</h4>
+    <div class="panel panel-default">
+      <h4 class="panel-title">Edit your Activity</h4>
     </div>
-      <div class="panel-body">
-        <% if @activity.errors.any? %>
+    <div class="panel-body">
+      <% if @activity.errors.any? %>
           <div id="error_explanation">
             <% @activity.errors.full_messages.each do |msg| %>
-              <div class="alert alert-danger fade in"><%= msg %><button class="close" data-dismiss="alert">x</button></div>
+                <div class="alert alert-danger fade in"><%= msg %>
+                  <button class="close" data-dismiss="alert">x</button>
+                </div>
             <% end %>
             </ul>
           </div>
-        <% end %>
+      <% end %>
       <div class="col-md-7">
-	    	<% if @activity.errors.any? %>
-				  <div id="error_explanation">
-				    <% @activity.errors.full_messages.each do |msg| %>
-				      <div class="alert alert-danger fade in"><%= msg %><button class="close" data-dismiss="alert">x</button></div>
-				    <% end %>
-				    </ul>
-				  </div>
-				<% end %>
-	    	<%= form_for @activity, html: { class: "form-horizontal", :multipart => true } do |f| %>
-          <div class="form-group">
-            <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-6">
-              <%= f.text_field :activity_name, class: "form-control" %>
+        <% if @activity.errors.any? %>
+            <div id="error_explanation">
+              <% @activity.errors.full_messages.each do |msg| %>
+                  <div class="alert alert-danger fade in"><%= msg %>
+                    <button class="close" data-dismiss="alert">x</button>
+                  </div>
+              <% end %>
+              </ul>
             </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000"  %>
-            <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
-              <%= f.text_field :date, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.date) %>
-              <span class="input-group-addon"><span class="icon-calendar"></span></span>
+        <% end %>
+        <%= form_for @activity, html: {class: "form-horizontal", :multipart => true} do |f| %>
+            <div class="form-group">
+              <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-6">
+                <%= f.text_field :activity_name, class: "form-control" %>
+              </div>
             </div>
-            <div class='input-group date col-sm-3' id='timepicker1'>
-              <%= f.text_field :time, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.time) %>
-              <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+
+            <div class="form-group">
+              <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
+                <%= f.text_field :date, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.date) %>
+                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+              </div>
+              <div class='input-group date col-sm-3' id='timepicker1'>
+                <%= f.text_field :time, class: "form-control", value: (@activity.datetime.blank? ? '' : @activity.time) %>
+                <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label 'End', class: "col-sm-3 control-label"  %>
-            <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker2'>
-              <%= f.text_field :enddate, class: "form-control", value: (@activity.enddate.nil? ? '' : @activity.enddate) %>
-              <span class="input-group-addon"><span class="icon-calendar"></span></span>
+            <div class="form-group">
+              <%= f.label 'End', class: "col-sm-3 control-label" %>
+              <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker2'>
+                <%= f.text_field :enddate, class: "form-control", value: (@activity.enddate.nil? ? '' : @activity.enddate) %>
+                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+              </div>
+              <div class='input-group date col-sm-3' id='timepicker2'>
+                <%= f.text_field :endtime, class: "form-control", value: (@activity.endtime.nil? ? '' : @activity.endtime) %>
+                <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+              </div>
             </div>
-            <div class='input-group date col-sm-3' id='timepicker2'>
-              <%= f.text_field :endtime, class: "form-control", value: (@activity.endtime.nil? ? '' : @activity.endtime) %>
-              <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+
+            <div class="form-group">
+              <%= f.label :venue, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :location_name, class: "form-control" %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label :venue, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :location_name, class: "form-control" %>
+            <div class="form-group">
+              <%= f.label :address, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :street_address_1, class: "form-control" %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label :address, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :street_address_1, class: "form-control" %>
+            <div class="form-group">
+              <%= f.label :address_2, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :street_address_2, class: "form-control" %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label :address_2, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :street_address_2, class: "form-control" %>
+            <div class="form-group">
+              <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-3">
+                <%= f.text_field :city, class: "form-control" %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000"  %>
-            <div class="col-sm-3">
-              <%= f.text_field :city, class: "form-control" %>
+            <div class="form-group">
+              <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-4">
+                <%= f.select :state, us_states, {}, {class: "form-control"} %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000"  %>
-            <div class="col-sm-4">
-              <%= f.select :state, us_states, {}, {class: "form-control"} %>
+            <div class="form-group">
+              <%= f.label :website, class: "col-sm-3 control-label" %>
+              <div class="col-sm-4">
+                <%= f.text_field :website, class: "form-control" %>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= f.label :website, class: "col-sm-3 control-label" %>
-            <div class="col-sm-4">
-              <%= f.text_field :website, class: "form-control" %>
+            <div class="form-group">
+              <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-8">
+                <%= f.text_area :description, class: "form-control", rows: "3" %>
+              </div>
             </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000"  %>
-            <div class="col-sm-8">
-              <%= f.text_area :description, class: "form-control", rows: "3" %>
             </div>
-          </div>
-	    </div>
 
-	    <div class="col-md-5">
-	    	<% if image_tag @activity.image.url %>
-	    		<%= image_tag @activity.image.url(:medium) %>
-	    	<% else %>
-	    	<div class="text-center" style="height:200px; width:300px; background-color:#e2e2e2; margin:0 auto">
-	    		<h5 style="margin: 0 auto; line-height:200px">No Image</h5>
-	    	</div>
-	    	<% end %>
-	    	<%= f.file_field :image %>
-	    	<br/><br/>
+            <div class="col-md-5">
+              <% if image_tag @activity.image.url %>
+                  <%= image_tag @activity.image.url(:medium) %>
+              <% else %>
+                  <div class="text-center" style="height:200px; width:300px; background-color:#e2e2e2; margin:0 auto">
+                    <h5 style="margin: 0 auto; line-height:200px">No Image</h5>
+                  </div>
+              <% end %>
+              <%= f.file_field :image %>
+              <br/><br/>
 
-				<div>
-					<label>Activity Type</label>
-				</div>
-				<% for type in ActivityType.all %>
-		    <div>
-		      <%= check_box_tag "activity[activity_type_ids][]", type.id, (@activity.activity_type_ids.include?(type.id) ? true : false) %>
-		      <%= type.activity_type %>
-		    </div>
-				<% end %>
- 				<% if @activity.cancelled %>
-					<%= link_to 'UN-Cancel Activity', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger pull-right' %>
-				<% else %>
-					<div class='pull-right' style='text-align:left; '>
-					<%= f.submit 'Update!', class: 'btn btn-sm btn-success' %>
-					<%= link_to 'Cancel Activity', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger' %>
-					</div>
-				<% end %>
-	    <% end %>
+              <div>
+                <h3>Activity Tags</h3>
+              </div>
 
-      <script type="text/javascript">
+              <div class="form-group">
+                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
+                  <% @activity_types.each do |activity_type| %>
+                      <% if @activity.activity_types.pluck(:id).include? activity_type.id %>
+                          <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                      <% else %>
+                          <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                      <% end %>
+                  <% end %>
+                </select>
+              </div>
+
+              <% if @activity.cancelled %>
+                  <%= link_to 'UN-Cancel Activity', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger pull-right' %>
+              <% else %>
+                  <div style='text-align:left; '>
+                    <%= f.submit 'Update!', class: 'btn btn-sm btn-success' %>
+                    <%= link_to 'Cancel Activity', activity_cancel_path(@activity.id), class: 'btn btn-sm btn-danger' %>
+                  </div>
+              <% end %>
+        <% end %>
+
+        <script type="text/javascript">
             $(function () {
-                $('#datepicker1').datetimepicker({pickTime:false});
-                $('#datepicker2').datetimepicker({pickTime:false});
+                $('#datepicker1').datetimepicker({pickTime: false});
+                $('#datepicker2').datetimepicker({pickTime: false});
 
-                $('#timepicker1').datetimepicker({pickDate:false});
-                $('#timepicker2').datetimepicker({pickDate:false});
+                $('#timepicker1').datetimepicker({pickDate: false});
+                $('#timepicker2').datetimepicker({pickDate: false});
             });
-      </script>
+        </script>
+        </div>
+        </div>
   </div>
 </div>

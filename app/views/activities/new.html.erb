@@ -1,63 +1,67 @@
 <div class="container">
-  <div class="row">
-    <div class="panel panel-default" >
-        <h4 class="panel-title">Create your Activity</h4>
-    </div>
-      <div class="panel-body">
-        <% if @activity.errors.any? %>
-          <div id="error_explanation">
-            <% @activity.errors.full_messages.each do |msg| %>
-              <div class="alert alert-danger fade in"><%= msg %><button class="close" data-dismiss="alert">x</button></div>
-            <% end %>
-            </ul>
-          </div>
-        <% end %>
-      <div class="col-md-7">
-      <script>
-        var bsubmit = false;
-        function confirmCreate()
-        {
-          if (bsubmit)
-          {
-            return true;
-          }
-
-          <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
-            if (!confirm('Creating this Activity will cost 1 Credit'))
-              return false;
+<div class="row">
+  <div class="panel panel-default">
+    <h4 class="panel-title">Create your Activity</h4>
+  </div>
+  <div class="panel-body">
+    <% if @activity.errors.any? %>
+        <div id="error_explanation">
+          <% @activity.errors.full_messages.each do |msg| %>
+              <div class="alert alert-danger fade in"><%= msg %>
+                <button class="close" data-dismiss="alert">x</button>
+              </div>
           <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="col-md-7">
+      <script>
+          var bsubmit = false;
+          function confirmCreate() {
+              if (bsubmit) {
+                  return true;
+              }
 
-          // get the city and state entered
-          var address1 = $('#activity_street_address_1').val();
-          console.log("address1: " + address1);
-          console.log("address1: " + $('#activity_street_address_1').val());
-          var address2 = $('#activity_street_address_2').val();
-          var city = $('#activity_city').val();
-          var state = $('#activity_state').val();
+              <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
+              if (!confirm('Creating this Activity will cost 1 Credit'))
+                  return false;
+              <% end %>
 
-          var address = '';
-          if (address1 && (address1.length > 0)) {address += address1 + ", ";}
-          if (address2 && (address2.length > 0)) {address += address2 + ", ";}
-          address += city + ", " + state;
-          console.log("address: " + address);
-          
-          // Get the lat long of the city, state
-          var geocoder = new google.maps.Geocoder();
+              // get the city and state entered
+              var address1 = $('#activity_street_address_1').val();
+              console.log("address1: " + address1);
+              console.log("address1: " + $('#activity_street_address_1').val());
+              var address2 = $('#activity_street_address_2').val();
+              var city = $('#activity_city').val();
+              var state = $('#activity_state').val();
 
-          geocoder.geocode({'address': address}, function(results, status){
-                console.log('results[0].geometry.location:'+results[0].geometry.location);
-                $('#lat').val(results[0].geometry.location.lat());
-                $('#lng').val(results[0].geometry.location.lng());
+              var address = '';
+              if (address1 && (address1.length > 0)) {
+                  address += address1 + ", ";
+              }
+              if (address2 && (address2.length > 0)) {
+                  address += address2 + ", ";
+              }
+              address += city + ", " + state;
+              console.log("address: " + address);
 
-                bsubmit = true;
+              // Get the lat long of the city, state
+              var geocoder = new google.maps.Geocoder();
 
-                $('#new_activity').submit();
-          });
+              geocoder.geocode({'address': address}, function (results, status) {
+                  console.log('results[0].geometry.location:' + results[0].geometry.location);
+                  $('#lat').val(results[0].geometry.location.lat());
+                  $('#lng').val(results[0].geometry.location.lng());
 
-          return false;
-        }
+                  bsubmit = true;
+
+                  $('#new_activity').submit();
+              });
+
+              return false;
+          }
       </script>
-        <%= form_for @activity, html: { class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
+      <%= form_for @activity, html: {class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
           <div class="form-group">
             <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
@@ -67,7 +71,7 @@
           </div>
 
           <div class="form-group">
-            <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000" %>
             <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
               <%= f.text_field :date, class: "form-control", value: (@activity.date.nil? ? '' : @activity.date) %>
               <span class="input-group-addon"><span class="icon-calendar"></span></span>
@@ -79,7 +83,7 @@
           </div>
 
           <div class="form-group">
-            <%= f.label 'End', class: "col-sm-3 control-label"  %>
+            <%= f.label 'End', class: "col-sm-3 control-label" %>
             <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker2'>
               <%= f.text_field :enddate, class: "form-control", value: (@activity.enddate.nil? ? '' : @activity.enddate) %>
               <span class="input-group-addon"><span class="icon-calendar"></span></span>
@@ -112,19 +116,19 @@
           </div>
 
           <div class="form-group">
-            <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000" %>
             <div class="col-sm-3">
               <%= f.text_field :city, class: "form-control" %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000" %>
             <div class="col-sm-4">
               <%= f.select :state, us_states, {}, {class: "form-control"} %>
             </div>
           </div>
-          <%= hidden_field_tag :lat%>
+          <%= hidden_field_tag :lat %>
           <%= hidden_field_tag :lng %>
 
           <div class="form-group">
@@ -135,104 +139,110 @@
           </div>
 
           <div class="form-group">
-            <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000"  %>
+            <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000" %>
             <div class="col-sm-8">
               <%= f.text_area :description, class: "form-control", rows: "3" %>
             </div>
           </div>
-      </div>
+          </div>
 
-      <div class="col-md-5">
-        <fieldset>
-          <h3>Upload Activity Image</h3>
-          <%= f.file_field :image %>
-        </fieldset>
-        <br/><br/>
-        <div>
-          <h3>Activity Type</h3>
-        </div>
-        <% for type in ActivityType.all %>
-        <div>
-          <%= check_box_tag "activity[activity_type_ids][]", type.id, (@activity.activity_type_ids.include?(type.id)?true:false) %>
-          <% logger.info "type.id: #{type.id}"
-              logger.info "included: #{@activity.activity_type_ids.include? type.id}" %>
-          <%= type.activity_type %>
-        </div>
-        <% end %>
+          <div class="col-md-5">
+            <fieldset>
+              <h3>Upload Activity Image</h3>
+              <%= f.file_field :image %>
+            </fieldset>
+            <br/><br/>
 
-        <button type="submit" class="btn btn-md btn-success pull-right" >Create!</button>
+            <div>
+              <h3>Activity Tags</h3>
+            </div>
+
+            <div class="form-group">
+              <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
+                <option value></option>
+                <% @activity_types.each do |activity_type| %>
+                    <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                <% end %>
+              </select>
+            </div>
+
+            <div style='padding-top:35px;'>
+              <button type="submit" class="btn btn-md btn-success">Create!</button>
+            </div>
+          </div>
+
       <% end %>
 
       <script type="text/javascript">
-            $(function () {
-                $('#datepicker1').datetimepicker({pickTime:false});
-                $('#datepicker2').datetimepicker({pickTime:false});
+          $(function () {
+              $('#datepicker1').datetimepicker({pickTime: false});
+              $('#datepicker2').datetimepicker({pickTime: false});
 
-                $('#timepicker1').datetimepicker({pickDate:false});
-                $('#timepicker2').datetimepicker({pickDate:false});
-            });
+              $('#timepicker1').datetimepicker({pickDate: false});
+              $('#timepicker2').datetimepicker({pickDate: false});
+          });
       </script>
-  </div>
+      </div>
 </div>
 
-<script>
-  $(function () {
+<script type='text/javascript'>
+    $(function () {
 
-    // Get browser location and set selectors
-    function getLocation() {
-      if (($.cookie("city")) && ($.cookie("state")))
-      {
-        $('#activity_city').val($.cookie("city"));
-        $('#activity_state').val($.cookie("state"));
-      }
-      else if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(getCity, getCityError);
-      }
-      else {
-        $('#activity_city').val('Denver');
-        $('#activity_state').val('CO');
-      }
-    }
+        // Get browser location and set selectors
+        function getLocation() {
+            if (($.cookie("city")) && ($.cookie("state"))) {
+                $('#activity_city').val($.cookie("city"));
+                $('#activity_state').val($.cookie("state"));
+            }
+            else if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getCity, getCityError);
+            }
+            else {
+                $('#activity_city').val('Denver');
+                $('#activity_state').val('CO');
+            }
+        }
 
-    function getCity(position) {
-      var geocoder = new google.maps.Geocoder();
+        function getCity(position) {
+            var geocoder = new google.maps.Geocoder();
 
-      var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      console.log(latlng);
-      $('#lat').val(position.coords.latitude);
-      $('#lng').val(position.coords.longitude);
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            console.log(latlng);
+            $('#lat').val(position.coords.latitude);
+            $('#lng').val(position.coords.longitude);
 
-      var city = 'Pittsburgh';
-      var state = 'PA';
+            var city = 'Pittsburgh';
+            var state = 'PA';
 
-      geocoder.geocode({'latLng': latlng}, function(results, status){
-        $.each(results[0].address_components, function (i, address_component) {
-            console.log('address_component:'+i);
+            geocoder.geocode({'latLng': latlng}, function (results, status) {
+                $.each(results[0].address_components, function (i, address_component) {
+                    console.log('address_component:' + i);
 
-            var type = address_component.types[0];
-            console.log(i+": "+type+":"+address_component.short_name);
+                    var type = address_component.types[0];
+                    console.log(i + ": " + type + ":" + address_component.short_name);
 
-            if (type == 'locality')
-              city = address_component.short_name;
-            else if (type == 'administrative_area_level_1')
-              state = address_component.short_name;
-        });
+                    if (type == 'locality')
+                        city = address_component.short_name;
+                    else if (type == 'administrative_area_level_1')
+                        state = address_component.short_name;
+                });
 
-        console.log("city, state: "+city+", "+state);
-        console.log(latlng);
+                console.log("city, state: " + city + ", " + state);
+                console.log(latlng);
 
-        $('#activity_city').val(city);
-        $('#activity_state').val(state);
-      });
-    }
+                $('#activity_city').val(city);
+                $('#activity_state').val(state);
+            });
+        }
 
-    function getCityError() {
-      $('#activity_city').val('Denver');
-      $('#activity_state').val('CO');
-    };
+        function getCityError() {
+            $('#activity_city').val('Denver');
+            $('#activity_state').val('CO');
+        };
 
-    if ($('#activity_city').val() == '')
-      getLocation();
-  });
+        if ($('#activity_city').val() == '')
+            getLocation();
+    });
 
 </script>
+</div>

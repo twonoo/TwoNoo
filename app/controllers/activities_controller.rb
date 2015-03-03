@@ -141,6 +141,7 @@ class ActivitiesController < ApplicationController
   end
 
   def new
+    @activity_types = ActivityType.all.each
     if (Transaction.get_balance(current_user) > 0) \
         || (current_user.profile.nonprofit == 1) \
         || (current_user.profile.ambassador == 1) \
@@ -152,6 +153,7 @@ class ActivitiesController < ApplicationController
   end
 
   def edit
+    @activity_types = ActivityType.all.each
     @activity = Activity.find(params[:id])
   end
 
@@ -228,49 +230,6 @@ class ActivitiesController < ApplicationController
     render :new
   end
 
-  def create
-    parms = activity_params
-#    dt_invalid = false
-#    begin
-#      parms[:datetime] = Time.strptime(activity_params[:datetime], '%m/%d/%Y %I:%M %p')
-#    rescue
-#      dt_invalid = true
-#      parms[:datetime] = Time.now
-#    end
-
-    if params[:lat].present? && params[:lng].present?
-      parms[:latitude] = params[:lat]
-      parms[:longitude] = params[:lng]
-    end
-
-    @activity = Activity.create(parms)
-    @activity.user_id = current_user.id
-
-    if @activity.save
-      # Charge the organizer
-      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
-
-      # Have the organizer RSVP to their own activity
-      rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)
-      rsvp.save
-
-      # Notfiy all followers of this organizer that a new activity has been created.
-      current_user.followers.each do |follower|
-        UserMailer.delay.new_following_activity(follower, current_user, @activity)
-        follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
-      end
-
-      #s=t in querystring will display the share modal
-      redirect_to "/activities/#{@activity.id}/?s=t"
-    else
-#      if dt_invalid
-#        @activity.errors.add(:base, "#{activity_params[:datetime]} is not a valid date.  Please enter dates in the format mm/dd/yyyy HH:MM AM/PM")
-#        @activity.datetime = Time.now
-#      end
-      render :new
-    end
-  end
-
   def rsvp
     rsvp = Rsvp.create(activity_id: params[:activity_id], user_id: params[:user_id])
     activity = Activity.where(id: params[:activity_id]).first
@@ -304,10 +263,82 @@ class ActivitiesController < ApplicationController
 
   end
 
+  def create
+    parms = activity_params
+
+    new_activity_types = []
+    selected_activity_types = []
+    parms[:activity_types].each do |tag|
+      next if Obscenity.offensive(tag).present?
+
+      selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
+      if !selected_activity_types.last.persisted?
+        selected_activity_types.last.save
+        new_activity_types << selected_activity_types.last
+      end
+
+    end
+
+    parms[:activity_type_ids] = selected_activity_types.map(&:id)
+    parms.delete(:activity_types)
+
+    if params[:lat].present? && params[:lng].present?
+      parms[:latitude] = params[:lat]
+      parms[:longitude] = params[:lng]
+    end
+
+    @activity = Activity.create(parms)
+    @activity.user_id = current_user.id
+
+    if @activity.save
+      # Charge the organizer
+      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
+
+      # Have the organizer RSVP to their own activity
+      rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)
+      rsvp.save
+
+      # Notfiy all followers of this organizer that a new activity has been created.
+      current_user.followers.each do |follower|
+        UserMailer.delay.new_following_activity(follower, current_user, @activity)
+        follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+      end
+
+      #s=t in querystring will display the share modal
+      redirect_to "/activities/#{@activity.id}/?s=t"
+    else
+
+      #remove all newly created activity types if the form is incomplete
+      new_activity_types.each do |activity_type|
+        activity_type.destroy
+      end
+
+      @activity_types = ActivityType.all.each
+      render :new
+    end
+  end
+
   def update
+
     @activity = Activity.find(params[:id])
     params = activity_params
     @activity.activity_type_ids=params[:activity_type_ids]
+
+    new_activity_types = []
+    selected_activity_types = []
+    params[:activity_types].each do |tag|
+      next if Obscenity.offensive(tag).present?
+
+      selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
+      if !selected_activity_types.last.persisted?
+        selected_activity_types.last.save
+        new_activity_types << selected_activity_types.last
+      end
+
+    end
+
+    params[:activity_type_ids] = selected_activity_types.map(&:id)
+    params.delete(:activity_types)
 
     @activity.update(params)
 
@@ -324,6 +355,12 @@ class ActivitiesController < ApplicationController
       end
       redirect_to @activity
     else
+      #remove all newly created activity types if the form is incomplete
+      new_activity_types.each do |activity_type|
+        activity_type.destroy
+      end
+
+      @activity_types = ActivityType.all.each
       render :edit
     end
   end
@@ -331,6 +368,6 @@ class ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image, :date, :time, :enddate, :endtime, activity_type_ids: [])
+    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image, :date, :time, :enddate, :endtime, activity_types: [])
   end
 end

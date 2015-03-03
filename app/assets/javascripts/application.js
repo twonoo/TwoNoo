@@ -39,4 +39,7 @@
 //= require twonoo_im.js
 //= require intelligent-search
 //= require jquery.typehead.js
+//= require chosen.jquery.min.js
+//= require chosen.proto.js
+//= require chosen.custom.js
 

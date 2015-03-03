@@ -352,6 +352,10 @@
         setupRsvp();
         <% end %>
 
+        <% if params[:s] == 't' %>
+        showOverlay();
+        <% end %>
+
         $('#close_overlay').click(function () {
             hideOverlay();
         })
