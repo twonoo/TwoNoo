@@ -142,6 +142,7 @@ class ActivitiesController < ApplicationController
 
   def new
     @activity_types = ActivityType.all.each
+    @selected_tag_ids = []
     if (Transaction.get_balance(current_user) > 0) \
         || (current_user.profile.nonprofit == 1) \
         || (current_user.profile.ambassador == 1) \
@@ -313,6 +314,7 @@ class ActivitiesController < ApplicationController
         activity_type.destroy
       end
 
+      @selected_tag_ids = (selected_activity_types.map(&:id) || [])
       @activity_types = ActivityType.all.each
       render :new
     end
@@ -322,7 +324,7 @@ class ActivitiesController < ApplicationController
 
     @activity = Activity.find(params[:id])
     params = activity_params
-    @activity.activity_type_ids=params[:activity_type_ids]
+    @activity.activity_type_ids = params[:activity_type_ids]
 
     new_activity_types = []
     selected_activity_types = []

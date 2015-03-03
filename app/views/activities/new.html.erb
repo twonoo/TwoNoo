@@ -161,7 +161,13 @@
               <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
                 <option value></option>
                 <% @activity_types.each do |activity_type| %>
-                    <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+
+                    <% if @selected_tag_ids.include? activity_type.id %>
+                        <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                    <% else %>
+                        <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                    <% end %>
+
                 <% end %>
               </select>
             </div>
