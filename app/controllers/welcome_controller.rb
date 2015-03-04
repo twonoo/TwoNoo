@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
   end
 
   def trending
-    @trending = Activity.trending(params[:location])
+    @trending = Activity.trending(params[:location]).order('datetime ASC')
 
     case @trending.length
       when 13..15
