@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
   end
 
   def trending
-    @trending = Activity.trending(params[:location]).order('datetime ASC')
+    @trending = Activity.trending(params[:location])
 
     case @trending.length
       when 13..15
@@ -13,6 +13,8 @@ class WelcomeController < ApplicationController
         @trending = @trending.limit(8)
       when 0..7
         @trending = @trending.limit(4)
+      else 
+        @trending = @trending.limit(16)
     end
 
     respond_to do |format|
