@@ -212,7 +212,7 @@ class Activity < ActiveRecord::Base
     where('datetime > ?', Time.now.utc)
     .select('activities.*, COUNT(rsvps.id) as rsvp_count')
     .where(cancelled: false)
-    .within(100, origin: (location.nil? ? denver : location)
+    .within(100, origin: (location.nil? ? denver : location))
     .joins(:rsvps)
     .group(:id)
     .order('datetime ASC')
