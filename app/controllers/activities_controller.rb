@@ -269,7 +269,7 @@ class ActivitiesController < ApplicationController
 
     new_activity_types = []
     selected_activity_types = []
-    parms[:activity_types].each do |tag|
+    (parms[:activity_types] || []).each do |tag|
       next if Obscenity.offensive(tag).present?
 
       selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
@@ -328,7 +328,7 @@ class ActivitiesController < ApplicationController
 
     new_activity_types = []
     selected_activity_types = []
-    params[:activity_types].each do |tag|
+    (params[:activity_types] || []).each do |tag|
       next if Obscenity.offensive(tag).present?
 
       selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
