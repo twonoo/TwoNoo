@@ -140,9 +140,9 @@ class Activity < ActiveRecord::Base
 
   def convert_to_enddatetime
     unless @enddate.blank? || @endtime.blank?
+      logger.info "endtime: #{@endtime}"
       self.enddatetime = Time.strptime("#{@enddate} #{@endtime.lstrip}-07:00", "%m/%d/%Y %l:%M %p%z")
-    else
-      self.enddatetime = nil
+      logger.info "enddatetime: #{self.enddatetime}"
     end
   end
 
