@@ -196,7 +196,7 @@ class WelcomeController < ApplicationController
       @activities = @activities.order('datetime ASC')
     end
 
-    @users = Profile.terms(params[:terms])
+    @users = Profile.includes(user: :interests).terms(params[:terms])
 
     search_history = Search.new(search: params[:terms], location: params[:location])
     search_history.user_id = current_user.id if current_user
