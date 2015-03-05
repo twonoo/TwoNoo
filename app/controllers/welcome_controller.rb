@@ -118,7 +118,8 @@ class WelcomeController < ApplicationController
 
     #Tag results
     tag_type = ActivityType.where(activity_type: params[:terms]).first
-    tag_activities = Activity.where(cancelled: false).joins(:activity_types).where('activity_types.id' => tag_type.id).where('cancelled = ?', false) if tag_type
+    tag_activities = Activity.where(cancelled: false).joins(:activity_types)
+    .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
 
     #Search results
     search_activities = []
