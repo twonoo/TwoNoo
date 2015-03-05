@@ -1,46 +1,47 @@
 class Activity < ActiveRecord::Base
-	acts_as_commentable
+  acts_as_commentable
 
-	has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x75>", :map_image => "250x100#", :trending => "650x500#" }, :default_url => "/images/:style/missing.png"
-	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
-	belongs_to :user
-	has_and_belongs_to_many :activity_types
-	#geocoded_by :address
-	before_validation :geocodecache
-	before_save :assign_timezone
-	before_save :convert_to_datetime
-	before_save :convert_to_enddatetime
-	before_save :format_url
-	before_save :format_description
-	has_many :rsvps
+  has_attached_file :image, :styles => {:medium => "300x300>", :thumb => "100x75>", :map_image => "250x100#", :trending => "650x500#"}, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
+  belongs_to :user
+  has_and_belongs_to_many :activity_types
+  #geocoded_by :address
+  before_validation :geocodecache
+  before_save :assign_timezone
+  before_save :convert_to_datetime
+  before_save :convert_to_enddatetime
+  before_save :format_url
+  before_save :format_description
+  has_many :rsvps
 
-	validates :activity_name, :date, :time, :city, :state, :description, presence: true
+  validates :activity_name, :date, :time, :city, :state, :description, presence: true
 
   validates_format_of :time, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid'
   validates_format_of :endtime, :with => /\A[ ]?([1-9]|1[0-2]|0[1-9]):[0-5][0-9] (AM|PM)\Z/i, :message => 'Invalid', unless: "endtime.blank?"
 
-	#validate :distance_cannot_be_greater_than_100_miles
-	validate :end_not_more_than_30_days
+  #validate :distance_cannot_be_greater_than_100_miles
+  validate :end_not_more_than_30_days
+  validate :presence_of_activity_types
 
-	acts_as_mappable :default_units => :miles,
+  acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
                    :distance_field_name => :distance,
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
-  scope :between_dates, lambda{|from_date, end_date| where('(datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?) OR ((? < enddatetime) AND (? > datetime))',
-                                                           from_date, end_date, from_date, end_date, from_date, end_date) }
+  scope :between_dates, lambda { |from_date, end_date| where('(datetime BETWEEN ? AND ?) OR (enddatetime BETWEEN ? AND ?) OR ((? < enddatetime) AND (? > datetime))',
+                                                             from_date, end_date, from_date, end_date, from_date, end_date) }
 
-  scope :after_date, lambda{|from_date| where('(datetime > ?) OR (enddatetime > ?) ',
-                                                           from_date, from_date) }
-  scope :upcoming, lambda{ where("datetime >= ?", Time.now()) }
+  scope :after_date, lambda { |from_date| where('(datetime > ?) OR (enddatetime > ?) ',
+                                                from_date, from_date) }
+  scope :upcoming, lambda { where("datetime >= ?", Time.now()) }
 
-	def address
-		[street_address_1, street_address_2, city, state].grep(String).join(', ')
-	end
+  def address
+    [street_address_1, street_address_2, city, state].grep(String).join(', ')
+  end
 
   def increase_view
-    if views.nil? 
+    if views.nil?
       update_attribute(:views, 1)
     else
       update_attribute(:views, views + 1)
@@ -55,7 +56,7 @@ class Activity < ActiveRecord::Base
         @date = datetime.strftime("%m/%d/%Y")
       end
     rescue => e
-				errors[:base] << "#{@date} is not a valid date. Use the format MM/DD/YYYY" unless @date.blank?
+      errors[:base] << "#{@date} is not a valid date. Use the format MM/DD/YYYY" unless @date.blank?
     end
 
     return @date
@@ -65,7 +66,7 @@ class Activity < ActiveRecord::Base
   def date=(d)
     logger.info "date: #{d}"
     @date = d
-  end 
+  end
 
   def enddate
     begin
@@ -77,7 +78,7 @@ class Activity < ActiveRecord::Base
         @enddate = self.enddatetime.strftime("%m/%d/%Y")
       end
     rescue => e
-				errors[:base] << "#{@enddate} is not a valid date. Use the format MM/DD/YYYY" unless @enddate.blank?
+      errors[:base] << "#{@enddate} is not a valid date. Use the format MM/DD/YYYY" unless @enddate.blank?
     end
 
     return @enddate
@@ -87,7 +88,7 @@ class Activity < ActiveRecord::Base
   def enddate=(d)
     logger.info "enddate: #{d}"
     @enddate = d
-  end 
+  end
 
   def time
     begin
@@ -97,7 +98,7 @@ class Activity < ActiveRecord::Base
         @time = datetime.strftime("%l:%M %p")
       end
     rescue
-				errors[:base] << "#{@time} is not a valid time" unless @time.blank?
+      errors[:base] << "#{@time} is not a valid time" unless @time.blank?
     end
 
     return @time
@@ -107,7 +108,7 @@ class Activity < ActiveRecord::Base
     logger.info "time: #{t}"
     @time = t
     logger.info "time2: #{t}"
-  end 
+  end
 
   def endtime
     begin
@@ -119,7 +120,7 @@ class Activity < ActiveRecord::Base
         @endtime = self.enddatetime.strftime("%l:%M %p")
       end
     rescue
-				errors[:base] << "#{@endtime} is not a valid time" unless @endtime.blank?
+      errors[:base] << "#{@endtime} is not a valid time" unless @endtime.blank?
     end
 
     return @endtime
@@ -127,7 +128,7 @@ class Activity < ActiveRecord::Base
 
   def endtime=(t)
     @endtime = t
-  end 
+  end
 
   def convert_to_datetime
     unless @date.blank? || @time.blank?
@@ -146,24 +147,24 @@ class Activity < ActiveRecord::Base
     end
   end
 
-	def end_not_more_than_30_days
+  def end_not_more_than_30_days
     unless enddatetime.nil? || (datetime - enddatetime) < 30.days
-				errors[:base] << "End date cannot be more than 30 days after the start"
+      errors[:base] << "End date cannot be more than 30 days after the start"
     end
   end
-  
-	def distance_cannot_be_greater_than_100_miles
-		unless city.blank?
+
+  def distance_cannot_be_greater_than_100_miles
+    unless city.blank?
       denver = [39.737567, -104.9847179]
       pittsburgh = [40.44062479999999, -79.9958864]
       fairbanks = [64.8377778, -147.7163889]
 
-			#unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
-			unless (distance_from(denver) < 300 || distance_from(pittsburgh) < 100 || distance_from(fairbanks) < 600) then
-				errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!" + distance_from(fairbanks).to_s
-			end
-		end
-	end
+      #unless distance_from("Denver, CO") < 100 || distance_from("Pittsburgh, PA") < 100
+      unless (distance_from(denver) < 300 || distance_from(pittsburgh) < 100 || distance_from(fairbanks) < 600) then
+        errors[:base] << "Whoops! #{city} is not within our current network, but will be soon!" + distance_from(fairbanks).to_s
+      end
+    end
+  end
 
   def geocodecache
     logger.info "geocodecache"
@@ -189,22 +190,22 @@ class Activity < ActiveRecord::Base
 
       # insert the geocode
       geocode = Geocode.new(city: city, state: state, latitude: latitude, longitude: longitude,
-                  timezone: timezone.active_support_time_zone)
+                            timezone: timezone.active_support_time_zone)
 
       logger.info "save it"
       geocode.save
     end
   end
 
-	def self.terms(terms)
-		query = []
-		terms.split.each do |t|
-			query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%' OR street_address_1 LIKE '%#{t}%' OR street_address_2 LIKE '%#{t}%' OR city LIKE '%#{t}%' OR state LIKE '%#{t}%' OR website LIKE '%#{t}%')"
-		end
-		where(query.join(" AND "))
-	end
+  def self.terms(terms)
+    query = []
+    terms.split.each do |t|
+      query << "(activity_name LIKE '%#{t}%' OR location_name LIKE '%#{t}%' OR description LIKE '%#{t}%' OR street_address_1 LIKE '%#{t}%' OR street_address_2 LIKE '%#{t}%' OR city LIKE '%#{t}%' OR state LIKE '%#{t}%' OR website LIKE '%#{t}%')"
+    end
+    where(query.join(" AND "))
+  end
 
-	def self.trending(location)
+  def self.trending(location)
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
     fairbanks = [64.8377778, -147.7163889]
@@ -212,6 +213,7 @@ class Activity < ActiveRecord::Base
     where('datetime > ?', Time.now.utc)
     .select('activities.*, COUNT(rsvps.id) as rsvp_count')
     .where(cancelled: false)
+    .within(100, origin: (location.nil? ? denver : location))
     .joins(:rsvps)
     .group(:id)
     .order('datetime ASC')
@@ -220,7 +222,13 @@ class Activity < ActiveRecord::Base
     .limit(16)
   end
 
-	private
+  private
+
+  def presence_of_activity_types
+    unless activity_types.present?
+      errors[:base] << 'Please add at least one keyword'
+    end
+  end
 
   def get_coordinates
     unless self.latitude.nil? or self.longitude.nil? then
@@ -236,7 +244,7 @@ class Activity < ActiveRecord::Base
 
     if geocode.nil? then
       # we had a cache miss
-		  zone = Timezone::Zone.new(:latlon => get_coordinates)
+      zone = Timezone::Zone.new(:latlon => get_coordinates)
       timezone = zone.active_support_time_zone
     else
       return geocode.timezone
@@ -244,19 +252,19 @@ class Activity < ActiveRecord::Base
 
     return timezone
   end
-  
-	def assign_timezone
-		self.tz = get_timezone
-	end
 
-	def format_url
+  def assign_timezone
+    self.tz = get_timezone
+  end
+
+  def format_url
     if self.website.present?
       if (self.website =~ /\Ahttp[s]?/i).nil?
         self.website = "http://#{self.website}"
       end
       logger.info "format_url: #{self.website}"
     end
-	end
+  end
 
   def format_description
     logger.info "format_description"

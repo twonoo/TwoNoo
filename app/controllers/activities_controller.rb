@@ -226,6 +226,8 @@ class ActivitiesController < ApplicationController
     unless old_activity.nil?
       @activity = old_activity.dup
       @activity.activity_type_ids = old_activity.activity_type_ids
+      @activity_types = ActivityType.all.each
+      @selected_tag_ids = @activity.activity_type_ids
       logger.info @activity.activity_type_ids
     end
     render :new
@@ -269,7 +271,7 @@ class ActivitiesController < ApplicationController
 
     new_activity_types = []
     selected_activity_types = []
-    parms[:activity_types].each do |tag|
+    (parms[:activity_types] || []).each do |tag|
       next if Obscenity.offensive(tag).present?
 
       selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
@@ -328,7 +330,7 @@ class ActivitiesController < ApplicationController
 
     new_activity_types = []
     selected_activity_types = []
-    params[:activity_types].each do |tag|
+    (params[:activity_types] || []).each do |tag|
       next if Obscenity.offensive(tag).present?
 
       selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)

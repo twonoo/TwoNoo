@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   def index
-    @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by{|word| word.downcase}
+    @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
   end
 
   def trending
@@ -13,6 +13,8 @@ class WelcomeController < ApplicationController
         @trending = @trending.limit(8)
       when 0..7
         @trending = @trending.limit(4)
+      else
+        @trending = @trending.limit(16)
     end
 
     respond_to do |format|
@@ -80,9 +82,6 @@ class WelcomeController < ApplicationController
     #      @outsideSupportedArea = true
     #    end
 
-    # Determine Type
-    type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
-
     params[:distance] = 25 unless params[:distance].present?
     params[:terms] = '' unless params[:terms].present?
 
@@ -117,21 +116,38 @@ class WelcomeController < ApplicationController
     tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
     #end
 
-    # Build search query for activities
-    @activities = Activity.terms(params[:terms])
-    @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
-    if end_date.present?
-      @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
-    else
-      @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
-    end
-    #logger.info "**********!!!!!!!**********     #{from_date.in_time_zone(tz).utc} -  #{end_date.in_time_zone(tz).utc}"
-    @activities = @activities.where('cancelled = ?', false)
-    unless @outsideSupportedArea
-      @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
-    end
-    @activities = @activities.order('datetime ASC')
+    #Tag results
+    tag_type = ActivityType.where(activity_type: params[:terms]).first
+    tag_activities = Activity.where(cancelled: false).joins(:activity_types)
+    .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
 
+    #Search results
+    search_activities = []
+    if end_date.present?
+      search_activities = Activity.terms(params[:terms]).between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+    else
+      search_activities = Activity.terms(params[:terms]).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false)
+    end
+
+    type = ActivityType.where(activity_type: (params[:type] || 'All')).first
+    search_activities = search_activities.joins(:activity_types).where('activity_types.id' => type.id).where('cancelled = ?', false) if type
+
+    #Join both results
+    both_activities = nil
+    if search_activities.present? && tag_activities.present?
+      both_activities = search_activities.all | tag_activities.all
+      both_activities = Activity.where(id: both_activities.map(&:id)).order('datetime ASC')
+    elsif search_activities.present?
+      both_activities = search_activities
+    elsif tag_activities.present?
+      both_activities = tag_activities
+    end
+
+    unless !@outsideSupportedArea
+      both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
+    end
+
+    @activities = both_activities.order('datetime') if both_activities
     @showCreateAlert = false
 
     if @activities.blank?

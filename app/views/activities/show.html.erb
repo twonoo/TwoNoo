@@ -1,12 +1,10 @@
 <% content_for :head do %>
-
     <meta property="og:title" content="<%= @activity.activity_name %>"/>
     <meta property="og:site_name" content="TwoNoo"/>
     <meta property="og:url" content="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>"/>
     <meta property="og:description" content="<%= @activity.description %>"/>
     <meta property="og:image" content="<%= 'https://www.twonoo.com' + ENV['FACEBOOK_LOGO_URL'] %>"/>
     <meta property="og:app_id" content="<%= ENV['FACEBOOK_KEY'] %>"/>
-
 <% end %>
 
 <div class="container">
@@ -32,9 +30,7 @@
   </p>
 
   <div class='overlay-buttons'>
-    <a class='overlay-links' id='overlay_eventdate'>
-      <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
-    </a>
+    <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
         <% image_tag('ical-icon.png', height: '50', width: '50') %>
@@ -63,12 +59,13 @@
             <% end %>
 
             <a href='#' id='rsvp_button' title='Test Hover' class='btn btn-success btn-sm pull-right'>Join Us!</a>
-            <!-- share buttons -->
+
+            <div class="fb-send" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-colorscheme="light" style="padding: 0px; vertical-align: top; width: 60px; height: 24px;">Loading...</div>
 
             <div class="fb-share-button"
                  data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"
-                 data-layout="button_count"
-                 style="padding: 0px; vertical-align: top; width: 106px; height: 24px;"></div>
+                 data-layout="button"
+                 style="padding: 0px; vertical-align: top; width: 63px; height: 24px;"></div>
 
             <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
             <div class="g-plusone"
@@ -116,36 +113,49 @@
         </p>
 
         <p class="lead">
-          <b>
-            <% if @activity.location_name.present? %>
-                <%= link_to @activity.location_name, @activity.website %>
-            <% elsif @activity.website.present? %>
-                <%= link_to @activity.website, @activity.website %>
-            <% end %>
-          </b></br>
+
+        <div class='row'>
+          <div class='col-sm-4'>
+            <b>
+              <% if @activity.location_name.present? %>
+                  <%= link_to @activity.location_name, @activity.website %>
+              <% elsif @activity.website.present? %>
+                  <%= link_to @activity.website, @activity.website %>
+              <% end %>
+            </b></br>
             <span style="white-space:nowrap;font-size:.85em;">
             <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
-          <% unless @activity.enddatetime.nil? %>
-              <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
+            <% unless @activity.enddatetime.nil? %>
+                <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
             - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
-          <% end %>
-          <font size="1" style="white-space:nowrap;float:right;">
-            Add to:
-            <a id='eventdate'>Google Calendar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            <%= link_to 'iCal', :controller => 'activities', :action => :add_to_gcal, :format => :ics %>
-          </font>
-          <script>
-              $(function () {
-                  $('#overlay_eventdate').bind('click', function () {
-                      window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
-                  });
-                  $('#eventdate').bind('click', function () {
-                      window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
-                  });
-              });
-          </script>
+            <% end %>
+          </div>
+          <div class='col-sm-2'></div>
+          <div class='col-sm-2'></div>
+          <div class='col-sm-4'>
+
+            <a class='overlay-links' id='overlay_eventdate'>
+              <%= image_tag 'google-cal-icon.png', height: '40', width: '40' %>
+            </a>
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
+                <% image_tag('ical-icon.png', height: '40', width: '40') %>
+            <% end %>
+
+          </div>
+        </div>
+        <script>
+            $(function () {
+                $('#overlay_eventdate').bind('click', function () {
+                    window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                });
+                $('#eventdate').bind('click', function () {
+                    window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                });
+            });
+        </script>
         </p>
         <div id="map-canvas"></div>
         <div id="directions-from"
