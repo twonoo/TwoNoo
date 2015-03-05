@@ -3,45 +3,57 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h3 class="modal-title" id="myModalLabel">Share TwoNoo with your friends!</h3>
       </div>
       <div class="modal-body">
-  <div style="width:100%;text-align:center;">
-					<!-- share buttons -->
-					<div class="fb-share-button" 
-            data-href="<%=new_user_registration_url(:referrer => current_user.id)%>" 
-            data-layout="button" 
-            style="padding: 0px; vertical-align: top; height: 24px; width:66px;"></div>
+        <!-- share buttons -->
+        <div style="width:100%;text-align:center;">
+          <div class="fb-send"
+               data-href="<%= ENV['BASEURL'] %>"
+               data-colorscheme="light"
+               style="padding: 0px; vertical-align: top; width: 40px; height: 66px;">Loading...
+          </div>
+
+          <div class="fb-share-button"
+               data-href="<%= new_user_registration_url(:referrer => current_user.id) %>"
+               data-layout="button"
+               style="padding: 0px; vertical-align: top; height: 40px; width:90px;"></div>
 
           <div class="g-plus"
-            data-action="share"
-            data-annotation="none"
-            data-height="24"
-            data-width="64"
-            data-href="<%=new_user_registration_url(:referrer => current_user.id) %>"></div>
+               data-action="share"
+               data-annotation="none"
+               data-height="24"
+               data-width="64"
+               data-href="<%= new_user_registration_url(:referrer => current_user.id) %>"></div>
 
-					<a href="https://twitter.com/share"
-            class="twitter-share-button"
-            data-url="<%=new_user_registration_url(:referrer => current_user.id) %>"
-            data-hashtags="twonoo"
-            data-related="MeetExploreLive"
-            data-count="none"
-            data-text="I just joined TwoNoo...Come check it out!"
-            style="padding: 0px; vertical-align: top; height: 24px;"
-            >Tweet</a>
-					<script>
-            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){
-              js=d.createElement(s);
-              js.id=id;
-              js.src=p+'://platform.twitter.com/widgets.js';
-              fjs.parentNode.insertBefore(js,fjs);
-              }}(document, 'script', 'twitter-wjs');
+          <a href="https://twitter.com/share"
+             class="twitter-share-button"
+             data-url="<%= new_user_registration_url(:referrer => current_user.id) %>"
+             data-hashtags="twonoo"
+             data-related="MeetExploreLive"
+             data-count="none"
+             data-text="I just joined TwoNoo...Come check it out!"
+             style="padding: 0px; vertical-align: top; height: 24px;"
+          >Tweet</a>
+          <script>
+              !function (d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                  if (!d.getElementById(id)) {
+                      js = d.createElement(s);
+                      js.id = id;
+                      js.src = p + '://platform.twitter.com/widgets.js';
+                      fjs.parentNode.insertBefore(js, fjs);
+                  }
+              }(document, 'script', 'twitter-wjs');
           </script>
-        <hr style="padding:0px;margin:0px;"/>- OR -<hr style="padding:0px;margin:0px;"/>
-        Enter e-mails of people to invite separated by commas.<br/>
-	<textarea id="emails" name="emails" style="width: 100%;"> </textarea>
-  </div>
+          <hr style="padding:0px;margin:0px;"/>
+          - OR -
+          <hr style="padding:0px;margin:0px;"/>
+          Enter e-mails of people to invite separated by commas.<br/>
+          <textarea id="emails" name="emails" style="width: 100%;"> </textarea>
+        </div>
       </div>
       <div class="modal-footer">
         <button id="cancelInvite" type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
@@ -55,8 +67,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	Invitations Sent!
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        Invitations Sent!
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Close</button>
@@ -66,60 +79,64 @@
 </div>
 
 <script>
-  $(function(){
-    <%
-      if cookies[:new_user] == 'true' %>
+    $(function () {
+        <%
+          if cookies[:new_user] == 'true' %>
         $('#invite_people_form').modal('show');
-    <%  cookies[:new_user] = 'false'
-      end %>
+        <%  cookies[:new_user] = 'false'
+          end %>
 
-    $('#sendInvites').bind('click', function(){invitePeople();});
-    $('#cancelInvite').bind('click', function(){$('#emails').val('');});
-    $('#invite_people_form').on('shown.bs.modal', function () { $('#emails').focus(); })
-
-    var invitePeople = function() {
-      if(validateEmails())
-      {
-        $.ajax({
-          type: "POST",
-          url: "<%=twonoo_invite_people_path%>",
-          data: { emails: $('#emails').val()},
-          success: function(html) {
-            $('#invite_info').modal('show');
+        $('#sendInvites').bind('click', function () {
+            invitePeople();
+        });
+        $('#cancelInvite').bind('click', function () {
             $('#emails').val('');
-          },
-          error: function(html) {alert('error');}
-         });
-    
-        $('#invite_people_form').modal('hide'); 
-      }
-    };
+        });
+        $('#invite_people_form').on('shown.bs.modal', function () {
+            $('#emails').focus();
+        })
 
-    function validateEmails()
-    {
-      var emails = $('#emails').val();
-      var emailArray = emails.split(',');
-      var i;
+        var invitePeople = function () {
+            if (validateEmails()) {
+                $.ajax({
+                    type: "POST",
+                    url: "<%=twonoo_invite_people_path%>",
+                    data: { emails: $('#emails').val()},
+                    success: function (html) {
+                        $('#invite_info').modal('show');
+                        $('#emails').val('');
+                    },
+                    error: function (html) {
+                        alert('error');
+                    }
+                });
 
-      for (i = 0; i < emailArray.length; i++)
-      {
-        var email = emailArray[i].trim();
-        if (!IsEmail(email))
-        {
-          alert("Please verify e-mail addresses to ensure they are valid.");
-          return false;
+                $('#invite_people_form').modal('hide');
+            }
+        };
+
+        function validateEmails() {
+            var emails = $('#emails').val();
+            var emailArray = emails.split(',');
+            var i;
+
+            for (i = 0; i < emailArray.length; i++) {
+                var email = emailArray[i].trim();
+                if (!IsEmail(email)) {
+                    alert("Please verify e-mail addresses to ensure they are valid.");
+                    return false;
+                }
+            }
+
+            return true;
         }
-      }
 
-      return true;
-    }
+        function IsEmail(email) {
+            var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            return regex.test(email);
+        }
 
-    function IsEmail(email) {
-      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      return regex.test(email);
-    }
-
-  });
+    });
 </script>
 
 
