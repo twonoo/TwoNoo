@@ -116,15 +116,6 @@ class WelcomeController < ApplicationController
     tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
     #end
 
-
-
-
-
-
-
-
-
-
     #Tag results
     tag_type = ActivityType.where(activity_type: params[:terms]).first
     tag_activities = Activity.where(cancelled: false).joins(:activity_types).where('activity_types.id' => tag_type.id).where('cancelled = ?', false) if tag_type
@@ -155,17 +146,8 @@ class WelcomeController < ApplicationController
       both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
     end
 
-    @activities = both_activities.order('datetime')
+    @activities = both_activities.order('datetime') if both_activities
     @showCreateAlert = false
-
-
-
-
-
-
-
-
-
 
     if @activities.blank?
       @showCreateAlert = true
