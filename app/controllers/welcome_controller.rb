@@ -83,7 +83,12 @@ class WelcomeController < ApplicationController
     #    end
 
     # Determine Type
-    type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
+    type = nil
+    if params[:type].present?
+      type = ActivityType.where(activity_type: params[:type]).first.id rescue type = nil
+    else
+      type = ActivityType.where(activity_type: params[:terms]).first.id rescue type = nil
+    end
 
     params[:distance] = 25 unless params[:distance].present?
     params[:terms] = '' unless params[:terms].present?
