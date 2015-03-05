@@ -13,6 +13,8 @@ class WelcomeController < ApplicationController
         @trending = @trending.limit(8)
       when 0..7
         @trending = @trending.limit(4)
+      else 
+        @trending = @trending.limit(16)
     end
 
     respond_to do |format|
