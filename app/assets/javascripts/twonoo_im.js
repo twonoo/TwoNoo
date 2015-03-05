@@ -14,7 +14,7 @@ Dispatcher.handle = false;
 Dispatcher.init_dispatcher = function(){
   if (!(Dispatcher.initialized))
   {
-    Dispatcher.dispatcher = new WebSocketRails('dev-steve.twonoo.com:3001/websocket');
+    Dispatcher.dispatcher = new WebSocketRails(window.location.hostname + ':3001/websocket');
 
     Dispatcher.dispatcher.on_open = function(data) {
       Dispatcher.supportsWebsockets = true;
