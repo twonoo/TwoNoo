@@ -30,9 +30,7 @@
   </p>
 
   <div class='overlay-buttons'>
-    <a class='overlay-links' id='overlay_eventdate'>
-      <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
-    </a>
+    <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
         <% image_tag('ical-icon.png', height: '50', width: '50') %>
@@ -61,6 +59,7 @@
             <% end %>
 
             <a href='#' id='rsvp_button' title='Test Hover' class='btn btn-success btn-sm pull-right'>Join Us!</a>
+
             <div class="fb-send" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-colorscheme="light" style="padding: 0px; vertical-align: top; width: 60px; height: 24px;">Loading...</div>
 
             <div class="fb-share-button"

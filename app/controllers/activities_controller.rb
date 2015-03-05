@@ -221,6 +221,8 @@ class ActivitiesController < ApplicationController
 
   def copy
     ## Load the activity
+    @activity_types = ActivityType.all.each
+    @selected_tag_ids = []
     old_activity = Activity.find_by_id(params[:id])
 
     unless old_activity.nil?
