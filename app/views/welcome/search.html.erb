@@ -167,7 +167,7 @@
                 <div role="tabpanel" class="tab-pane fade in <%= @activities.blank? ? nil :  'active' %>" id="activity">
                 <% @activities.each do |a| %>
                   <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-12 search-result-list">
-                    <div class="col-md-6 search-result-list-details">
+                    <div class="col-md-6 col-md-offset-3 search-result-list-details">
                       <span><%= link_to a.activity_name, activity_path(a.id), class: "search-result-list-name" %></span>
                       <span class="search-result-list-location"><%= a.location_name %> </span>
                       <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
