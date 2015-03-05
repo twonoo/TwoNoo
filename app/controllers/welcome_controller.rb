@@ -144,7 +144,7 @@ class WelcomeController < ApplicationController
     both_activities = nil
     if search_activities.present? && tag_activities.present?
       both_activities = search_activities.all | tag_activities.all
-      both_activities = Activity.where(id: both_activities.pluck(:id)).order('datetime ASC')
+      both_activities = Activity.where(id: both_activities.map(&:id)).order('datetime ASC')
     elsif search_activities.present?
       both_activities = search_activities
     elsif tag_activities.present?
