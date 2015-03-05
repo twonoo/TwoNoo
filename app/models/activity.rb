@@ -225,7 +225,7 @@ class Activity < ActiveRecord::Base
   private
 
   def presence_of_activity_types
-    unless activity_types.nil?
+    unless activity_types.present?
       errors[:base] << 'Please add at least one keyword'
     end
   end
