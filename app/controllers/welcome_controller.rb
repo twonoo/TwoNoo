@@ -143,7 +143,7 @@ class WelcomeController < ApplicationController
       both_activities = tag_activities
     end
 
-    unless !@outsideSupportedArea
+    unless @outsideSupportedArea
       both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
     end
 
@@ -196,7 +196,7 @@ class WelcomeController < ApplicationController
       @activities = @activities.order('datetime ASC')
     end
 
-    @users = Profile.includes(user: :interests).terms(params[:terms])
+    @users = Profile.terms(params[:terms])
 
     search_history = Search.new(search: params[:terms], location: params[:location])
     search_history.user_id = current_user.id if current_user
