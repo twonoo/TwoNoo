@@ -106,13 +106,11 @@ class WelcomeController < ApplicationController
           end_date = 1.month.from_now
       end
     else
-      from_date = params[:from_date]
-      end_date = params[:to_date]
+      from_date = Date.strptime(params[:from_date], '%m/%d/%Y') if params[:from_date].present? rescue from_date = DateTime.now.beginning_of_day
+      end_date = Date.strptime(params[:to_date], '%m/%d/%Y') if params[:to_date].present? rescue end_date = nil
     end
 
     from_date = DateTime.now.beginning_of_day unless from_date
-    from_date = Date.strptime(from_date, '%m/%d/%Y') if from_date
-    end_date = Date.strptime(end_date, '%m/%d/%Y') if end_date
 
     #fdsafasd
     # Get Timezone
