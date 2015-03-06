@@ -144,7 +144,7 @@ class WelcomeController < ApplicationController
     end
 
     unless @outsideSupportedArea
-      both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
+      both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC') if both_activities
     end
 
     @activities = both_activities.order('datetime') if both_activities
