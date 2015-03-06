@@ -10,7 +10,7 @@ class Profile < ActiveRecord::Base
 
   after_save :create_notification_setting
 
-  has_attached_file :profile_picture, :styles => {:medium => "300x300>", :thumb => "100x100#"}, :default_url => "/images/:style/missing.png"
+  has_attached_file :profile_picture, :styles => {:medium => "300x300>", :thumb => "100x100#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
   validates_attachment_content_type :profile_picture, :content_type => /\Aimage\/.*\Z/
 
   def must_be_18_or_older

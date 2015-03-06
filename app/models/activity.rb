@@ -1,7 +1,7 @@
 class Activity < ActiveRecord::Base
   acts_as_commentable
 
-  has_attached_file :image, :styles => {:medium => "300x300>", :thumb => "100x75>", :map_image => "250x100#", :trending => "650x500#"}, :default_url => "/images/:style/missing.png"
+  has_attached_file :image, :styles => {:medium => "300x300>", :thumb => "100x75>", :map_image => "250x100#", :trending => "650x500#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
   belongs_to :user
   has_and_belongs_to_many :activity_types

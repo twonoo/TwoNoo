@@ -109,11 +109,9 @@
 
             <div class="col-md-5">
               <% if image_tag @activity.image.url %>
-                  <%= image_tag @activity.image.url(:medium) %>
+                  <%= image_tag @activity.image.url(:medium), width: 300 %>
               <% else %>
-                  <div class="text-center" style="height:200px; width:300px; background-color:#e2e2e2; margin:0 auto">
-                    <h5 style="margin: 0 auto; line-height:200px">No Image</h5>
-                  </div>
+                  <%= image_tag 'no-image.png', width: 300 %>
               <% end %>
               <%= f.file_field :image %>
               <br/><br/>
