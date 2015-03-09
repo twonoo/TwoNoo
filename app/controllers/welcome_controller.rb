@@ -86,6 +86,9 @@ class WelcomeController < ApplicationController
     params[:distance] = 25 unless params[:distance].present?
     params[:terms] = '' unless params[:terms].present?
 
+    end_date = nil
+    from_date = nil
+
     # Determine date range
     if params[:when].present?
       case params[:when]
@@ -103,11 +106,12 @@ class WelcomeController < ApplicationController
         else
           end_date = 1.month.from_now
       end
-      from_date = DateTime.now.beginning_of_day unless from_date
-    else #if this else is hit, we wan't to it to represent "Anytime"
-      from_date = DateTime.now.beginning_of_day
-      end_date = nil
+    else
+      from_date = Date.strptime(params[:from_date], '%m/%d/%Y') if params[:from_date].present? rescue from_date = DateTime.now.beginning_of_day
+      end_date = Date.strptime(params[:to_date], '%m/%d/%Y') if params[:to_date].present? rescue end_date = nil
     end
+
+    from_date = DateTime.now.beginning_of_day unless from_date
 
     #fdsafasd
     # Get Timezone
