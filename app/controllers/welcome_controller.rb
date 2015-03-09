@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
   def index
     @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
+    @suggested_city_search_terms = US_CITIES
   end
 
   def trending

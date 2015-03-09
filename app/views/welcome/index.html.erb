@@ -78,7 +78,8 @@
                 <div class="btn-group" id="location-selection">
                   <input type="hidden" id="lat" name="lat" value="39.737567"/>
                   <input type="hidden" id="lng" name="lng" value="-104.9847179"/>
-                  <input type="text" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="width:125px;display:none;"
+                  <div class="input-group" style="background-color: #ffffff">
+                  <input type="search" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="width:200px;display:none;"
                          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                          value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
                          <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
@@ -87,6 +88,7 @@
                          value="Denver, CO"
                          <% end %>
                          placeholder="City or ZIP">
+                  </div>
                   <a id="selection" class="selection location_selection">
                     <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                         <%= current_user.profile.city %>, <%= current_user.profile.state %>
@@ -120,7 +122,7 @@
 </section>
 
 <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
-    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 140px; float: none; margin: 0; ">
+    <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 180px; float: none; margin: 0; ">
       <div class="" style="padding-bottom: 10px">
         <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Enter what interests you...blank shows all" type="search" title="Enter what interests you...blank shows all">
         <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;" onclick="document.search_form_mobile.submit(); return false;"></span>
@@ -178,8 +180,11 @@
 <%= javascript_include_tag "welcome" %>
 <script type='text/javascript'>
     $(function () {
-        suggestedValues = <%= raw @suggested_search_terms %>;
-        setupSuggestedSearch(suggestedValues)
+        var suggestedValues = <%= raw @suggested_search_terms %>;
+        setupSuggestedSearch(suggestedValues);
+
+        var suggestedCityValues = <%= raw @suggested_city_search_terms %>;
+        setupCitySuggestedSearch(suggestedCityValues);
     });
 
 </script>

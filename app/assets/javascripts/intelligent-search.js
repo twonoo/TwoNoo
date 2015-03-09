@@ -1,4 +1,4 @@
-substringMatcher = function (strs) {
+substringMatcher = function (strs, limit) {
     return function findMatches(q, cb) {
         var matches, substrRegex;
         matches = [];
@@ -11,6 +11,10 @@ substringMatcher = function (strs) {
                 matches.push({ value: str });
             }
         });
+
+        if(limit != null){
+            matches = matches.slice(0, limit - 1);
+        }
 
         cb(matches);
     };
@@ -27,7 +31,30 @@ function setupSuggestedSearch(terms) {
             {
                 name: 'interests',
                 displayKey: 'value',
-                source: substringMatcher(terms)
+                source: substringMatcher(terms, 8)
+            }
+        ).on('typehead:selected',function () {
+                $('.typeahead').typeahead('close');
+            }
+        ).on('typeahead:autocompleted', function () {
+                $('.typeahead').typeahead('close');
+            }
+        );
+    }
+}
+
+function setupCitySuggestedSearch(terms) {
+    if (terms && terms.length > 0) {
+        $('#location').typeahead(
+            {
+                hint: true,
+                highlight: true,
+                minLength: 2
+            },
+            {
+                name: 'cities',
+                displayKey: 'value',
+                source: substringMatcher(terms, 5)
             }
         ).on('typehead:selected',function () {
                 $('.typeahead').typeahead('close');
