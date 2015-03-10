@@ -15,7 +15,18 @@ class Profile < ActiveRecord::Base
 
   def must_be_18_or_older
     if birthday.present? && birthday > Date.today - 6570
-      errors.add(:birthday, "Sorry, you must be 18 years or older to use TwoNoo")
+      errors.add(:birthday, 'Sorry, you must be 18 years or older to use TwoNoo')
+    end
+  end
+
+  def update_location(location)
+    result = Geocoder.search(location)
+    if result.present? && result.first.data['address_components'].last['short_name'] == 'US'
+      self.city = result.first.data['address_components'].first['long_name']
+      self.state = result.first.data['address_components'].third['short_name']
+      self.save
+    else
+      false
     end
   end
 

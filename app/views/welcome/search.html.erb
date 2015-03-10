@@ -147,6 +147,11 @@
                 }
             }
 
+            .nav-pills li.active a{
+                background-color: #2289E2!important;
+                color: #ffffff!important;
+            }
+
             </style>
 <!--             <div class="row">
 
@@ -157,8 +162,12 @@
             <div class="row" role="tabpanel">
               <div class="col-md-3 side-nav">
                 <ul class="nav nav-pills nav-stacked">
-                  <li style="<%= @activities.blank? ? 'display:none' : nil %>"><a aria-controls="activity" role="tab" data-toggle="tab" href="#activity">Activities</a></li>
-                  <li style="<%= @users.blank? ? 'display:none' :  nil %>"><a aria-controls="people" role="tab" data-toggle="tab" href="#people">People</a></li>
+                  <% unless @activities.blank? %>
+                    <li class="active"><a aria-controls="activity" role="tab" data-toggle="tab" href="#activity">Activities</a></li>
+                  <% end  %>
+                  <% unless @users.blank? %>
+                    <li><a aria-controls="people" role="tab" data-toggle="tab" href="#people">People</a></li>
+                  <% end %>
                 </ul>
               </div>
               <!-- BEGIN RESULTS -->

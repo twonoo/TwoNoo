@@ -7,6 +7,7 @@ class ProfileController < ApplicationController
 
   def edit
     @user = User.find(current_user)
+    @suggested_city_search_terms = US_CITIES
   end
 
   def password
@@ -29,8 +30,15 @@ class ProfileController < ApplicationController
   def update
     user = User.find(params[:id])
     user.update(profile_params)
+    if params[:location]
+      location_updated = user.profile.update_location(params[:location])
+    end
     if user.save
-      redirect_to profile_edit_path, notice: "Your profile has been updated"
+      if location_updated == false
+        redirect_to profile_edit_path, error: 'Invalid location'
+      else
+        redirect_to profile_edit_path, notice: 'Your profile has been updated'
+      end
     end
   end
 

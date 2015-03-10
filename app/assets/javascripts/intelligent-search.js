@@ -43,11 +43,11 @@ function setupSuggestedSearch(terms) {
     }
 }
 
-function setupCitySuggestedSearch(terms) {
+function setupCitySuggestedSearch(terms, hint) {
     if (terms && terms.length > 0) {
         $('#location').typeahead(
             {
-                hint: true,
+                hint: hint == null ? true : hint,
                 highlight: true,
                 minLength: 2
             },
