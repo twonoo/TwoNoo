@@ -121,7 +121,7 @@ class User < ActiveRecord::Base
   end
 
   def self.new_with_session(params, session)
-      super.tap do |user|
+    super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
         user.build_profile
         user.email = data["email"] if user.email.blank?
@@ -192,6 +192,39 @@ class User < ActiveRecord::Base
           follow!(4) unless (following?(user1) || (self == user1))
           follow!(241) unless (user2.nil? || following?(user2) || self == user1)
       end
+    end
+  end
+
+  def find_people
+
+    other_users = User.all
+    user = self
+
+    other_users.each do |other_user|
+      follow_relationship = FollowRelationship.exists?(follower_id: user.id, followed_id: other_user.id)
+
+      if !follow_relationship && user.id != other_user.id
+
+        users_being_followed = user.follow_relationships.pluck(:followed_id)
+        users_following = other_user.follow_relationships.pluck(:followed_id)
+        num_shared_followers = (users_being_followed & users_following).length
+
+        are_friends = user.facebook_friends?(other_user)
+        if are_friends
+          other_user.recommend_follow!(user, 1)
+          puts 'Result --> Facebook Friends: Priority 1'
+        elsif user.profile.state == other_user.profile.state && num_shared_followers >= 3
+          other_user.recommend_follow!(user, 2)
+          puts 'Result --> Same State and more than 3 shared interests: Priority 2'
+        elsif user.profile.state == other_user.profile.state && user.followers.where(id: other_user.id).exists?
+          other_user.recommend_follow!(user, 3)
+          puts 'Result --> Being followed but not following: Priority 3'
+        else
+          puts 'Result --> No shared interests: No record created'
+        end
+
+      end
+
     end
   end
 
