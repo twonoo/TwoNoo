@@ -21,7 +21,7 @@ class Profile < ActiveRecord::Base
 
   def update_location(location, skip_write = false)
     result = Geocoder.search(location)
-    if result.present? && result.first.country_code == 'US'
+    if result.present? && result.first.country_code.downcase == 'us'
       self.city = result.first.city
       self.state =  result.first.state_code
       self.save unless skip_write
