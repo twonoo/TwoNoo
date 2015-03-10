@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'newrelic_rpm'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+gem 'rails', '4.2.0'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 # Use SCSS for stylesheets
@@ -29,7 +29,7 @@ gem 'spring',        group: :development
 
 # Use Devise for Authentication and Authorization
 gem 'omniauth-facebook'
-gem 'devise'
+gem 'devise', '3.4.1'
 gem 'google-api-client', :require => 'google/api_client'
 gem 'omniauth-google-oauth2'
 gem 'rest-client'
@@ -45,7 +45,7 @@ gem "paperclip", "~> 4.1"
 gem 'byebug'
 
 gem 'geokit'
-gem 'geokit-rails'
+gem 'geokit-rails', github: 'aronbohl/geokit-rails'
 gem 'timezone'
 
 gem 'mailboxer'
