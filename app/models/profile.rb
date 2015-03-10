@@ -21,9 +21,9 @@ class Profile < ActiveRecord::Base
 
   def update_location(location)
     result = Geocoder.search(location)
-    if result.present? && result.first.data['address_components'].last['short_name'] == 'US'
-      self.city = result.first.data['address_components'].first['long_name']
-      self.state = result.first.data['address_components'].third['short_name']
+    if result.present? && result.first.data['address_components'].select{|c| c['types'].include?('country')}.first['short_name'] == 'US'
+      self.city = result.first.data['address_components'].select{|c| c['types'].include?('locality')}.first['long_name']
+      self.state =  result.first.data['address_components'].select{|c| c['types'].include?('administrative_area_level_1')}.first['short_name']
       self.save
     else
       false
