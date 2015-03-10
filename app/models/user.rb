@@ -103,6 +103,7 @@ class User < ActiveRecord::Base
       oauth_picture = URI.parse(URI.encode(auth.info.image)) if auth.info.image?
       user.profile.profile_picture = oauth_picture
       user.save
+
       logger.info "created account for facebook user: #{user.email}"
 
     end
@@ -112,12 +113,15 @@ class User < ActiveRecord::Base
     user.uid = auth.uid
     user.fb_token = auth.credentials[:token]
     user.fb_token_expires_in = auth.credentials[:expires_at]
+    if auth.info.location.present?
+      user.profile.update_location(auth.info.location, true)
+    end
 
     user
   end
 
   def self.new_with_session(params, session)
-    super.tap do |user|
+      super.tap do |user|
       if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
         user.build_profile
         user.email = data["email"] if user.email.blank?

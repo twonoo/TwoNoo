@@ -19,12 +19,12 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  def update_location(location)
+  def update_location(location, skip_write = false)
     result = Geocoder.search(location)
-    if result.present? && result.first.data['address_components'].select{|c| c['types'].include?('country')}.first['short_name'] == 'US'
-      self.city = result.first.data['address_components'].select{|c| c['types'].include?('locality')}.first['long_name']
-      self.state =  result.first.data['address_components'].select{|c| c['types'].include?('administrative_area_level_1')}.first['short_name']
-      self.save
+    if result.present? && result.first.country_code == 'US'
+      self.city = result.first.city
+      self.state =  result.first.state_code
+      self.save unless skip_write
     else
       false
     end

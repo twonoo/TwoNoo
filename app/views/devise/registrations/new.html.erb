@@ -43,6 +43,10 @@
                   </div>
                   </br>
 
+                  <%= text_field_tag :location, nil, {class: 'form-control input-lg', style: 'margin-bottom:5px; width:100%; display:inline', placeholder: 'City/State or Zip Code (optional)', id: 'location', type: 'search', autocomplete: 'off'} %>
+
+                  </br>
+
                   <h4>By clicking Sign Up, you agree to our
                     <strong><%= link_to 'Terms', terms_path, target: '_blank' %></strong> and
                     <strong><%= link_to 'Privacy Policy', privacy_path, target: '_blank' %></strong>.</h4>
@@ -63,3 +67,10 @@
     </div>
   </div>
 </div>
+
+<script type='text/javascript'>
+    $(function () {
+        var suggestedCityValues = <%= raw @suggested_city_search_terms %>;
+        setupCitySuggestedSearch(suggestedCityValues, false);
+    });
+</script>
