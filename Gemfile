@@ -45,7 +45,7 @@ gem "paperclip", "~> 4.1"
 gem 'byebug'
 
 gem 'geokit'
-gem 'geokit-rails', github: 'aronbohl/geokit-rails'
+gem 'geokit-rails', '2.1.0'
 gem 'timezone'
 
 gem 'mailboxer'
