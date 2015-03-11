@@ -197,7 +197,7 @@ class User < ActiveRecord::Base
 
   def find_people
 
-    other_users = User.all
+    other_users = User.unscoped.all
     user = self
 
     other_users.each do |other_user|
