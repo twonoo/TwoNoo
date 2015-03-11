@@ -21,6 +21,10 @@
 /log/*.log
 /tmp
 
+# Ignore all rvmrc detection
+.ruby-version
+.rvmrc.*
+
 # Ignore other unneeded files.
 doc/
 *.swp
