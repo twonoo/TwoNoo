@@ -50,7 +50,7 @@ gem 'geokit'
 gem 'geokit-rails', '2.1.0'
 gem 'timezone'
 
-gem 'mailboxer'
+gem 'mailboxer', git: 'https://github.com/lacco/mailboxer.git'
 gem 'sidekiq'
 gem 'mandrill-api'
 gem 'acts_as_commentable'

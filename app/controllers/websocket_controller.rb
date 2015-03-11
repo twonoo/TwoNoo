@@ -24,7 +24,9 @@ class WebsocketController < WebsocketRails::BaseController
 
     logger.info "Let the other person see the message"
 
-    WebsocketRails["#{recipient_id}_#{sender_id}"].trigger('new_message', message)
+    Fiber.new do
+      WebsocketRails["#{recipient_id}_#{sender_id}"].trigger('new_message', message)
+    end.resume
 
     logger.info "Here we be"
 

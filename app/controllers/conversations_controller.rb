@@ -93,7 +93,9 @@ class ConversationsController < ApplicationController
         sender - current_user
 
         message = {body: params[:body]}
-        WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message.to_json)
+        Fiber.new do
+          WebsocketRails["#{recipient.id}_#{current_user.id}"].trigger('new_message', message.to_json)
+        end.resume
 
         logger.info("recipient: " + params[:recipient])
 
@@ -129,7 +131,9 @@ class ConversationsController < ApplicationController
         logger.info "Let the other person see the message"
 
         # Evenb though we are doing an ajax post the person listening might be using websockets
-        WebsocketRails["#{recipient_id}_#{sender_id}"].trigger('new_message', params.to_json)
+        Fiber.new do
+          WebsocketRails["#{recipient_id}_#{sender_id}"].trigger('new_message', params.to_json)
+        end.resume
 
         logger.info "Here we be"
 

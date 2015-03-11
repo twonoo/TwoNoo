@@ -48,15 +48,15 @@ class CreateMailboxer < ActiveRecord::Migration
   #Foreign keys    
   	#Conversations
   	#Receipts
-  	add_foreign_key "mailboxer_receipts", "mailboxer_notifications", :name => "receipts_on_notification_id", :column => "notification_id"
+  	add_foreign_key :mailboxer_receipts, :mailboxer_notifications, column: :notification_id, primary_key: :id
   	#Messages  
-  	add_foreign_key "mailboxer_notifications", "mailboxer_conversations", :name => "notifications_on_conversation_id", :column => "conversation_id"
+  	add_foreign_key :mailboxer_notifications, :mailboxer_conversations, column: :conversation_id, primary_key: :id
   end
   
   def self.down
   #Tables  	
-  	remove_foreign_key "mailboxer_receipts", :name => "receipts_on_notification_id"
-  	remove_foreign_key "mailboxer_notifications", :name => "notifications_on_conversation_id"
+  	remove_foreign_key :mailboxer_receipts, column: :notification_id
+  	remove_foreign_key :mailboxer_notifications, column: :conversation_id
   	
   #Indexes
     drop_table :mailboxer_receipts
