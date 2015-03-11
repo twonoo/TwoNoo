@@ -39,10 +39,10 @@ gem 'icalendar'
 
 gem 'momentjs-rails', '~> 2.5.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 3.0.0'
-gem 'geocoder', git: 'https://github.com/alexreisner/geocoder.git'
+gem 'geocoder', '1.2.5'
 gem 'quiet_assets', group: :development
 
-gem "paperclip", "~> 4.1"
+gem 'paperclip', '~> 4.1'
 
 gem 'byebug'
 

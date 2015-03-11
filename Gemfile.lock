@@ -10,12 +10,6 @@ GIT
       typhoeus
 
 GIT
-  remote: https://github.com/alexreisner/geocoder.git
-  revision: 8ba90c98712c23cdce72a0a85e05d73690ac54ad
-  specs:
-    geocoder (1.2.5)
-
-GIT
   remote: https://github.com/stripe/stripe-ruby
   revision: da216fd53b7a5386c136e93bdfe5efaff20682b7
   specs:
@@ -127,6 +121,7 @@ GEM
     ffi (1.9.6)
     foreigner (1.6.1)
       activerecord (>= 3.0.0)
+    geocoder (1.2.5)
     geokit (1.9.0)
       multi_json (>= 1.3.2)
     geokit-rails (2.1.0)
@@ -332,7 +327,7 @@ DEPENDENCIES
   byebug
   coffee-rails
   devise (= 3.4.1)
-  geocoder!
+  geocoder (= 1.2.5)
   geoip2!
   geokit
   geokit-rails (= 2.1.0)
