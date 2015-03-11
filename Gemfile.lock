@@ -10,7 +10,7 @@ GIT
       typhoeus
 
 GIT
-  remote: https://github.com/lacco/mailboxer.git
+  remote: https://github.com/aronbohl/mailboxer.git
   revision: d436329f771d1607a6835f0aeb8b1120a3562a47
   specs:
     mailboxer (0.12.5)
