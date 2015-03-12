@@ -124,3 +124,9 @@
     width: 110%;
     margin-top: -10px;
 }
+
+.people_you_know{
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}

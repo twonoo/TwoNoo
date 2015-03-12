@@ -63,7 +63,7 @@
     <ul class="dropdown-menu" id="messages_dropdown" style="width:300px;max-height:300px;">
       <% current_user.recommended_followers.order('id desc').each do |person| %>
           <div style='word-wrap: break-word; width: 290px; margin-left: 5px;'></div>
-          <%= link_to profile_path(person) do %>
+          <%= link_to profile_path(person), class: 'people_you_know' do %>
               <b><%= profile_img_small(person.follower_user) %> <%= person.follower_profile.first_name %> <%= person.follower_profile.last_name %></b>
           <% end %>
           <li class="divider"></li>
