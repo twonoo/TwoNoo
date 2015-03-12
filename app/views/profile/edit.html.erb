@@ -5,23 +5,26 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="col-md-9"> <%= form_for @user, html: {class: 'form form-horizontal'} do |u| %> <%= u.fields_for :profile do |p| %>
-            <div class="form-group"> <%= p.label :first_name, class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= p.label :first_name, class: 'col-sm-3 control-label' %>
               <div class="col-sm-6"> <%= p.text_field :first_name, class: 'form-control' %> </div>
             </div>
-            <div class="form-group"> <%= p.label :last_name, class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= p.label :last_name, class: 'col-sm-3 control-label' %>
               <div class="col-sm-6"> <%= p.text_field :last_name, class: 'form-control' %> </div>
             </div>
-            <div class="form-group"> <%= u.label :email, class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= u.label :email, class: 'col-sm-3 control-label' %>
               <div class="col-sm-6"> <%= u.text_field :email, class: 'form-control' %> </div>
             </div>
-            <div class="form-group"> <%= p.label :sex, class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= p.label :sex, class: 'col-sm-3 control-label' %>
               <div class="col-sm-3"> <%= p.select :gender, [['Male', 0], ['Female', 1], ['Other', 2], ['Not Disclosed', 3]], {}, class: 'form-control' %> </div>
             </div>
-            <div class="form-group"> <%= p.label :about_me, class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= p.label :about_me, class: 'col-sm-3 control-label' %>
               <div class="col-sm-6"> <%= p.text_area :about_me, class: 'form-control limit-160', maxlength: 160 %> </div>
             </div>
-            <div class="form-group"> <%= label_tag :location, 'Location', class: 'col-sm-2 control-label' %>
+            <div class="form-group"> <%= label_tag :location, 'Location', class: 'col-sm-3 control-label' %>
               <div class="col-sm-6"> <%= text_field_tag(:location, "#{@user.profile.city}, #{@user.profile.state}", {id: 'location', class: 'form-control', autocomplete: 'off', type: 'search'}) %> </div>
+            </div>
+            <div class="form-group"> <%= label_tag :neighborhood, 'Neighborhood', class: 'col-sm-3 control-label' %>
+              <div class="col-sm-6"> <%= text_field_tag(:neighborhood, "#{@user.profile.neighborhood}", {id: 'neighborhood', class: 'form-control', autocomplete: 'off', type: 'search'}) %> </div>
             </div>
             <%= u.submit 'Save', class: 'btn btn-primary' %> </div>
           <div class="col-md-2"> <%= profile_img(@user) %>
@@ -39,6 +42,20 @@
     $(function () {
         var suggestedCityValues = <%= raw @suggested_city_search_terms %>;
         setupCitySuggestedSearch(suggestedCityValues, false);
-    });
 
+        var neighborhoodValues = [];
+
+        var populateNeighborhoods = function(){
+            var location_string = $('#location').val();
+            if(location_string.length >= 4)
+                $.get( "/neighborhoods/search?query=" + location_string, function( data ) {
+                    neighborhoodValues = data;
+                    setupNeighborhoodSearch(neighborhoodValues, false);
+                });
+        };
+
+        $('#location').blur(populateNeighborhoods);
+
+        populateNeighborhoods();
+    });
 </script>

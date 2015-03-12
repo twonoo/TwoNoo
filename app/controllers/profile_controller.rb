@@ -31,7 +31,7 @@ class ProfileController < ApplicationController
     user = User.find(params[:id])
     user.update(profile_params)
     if params[:location]
-      location_updated = user.profile.update_location(params[:location])
+      location_updated = user.profile.update_location(params[:location], params[:neighborhood])
     end
     if user.save
       if location_updated == false

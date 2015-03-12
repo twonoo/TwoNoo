@@ -8,6 +8,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     logger.info "Devise create"
     params['user']['sign_up_ip'] = request.env['REMOTE_ADDR']
+
     if params['location']
       result = Geocoder.search(params['location'])
       if result.present? && result.first.country_code == 'US'
@@ -15,6 +16,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
         params['user']['profile_attributes']['state'] = result.first.state_code
       end
     end
+
+    if params['neighborhood']
+      params['user']['profile_attributes']['neighborhood'] = params['neighborhood']
+    end
+
     super
   end
 

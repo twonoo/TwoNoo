@@ -66,6 +66,29 @@ function setupCitySuggestedSearch(terms, hint) {
     }
 }
 
+function setupNeighborhoodSearch(terms, hint) {
+    if (terms && terms.length > 0) {
+        $('#neighborhood').typeahead(
+            {
+                hint: hint == null ? true : hint,
+                highlight: true,
+                minLength: 2
+            },
+            {
+                name: 'neighborhoods',
+                displayKey: 'value',
+                source: substringMatcher(terms, 5)
+            }
+        ).on('typehead:selected',function () {
+                $('.typeahead').typeahead('close');
+            }
+        ).on('typeahead:autocompleted', function () {
+                $('.typeahead').typeahead('close');
+            }
+        );
+    }
+}
+
 //var suggestedSearchTerms = null;
 //var searchInputLength = 0;
 //

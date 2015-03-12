@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
     user.fb_token = auth.credentials[:token]
     user.fb_token_expires_in = auth.credentials[:expires_at]
     if auth.info.location.present?
-      user.profile.update_location(auth.info.location, true)
+      user.profile.update_location(auth.info.location, nil, true)
     end
 
     user

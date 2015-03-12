@@ -11,66 +11,66 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209210412) do
+ActiveRecord::Schema.define(version: 20150312170344) do
 
-  create_table "activities", force: true do |t|
-    t.string   "activity_name"
-    t.string   "location_name"
-    t.string   "street_address_1"
-    t.string   "street_address_2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "country"
-    t.string   "website"
-    t.integer  "activity_type_id"
-    t.text     "description"
-    t.integer  "views"
-    t.integer  "user_id"
+  create_table "activities", force: :cascade do |t|
+    t.string   "activity_name",      limit: 255
+    t.string   "location_name",      limit: 255
+    t.string   "street_address_1",   limit: 255
+    t.string   "street_address_2",   limit: 255
+    t.string   "city",               limit: 255
+    t.string   "state",              limit: 255
+    t.string   "country",            limit: 255
+    t.string   "website",            limit: 255
+    t.integer  "activity_type_id",   limit: 4
+    t.text     "description",        limit: 65535
+    t.integer  "views",              limit: 4
+    t.integer  "user_id",            limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "datetime"
-    t.boolean  "rsvp",               default: false
-    t.float    "latitude"
-    t.float    "longitude"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
+    t.boolean  "rsvp",               limit: 1,     default: false
+    t.float    "latitude",           limit: 24
+    t.float    "longitude",          limit: 24
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
+    t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
-    t.boolean  "alerted",            default: false
-    t.boolean  "cancelled",          default: false
-    t.string   "tz"
+    t.boolean  "alerted",            limit: 1,     default: false
+    t.boolean  "cancelled",          limit: 1,     default: false
+    t.string   "tz",                 limit: 255
     t.datetime "enddatetime"
   end
 
-  create_table "activities_activity_types", id: false, force: true do |t|
-    t.integer  "activity_id"
-    t.integer  "activity_type_id"
+  create_table "activities_activity_types", id: false, force: :cascade do |t|
+    t.integer  "activity_id",      limit: 4
+    t.integer  "activity_type_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "activity_types", force: true do |t|
-    t.string   "activity_type"
+  create_table "activity_types", force: :cascade do |t|
+    t.string   "activity_type", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "alerts", force: true do |t|
-    t.string   "keywords"
-    t.string   "location"
-    t.integer  "distance"
-    t.integer  "user_id"
+  create_table "alerts", force: :cascade do |t|
+    t.string   "keywords",   limit: 255
+    t.string   "location",   limit: 255
+    t.integer  "distance",   limit: 4
+    t.integer  "user_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "comments", force: true do |t|
-    t.string   "title",            limit: 50, default: ""
-    t.text     "comment"
-    t.integer  "commentable_id"
-    t.string   "commentable_type"
-    t.integer  "user_id"
-    t.string   "role",                        default: "comments"
+  create_table "comments", force: :cascade do |t|
+    t.string   "title",            limit: 50,    default: ""
+    t.text     "comment",          limit: 65535
+    t.integer  "commentable_id",   limit: 4
+    t.string   "commentable_type", limit: 255
+    t.integer  "user_id",          limit: 4
+    t.string   "role",             limit: 255,   default: "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -79,213 +79,219 @@ ActiveRecord::Schema.define(version: 20150209210412) do
   add_index "comments", ["commentable_type"], name: "index_comments_on_commentable_type", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "follow_relationships", force: true do |t|
-    t.integer  "follower_id"
-    t.integer  "followed_id"
+  create_table "follow_relationships", force: :cascade do |t|
+    t.integer  "follower_id", limit: 4
+    t.integer  "followed_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "geocodes", force: true do |t|
-    t.string   "city"
-    t.string   "state"
-    t.float    "latitude"
-    t.float    "longitude"
-    t.string   "timezone"
+  create_table "geocodes", force: :cascade do |t|
+    t.string   "city",       limit: 255
+    t.string   "state",      limit: 255
+    t.float    "latitude",   limit: 24
+    t.float    "longitude",  limit: 24
+    t.string   "timezone",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "interests", force: true do |t|
-    t.string  "name",                  null: false
-    t.string  "code",                  null: false
-    t.boolean "active", default: true, null: false
+  create_table "interests", force: :cascade do |t|
+    t.string  "name",   limit: 255,                null: false
+    t.string  "code",   limit: 255,                null: false
+    t.boolean "active", limit: 1,   default: true, null: false
   end
 
-  create_table "interests_options", force: true do |t|
-    t.integer "interest_id",                 null: false
-    t.string  "option_name",                 null: false
-    t.string  "option_value"
-    t.string  "code",                        null: false
-    t.boolean "active",       default: true, null: false
+  create_table "interests_options", force: :cascade do |t|
+    t.integer "interest_id",  limit: 4,                  null: false
+    t.string  "option_name",  limit: 255,                null: false
+    t.string  "option_value", limit: 255
+    t.string  "code",         limit: 255,                null: false
+    t.boolean "active",       limit: 1,   default: true, null: false
   end
 
-  create_table "interests_users", id: false, force: true do |t|
-    t.integer "user_id",             null: false
-    t.integer "interest_id",         null: false
-    t.integer "interests_option_id"
+  create_table "interests_users", id: false, force: :cascade do |t|
+    t.integer "user_id",             limit: 4, null: false
+    t.integer "interest_id",         limit: 4, null: false
+    t.integer "interests_option_id", limit: 4
   end
 
-  create_table "mailboxer_conversation_opt_outs", force: true do |t|
-    t.integer "unsubscriber_id"
-    t.string  "unsubscriber_type"
-    t.integer "conversation_id"
+  create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
+    t.integer "unsubscriber_id",   limit: 4
+    t.string  "unsubscriber_type", limit: 255
+    t.integer "conversation_id",   limit: 4
   end
 
   add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "mb_opt_outs_on_conversations_id", using: :btree
 
-  create_table "mailboxer_conversations", force: true do |t|
-    t.string   "subject",    default: ""
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+  create_table "mailboxer_conversations", force: :cascade do |t|
+    t.string   "subject",    limit: 255, default: ""
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
-  create_table "mailboxer_notifications", force: true do |t|
-    t.string   "type"
-    t.text     "body"
-    t.string   "subject",              default: ""
-    t.integer  "sender_id"
-    t.string   "sender_type"
-    t.integer  "conversation_id"
-    t.boolean  "draft",                default: false
-    t.string   "notification_code"
-    t.integer  "notified_object_id"
-    t.string   "notified_object_type"
-    t.string   "attachment"
-    t.datetime "updated_at",                           null: false
-    t.datetime "created_at",                           null: false
-    t.boolean  "global",               default: false
+  create_table "mailboxer_notifications", force: :cascade do |t|
+    t.string   "type",                 limit: 255
+    t.text     "body",                 limit: 65535
+    t.string   "subject",              limit: 255,   default: ""
+    t.integer  "sender_id",            limit: 4
+    t.string   "sender_type",          limit: 255
+    t.integer  "conversation_id",      limit: 4
+    t.boolean  "draft",                limit: 1,     default: false
+    t.string   "notification_code",    limit: 255
+    t.integer  "notified_object_id",   limit: 4
+    t.string   "notified_object_type", limit: 255
+    t.string   "attachment",           limit: 255
+    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                         null: false
+    t.boolean  "global",               limit: 1,     default: false
     t.datetime "expires"
   end
 
   add_index "mailboxer_notifications", ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id", using: :btree
 
-  create_table "mailboxer_receipts", force: true do |t|
-    t.integer  "receiver_id"
-    t.string   "receiver_type"
-    t.integer  "notification_id",                            null: false
-    t.boolean  "is_read",                    default: false
-    t.boolean  "trashed",                    default: false
-    t.boolean  "deleted",                    default: false
+  create_table "mailboxer_receipts", force: :cascade do |t|
+    t.integer  "receiver_id",     limit: 4
+    t.string   "receiver_type",   limit: 255
+    t.integer  "notification_id", limit: 4,                   null: false
+    t.boolean  "is_read",         limit: 1,   default: false
+    t.boolean  "trashed",         limit: 1,   default: false
+    t.boolean  "deleted",         limit: 1,   default: false
     t.string   "mailbox_type",    limit: 25
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id", using: :btree
 
-  create_table "notification_settings", force: true do |t|
-    t.integer  "profile_id"
-    t.integer  "new_follower",                  default: 2
-    t.integer  "new_message",                   default: 1
-    t.integer  "new_rsvp",                      default: 1
-    t.integer  "new_following_activity",        default: 2
-    t.integer  "attending_activity_update",     default: 1
-    t.integer  "comment_on_owned_activity",     default: 1
-    t.integer  "comment_on_attending_activity", default: 1
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "activity_summary",              default: 3
-    t.integer  "activity_reminder",             default: 1
-    t.integer  "local_activity_summary",        default: 2
+  create_table "neighborhoods", force: :cascade do |t|
+    t.string   "name",       limit: 255, null: false
+    t.string   "city",       limit: 255, null: false
+    t.string   "state",      limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  create_table "profiles", force: true do |t|
-    t.integer  "user_id"
-    t.string   "first_name"
-    t.string   "last_name"
+  create_table "notification_settings", force: :cascade do |t|
+    t.integer  "profile_id",                    limit: 4
+    t.integer  "new_follower",                  limit: 4, default: 2
+    t.integer  "new_message",                   limit: 4, default: 1
+    t.integer  "new_rsvp",                      limit: 4, default: 1
+    t.integer  "new_following_activity",        limit: 4, default: 2
+    t.integer  "attending_activity_update",     limit: 4, default: 1
+    t.integer  "comment_on_owned_activity",     limit: 4, default: 1
+    t.integer  "comment_on_attending_activity", limit: 4, default: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "activity_summary",              limit: 4, default: 3
+    t.integer  "activity_reminder",             limit: 4, default: 1
+    t.integer  "local_activity_summary",        limit: 4, default: 2
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.integer  "user_id",                      limit: 4
+    t.string   "first_name",                   limit: 255
+    t.string   "last_name",                    limit: 255
     t.datetime "birthday"
-    t.integer  "gender"
-    t.integer  "postcode"
-    t.text     "about_me"
+    t.integer  "gender",                       limit: 4
+    t.integer  "postcode",                     limit: 4
+    t.text     "about_me",                     limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "profile_picture_file_name"
-    t.string   "profile_picture_content_type"
-    t.integer  "profile_picture_file_size"
+    t.string   "profile_picture_file_name",    limit: 255
+    t.string   "profile_picture_content_type", limit: 255
+    t.integer  "profile_picture_file_size",    limit: 4
     t.datetime "profile_picture_updated_at"
-    t.integer  "nonprofit"
-    t.integer  "ambassador"
-    t.integer  "referrer",                     default: 0
-    t.string   "city"
-    t.string   "state"
+    t.integer  "nonprofit",                    limit: 4
+    t.integer  "ambassador",                   limit: 4
+    t.integer  "referrer",                     limit: 4,     default: 0
+    t.string   "city",                         limit: 255
+    t.string   "state",                        limit: 255
+    t.string   "neighborhood",                 limit: 255
   end
 
-  create_table "recommended_followers", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "recommended_follower_id"
-    t.integer  "order"
+  create_table "recommended_followers", force: :cascade do |t|
+    t.integer  "user_id",                 limit: 4
+    t.integer  "recommended_follower_id", limit: 4
+    t.integer  "order",                   limit: 4
     t.datetime "recommended_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "rsvps", force: true do |t|
-    t.integer  "activity_id"
-    t.integer  "user_id"
+  create_table "rsvps", force: :cascade do |t|
+    t.integer  "activity_id", limit: 4
+    t.integer  "user_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "searches", force: true do |t|
-    t.integer  "user_id"
-    t.string   "search"
+  create_table "searches", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.string   "search",     limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "location"
+    t.string   "location",   limit: 255
   end
 
-  create_table "transaction_types", force: true do |t|
-    t.string   "name"
+  create_table "transaction_types", force: :cascade do |t|
+    t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "transactions", force: true do |t|
-    t.integer  "transaction_type_id"
-    t.integer  "amount"
-    t.float    "cost"
-    t.integer  "balance"
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "transaction_type_id", limit: 4
+    t.integer  "amount",              limit: 4
+    t.float    "cost",                limit: 24
+    t.integer  "balance",             limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "comment"
-    t.integer  "activity_id"
-    t.integer  "user_id"
+    t.text     "comment",             limit: 65535
+    t.integer  "activity_id",         limit: 4
+    t.integer  "user_id",             limit: 4
   end
 
-  create_table "users", force: true do |t|
-    t.string   "email",                              default: "", null: false
-    t.string   "encrypted_password",                 default: "", null: false
-    t.string   "reset_password_token"
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "confirmation_token"
+    t.string   "provider",               limit: 255
+    t.string   "uid",                    limit: 255
+    t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.string   "last_search_location"
-    t.string   "last_search_lat"
-    t.string   "last_search_lon"
-    t.string   "gcal_token"
+    t.string   "unconfirmed_email",      limit: 255
+    t.string   "last_search_location",   limit: 255
+    t.string   "last_search_lat",        limit: 255
+    t.string   "last_search_lon",        limit: 255
+    t.string   "gcal_token",             limit: 255
     t.datetime "gcal_token_issued_at"
-    t.integer  "gcal_token_expires_in"
-    t.string   "gcal_refresh_token"
+    t.integer  "gcal_token_expires_in",  limit: 4
+    t.string   "gcal_refresh_token",     limit: 255
     t.string   "fb_token",               limit: 500
-    t.integer  "fb_token_expires_in"
+    t.integer  "fb_token_expires_in",    limit: 4
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "view_logs", force: true do |t|
-    t.integer "user_id"
-    t.string  "view_name"
+  create_table "view_logs", force: :cascade do |t|
+    t.integer "user_id",   limit: 4
+    t.string  "view_name", limit: 255
   end
 
-  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", name: "mb_opt_outs_on_conversations_id", column: "conversation_id"
-
-  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", name: "notifications_on_conversation_id", column: "conversation_id"
-
-  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", name: "receipts_on_notification_id", column: "notification_id"
-
+  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
+  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
+  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
 end

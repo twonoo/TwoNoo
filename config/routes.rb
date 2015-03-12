@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'neighborhoods/search'
+
   get 'geocode/search'
   get 'geocode/searchCityState'
   match 'search' => 'welcome#search', via: [:get, :post], as: :search
