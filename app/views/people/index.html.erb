@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <%= render('layouts/side_nav') %>
+
+    <div class="panel col-md-8">
+      <h2>
+        <button href='' id='find_people' class='pull-right btn btn-sm btn-primary'>Find People
+          <span id='find_people_loading' class='fa fa-refresh fa-spin'></span></button>
+        People You Know
+      </h2>
+      <% @people.each do |p| %>
+          <% if current_user != p.follower_user && !current_user.following?(p.follower_user) %>
+              <div class="col-md-12 panel " style="background-color:#fff;vertical-align:middle;">
+
+                <%= profile_img(p.follower_user) %>
+                <%= link_to (p.follower_user.name), profile_path(p.follower_user) %>
+
+                <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
+                     alink="Send <%= p.follower_user.profile.first_name %> a message"
+                     recipient="<%= p.follower_user.id %>" recipient_firstname="<%= p.follower_user.profile.first_name %>" recipient_lastname="<%= p.follower_user.profile.last_name %>"
+                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"></div>
+
+                <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%= p.follower_user.id %>" user_name="<%= p.follower_user.name %>">
+                  <a class='label label-info' style="color:#FFF;vertical-align:middle;">Follow</a></div>
+
+              </div>
+          <% end %>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+<script type='text/javascript'>
+    $(function () {
+        $('#find_people_loading').hide();
+        $('#find_people').click(function (e) {
+            e.preventDefault();
+
+            $('#find_people_loading').show();
+            $('#find_people').attr('disabled', 'disabled')
+
+            $.ajax({
+                url: '/background_jobs/',
+                type: 'POST',
+                dataType: 'JSON',
+                error: function (data) {
+                    $('#find_people_loading').hide();
+                    $('#find_people').removeAttr('disabled')
+                }
+            });
+
+        })
+    })
+</script>

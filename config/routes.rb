@@ -30,7 +30,8 @@ Rails.application.routes.draw do
   get 'interests', to: 'interests#index', as: :interests_index
   get 'interests/update', to: 'interests#index'
   resources :interests
-
+  resources :background_jobs
+  resources :people
   get 'profile/index'
 
   get 'profile/edit'
@@ -56,6 +57,7 @@ Rails.application.routes.draw do
   get 'profile/:id/attending_profile' => 'profile#attending_profile', as: :attending_profile
   get 'profile/:id/followers_profile' => 'profile#followers_profile', as: :followers_profile
   get 'profile/:id/following_profile' => 'profile#following_profile', as: :following_profile
+  get 'profile/:id/people_profile' => 'profile#people_profile', as: :people_profile
 
   patch 'profile/:id' => 'profile#update', as: :profile_update
 
@@ -77,7 +79,7 @@ Rails.application.routes.draw do
   get 'activities/search'
   post 'activities/search' => 'activities#search', as: :activity_search
   get 'activities/show'
-  get 'activities/new'  
+  get 'activities/new'
   post 'activities/new'
   get 'activities/edit'
   get 'activities/edit/:id' => 'activities#edit', as: :activity_edit
@@ -96,7 +98,7 @@ Rails.application.routes.draw do
   resources :activities
   resources :credits
 
-  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks', :registrations => 'users/registrations'}
+  devise_for :users, :controllers => {:omniauth_callbacks => 'users/omniauth_callbacks', :registrations => 'users/registrations'}
 
   resources :conversations, only: [:index, :show, :new, :create] do
     member do
@@ -125,8 +127,6 @@ Rails.application.routes.draw do
 
   get 'activities/rsvp/:activity_id/:user_id' => 'activities#rsvp', as: :rsvp
   get 'activities/unrsvp/:activity_id/:user_id' => 'activities#unrsvp', as: :unrsvp
-
-
 
 
   # The priority is based upon order of creation: first created -> highest priority.

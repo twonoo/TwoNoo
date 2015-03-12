@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
+
+    #kick off find people job
+    FindPeopleJob.perform_later(current_user.id) if current_user
+
     if !current_user.view_logs.where(view_name: 'interests/index').exists?
       interests_index_path || session[:previous_url] || root_path
     elsif session[:previous_url].present?

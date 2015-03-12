@@ -1,0 +1,6 @@
+$('#profile_data').html("<%=escape_javascript  render(partial: 'people')  %>");
+
+$('[id^=profile_]').removeClass('active');
+$('#profile_people').addClass('active');
+prepare_follow_links();
+init_im();

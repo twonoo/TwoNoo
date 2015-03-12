@@ -53,6 +53,11 @@
               <li id="profile_following">
                 <%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
               </li>
+              <% if current_user.id == @profile.id %>
+                  <li id="profile_people">
+                    <%= link_to 'People You Know', current_user.id.to_s+'/people_profile', :remote => true %>
+                  </li>
+              <% end %>
             </ul>
           </div>
         </div>

@@ -1,0 +1,17 @@
+<% @people.each do |person| %>
+    <div class="col-md-12 panel " style="background-color:#fff;vertical-align:middle;">
+      <%= profile_img(person.follower_user) %>
+      <%= link_to (person.follower_user.name), profile_path(person.follower_user) %>
+      <% if !current_user.nil? && (current_user != person.follower_user) %>
+          <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
+               alink="Send <%= person.follower_user.profile.first_name %> a message"
+               recipient="<%= person.follower_user.id %>" recipient_firstname="<%= person.follower_user.profile.first_name %>" recipient_lastname="<%= person.follower_user.profile.last_name %>"
+               sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
+          ></div>
+          <% unless (current_user == person.follower_user) || (current_user.following?(person.follower_user)) %>
+              <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%= person.follower_user.id %>" user_name="<%= person.follower_user.name %>">
+                <a class='label label-info' style="color:#FFF;vertical-align:middle;">Follow</a></div>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>

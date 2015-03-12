@@ -1,59 +1,80 @@
 <ul class="nav navbar-nav pull-right collapse navbar-collapse">
   <% if request.original_url == root_url %>
-    <li><%= link_to 'Invite Friends', '#', id: 'invite', style: 'background-color:#0099FF; color:#FFF', title: "Earn referral credit!", rel: "tooltip" %></li>
+      <li><%= link_to 'Invite Friends', '#', id: 'invite', style: 'background-color:#0099FF; color:#FFF', title: "Earn referral credit!", rel: "tooltip" %></li>
       <script>
-        $('#invite').bind('click', function(){$('#invite_people_form').modal('show');});
+          $('#invite').bind('click', function () {
+              $('#invite_people_form').modal('show');
+          });
       </script>
   <% else %>
-  	<li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#0099FF; color:#FFF' %></li>
-    <li><%= link_to 'Home', root_path  %></li>
+      <li><%= link_to "Create Activity", new_activity_path, style: 'background-color:#0099FF; color:#FFF' %></li>
+      <li><%= link_to 'Home', root_path %></li>
   <% end %>
   <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
-  <li><a href="/credits/purchase">Credits <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
+  <li><a href="/credits/purchase">Credits
+    <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
 
   <li class="dropdown wide" id="notifications_menu">
     <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">Notifications
       <span class="badge" id="notifications_badge"><%= num_notifications %></span>
     </a>
     <style>
-      #notifications_dropdown, #messages_dropdown
-      {
-        overflow-y:hidden;
-        overflow-x:hidden;
-        font-size:.9em;
-      }
-      #notifications_dropdown:hover, #messages_dropdown:hover
-      {
-        overflow-y:auto;
-      }
+        #notifications_dropdown, #messages_dropdown {
+            overflow-y: hidden;
+            overflow-x: hidden;
+            font-size: .9em;
+        }
+
+        #notifications_dropdown:hover, #messages_dropdown:hover {
+            overflow-y: auto;
+        }
     </style>
     <ul class="dropdown-menu" id="notifications_dropdown" style="width:300px;max-height:300px;">
       <%= div_for(current_user.mailbox.notifications({:read => false}), style: 'word-wrap: break-word; width: 280px; margin-left: 5px;') do |notif| %>
-        <b><%=notif.subject%>:</b> <%=notif.body.html_safe%>
-        <li class="divider"></li>
+          <b><%= notif.subject %>:</b> <%= notif.body.html_safe %>
+          <li class="divider"></li>
       <% end %>
     </ul>
   </li>
 
   <li class="dropdown wide" id="messags_menu">
-    <a href="<%=conversations_path%>" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Conversations <span class="badge" id="messages_badge"><%=current_user.mailbox.inbox({:read => false}).count%></span></a>
+    <a href="<%= conversations_path %>" id="messages_link" class="dropdown-toggle" data-toggle="dropdown">Conversations
+      <span class="badge" id="messages_badge"><%= current_user.mailbox.inbox({:read => false}).count %></span></a>
     <ul class="dropdown-menu" id="messages_dropdown" style="width:300px;max-height:300px;">
       <% current_user.mailbox.inbox({:read => false}).each do |conversation| %>
-        <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
-          <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
-            <%= link_to conversation_path(conversation) do %>
-              <b><%=message.sender.profile.first_name%>:</b> <%=message.body[0..99]%>
-              <% if message.body.length > 100 then %>...<% end %>
-            <% end %>
+          <%= div_for(conversation.messages({:read => false}), style: 'word-wrap: break-word; width: 290px; margin-left: 5px;') do |message| %>
+              <% if (message.sender.id != current_user.id) && message.is_unread?(current_user) %>
+                  <%= link_to conversation_path(conversation) do %>
+                      <b><%= message.sender.profile.first_name %>:</b> <%= message.body[0..99] %>
+                      <% if message.body.length > 100 then %>...
+                      <% end %>
+                  <% end %>
+              <% end %>
           <% end %>
-        <% end %>
-        <li class="divider"></li>
+          <li class="divider"></li>
       <% end %>
       <div style="width: 300px; text-align: center;"><b><%= link_to 'View All', conversations_path %></b></div>
     </ul>
   </li>
 
-  <li class="dropdown wide"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= profile_img_small(current_user) %> <%= current_user.profile.first_name %><b class="caret"></b></a>
+  <li class="dropdown wide">
+    <a href="" class="dropdown-toggle" data-toggle="dropdown">People You
+      Know <span class="badge" id="messages_badge"><%= current_user.recommended_followers.count %></span></a>
+    <ul class="dropdown-menu" id="messages_dropdown" style="width:300px;max-height:300px;">
+      <% current_user.recommended_followers.order('id desc').each do |person| %>
+          <div style='word-wrap: break-word; width: 290px; margin-left: 5px;'></div>
+          <%= link_to profile_path(person) do %>
+              <b><%= profile_img_small(person.follower_user) %> <%= person.follower_profile.first_name %> <%= person.follower_profile.last_name %></b>
+          <% end %>
+          <li class="divider"></li>
+      <% end %>
+      <div style="width: 300px; text-align: center;"><b><%= link_to 'View All', people_path %></b></div>
+    </ul>
+  </li>
+
+  <li class="dropdown wide">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= profile_img_small(current_user) %> <%= current_user.profile.first_name %>
+      <b class="caret"></b></a>
     <ul class="dropdown-menu wide">
       <li><%= link_to 'My Profile', profile_path(current_user) %></li>
       <li><%= link_to 'My Activities', user_activities_path(current_user.id) %></li>

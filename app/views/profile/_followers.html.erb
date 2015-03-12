@@ -9,7 +9,7 @@
           sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
         ></div>
           <% unless (current_user == f) || (current_user.following?(f))%>
-            <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;vertical-align:middle;"">Follow</a></div>
+            <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%=f.id%>" user_name="<%=f.name%>"><a class='label label-info' style="color:#FFF;vertical-align:middle;">Follow</a></div>
           <% end %>
       <% end %>
     </div>

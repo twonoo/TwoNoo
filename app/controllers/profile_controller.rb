@@ -1,5 +1,5 @@
 class ProfileController < ApplicationController
-  
+
   before_filter :authenticate_user!, :except => [:show]
 
   def index
@@ -75,12 +75,12 @@ class ProfileController < ApplicationController
       @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).order('datetime DESC')
     else
       @activities = Activity.where(user_id: params[:id]).where('datetime >= ?', Time.now).
-        where('cancelled = false').
-        order('datetime ASC')
+          where('cancelled = false').
+          order('datetime ASC')
 
       @activitiesPast = Activity.where(user_id: params[:id]).where('datetime < ?', Time.now).
-        where('cancelled = false').
-        order('datetime DESC')
+          where('cancelled = false').
+          order('datetime DESC')
     end
   end
 
@@ -102,8 +102,8 @@ class ProfileController < ApplicationController
 
   def notification_setting_params
     params.require(:notification_setting).permit(:new_follower, :new_message, :new_rsvp, :new_following_activity,
-      :attending_activity_update, :comment_on_owned_activity, :comment_on_attending_activity, :activity_summary,
-      :activity_reminder, :local_activity_summary)
+                                                 :attending_activity_update, :comment_on_owned_activity, :comment_on_attending_activity, :activity_summary,
+                                                 :activity_reminder, :local_activity_summary)
   end
 
   def activities_profile
@@ -130,6 +130,13 @@ class ProfileController < ApplicationController
 
   def following_profile
     @following = following
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def people_profile
+    @people = User.find(params[:id]).recommended_followers
     respond_to do |format|
       format.js
     end

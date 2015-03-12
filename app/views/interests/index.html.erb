@@ -15,7 +15,7 @@
                         <%= label_tag "interests[#{interest.code}]", interest.name %>
                         <% if interest.interests_options.present? %>
                             <%= select_tag "interests_options[#{interest.code}]",
-                                           options_from_collection_for_select(interest.interests_options.order(:option_value),
+                                           options_from_collection_for_select(interest.interests_options.order(:id),
                                                                               'id', 'option_value', interest.interests_option_id(current_user.id)),
                                            prompt: interest.interests_options.first.option_name, style: 'display:none' %>
                         <% end %>

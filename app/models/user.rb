@@ -201,23 +201,23 @@ class User < ActiveRecord::Base
     user = self
 
     other_users.each do |other_user|
-      follow_relationship = FollowRelationship.exists?(follower_id: user.id, followed_id: other_user.id)
+      follow_relationship = FollowRelationship.exists?(follower_id: other_user.id, followed_id: user.id)
 
-      if !follow_relationship && user.id != other_user.id
+      if !follow_relationship && other_user.id != user.id
 
-        users_being_followed = user.follow_relationships.pluck(:followed_id)
-        users_following = other_user.follow_relationships.pluck(:followed_id)
+        users_being_followed = other_user.follow_relationships.pluck(:followed_id)
+        users_following = user.follow_relationships.pluck(:followed_id)
         num_shared_followers = (users_being_followed & users_following).length
 
-        are_friends = user.facebook_friends?(other_user)
+        are_friends = other_user.facebook_friends?(user)
         if are_friends
-          other_user.recommend_follow!(user, 1)
+          user.recommend_follow!(other_user, 1)
           puts 'Result --> Facebook Friends: Priority 1'
-        elsif user.profile.state == other_user.profile.state && num_shared_followers >= 3
-          other_user.recommend_follow!(user, 2)
+        elsif other_user.profile.state == user.profile.state && num_shared_followers >= 3
+          user.recommend_follow!(other_user, 2)
           puts 'Result --> Same State and more than 3 shared interests: Priority 2'
-        elsif user.profile.state == other_user.profile.state && user.followers.where(id: other_user.id).exists?
-          other_user.recommend_follow!(user, 3)
+        elsif other_user.profile.state == user.profile.state && other_user.followers.where(id: user.id).exists?
+          user.recommend_follow!(other_user, 3)
           puts 'Result --> Being followed but not following: Priority 3'
         else
           puts 'Result --> No shared interests: No record created'
