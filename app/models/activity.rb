@@ -134,7 +134,9 @@ class Activity < ActiveRecord::Base
     unless @date.blank? || @time.blank?
       logger.info "time3: #{@time}"
       logger.info "zone: #{Time.zone}"
-      self.datetime = Time.strptime("#{@date} #{@time.lstrip}-07:00", "%m/%d/%Y %l:%M %p%z")
+      tz = ActiveSupport::TimeZone['Mountain Time (US & Canada)']
+      time_in_tz = tz.parse(Time.strptime("#{@date} #{@time.lstrip}", "%m/%d/%Y %l:%M %p").strftime('%Y-%m-%d %H:%M:%S'))
+      self.datetime = time_in_tz
       logger.info "datetime: #{self.datetime}"
     end
   end
@@ -142,7 +144,9 @@ class Activity < ActiveRecord::Base
   def convert_to_enddatetime
     unless @enddate.blank? || @endtime.blank?
       logger.info "endtime: #{@endtime}"
-      self.enddatetime = Time.strptime("#{@enddate} #{@endtime.lstrip}-07:00", "%m/%d/%Y %l:%M %p%z")
+      tz = ActiveSupport::TimeZone['Mountain Time (US & Canada)']
+      time_in_tz = tz.parse(Time.strptime("#{@date} #{@time.lstrip}", "%m/%d/%Y %l:%M %p").strftime('%Y-%m-%d %H:%M:%S'))
+      self.enddatetime = time_in_tz
       logger.info "enddatetime: #{self.enddatetime}"
     end
   end

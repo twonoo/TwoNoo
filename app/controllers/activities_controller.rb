@@ -58,15 +58,17 @@ class ActivitiesController < ApplicationController
           location << activity.city + ', ' if activity.city.present?
           location << activity.state + ', ' if activity.state.present?
 
+          activity_tz = ActiveSupport::TimeZone[activity.tz]
+          activity_time_in_tz = activity_tz.parse(activity.datetime.strftime('%Y-%m-%d %H:%M:%S'))
           event = {
               'summary' => activity.activity_name,
               'description' => activity.description,
               'location' => location,
               'start' => {
-                  'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+                  'dateTime' => "#{activity.datetime.strftime('%Y-%m-%dT%H:%M:%S')}#{activity_time_in_tz.formatted_offset}"
               },
               'end' => {
-                  'dateTime' => "#{(activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{ActiveSupport::TimeZone[activity.tz].formatted_offset}"
+                  'dateTime' => "#{(activity.enddatetime.present? ? activity.enddatetime : activity.datetime + 1.hours).strftime('%Y-%m-%dT%H:%M:%S')}#{activity_time_in_tz.formatted_offset}"
               }
           }
 
