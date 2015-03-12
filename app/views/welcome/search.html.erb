@@ -199,15 +199,19 @@
                   <% if @users.present? %>
                     <% @users.each do |u| %>
                       <div style="background: #FFFFFF" class="col-md-12 people-search-result-list">
-                        <div class="col-md-12 people-search-result-list-details">
-                         <span class="col-md-2"><%= profile_img(u.user) %></span>
-                          <span class="col-md-6">
-                            <span><%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: 'search-result-list-name'%></span>
-                            <span class="search-result-list-location mobile-hide"><%= "#{u.city}, #{u.state}" %> </span>
-                            <span class="interests-small mobile-hide"><%= interests_tag(u.user) %></span>
-                          </span>
+                        <div class="col-sm-12 people-search-result-list-details">
+                            <div class="col-sm-2 col-xs-4"><%= profile_img(u.user) %></div>
+                            <div class="col-sm-7 col-xs-8">
+                                <span><%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: 'search-result-list-name'%></span>
+                                <span class="search-result-list-location"><%= "#{u.city}, #{u.state}" %>
+                                  <% if u.neighborhood.present? %>
+                                    <%= "(#{u.neighborhood})" %>
+                                  <% end %>
+                                </span>
+                                <p class="interests-small hidden-xs"><%= interests_tag(u.user) %></p>
+                            </div>
                         </div>
-                        <div class="search-result-list-follow col-med-1 col-offset-8 mobile-hide">
+                        <div class="search-result-list-follow col-sm-2 hidden-xs">
                           <% if current_user %>
                           <%= current_user.following?(u.user) ? (link_to 'Unfollow', unfollow_path(u.user.id), class: 'btn btn-default btn-sm') : (link_to 'Follow', follow_path(u.user.id), class: 'btn btn-default btn-sm') %>
                           <% else %>
