@@ -5,16 +5,19 @@
   <li class=""><%= link_to 'Settings', profile_edit_path %></li>
   <% if current_user %>
       <li>
-        <span class="badge"><%= current_user.recommended_followers.count %></span>
-        <%= link_to 'People You Know', people_path %>
+      <% if current_user && current_user.recommended_followers.count > 0 %>
+              <%= link_to ('People You Know <span class="red_badge">' + current_user.recommended_followers.count.to_s+ '</span>').html_safe, people_path %>
+            <% else %>
+              <%= link_to ('People You Know <span class="badge">0</span>').html_safe, people_path %>
+            <% end %>
       </li>
   <% end %>
-  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
   <li>
     <a href="/credits/purchase">Credits
       <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span>
     </a>
   </li>
+  <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
   <% if current_user %>
       <li class=""><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %> </li>
   <% else %>

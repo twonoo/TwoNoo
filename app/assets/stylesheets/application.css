@@ -10,7 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- 
+
  *= require_self
  *= require 'bootstrap.min.css'
  *= require 'bootstrap-icons.css.scss'
@@ -53,8 +53,8 @@
 
 #results-row .panel-left {
 	border-radius: 10px 0	0 10px;
-	background-color:#0099FF; 
-	text-align:center; 
+	background-color:#0099FF;
+	text-align:center;
 	color:white;
 	padding-top: 15px;
 }
@@ -63,7 +63,7 @@
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    border:solid 1px #FFF; 
+    border:solid 1px #FFF;
     width:100px;
 }
 
@@ -98,8 +98,8 @@
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    border:solid 0px #FFF; 
-    width:30px; 
+    border:solid 0px #FFF;
+    width:30px;
 }
 
 .interests-small {
@@ -129,4 +129,19 @@
     width: 100%;
     text-align: center;
     display: inline-block;
+}
+
+.red_badge{
+      display: inline-block;
+      min-width: 10px;
+      padding: 3px 7px;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      background-color:  red;
+      border-radius: 10px;
 }
