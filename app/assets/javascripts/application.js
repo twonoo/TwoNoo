@@ -37,6 +37,7 @@
 //= require global.js
 //= require websocket_rails/main
 //= require twonoo_im.js
+//= require people_you_know.js.erb
 //= require intelligent-search
 //= require jquery.typehead.js
 //= require chosen.jquery.min.js

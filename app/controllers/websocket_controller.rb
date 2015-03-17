@@ -45,8 +45,7 @@ class WebsocketController < WebsocketRails::BaseController
 
     logger.info "record is"
     if conversation.nil? then
-      conversation = sender.
-        send_message(recipient, message[:body], sender.email).conversation
+      conversation = sender.send_message(recipient, message[:body], sender.email).conversation
     else
       sender.reply_to_conversation(conversation, message[:body])
     end

@@ -1,0 +1,13 @@
+$(function() {
+    var sub_id = $('#subscription_id').val();
+
+    if(sub_id) {
+        console.log(sub_id);
+        var dispatcher = new WebSocketRails(window.location.host + '/websocket');
+
+        channel = dispatcher.subscribe('people_you_know');
+        channel.bind(sub_id, function (person) {
+            console.log(person);
+        });
+    }
+});
