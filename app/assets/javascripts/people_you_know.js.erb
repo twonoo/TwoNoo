@@ -3,7 +3,7 @@ $(function() {
 
     if(sub_id) {
         console.log(sub_id);
-        var dispatcher = new WebSocketRails(window.location.host + '/websocket');
+        var dispatcher = new WebSocketRails(window.location.hostname + ':3001/websocket');
 
         channel = dispatcher.subscribe('people_you_know');
         channel.bind(sub_id, function (person) {
