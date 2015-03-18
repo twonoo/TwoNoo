@@ -16,8 +16,8 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :profile
 
   has_many :reverse_relationships, foreign_key: "followed_id",
-  class_name: "FollowRelationship",
-  dependent: :destroy
+           class_name: "FollowRelationship",
+           dependent: :destroy
   has_many :followers, through: :reverse_relationships
 
   has_many :activities
@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
-  :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
 
 
   def initial_credits
@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
     if profile.city.present? and profile.state.present?
 
       case profile.state
-      when "CO"
+        when "CO"
           user1 = User.find_by_id(2) #Keefe
           user2 = User.find_by_id(231) #TwoNoo Denver
           follow!(2) unless (following?(user1) || (self == user1))
@@ -191,51 +191,51 @@ class User < ActiveRecord::Base
           user2 = User.find_by_id(241) # TwoNoo Pittsburgh
           follow!(4) unless (following?(user1) || (self == user1))
           follow!(241) unless (user2.nil? || following?(user2) || self == user1)
+      end
+    end
+  end
+
+  def find_people
+
+    other_users = User.unscoped.all
+    user = self
+
+    user_key = Digest::SHA1.hexdigest(user.id.to_s + WEB_SOCKET_CIPHER)
+
+    other_users.each do |other_user|
+      follow_relationship = FollowRelationship.exists?(follower_id: user.id, followed_id: other_user.id)
+
+      if !follow_relationship && other_user.id != user.id
+
+        users_being_followed = other_user.follow_relationships.pluck(:followed_id)
+        users_following = user.follow_relationships.pluck(:followed_id)
+        num_shared_followers = (users_being_followed & users_following).length
+
+        are_friends = other_user.facebook_friends?(user)
+        if are_friends
+          user.recommend_follow!(other_user, 1)
+          Fiber.new do
+            WebsocketRails[:people_you_know].trigger user_key, other_user
+          end.resume
+        elsif other_user.profile.state == user.profile.state && num_shared_followers >= 3
+          user.recommend_follow!(other_user, 2)
+          Fiber.new do
+            WebsocketRails[:people_you_know].trigger user_key, other_user
+          end.resume
+        elsif other_user.profile.state == user.profile.state && other_user.followers.where(id: user.id).exists?
+          user.recommend_follow!(other_user, 3)
+          Fiber.new do
+            WebsocketRails[:people_you_know].trigger user_key, other_user
+          end.resume
         end
+
       end
     end
 
-    def find_people
-
-      other_users = User.unscoped.all
-      user = self
-
-      user_key = Digest::SHA1.hexdigest(user.id.to_s + WEB_SOCKET_CIPHER)
-
-      other_users.each do |other_user|
-        follow_relationship = FollowRelationship.exists?(follower_id: user.id, followed_id: other_user.id)
-
-        if !follow_relationship && other_user.id != user.id
-
-          users_being_followed = other_user.follow_relationships.pluck(:followed_id)
-          users_following = user.follow_relationships.pluck(:followed_id)
-          num_shared_followers = (users_being_followed & users_following).length
-
-          are_friends = other_user.facebook_friends?(user)
-          if are_friends
-            user.recommend_follow!(other_user, 1)
-            Fiber.new do
-              WebsocketRails[:people_you_know].trigger user_key, other_user
-            end.resume
-          elsif other_user.profile.state == user.profile.state && num_shared_followers >= 3
-            user.recommend_follow!(other_user, 2)
-            Fiber.new do
-              WebsocketRails[:people_you_know].trigger user_key, other_user
-            end.resume
-          elsif other_user.profile.state == user.profile.state && other_user.followers.where(id: user.id).exists?
-            user.recommend_follow!(other_user, 3)
-            Fiber.new do
-              WebsocketRails[:people_you_know].trigger user_key, other_user
-            end.resume
-          end
-
-        end
-
-        Fiber.new do
-          WebsocketRails[:people_you_know].trigger user_key, 'done'
-        end.resume
-      end
-
-    end
+    Fiber.new do
+      WebsocketRails[:people_you_know].trigger user_key, 'done'
+    end.resume
 
   end
+
+end
