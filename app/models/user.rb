@@ -222,7 +222,7 @@ class User < ActiveRecord::Base
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
-        elsif other_user.profile.state == user.profile.state && other_user.followers.where(id: user.id).exists?
+        elsif other_user.profile.state == user.profile.state && user.followers.where(id: other_user.id).exists?
           user.recommend_follow!(other_user, 3)
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
