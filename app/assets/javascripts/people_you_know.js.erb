@@ -1,13 +1,23 @@
 $(function() {
-    var sub_id = $('#subscription_id').val();
+  var sub_id = $('#subscription_id').val();
 
-    if(sub_id) {
-        console.log(sub_id);
-        var dispatcher = new WebSocketRails(window.location.hostname + ':3001/websocket');
 
-        channel = dispatcher.subscribe('people_you_know');
-        channel.bind(sub_id, function (person) {
-            console.log(person);
-        });
-    }
+  if(sub_id) {
+    console.log(sub_id);
+    var dispatcher = new WebSocketRails(window.location.hostname + ':3001/websocket');
+
+    channel = dispatcher.subscribe('people_you_know');
+    channel.bind(sub_id, function (person) {
+      if(person == 'done'){
+        console.log('done');
+        $('#find_people').removeAttr('disabled');
+        $('#find_people_loading').hide();
+      }else{
+          console.log(person);
+          $('.people_counter').removeClass('badge');
+          $('.people_counter').addClass('red_badge');
+          $('.people_counter').html(parseInt($('.people_counter').html()) + 1);
+      }
+    });
+  }
 });

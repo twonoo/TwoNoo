@@ -71,13 +71,13 @@
     <li class="dropdown wide">
       <a href="" class="dropdown-toggle" data-toggle="dropdown">People You Know
         <% if current_user.recommended_followers.count > 0%>
-        <span class="red_badge" id="messages_badge"><%= current_user.recommended_followers.count %></span>
+        <span class="people_counter red_badge" id="people_badge"><%= current_user.recommended_followers.count %></span>
         <% else %>
-        <span class="badge" id="messages_badge">0</span>
+        <span class="people_counter badge" id="people_badge">0</span>
         <% end %>
 
       </a>
-      <ul class="dropdown-menu" id="messages_dropdown" style="width:300px;max-height:300px;">
+      <ul class="dropdown-menu" id="people_you_know_dropdown" style="width:300px;max-height:300px;">
         <% current_user.recommended_followers.order('id desc').each do |person| %>
         <div style='word-wrap: break-word; width: 290px; margin-left: 5px;'></div>
         <%= link_to profile_path(person.follower_user), class: 'people_you_know' do %>
