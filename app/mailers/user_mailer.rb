@@ -314,7 +314,7 @@ class UserMailer < ActionMailer::Base
     end
   end
 
-  def attending_activity_update(user, activity)
+  def attending_activity_update(user, organizer, activity)
     @user = user
 
     if (@user.profile.notification_setting.attending_activity_update == 1)

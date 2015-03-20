@@ -183,8 +183,9 @@ class ActivitiesController < ApplicationController
             @user.notify("#{@activity.activity_name} has been cancelled", "(<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>)")
             UserMailer.delay.activity_cancelled(@user, @activity)
           else
+            @organizer = User.find(@activity.user_id)
             @user.notify("#{@activity.activity_name} is back on!!", "(<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>)")
-            UserMailer.delay.attending_activity_update(@user, @activity)
+            UserMailer.delay.attending_activity_update(@user, @organizer, @activity)
           end
         end
       end
@@ -200,7 +201,7 @@ class ActivitiesController < ApplicationController
     @comment.user = current_user
     @comment.comment = params[:comment]
     if @comment.save
-      #Notify all users either organizeing or attending this activity that a comment was added
+      #Notify all users either organizing or attending this activity that a comment was added
       # Get the rsvp'd users
       @rsvp_ids = Rsvp.uniq.where(activity_id: @activity.id).pluck(:user_id)
       @rsvp_ids.each do |rsvp_id|
@@ -356,7 +357,8 @@ class ActivitiesController < ApplicationController
         unless @user.nil? || (current_user == @user)
           @user.notify("#{current_user.name} updated an activity you're going to", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
-          UserMailer.delay.attending_activity_update(@user, @activity)
+          @organizer = User.find(@activity.user_id)
+          UserMailer.delay.attending_activity_update(@user, @organizer, @activity)
         end
       end
       redirect_to @activity
