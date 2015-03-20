@@ -10,10 +10,10 @@ $(function() {
     channel.bind(sub_id, function (person) {
       if(person == 'done'){
         console.log('done');
-        $('#find_people').removeAttr('disabled');
-        $('#find_people_loading').hide();
+        document.location.reload(true);
+        //$('#find_people').removeAttr('disabled');
+        //$('#find_people_loading').hide();
       }else{
-           document.location.reload(true);
           //$('.people_counter').removeClass('badge');
           //$('.people_counter').addClass('red_badge');
           //$('.people_counter').html(parseInt($('.people_counter').html()) + 1);
