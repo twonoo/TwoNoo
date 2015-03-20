@@ -6,7 +6,7 @@
      oldestunreadnotif = current_user.mailbox.notifications({:read => false}).order("id ASC").first
      oldestid = oldestunreadmessages.id
 
-     unless @oldestid.nill? then
+     unless @oldestid.nil? then
        @numAdjustedNotifs = current_user.mailbox.notifications({:read => false}).where('mailboxer_notifications.id >= ?', oldestid).count
      end
   end

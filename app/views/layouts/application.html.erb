@@ -120,14 +120,14 @@
       </a></li>
 
       <li id="messages">
-        <a href="<%= conversations_path %>"><span class="icon glyphicon glyphicon-envelope"></span>MESSAGES
+        <a href="<%= conversations_path %>"><span class="icon glyphicon glyphicon-envelope"></span><!--MESSAGES-->
           <% if num_inbox > 0 %>
               <span class="counter"><%= num_inbox > 99 ? "*" : num_inbox %></span>
           <% end %>
         </a></li>
 
       <li id="alert" class="dropdown">
-        <a href="<%= notifications_mobile_path %>"><span class="icon fa fa-bell"></span>ALERTS
+        <a href="<%= notifications_mobile_path %>"><span class="icon fa fa-bell"></span><!--ALERTS-->
           <% if num_notifications > 0 %>
               <span class="counter"><%= num_notifications > 99 ? "*" : num_notifications %></span>
           <% end %>

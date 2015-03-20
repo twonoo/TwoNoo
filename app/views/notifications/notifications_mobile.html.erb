@@ -18,12 +18,15 @@
   @numUnreadNotifs = current_user.mailbox.notifications({:read => false}).count
   @numAdjustedNotifs = 0
   if @numUnreadNotifs > 0 then
-     oldestunreadnotif = current_user.mailbox.notifications({:read => false}).order("id ASC").first
-     oldestid = oldestunreadmessages.id
+     oldestunreadnotif = current_user.mailbox.notifications({:read => false}).order('id ASC').last
+     oldestid = oldestunreadnotif.id
+     logger.info "oldestid: #{oldestid}"
 
-     unless @oldestid.nill? then
-       @numAdjustedNotifs = current_user.mailbox.notifications({:read => false}).where('mailboxer_notifications.id >= ?', oldestid).count
+     logger.info "numAdjustedNotifs: #{@numAdjustedNotifs}"
+     unless oldestid.nil? then
+       @numAdjustedNotifs = current_user.mailbox.notifications.where('mailboxer_notifications.id >= ?', oldestid).count
      end
+     logger.info "numAdjustedNotifs: #{@numAdjustedNotifs}"
   end
 
   @numNotifs = (@numAdjustedNotifs > @numNotifs)?@numAdjustedNotifs:@numNotifs
