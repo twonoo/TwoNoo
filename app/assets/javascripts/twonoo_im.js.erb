@@ -15,7 +15,7 @@ Dispatcher.init_dispatcher = function(){
   if (!(Dispatcher.initialized))
   {
     var useSsl = '<%= ENV['WEBSOCKET_USE_SSL'] %>';
-    Dispatcher.dispatcher = new WebSocketRails(window.location.hostname + useSsl == 'true' ? '/websocket' : ':3001/websocket');
+    Dispatcher.dispatcher = new WebSocketRails(window.location.hostname + (useSsl == 'true' ? '/websocket' : ':3001/websocket'));
 
     Dispatcher.dispatcher.on_open = function(data) {
       Dispatcher.supportsWebsockets = true;

@@ -6,9 +6,9 @@ $(function () {
         console.log(sub_id);
 
         var useSsl = '<%= ENV['WEBSOCKET_USE_SSL'] %>';
-        var dispatcher = new WebSocketRails(window.location.hostname + useSsl == 'true' ? '/websocket' : ':3001/websocket');
+        var dispatcher = new WebSocketRails(window.location.hostname + (useSsl == 'true' ? '/websocket' : ':3001/websocket'));
 
-        channel = dispatcher.subscribe('people_you_know');
+        var channel = dispatcher.subscribe('people_you_know');
         channel.bind(sub_id, function (person) {
             if (person == 'done') {
                 console.log('done');
