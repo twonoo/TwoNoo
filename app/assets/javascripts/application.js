@@ -36,7 +36,7 @@
 //= require signed_in_nav.js
 //= require global.js
 //= require websocket_rails/main
-//= require twonoo_im.js
+//= require twonoo_im.js.erb
 //= require people_you_know.js.erb
 //= require intelligent-search
 //= require jquery.typehead.js

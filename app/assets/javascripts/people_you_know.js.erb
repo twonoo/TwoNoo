@@ -1,23 +1,25 @@
-$(function() {
-  var sub_id = $('#subscription_id').val();
+$(function () {
+    var sub_id = $('#subscription_id').val();
 
 
-  if(sub_id) {
-    console.log(sub_id);
-    var dispatcher = new WebSocketRails(window.location.hostname + ':3001/websocket');
+    if (sub_id) {
+        console.log(sub_id);
 
-    channel = dispatcher.subscribe('people_you_know');
-    channel.bind(sub_id, function (person) {
-      if(person == 'done'){
-        console.log('done');
-        document.location.reload(true);
-        //$('#find_people').removeAttr('disabled');
-        //$('#find_people_loading').hide();
-      }else{
-          //$('.people_counter').removeClass('badge');
-          //$('.people_counter').addClass('red_badge');
-          //$('.people_counter').html(parseInt($('.people_counter').html()) + 1);
-      }
-    });
-  }
+        var useSsl = '<%= ENV['WEBSOCKET_USE_SSL'] %>';
+        var dispatcher = new WebSocketRails(window.location.hostname + useSsl == 'true' ? '/websocket' : ':3001/websocket');
+
+        channel = dispatcher.subscribe('people_you_know');
+        channel.bind(sub_id, function (person) {
+            if (person == 'done') {
+                console.log('done');
+                document.location.reload(true);
+                //$('#find_people').removeAttr('disabled');
+                //$('#find_people_loading').hide();
+            } else {
+                //$('.people_counter').removeClass('badge');
+                //$('.people_counter').addClass('red_badge');
+                //$('.people_counter').html(parseInt($('.people_counter').html()) + 1);
+            }
+        });
+    }
 });

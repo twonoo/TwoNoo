@@ -19,6 +19,8 @@ development:
     <<: *google_defaults
   MANDRILL:
     APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
+  WEBSOCKET:
+    USE_SSL: 'false'
 
 production:
   BASEURL: 'https://www.twonoo.com'
@@ -30,3 +32,5 @@ production:
     <<: *google_defaults
   MANDRILL:
     APIKEY: 'FWDtyP_2VA85dpsXhuudoA'
+  WEBSOCKET:
+      USE_SSL: 'true'
