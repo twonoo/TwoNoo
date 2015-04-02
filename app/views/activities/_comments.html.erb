@@ -3,7 +3,7 @@
     <% if comment.user.nil? then %>
       <b>Anonymous:</b>
     <% else %>
-      <b><%= comment.user.profile.first_name %>:</b>
+      <b><%= link_to comment.user.profile.first_name, comment.user %>:</b>
     <% end %>
     <font size="1">(<%=comment.created_at.strftime("%m/%d/%y %l:%M %P")%>)</font><br/>
     <%= comment.comment %>
