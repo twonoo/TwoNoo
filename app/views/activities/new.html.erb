@@ -64,7 +64,7 @@
       <%= form_for @activity, html: {class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
           <div class="form-group">
-            <%= f.label 'Name *', class: "col-sm-3 control-label", style: "color:#000" %>
+            <%= f.label 'Activity Name *', class: "col-sm-3 control-label", style: "color:#000" %>
             <div class="col-sm-6">
               <%= f.text_field :activity_name, class: "form-control" %>
             </div>
