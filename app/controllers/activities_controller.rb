@@ -200,6 +200,9 @@ class ActivitiesController < ApplicationController
     @comment = @activity.comments.create
     @comment.user = current_user
     @comment.comment = params[:comment]
+
+    userIds = []
+
     if @comment.save
       #Notify all users either organizing or attending this activity that a comment was added
       # Get the rsvp'd users
@@ -207,9 +210,20 @@ class ActivitiesController < ApplicationController
       @rsvp_ids.each do |rsvp_id|
         @user = User.find_by_id(rsvp_id)
         if !@user.nil? && @user != current_user
+          userIds << @user.id
           @user.notify("#{current_user.name} commented on an activity you're going to", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
           UserMailer.delay.comment_on_attending_activity(@user, @activity, current_user, @comment.comment)
+        end
+      end
+
+      @activity.comments.recent.all.each do |comment|
+        @user = User.find_by_id(comment.user.id)
+        if !@user.nil? && @user != current_user && !(userId.include? @user.id)
+          userIds << @user.id
+          @user.notify("#{current_user.name} commented on an activity you've commented on", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+
+          UserMailer.delay.comment_on_commented_activity(@user, @activity, current_user, @comment.comment)
         end
       end
 

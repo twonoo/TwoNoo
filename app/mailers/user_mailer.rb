@@ -416,6 +416,35 @@ class UserMailer < ActionMailer::Base
     end
   end
 
+  def comment_on_commented_activity(user, activity, commenter, comment)
+    @user = user
+
+    if (@user.profile.notification_setting.comment_on_attending_activity == 1)
+      # Mandrill integration
+      mandrill_to = [{:email => user.email, :type => 'to'}]
+      m = Mandrill::API.new
+      t = 'comment_on_commented_activity'
+      tc = [{"name" => "inviter", "content" => "TwoNoo Testerino"}]
+      message = {  
+       :from_name=> commenter.name,  
+       :to=>mandrill_to,  
+       :merge_language=>"mailchimp",
+       :global_merge_vars=>[
+        {"name"=>"USER_NAME", "content"=>user.name},
+        {"name"=>"USER_EMAIL", "content"=>user.email},
+        {"name"=>"COMMENTER_NAME", "content"=>commenter.name},
+        {"name"=>"COMMENTER_ID", "content"=>commenter.id},
+        {"name"=>"COMMENT", "content"=>comment},
+        {"name"=>"ACTIVITY_ID", "content"=>activity.id},
+        {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name}
+        ] 
+      }  
+
+      sending = m.messages.send_template t, tc, message  
+      logger.info sending
+    end
+  end
+  
   def alert(user, activity, alert)
     @user = user
 
