@@ -219,7 +219,7 @@ class ActivitiesController < ApplicationController
 
       @activity.comments.recent.all.each do |comment|
         @user = User.find_by_id(comment.user.id)
-        if !@user.nil? && @user != current_user && !(userId.include? @user.id)
+        if !@user.nil? && @user != current_user && !(userIds.include? @user.id)
           userIds << @user.id
           @user.notify("#{current_user.name} commented on an activity you've commented on", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
 
