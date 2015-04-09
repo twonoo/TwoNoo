@@ -1,6 +1,6 @@
 <div class="alert alert-warning fade in" style="display:none" id="needLogInAlert">
   <button class="close" data-dismiss="" id="closeNeedLogInAlert">x</button>
-  You need to sign in or sign up before continuing.
+  You need to sign in or sign up to perform that action.
 </div>
 <div class="container-fluid">
   <div class="row" style="margin-top:0px">
@@ -34,7 +34,8 @@
                 </script>
               </h3>
           <% else %>
-              <a id="messageMe" class="messageMe label label-info">Send <%= @profile.profile.first_name %> a
+              <a id="messageMe" class="messageMe label label-info" style="display:inline-block;cursor: pointer; cursor: hand;">Follow</a>
+              <a id="followMe" class="messageMe label label-info" style="display:inline-block;cursor: pointer; cursor: hand;">Send <%= @profile.profile.first_name %> a
                 message</a>
           <% end %>
         </div>
@@ -121,6 +122,21 @@
         text-decoration: none;
     }
 
+    #followMe {
+        color: #FFF;
+        text-decoration: none;
+    }
+
+    #followMe:visited {
+        color: #FFF;;
+        text-decoration: none;
+    }
+
+    #followMe:hover {
+        color: #FFF;
+        text-decoration: none;
+    }
+
 </style>
 
 <% if current_user.nil? %>
@@ -129,7 +145,11 @@
             $('#messageMe').click(function (e) {
                 e.preventDefault();
                 showAlert();
-            })
+            });
+            $('#followMe').click(function (e) {
+                e.preventDefault();
+                showAlert();
+            });
         })
         function showAlert() {
             $('#needLogInAlert').show();
