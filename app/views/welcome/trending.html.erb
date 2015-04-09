@@ -1,34 +1,38 @@
 <section class="slice" id="trending" style="background-image: url(<%= asset_url 'backgrounds/crossword.png' %>);">
   <h2 class="subTitle" style="margin-bottom:-10px; margin-top:px">Trending</h2>
+
   <div class="container clearfix" style="padding:0">
     <div class="row">
       <div class="portfolio-items  isotopeWrapper clearfix imgHover" id="4">
-      <% @trending.each do |k,v| %>
-        <% v.each do |t| %>
-        <article class="col-sm-3 isotopeItem <%= k %>">
-          <section class="imgWrapper">
-            <% if t.image_file_name %>
-              <%= image_tag t.image.url(:trending), class: 'img-responsive' %>
-            <% else %>
-              <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
+        <% @trending.each do |k, v| %>
+            <% v.each do |t| %>
+                <article class="col-sm-3 isotopeItem <%= k %>">
+                  <section class="imgWrapper">
+                    <% if t.image_file_name %>
+                        <%= image_tag t.image.url(:trending), class: 'img-responsive' %>
+                    <% else %>
+                        <img alt="" class="img-responsive" style="height:208px;width:270px; background-color:#444">
+                    <% end %>
+                  </section>
+                  <div class="mediaHover">
+                    <div class="mask"></div>
+                    <div class="iconLinks">
+                      <% if current_user && t.user_id != current_user.id && Rsvp.user_rsvp?(t, current_user).blank? %>
+                          <%= link_to "<i class='icon-check iconRounded iconBig'></i><span>RSVP</span>".html_safe, rsvp_path(t.id, current_user.id) %>
+                      <% end %>
+                      <%= link_to "<i class='icon-search iconRounded iconBig'></i><span>VIEW</span>".html_safe, activity_path(t.id) %>
+                      </a>
+                    </div>
+                  </div>
+                  <section class="boxContent">
+                    <%= link_to t.activity_name, activity_path(t.id) %>
+                  </section>
+                </article>
             <% end %>
-          </section>
-          <div class="mediaHover">
-            <div class="mask"></div>
-            <div class="iconLinks">
-              <% if current_user && t.user_id != current_user.id && Rsvp.user_rsvp?(t, current_user).blank? %>
-                <%= link_to "<i class='icon-check iconRounded iconBig'></i><span>RSVP</span>".html_safe, rsvp_path(t.id, current_user.id) %>
-              <% end %>
-              <%= link_to "<i class='icon-search iconRounded iconBig'></i><span>VIEW</span>".html_safe, activity_path(t.id) %>
-              </a>
-            </div>
-          </div>
-          <section class="boxContent">
-            <%= link_to t.activity_name, activity_path(t.id) %>
-          </section>
-        </article>
         <% end %>
-      <% end %>
+      </div>
+      <div class="col-sm-12" style="text-align:center">
+        <%= link_to "More", search_path, class: 'btn btn-default btn-sm', style: 'background-color:#FE0075;width:200px;margin-bottom:15px' %>
       </div>
     </div>
   </div>
