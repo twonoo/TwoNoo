@@ -1,3 +1,7 @@
+<div class="alert alert-warning fade in" style="display:none" id="needLogInAlert">
+  <button class="close" data-dismiss="" id="closeNeedLogInAlert">x</button>
+  You need to sign in or sign up before continuing.
+</div>
 <div class="container-fluid">
   <div class="row" style="margin-top:0px">
     <div style="background-color:#333;height:285px">
@@ -16,23 +20,24 @@
           <% if !current_user.nil? && (current_user != @profile) then %>
               <h3>
                 <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
+                <div id="profile-im" style="display:inline-block;cursor: pointer; cursor: hand;" class="im-container"
+                     alink="Send <%= @profile.profile.first_name %> a message"
+                     recipient="<%= @profile.id %>" recipient_firstname="<%= @profile.profile.first_name %>" recipient_lastname="<%= @profile.profile.last_name %>"
+                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>">
+                </div>
+                <script>
+                    (function () {
+                        $('#profile-im').bind('on_init_complete', function () {
+                            $('#profile-im #messageMe').addClass('label label-info');
+                        });
+                    })();
+                </script>
               </h3>
+          <% else %>
+              <a id="messageMe" class="messageMe label label-info">Send <%= @profile.profile.first_name %> a
+                message</a>
           <% end %>
         </div>
-        <% if !current_user.nil? && (current_user != @profile) then %>
-            <div id="profile-im" class="im-container pull-right" style="width:230px;z-index:1000"
-                 alink="Send <%= @profile.profile.first_name %> a message"
-                 recipient="<%= @profile.id %>" recipient_firstname="<%= @profile.profile.first_name %>" recipient_lastname="<%= @profile.profile.last_name %>"
-                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>">
-            </div>
-            <script>
-                (function () {
-                    $('#profile-im').bind('on_init_complete', function () {
-                        $('#profile-im #messageMe').addClass('label');
-                    });
-                })();
-            </script>
-        <% end %>
       </div>
     </div>
   </div>
@@ -101,4 +106,33 @@
         background-color: white;
     }
 
+    #messageMe {
+        color: #FFF;
+        text-decoration: none;
+    }
+
+    #messageMe:visited {
+        color: #FFF;;
+        text-decoration: none;
+    }
+
+    #messageMe:hover {
+        color: #FFF;
+        text-decoration: none;
+    }
+
 </style>
+
+<% if current_user.nil? %>
+    <script>
+        $(function () {
+            $('#messageMe').click(function (e) {
+                e.preventDefault();
+                showAlert();
+            })
+        })
+        function showAlert() {
+            $('#needLogInAlert').show();
+        }
+    </script>
+<% end %>
