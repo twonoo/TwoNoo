@@ -1,239 +1,266 @@
-<% if @showCreateAlert %>
-  <div class="alert alert-info search-result-alert" style="margin-bottom:0px" role="alert">
-    <span>No activities matched search criteria, showing expanded results. Create an alert to be notified of future activities! <%= link_to 'Create Alert', alert_create_path(params), method: 'POST', class: 'btn btn-default btn-sm pull-right' %></span>
-  </div>
-<% end %>
+<div class="alert alert-info search-result-alert" style="margin-bottom:0px;display:none;" role="alert" id="noMatchesAlert">
+  <span>No activities matched search criteria, showing expanded results. Create an alert to be notified of future activities! <%= link_to 'Create Alert', alert_create_path(params), method: 'POST', class: 'btn btn-default btn-sm pull-right' %></span>
+</div>
 <div class="container">
   <div class="row center-block" style="margin-bottom:5px">
 
     <div class="content">
 
-            <style type="text/css">
+      <script type="text/javascript">
+          $(function () {
+              var noResults = <%= @showCreateAlert %>;
+              var peopleToggle = $('#peopleToggle');
+              if (noResults && peopleToggle.length > 0) {
+                  peopleToggle.click();
+              } else if (noResults) {
+                  $('#noMatchesAlert').show();
+              }
+
+              $('#peopleToggle').click(function () {
+                  if (noResults) {
+                      $('#noMatchesAlert').hide();
+                  }
+              });
+              $('#activityToggle').click(function () {
+                  if (noResults) {
+                      $('#noMatchesAlert').show();
+                  }
+              });
+
+          })
+      </script>
+
+      <style type="text/css">
 
 
-            body {
+          body {
               background-color: #e2e2e2;
-            }
+          }
 
-            .search-result-list {
+          .search-result-list {
               min-height: 150px;
               background-color: #FFFFFF;
               margin-bottom: 2px;
-            }
-            
-            .search-result-list:hover {
+          }
+
+          .search-result-list:hover {
               min-height: 150px;
               background-color: #FFFFFF;
               margin-bottom: 2px;
               cursor: pointer;
-            }
+          }
 
-            .people-search-result-list {
-                min-height: 150px;
-                background-color: #FFFFFF;
-                margin-bottom: 2px;
-                display: inline-block;
-            }
+          .people-search-result-list {
+              min-height: 150px;
+              background-color: #FFFFFF;
+              margin-bottom: 2px;
+              display: inline-block;
+          }
 
-            .people-search-result-list-details {
+          .people-search-result-list-details {
               line-height: 17px;
               padding-top: 26px;
               padding-right: 0px;
-            }
+          }
 
-            .search-result-list-details {
+          .search-result-list-details {
               line-height: 17px;
               padding-top: 49px;
               padding-right: 0px;
-            }
+          }
 
-            .search-result-list-location {
-              padding:0;
+          .search-result-list-location {
+              padding: 0;
               font-size: 15px;
               color: #FE0075;
-              margin:0;
-              display:block;
-            }
+              margin: 0;
+              display: block;
+          }
 
-            .search-result-list-date {
-              padding:0;
+          .search-result-list-date {
+              padding: 0;
               font-size: 15px;
-              display:block;
-            }
+              display: block;
+          }
 
-            .search-result-list-name {
-              padding:0;
+          .search-result-list-name {
+              padding: 0;
               font-size: 20px;
               font-weight: 600;
               color: #000000;
               font-family: Helvetica, Helvetica Neue;
-            }
-            .search-result-list-name:link {
-              padding:0;
+          }
+
+          .search-result-list-name:link {
+              padding: 0;
               font-size: 20px;
               font-weight: 600;
               color: #000000;
               font-family: Helvetica, Helvetica Neue;
-            }
+          }
 
-            .search-result-list-name:hover {
-              padding:0;
+          .search-result-list-name:hover {
+              padding: 0;
               font-size: 20px;
               font-weight: 600;
               color: #000000;
               font-family: Helvetica, Helvetica Neue;
-            }
+          }
 
-            .search-result-list-attending {
+          .search-result-list-attending {
               line-height: 25px;
               text-align: right;
-              margin-top:17px;
-            }
+              margin-top: 17px;
+          }
 
-            .search-result-list-join {
+          .search-result-list-join {
               padding-top: 53px;
               line-height: 10px;
               text-align: right;
-            }
+          }
 
-            .search-result-list-follow {
+          .search-result-list-follow {
               padding-top: 30px;
               line-height: 10px;
               text-align: right;
-            }
+          }
 
-            .search-result-list-follow > a {
+          .search-result-list-follow > a {
               background-color: #e2e2e2;
               color: #333333;
               font-weight: 600;
               font-size: 14px;
-            }
+          }
 
-            .search-result-list-join > a {
+          .search-result-list-join > a {
               background-color: #e2e2e2;
               color: #333333;
               font-weight: 600;
               font-size: 14px;
-            }
+          }
 
-            .search-result-alert > span > a {
+          .search-result-alert > span > a {
               background-color: #0099FF;
               color: #FFF;
               font-weight: 600;
               font-size: 14px;
-              margin-top:-10px;
-            }
+              margin-top: -10px;
+          }
 
-            .side-nav {
-              padding:0;
-            }
+          .side-nav {
+              padding: 0;
+          }
 
-            .side-nav>ul>li {
+          .side-nav > ul > li {
               background: #FFFFFF;
-            }
+          }
 
-            .side-nav>ul>li>a {
+          .side-nav > ul > li > a {
               border-radius: 0px;
               color: #333;
-            }
+          }
 
-            .side-nav>ul>li.active>a, .side-nav>ul>li.active>a:hover {
-              background-color:#f5f5f5;
+          .side-nav > ul > li.active > a, .side-nav > ul > li.active > a:hover {
+              background-color: #f5f5f5;
               color: #333;
-            }
+          }
 
-            .side-nav>ul>li>a:hover {
-              background-color:#FE0075;
+          .side-nav > ul > li > a:hover {
+              background-color: #FE0075;
               color: #fff;
-            }
+          }
 
-            @media screen and (max-width: 860px) {
-                .mobile-hide {
-                    display: none;
-                }
+          @media screen and (max-width: 860px) {
+              .mobile-hide {
+                  display: none;
+              }
 
-                .people-search-result-list {
-                    display: block;
-                }
-            }
+              .people-search-result-list {
+                  display: block;
+              }
+          }
 
-            .nav-pills li.active a{
-                background-color: #2289E2!important;
-                color: #ffffff!important;
-            }
+          .nav-pills li.active a {
+              background-color: #2289E2 !important;
+              color: #ffffff !important;
+          }
 
-            </style>
-<!--             <div class="row">
+      </style>
+      <!--             <div class="row">
 
-              <div style="background-color:#FFF; margin-right:15px">
-                <span> test </span>
-              </div>
-            </div> -->
-            <div class="row" role="tabpanel">
-              <div class="col-md-3 side-nav">
-                <ul class="nav nav-pills nav-stacked">
-                  <% unless @activities.blank? %>
-                    <li class="active"><a aria-controls="activity" role="tab" data-toggle="tab" href="#activity">Activities</a></li>
-                  <% end  %>
-                  <% unless @users.blank? %>
-                    <li><a aria-controls="people" role="tab" data-toggle="tab" href="#people">People</a></li>
-                  <% end %>
-                </ul>
-              </div>
-              <!-- BEGIN RESULTS -->
-              <div class="col-md-9 tab-content">
-                <!-- TAB ALL THE ACTIVITIES! -->
-                <div role="tabpanel" class="tab-pane fade in <%= @activities.blank? ? nil :  'active' %>" id="activity">
-                <% @activities.each do |a| %>
-                  <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-12 search-result-list"
-                  onclick="location='<%=activity_path(a.id)%>'">
-                    <div class="col-md-6 col-md-offset-3 search-result-list-details">
-                      <span class="search-result-list-name"><%= a.activity_name %></span>
-                      <span class="search-result-list-location"><%= a.location_name %> </span>
-                      <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
+                    <div style="background-color:#FFF; margin-right:15px">
+                      <span> test </span>
                     </div>
-                    <div class="search-result-list-join">
-                      <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
-                    </div>
-                    <div class="search-result-list-attending">
-                      <% User.limit(4).find(a.rsvps.map {|r| r.user_id}).each do |u| %>
-                        <%= profile_img_small(u) unless u.nil? %>
-                      <% end %>
-                      <%= "+#{a.rsvps.count - 4}" if a.rsvps.count > 4 %>
-                    </div>
+                  </div> -->
+      <div class="row" role="tabpanel">
+        <div class="col-md-3 side-nav">
+          <ul class="nav nav-pills nav-stacked">
+            <% unless @activities.blank? %>
+                <li class="active">
+                  <a aria-controls="activity" role="tab" data-toggle="tab" href="#activity" id="activityToggle">Activities</a>
+                </li>
+            <% end %>
+            <% unless @users.blank? %>
+                <li><a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People</a>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+        <!-- BEGIN RESULTS -->
+        <div class="col-md-9 tab-content">
+          <!-- TAB ALL THE ACTIVITIES! -->
+          <div role="tabpanel" class="tab-pane fade in <%= @activities.blank? ? nil : 'active' %>" id="activity">
+            <% @activities.each do |a| %>
+                <div style="background: #FFFFFF url('<%= a.image.url(:trending) %>') no-repeat left top; background-size: auto 150px" class="col-md-12 search-result-list"
+                     onclick="location='<%=activity_path(a.id)%>'">
+                  <div class="col-md-6 col-md-offset-3 search-result-list-details">
+                    <span class="search-result-list-name"><%= a.activity_name %></span>
+                    <span class="search-result-list-location"><%= a.location_name %> </span>
+                    <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
                   </div>
-                <% end %>
-              </div>
-             <!--  END ACTIVITY TAB -->
-             <!-- TAB ALL THE PEOPLE! -->
-                <div role="tabpanel" class="tab-pane <%= @activities.blank? ? 'fade in active' :  nil %>" id="people">
-                  <% if @users.present? %>
-                    <% @users.each do |u| %>
-                      <div style="background: #FFFFFF" class="col-md-12 people-search-result-list">
-                        <div class="col-sm-12 people-search-result-list-details">
-                            <div class="col-sm-2 col-xs-4"><%= profile_img(u.user) %></div>
-                            <div class="col-sm-7 col-xs-8">
-                                <span><%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: 'search-result-list-name'%></span>
+                  <div class="search-result-list-join">
+                    <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
+                  </div>
+                  <div class="search-result-list-attending">
+                    <% User.limit(4).find(a.rsvps.map { |r| r.user_id }).each do |u| %>
+                        <%= profile_img_small(u) unless u.nil? %>
+                    <% end %>
+                    <%= "+#{a.rsvps.count - 4}" if a.rsvps.count > 4 %>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+          <!--  END ACTIVITY TAB -->
+          <!-- TAB ALL THE PEOPLE! -->
+          <div role="tabpanel" class="tab-pane <%= @activities.blank? ? 'fade in active' : nil %>" id="people">
+            <% if @users.present? %>
+                <% @users.each do |u| %>
+                    <div style="background: #FFFFFF" class="col-md-12 people-search-result-list">
+                      <div class="col-sm-12 people-search-result-list-details">
+                        <div class="col-sm-2 col-xs-4"><%= profile_img(u.user) %></div>
+                        <div class="col-sm-7 col-xs-8">
+                          <span><%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: 'search-result-list-name' %></span>
                                 <span class="search-result-list-location"><%= "#{u.city}, #{u.state}" %>
                                   <% if u.neighborhood.present? %>
                                     <%= "(#{u.neighborhood})" %>
                                   <% end %>
                                 </span>
-                                <p class="interests-small hidden-xs"><%= interests_tag(u.user) %></p>
-                            </div>
-                        </div>
-                        <div class="search-result-list-follow col-sm-2 hidden-xs">
-                          <% if current_user %>
-                          <%= current_user.following?(u.user) ? (link_to 'Unfollow', unfollow_path(u.user.id), class: 'btn btn-default btn-sm') : (link_to 'Follow', follow_path(u.user.id), class: 'btn btn-default btn-sm') %>
-                          <% else %>
-                          <%= link_to("View", profile_path(u.user), class: 'btn btn-default btn-sm') %>
-                          <% end %>
+
+                          <p class="interests-small hidden-xs"><%= interests_tag(u.user) %></p>
                         </div>
                       </div>
-                    <% end %>
-                 <% end %>
-                </div>
-            <!-- END PEOPLE TAB -->
+                      <div class="search-result-list-follow col-sm-2 hidden-xs">
+                        <% if current_user %>
+                            <%= current_user.following?(u.user) ? (link_to 'Unfollow', unfollow_path(u.user.id), class: 'btn btn-default btn-sm') : (link_to 'Follow', follow_path(u.user.id), class: 'btn btn-default btn-sm') %>
+                        <% else %>
+                            <%= link_to("View", profile_path(u.user), class: 'btn btn-default btn-sm') %>
+                        <% end %>
+                      </div>
+                    </div>
+                <% end %>
+            <% end %>
+          </div>
+          <!-- END PEOPLE TAB -->
           <!-- END RESULTS -->
         </div>
       </div>
