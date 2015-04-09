@@ -59,7 +59,7 @@
                 <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
             <% end %>
 
-            <a href='#' id='rsvp_button' title='Test Hover' class='btn btn-success btn-sm pull-right'>Join Us!</a>
+            <a href='#' id='rsvp_button' title='Join Us!' class='btn btn-success btn-sm pull-right'>Join Us!</a>
 
             <div class="fb-send" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-colorscheme="light" style="padding: 0px; vertical-align: top; width: 60px; height: 24px;">Loading...</div>
 
