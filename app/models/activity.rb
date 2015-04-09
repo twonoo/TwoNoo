@@ -145,7 +145,7 @@ class Activity < ActiveRecord::Base
     unless @enddate.blank? || @endtime.blank?
       logger.info "endtime: #{@endtime}"
       tz = ActiveSupport::TimeZone['Mountain Time (US & Canada)']
-      time_in_tz = tz.parse(Time.strptime("#{@date} #{@time.lstrip}", "%m/%d/%Y %l:%M %p").strftime('%Y-%m-%d %H:%M:%S'))
+      time_in_tz = tz.parse(Time.strptime("#{@enddate} #{@endtime.lstrip}", "%m/%d/%Y %l:%M %p").strftime('%Y-%m-%d %H:%M:%S'))
       self.enddatetime = time_in_tz
       logger.info "enddatetime: #{self.enddatetime}"
     end
