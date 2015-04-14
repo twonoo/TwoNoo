@@ -1,0 +1,49 @@
+.like-widget {
+    position: relative;
+}
+
+.like-button {
+    width: 25px;
+    border: 1px solid black;
+    height: 25px;
+    display: inline-block;
+    padding: 2px;
+    background-image: url('/assets/checkmark.png');
+    background-position: center center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+}
+
+.like-counter {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+    margin-top: 1px;
+    padding-right: 3px;
+}
+
+.like-counter:after, .like-counter:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.like-counter:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #ffffff;
+    border-width: 10px;
+    margin-top: -10px;
+}
+
+.like-counter:before {
+    border-color: rgba(204, 204, 204, 0);
+    border-right-color: #ccc;
+    border-width: 11px;
+    margin-top: -11px;
+}

@@ -18,7 +18,10 @@
   <meta name="google-site-verification" content="EiVIH4ce5RGmJBuZIatvMd1DBQyRsmuMOvQRncxitIM"/>
   <meta name="description" content="Find friends and things to do. Meet people and do stuff. Create and Find activities and events.">
   <meta name="author" content="TwoNoo">
-  <link href="https://plus.google.com/118324650798603527769" rel="publisher" />
+  <% if current_user.present? %>
+      <meta name="user_id" content="<%= current_user.id %>"/>
+  <% end %>
+  <link href="https://plus.google.com/118324650798603527769" rel="publisher"/>
 
   <% if !@activity.nil? && !@activity.id.nil? %>
       <meta property="og:url" content="<%= activity_url(:id => @activity.id) %>"/>
@@ -66,7 +69,7 @@
               var script = document.createElement('script');
               script.type = 'text/javascript';
               script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
-                      'callback=initialize';
+              'callback=initialize';
               document.body.appendChild(script);
               console.log('done getting google stuff');
           });

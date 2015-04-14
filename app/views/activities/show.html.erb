@@ -9,221 +9,223 @@
 
 <div class="container">
 
-<div class="overlay" id='overlay'>
+  <div class="overlay" id='overlay'>
 
-  <i class='fa fa-close' id='close_overlay'></i>
+    <i class='fa fa-close' id='close_overlay'></i>
 
-  <p class='overlay-content'>
-    You’re all RSVP’d - now share it with your friends!
-  </p>
+    <p class='overlay-content'>
+      You’re all RSVP’d - now share it with your friends!
+    </p>
 
-  <div class='overlay-buttons'>
-    <fb:send href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>"></fb:send>
-    &nbsp;|&nbsp;
-    <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-layout="button"></div>
-    &nbsp;|&nbsp;
-    <a href="#" class="label label-danger" data-toggle="modal" data-target="#invite_people_form">Mail</a>
+    <div class='overlay-buttons'>
+      <fb:send href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>"></fb:send>
+      &nbsp;|&nbsp;
+      <div class="fb-share-button" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-layout="button"></div>
+      &nbsp;|&nbsp;
+      <a href="#" class="label label-danger" data-toggle="modal" data-target="#invite_people_form">Mail</a>
+    </div>
+
+    <p class='overlay-content'>
+      ...and add it to your calendar
+    </p>
+
+    <div class='overlay-buttons'>
+      <a class='overlay-links' id='eventdate'>
+        <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
+      </a>
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
+          <% image_tag('ical-icon.png', height: '50', width: '50') %>
+      <% end %>
+    </div>
+
   </div>
 
-  <p class='overlay-content'>
-    ...and add it to your calendar
-  </p>
-
-  <div class='overlay-buttons'>
-    <a class='overlay-links' id='eventdate'>
-      <%= image_tag 'google-cal-icon.png', height: '50', width: '50' %>
-    </a>
-    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
-        <% image_tag('ical-icon.png', height: '50', width: '50') %>
-    <% end %>
-  </div>
-
-</div>
-
-<div class="row">
-  <div class="col-md-8">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <h2>
-          <%= @activity.activity_name %>
-          <small class="pull-right"><%= @activity.views %> views</small>
-          <% if @activity.cancelled %>
-              <font color='red'>(Cancelled)</font>
-          <% end %>
-        </h2>
-        <% if current_user %>
-
-            <% if @organizer == current_user %>
-                <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
-                <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h2>
+            <%= @activity.activity_name %>
+            <small class="pull-right"><%= @activity.views %> views</small>
+            <% if @activity.cancelled %>
+                <font color='red'>(Cancelled)</font>
             <% end %>
+          </h2>
+          <% if current_user %>
 
-            <a href='#' id='rsvp_button' title='Join Us!' class='btn btn-success btn-sm pull-right'>Join Us!</a>
-
-            <div class="fb-send" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-colorscheme="light" style="padding: 0px; vertical-align: top; width: 60px; height: 24px;">Loading...</div>
-
-            <div class="fb-share-button"
-                 data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"
-                 data-layout="button"
-                 style="padding: 0px; vertical-align: top; width: 63px; height: 24px;"></div>
-
-            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-            <div class="g-plusone"
-                 data-height="24"
-                 data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"></div>
-
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= activity_url(id: @activity.id, referrer: current_user.id) %>" data-hashtags="twonoo" data-text="Check out <%= @activity.activity_name %> on TwoNoo!">Tweet</a>
-            <script>!function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = p + '://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, 'script', 'twitter-wjs');</script>
-
-            <% if @activity.image.exists?
-                 @imageURL = root_url + @activity.image.url
-               else
-                 @imageURL = asset_url('TwoNoo-Logo.png')
-               end %>
-            <a href="//www.pinterest.com/pin/create/button/?url=<%= activity_url(id: @activity.id) %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%= @imageURL %>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png"/></a>
-
-        <% else %>
-            <%= link_to "Join Us!", new_user_session_path + '?s=t', class: 'btn btn-success btn-sm pull-right' %>
-        <% end %>
-
-        <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
-
-        <div>
-          <% @activity.activity_types.each do |a| %>
-              <span class="label label-danger"><%= a.activity_type %></span>
-          <% end %>
-        </div>
-        </br>
-        <p class="lead">
-          <%
-             desc = @activity.description
-             .gsub("\n", "<br/>")
-             .gsub("  ", "&nbsp;")
-             .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
-          %>
-          <%= desc.html_safe %>
-        </p>
-
-        <p class="lead">
-
-        <div class='row'>
-          <div class='col-sm-4'>
-            <b>
-              <% if @activity.location_name.present? %>
-                  <%= link_to @activity.location_name, @activity.website %>
-              <% elsif @activity.website.present? %>
-                  <%= link_to @activity.website, @activity.website %>
+              <% if @organizer == current_user %>
+                  <%= link_to 'Edit', activity_edit_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
+                  <%= link_to 'Copy', activity_copy_path(@activity.id), class: 'btn btn-success btn-sm pull-right' %>
               <% end %>
-            </b></br>
+
+              <a href='#' id='rsvp_button' title='Join Us!' class='btn btn-success btn-sm pull-right'>Join Us!</a>
+
+              <div class="fb-send" data-href="<%= ENV['BASEURL'] + '/activities/' + @activity.id.to_s %>" data-colorscheme="light" style="padding: 0px; vertical-align: top; width: 60px; height: 24px;">Loading...</div>
+
+              <div class="fb-share-button"
+                   data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"
+                   data-layout="button"
+                   style="padding: 0px; vertical-align: top; width: 63px; height: 24px;"></div>
+
+              <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+              <div class="g-plusone"
+                   data-height="24"
+                   data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"></div>
+
+              <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= activity_url(id: @activity.id, referrer: current_user.id) %>" data-hashtags="twonoo" data-text="Check out <%= @activity.activity_name %> on TwoNoo!">Tweet</a>
+              <script>!function (d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                  if (!d.getElementById(id)) {
+                      js = d.createElement(s);
+                      js.id = id;
+                      js.src = p + '://platform.twitter.com/widgets.js';
+                      fjs.parentNode.insertBefore(js, fjs);
+                  }
+              }(document, 'script', 'twitter-wjs');</script>
+
+              <% if @activity.image.exists?
+                   @imageURL = root_url + @activity.image.url
+                 else
+                   @imageURL = asset_url('TwoNoo-Logo.png')
+                 end %>
+              <a href="//www.pinterest.com/pin/create/button/?url=<%= activity_url(id: @activity.id) %>&description=Check out <%= @activity.activity_name %> on TwoNoo!&media=<%= @imageURL %>" data-pin-do="buttonPin" data-pin-config="beside" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png"/></a>
+
+          <% else %>
+              <%= link_to "Join Us!", new_user_session_path + '?s=t', class: 'btn btn-success btn-sm pull-right' %>
+          <% end %>
+
+          <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+
+          <div>
+            <% @activity.activity_types.each do |a| %>
+                <span class="label label-danger"><%= a.activity_type %></span>
+            <% end %>
+          </div>
+          </br>
+          <p class="lead">
+            <%
+               desc = @activity.description
+                       .gsub("\n", "<br/>")
+                       .gsub("  ", "&nbsp;")
+                       .gsub(/((http|https):\/\/\S*)/, '<a href="\1" target="_blank">\1</a> ')
+            %>
+            <%= desc.html_safe %>
+          </p>
+
+          <p class="lead">
+
+          <div class='row'>
+            <div class='col-sm-4'>
+              <b>
+                <% if @activity.location_name.present? %>
+                    <%= link_to @activity.location_name, @activity.website %>
+                <% elsif @activity.website.present? %>
+                    <%= link_to @activity.website, @activity.website %>
+                <% end %>
+              </b></br>
             <span style="white-space:nowrap;font-size:.85em;">
             <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
-            <% unless @activity.enddatetime.nil? %>
-                <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
+              <% unless @activity.enddatetime.nil? %>
+                  <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
             - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
             </span>
-            <% end %>
-          </div>
-          <div class='col-sm-2'></div>
-          <div class='col-sm-2'></div>
-          <div class='col-sm-4'>
+              <% end %>
+            </div>
+            <div class='col-sm-2'></div>
+            <div class='col-sm-2'></div>
+            <div class='col-sm-4'>
 
-            <a class='overlay-links' id='overlay_eventdate'>
-              <%= image_tag 'google-cal-icon.png', height: '40', width: '40' %>
-            </a>
-            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
-                <% image_tag('ical-icon.png', height: '40', width: '40') %>
-            <% end %>
+              <%= like_button(@activity.id) %>
 
-          </div>
-        </div>
-        <script>
-            $(function () {
-                $('#overlay_eventdate').bind('click', function () {
-                    window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
-                });
-                $('#eventdate').bind('click', function () {
-                    window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
-                });
-            });
-        </script>
-        </p>
-        <div id="map-canvas"></div>
-        <div id="directions-from"
-             style="position:relative;
-                     z-index:100;
-                     top:-50px;
-                     left:50px;"
-        >
-          <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions"/>
-        </div>
-        <div id="directions-panel"></div>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h4>Activity Comments:</h4>
-            <% if user_signed_in? %>
-                <%= render partial: 'form', locals: {:activity => @activity} %>
-            <% end %>
-            <%= render partial: 'comments', locals: {:activity => @activity} %>
-          </div>
-        </div>
+              <a class='overlay-links' id='overlay_eventdate'>
+                <%= image_tag 'google-cal-icon.png', height: '40', width: '40' %>
+              </a>
+              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+              <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
+                  <% image_tag('ical-icon.png', height: '40', width: '40') %>
+              <% end %>
 
+            </div>
+          </div>
+          <script>
+              $(function () {
+                  $('#overlay_eventdate').bind('click', function () {
+                      window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                  });
+                  $('#eventdate').bind('click', function () {
+                      window.open('<%=google_calendar_path(@activity)%>', 'Add Event to Google Calendar', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=1,resizable=1,left=0,top=0');
+                  });
+              });
+          </script>
+          </p>
+          <div id="map-canvas"></div>
+          <div id="directions-from"
+               style="position:relative;
+                       z-index:100;
+                       top:-50px;
+                       left:50px;"
+          >
+            <input type="textbox" id="from_address" onchange="calcRoute()" placeholder="Get driving directions"/>
+          </div>
+          <div id="directions-panel"></div>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4>Activity Comments:</h4>
+              <% if user_signed_in? %>
+                  <%= render partial: 'form', locals: {:activity => @activity} %>
+              <% end %>
+              <%= render partial: 'comments', locals: {:activity => @activity} %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body text-center">
+          <%= profile_img(@organizer) %>
+          <h3><%= link_to @organizer.profile.first_name + ' ' + @organizer.profile.last_name, @organizer %></h3>
+          <h4><%= @organizer.profile.about_me %></h4>
+          <% if @organizer != current_user && current_user %>
+              <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
+          <% elsif !current_user %>
+              <%= (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %>
+          <% end %>
+        </div>
+        <% unless current_user.nil? || (@organizer == current_user) %>
+            <div class="aim-container" style="width:230px;z-index:1000;"
+                 alink="Send <%= @organizer.profile.first_name %> a message"
+                 activity_name="<%= @activity.activity_name %>"
+                 recipient="<%= @organizer.id %>" recipient_firstname="<%= @organizer.profile.first_name %>" recipient_lastname="<%= @organizer.profile.last_name %>"
+                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
+            ></div>
+        <% end %>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body" id='whos_going'>
+          <h4>Who's Going (<%= @rsvps.length %>)</h4>
+
+          <%= render partial: 'invite_people', locals: {:activity => @activity} %>
+
+          <% @rsvps.each do |rsvp|
+            @going = rsvp.user %>
+              <p>
+                <% unless current_user.nil? || (@going == current_user) || (current_user.following?(@going)) %>
+                  <div class="pull-right follow_link" style="cursor:pointer;" user_id="<%= rsvp.user_id %>" user_name="<%= @going.name %>">
+                    <a class='label label-info' style="color:#FFF;">Follow</a>
+                  </div>
+              <% end %>
+              <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
+              </p>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="col-md-4">
-    <div class="panel panel-default">
-      <div class="panel-body text-center">
-        <%= profile_img(@organizer) %>
-        <h3><%= link_to @organizer.profile.first_name + ' ' + @organizer.profile.last_name, @organizer %></h3>
-        <h4><%= @organizer.profile.about_me %></h4>
-        <% if @organizer != current_user && current_user %>
-            <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
-        <% elsif !current_user %>
-            <%= (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %>
-        <% end %>
-      </div>
-      <% unless current_user.nil? || (@organizer == current_user) %>
-          <div class="aim-container" style="width:230px;z-index:1000;"
-               alink="Send <%= @organizer.profile.first_name %> a message"
-               activity_name="<%= @activity.activity_name %>"
-               recipient="<%= @organizer.id %>" recipient_firstname="<%= @organizer.profile.first_name %>" recipient_lastname="<%= @organizer.profile.last_name %>"
-               sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
-          ></div>
-      <% end %>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-body" id='whos_going'>
-        <h4>Who's Going (<%= @rsvps.length %>)</h4>
-
-        <%= render partial: 'invite_people', locals: {:activity => @activity} %>
-
-        <% @rsvps.each do |rsvp|
-          @going = rsvp.user %>
-            <p>
-              <% unless current_user.nil? || (@going == current_user) || (current_user.following?(@going)) %>
-                <div class="pull-right follow_link" style="cursor:pointer;" user_id="<%= rsvp.user_id %>" user_name="<%= @going.name %>">
-                  <a class='label label-info' style="color:#FFF;">Follow</a>
-                </div>
-            <% end %>
-            <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
-            </p>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
 </div>
 
 <script type="text/javascript">

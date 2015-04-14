@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150312170344) do
+ActiveRecord::Schema.define(version: 20150414181233) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "activity_name",      limit: 255
@@ -116,6 +116,14 @@ ActiveRecord::Schema.define(version: 20150312170344) do
     t.integer "interests_option_id", limit: 4
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4,   null: false
+    t.integer  "activity_id",  limit: 4,   null: false
+    t.string   "referrer_uri", limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
     t.integer "unsubscriber_id",   limit: 4
     t.string  "unsubscriber_type", limit: 255
@@ -208,6 +216,14 @@ ActiveRecord::Schema.define(version: 20150312170344) do
     t.string   "city",                         limit: 255
     t.string   "state",                        limit: 255
     t.string   "neighborhood",                 limit: 255
+  end
+
+  create_table "promotioncodes", force: :cascade do |t|
+    t.string   "code",       limit: 255, null: false
+    t.string   "campaign",   limit: 255, null: false
+    t.integer  "user_id",    limit: 4,   null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "recommended_followers", force: :cascade do |t|

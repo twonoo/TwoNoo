@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships
 
   has_many :activities
+  has_many :likes
 
   before_save :geocode_ip
   after_save :default_follow

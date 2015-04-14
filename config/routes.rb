@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   post 'alerts/create' => 'alerts#create', as: :alert_create
 
   resources :alerts
+  resources :likes, only: :create
+  get 'likes/data', to: 'likes#data'
+
   get 'alerts/new'
 
   get 'alerts/create'

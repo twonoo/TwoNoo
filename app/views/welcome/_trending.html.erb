@@ -11,6 +11,7 @@
                   </div>
                 </div>
                 <div class="trending-card-details">
+                  <%= like_button(t.id) %>
                   <p class="trending-date"><%= t.datetime.strftime('%^b %e') %></p>
 
                   <p class="trending-location"><%= t.city %>, <%= t.state %></p>
