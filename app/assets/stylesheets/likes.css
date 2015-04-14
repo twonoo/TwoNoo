@@ -1,5 +1,7 @@
 .like-widget {
     position: relative;
+    z-index: 1099;
+    width: 30px;
 }
 
 .like-button {
