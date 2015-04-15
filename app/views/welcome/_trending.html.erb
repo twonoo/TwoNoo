@@ -3,22 +3,30 @@
     <div class="row">
       <div>
         <% @trending.each do |t| %>
-            <a href="<%= activity_path(t.id) %>">
+            
               <div class="col-sm-3 trending-card-container">
+                <a href="<%= activity_path(t.id) %>">
                 <div style="background: rgba(0,0,0,0.5) url('<%= t.image.url(:trending) %>') no-repeat left top; background-size: cover" class="trending-card">
                   <div class="trending-title-container">
                     <span class="trending-title"><%= truncate(t.activity_name, :length => 31, separator: ' ') %></span>
                   </div>
                 </div>
+                </a>
                 <div class="trending-card-details">
-                  <p class="trending-date"><%= t.datetime.strftime('%^b %e') %></p>
-                  <p class="trending-location"><%= t.city %>, <%= t.state %></p>
-                  <!--<p class="trending-rsvps pull-right"><%#= like_button(t.id) %></p>-->
-                  <p class="trending-rsvps pull-right"><%= t.rsvp_count %>
-                    <span class="glyphicon glyphicon-user"></span></p>
+                  <div class="pull-left">
+                    <p class="trending-date"><%= t.datetime.strftime('%^b %e') %></p>
+                    <p class="trending-location"><%= t.city %>, <%= t.state %></p>
+                  </div>
+                  <div class="pull-right" style="margin-right:5px; margin-top:10px;">
+                    <span class="trending-rsvps"><%= t.rsvp_count %>
+                      <span class="glyphicon glyphicon-user"></span>
+                    </span>
+                    <span class="trending-rsvps pull-right"><%= like_button(t.id) %></span>
+                  </div>
+                  
                 </div>
               </div>
-            </a>
+            
         <% end %>
       </div>
     </div>

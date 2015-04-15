@@ -51,6 +51,10 @@ $(function () {
                 window.location.href = '/users/sign_in?s=t';
             }
         })
+        $('.like-button-text').click(function (e) {
+           e.preventDefault();
+           $(e.target.parentElement).click();
+       })
     }, 2000);
 
 })

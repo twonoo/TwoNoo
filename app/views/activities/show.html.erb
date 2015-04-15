@@ -124,28 +124,28 @@
                     <%= link_to @activity.website, @activity.website %>
                 <% end %>
               </b></br>
-            <span style="white-space:nowrap;font-size:.85em;">
-            <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
-            </span>
-              <% unless @activity.enddatetime.nil? %>
-                  <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
-            - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
-            </span>
+              <span style="white-space:nowrap;font-size:.85em;">
+              <%= @activity.datetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
+                </span>
+                  <% unless @activity.enddatetime.nil? %>
+                      <br/><span style="white-space:nowrap;margin-left:5%;font-size:.85em">
+                - <%= @activity.enddatetime.strftime('%A, %B %e, %Y @ %l:%M %p') %>
+                </span>
               <% end %>
             </div>
-            <div class='col-sm-2'></div>
-            <div class='col-sm-2'></div>
-            <div class='col-sm-4'>
-
-              <%#= like_button(@activity.id) %>
-
-              <a class='overlay-links' id='overlay_eventdate'>
-                <%= image_tag 'google-cal-icon.png', height: '40', width: '40' %>
-              </a>
-              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-              <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
+            <div class='col-sm-8 col-xs-12'>
+              <ul id="event_buttons">
+                <li class="first"><a class='overlay-links' id='overlay_eventdate'>
+                <%= image_tag 'google-cal-icon.png', height: '40', width: '40' %></a></li>
+                <li> | </li>
+                <li>
+                  <%= link_to :controller => 'activities', :action => :add_to_gcal, :format => :ics, :class => 'overlay-links' do %>
                   <% image_tag('ical-icon.png', height: '40', width: '40') %>
-              <% end %>
+                  <% end %>
+                </li>
+                <li> | </li>
+                <li><%= like_button(@activity.id) %></li>
+              </ul>
 
             </div>
           </div>
@@ -310,6 +310,29 @@
 </script>
 
 <style type='text/css'>
+
+ #event_buttons {
+    float:right;
+  }
+  @media screen and (max-width: 640px) {
+    #event_buttons {
+      float:left;
+      margin-left:0 !important;
+      padding-left:0 !important;
+      margin-top:10px !important;
+    }
+    #event_buttons li.first {
+      margin-left:0px;
+    }
+  }
+  #event_buttons li {
+    display:inline-block;
+    margin:0 8px;
+  }
+
+  #event_buttons .like-widget {
+    top:3px;
+  }
 
     .overlay-links {
         cursor: pointer;
