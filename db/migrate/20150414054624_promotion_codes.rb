@@ -3,7 +3,7 @@ class PromotionCodes < ActiveRecord::Migration
     create_table :promotioncodes do |t|
       t.string :code, null: false
       t.string :campaign, null: false
-      t.integer :user_id, null: false
+      t.integer :user_id, null: true
 
       t.timestamps null: false
     end
