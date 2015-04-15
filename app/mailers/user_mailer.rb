@@ -491,7 +491,7 @@ class UserMailer < ActionMailer::Base
       {"name"=>"ACTIVITY_ID", "content"=>activity.id},
       {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
       {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
-      {"name"=>"*|DISCOUNT_CODE|*", "content"=>promotion.code}
+      {"name"=>"DISCOUNT_CODE", "content"=>promotion.code}
       ]
     }  
 
