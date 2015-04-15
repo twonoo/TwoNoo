@@ -13,7 +13,7 @@
                 <div class="trending-card-details">
                   <p class="trending-date"><%= t.datetime.strftime('%^b %e') %></p>
                   <p class="trending-location"><%= t.city %>, <%= t.state %></p>
-                  <p class="trending-rsvps pull-right"><%= like_button(t.id) %></p>
+                  <!--<p class="trending-rsvps pull-right"><%#= like_button(t.id) %></p>-->
                   <p class="trending-rsvps pull-right"><%= t.rsvp_count %>
                     <span class="glyphicon glyphicon-user"></span></p>
                 </div>
