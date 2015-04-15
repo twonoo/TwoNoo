@@ -318,9 +318,6 @@ class UserMailer < ActionMailer::Base
     @user = user
 
     if (@user.profile.notification_setting.attending_activity_update == 1)
-#      @activity = activity
-#      attachments.inline['twonoo-logo.png'] = File.read("#{Rails.root}/app/assets/images/twonoo_logo_small.png")
-#      mail(to: @user.email, subject: "#{@activity.activity_name} has been updated on TwoNoo!")
 
       # Mandrill integration
 
@@ -476,6 +473,30 @@ class UserMailer < ActionMailer::Base
 
       sending = m.messages.send_template t, tc, message  
       logger.info sending
+  end
+
+  def promotion_code(user, activity, promotion)
+    # Mandrill integration
+
+    mandrill_to = [{:email => user.email, :type => 'to'}]
+    m = Mandrill::API.new
+    t = 'Whiskey Doughnut'
+    tc = [{"name" => "inviter", "content" => "TwoNoo"}]
+    message = {  
+     :to=>mandrill_to,  
+     :merge_language=>"mailchimp",
+     :global_merge_vars=>[
+      {"name"=>"USER_NAME", "content"=>user.name},
+      {"name"=>"USER_EMAIL", "content"=>user.email},
+      {"name"=>"ACTIVITY_ID", "content"=>activity.id},
+      {"name"=>"ACTIVITY_NAME", "content"=>activity.activity_name},
+      {"name"=>"ACTIVITY_DESC", "content"=>activity.description},
+      {"name"=>"*|DISCOUNT_CODE|*", "content"=>promotion.code}
+      ]
+    }  
+
+    sending = m.messages.send_template t, tc, message  
+    logger.info sending
   end
 
 end

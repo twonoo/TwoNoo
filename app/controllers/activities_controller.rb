@@ -260,6 +260,26 @@ class ActivitiesController < ApplicationController
         if current_user != activity.user
           activity.user.notify("#{current_user.name} is coming to your activity!", "<a href='#{root_url}/activities/#{activity.id}'>#{activity.activity_name}</a>")
           UserMailer.delay.new_rsvp(activity.user, current_user, activity)
+
+          ## Get the Promotion
+          logger.info "checking for promotion"
+          unless activity.campaign.nil?
+            logger.info "Activity has Campaign: #{activity.campaign}"
+            promotion = Promotioncode.where(campaign: activity.campaign, user_id: current_user.id).first
+            if promotion.nil?
+              promotion = Promotioncode.where(campaign: activity.campaign, user_id: 2).first
+            end 
+
+            unless promotion.nil?
+              logger.info "Updating promotion code"
+              promotion.user_id = current_user.id
+
+              if promotion.save
+                logger.info "Sending e-mail"
+                UserMailer.delay.promotion_code(current_user, activity, promotion)
+              end
+            end
+          end 
         end
 
         format.html { redirect_to activity_path(activity), notice: "You're now going to #{activity.activity_name}!" }
