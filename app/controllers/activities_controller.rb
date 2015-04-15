@@ -267,7 +267,7 @@ class ActivitiesController < ApplicationController
             logger.info "Activity has Campaign: #{activity.campaign}"
             promotion = Promotioncode.where(campaign: activity.campaign, user_id: current_user.id).first
             if promotion.nil?
-              promotion = Promotioncode.where(campaign: activity.campaign, user_id: 2).first
+              promotion = Promotioncode.where(campaign: activity.campaign, user_id: nil).first
             end 
 
             unless promotion.nil?
