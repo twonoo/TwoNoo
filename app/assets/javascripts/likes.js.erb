@@ -1,0 +1,56 @@
+$(function () {
+
+    setTimeout(function () {
+        var userId = $('meta[name=user_id]').attr("content");
+
+        $(".like-widget").each(function (e) {
+            var activityId = $(this).attr('activity-id');
+
+            $.ajax({
+                type: "GET",
+                url: "/likes/data",
+                data: {activity_id: activityId, user_id: userId},
+                success: function (results) {
+                    $($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text(results.count);
+                    if (results.user_has_liked) {
+                        $($('[activity-id=' + activityId + ']').children('.like-button')[0]).css('background-color', '#FE0075');
+                    }
+                },
+                error: function (results) {
+                    console.log('error');
+                    console.log(results);
+                }
+            });
+        });
+
+        $('.like-button').click(function (e) {
+            e.preventDefault();
+
+            if (userId != undefined) {
+                var activityId = $(e.target.parentElement).attr('activity-id');
+                var referrerUri = window.location.href;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/likes",
+                    data: {activity_id: activityId, user_id: userId, referrer_uri: referrerUri},
+                    success: function (results) {
+                        var countVal = parseInt($($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text());
+                        if (results.created) {
+                            $(e.target).css('background-color', '#FE0075');
+                            $($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text((countVal + 1).toString());
+                        } else {
+                            $(e.target).css('background-color', '#FFFFFF');
+                            $($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text((countVal - 1)).toString();
+                        }
+                    },
+                    error: function (results) {
+                    }
+                });
+            } else {
+                window.location.href = '/users/sign_in?s=t';
+            }
+        })
+    }, 2000);
+
+})
