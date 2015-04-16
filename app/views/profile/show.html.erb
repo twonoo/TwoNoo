@@ -150,9 +150,15 @@
                 e.preventDefault();
                 showAlert();
             });
+
+            $('#closeNeedLogInAlert').click(function(){
+                $('#loginToLike').hide();
+            })
+
         })
         function showAlert() {
             $('#needLogInAlert').show();
         }
+
     </script>
 <% end %>
