@@ -26,6 +26,7 @@ $(function () {
         });
 
         $('.like-button').click(function (e) {
+            $('#loginToLike').hide();
             e.preventDefault();
 
             if (userId != undefined) {
@@ -50,7 +51,7 @@ $(function () {
                     }
                 });
             } else {
-                window.location.href = '/users/sign_in?s=t';
+                $('#loginToLike').show();
             }
         })
         $('.like-button-text').click(function (e) {
