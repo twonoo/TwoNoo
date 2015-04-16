@@ -1,12 +1,13 @@
 .like-widget {
     position: relative;
-    z-index: 1099;
+    //z-index: 1099;  Stupid taxes, am I right?
     width: 65px;
+  bottom: 2px;
 }
 
 .like-button {
     width: 40px;
-    //border: 1px solid #ccc;
+    border: 1px solid #ccc;
     height: 25px;
     display: inline-block;
     padding: 2px;
