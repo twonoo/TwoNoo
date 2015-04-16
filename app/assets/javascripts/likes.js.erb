@@ -15,7 +15,7 @@ $(function () {
                     if (results.user_has_liked) {
                         $($('[activity-id=' + activityId + ']').children('.like-button')[0]).css('background-color', '#FE0075');
                     }else{
-                        $($('[activity-id=' + activityId + ']').children('.like-button')[0]).css('background-color', '#eeeeee');
+                        $($('[activity-id=' + activityId + ']').children('.like-button')[0]).css('background-color', '#FFFFFF');
                     }
                 },
                 error: function (results) {
@@ -43,7 +43,7 @@ $(function () {
                             $(e.target).css('background-color', '#FE0075');
                             $($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text((countVal + 1).toString());
                         } else {
-                            $(e.target).css('background-color', '#eeeeee');
+                            $(e.target).css('background-color', '#FFFFFF');
                             $($('[activity-id=' + activityId + ']').children('.like-counter')[0]).text((countVal - 1)).toString();
                         }
                     },
