@@ -9,13 +9,13 @@ class WelcomeController < ApplicationController
 
     case @trending.length
       when 13..15
-        @trending = @trending.limit(12)
+        @trending = @trending.take(12)
       when 9..11
-        @trending = @trending.limit(8)
+        @trending = @trending.take(8)
       when 0..7
-        @trending = @trending.limit(4)
+        @trending = @trending.take(4)
       else
-        @trending = @trending.limit(16)
+        @trending = @trending.take(16)
     end
 
     respond_to do |format|
