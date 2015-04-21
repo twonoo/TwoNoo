@@ -28,6 +28,8 @@ class WelcomeController < ApplicationController
   end
 
   def search
+    params[:terms] = params[:terms].gsub!(/[^0-9A-Za-z]/, ' ')
+
     @outsideSupportedArea = false
     # Setup location constraints
     denver = [39.737567, -104.9847179]
