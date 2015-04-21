@@ -6,9 +6,9 @@
   <% if current_user %>
       <li>
       <% if current_user && current_user.recommended_followers.count > 0 %>
-              <%= link_to ('People You Know <span class="red_badge">' + current_user.recommended_followers.count.to_s+ '</span>').html_safe, people_path %>
+              <%= link_to ('Cool People <span class="red_badge">' + current_user.recommended_followers.count.to_s+ '</span>').html_safe, people_path %>
             <% else %>
-              <%= link_to ('People You Know <span class="badge">0</span>').html_safe, people_path %>
+              <%= link_to ('Cool People <span class="badge">0</span>').html_safe, people_path %>
             <% end %>
       </li>
   <% end %>

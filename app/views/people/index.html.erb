@@ -6,7 +6,7 @@
       <h2>
         <button href='' id='find_people' class='pull-right btn btn-sm btn-primary'>Find People
           <span id='find_people_loading' class='fa fa-refresh fa-spin'></span></button>
-        People You Know
+        Cool People
       </h2>
       <% @people.each do |p| %>
           <% if current_user != p.follower_user && !current_user.following?(p.follower_user) %>
