@@ -15,11 +15,12 @@
                 <%= profile_img(p.follower_user) %>
                 <div class="image-container">
                   <%= link_to (p.follower_user.name.titleize), profile_path(p.follower_user) %><br/>
-                  <br/>
 
                   <div class="match-criteria-text"><span class="match-criteria"><%= p.match_criteria %></span>
                     <% if p.match_data.present? %>
                         ...<br/><span class="match-data"><%= p.match_data %></span>
+                    <% else %>
+                        &nbsp;<br/>
                     <% end %>
                   </div>
                 </div>
