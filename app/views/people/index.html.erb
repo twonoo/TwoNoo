@@ -14,11 +14,13 @@
 
                 <%= profile_img(p.follower_user) %>
                 <div class="image-container">
-                  <%= link_to (p.follower_user.name), profile_path(p.follower_user) %><br/>
-                  <span class="match-criteria"><%= p.match_criteria %></span>
-                  <% if p.match_data.present? %>
-                      ...&nbsp;<span class="match-data"><%= p.match_data %></span>
-                  <% end %>
+                  <%= link_to (p.follower_user.name.titleize), profile_path(p.follower_user) %><br/>
+
+                  <div class="match-criteria-text"><span class="match-criteria"><%= p.match_criteria %></span>
+                    <% if p.match_data.present? %>
+                        ...<br/><span class="match-data"><%= p.match_data %></span>
+                    <% end %>
+                  </div>
                 </div>
 
                 <div class="im-container"
@@ -69,6 +71,10 @@
     .match-data {
         color: #5bc0de;
         font-size: 11px;
+    }
+
+    .match-criteria-text {
+        line-height: 12px;
     }
 </style>
 
