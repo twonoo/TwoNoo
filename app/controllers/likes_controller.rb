@@ -1,8 +1,11 @@
 class LikesController < ApplicationController
+  before_filter :authenticate_user!, only: :create
 
   def create
+    params.merge!(user_id: current_user.id)
     params.merge!(referrer_uri: request.referrer) if params[:referrer_uri].blank?
-    if !permitted.values_at(:user_id, :activity_id, :referrer_uri).include? nil
+
+    if !permitted.values_at(:activity_id, :referrer_uri).include? nil
       render json: {created: Like.add_or_remove(permitted)}, status: 200
     else
       render json: {error: 'missing required parameters'}, status: :unprocessable_entity
