@@ -8,13 +8,13 @@ class MatchedCriteriaOnRecommendedFollowers < ActiveRecord::Migration
     RecommendedFollower.all.each do |rf|
       case rf.order
         when 1
-          rf.update_attribute(:match_criteria, "You're facebook friends")
+          puts rf.update_attribute(:match_criteria, "You're facebook friends")
         when 2
-          rf.update_attribute(:match_criteria, "They're following you")
+          puts rf.update_attribute(:match_criteria, "They're following you")
         when 3
-          rf.update_attribute(:match_criteria, "You're following several of the same people")
+          puts rf.update_attribute(:match_criteria, "You're following several of the same people")
         when 4
-          rf.update_attribute(:match_criteria, "You're at the same level")
+          puts rf.update_attribute(:match_criteria, "You're at the same level")
       end
     end
 
