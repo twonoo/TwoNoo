@@ -6,17 +6,23 @@
       <h2>
         <button href='' id='find_people' class='pull-right btn btn-sm btn-primary'>Find People
           <span id='find_people_loading' class='fa fa-refresh fa-spin'></span></button>
-        Cool People
+        People You Know
       </h2>
       <% @people.each do |p| %>
           <% if current_user != p.follower_user && !current_user.following?(p.follower_user) %>
               <div class="col-md-12 panel " style="background-color:#fff;vertical-align:middle;">
 
                 <%= profile_img(p.follower_user) %>
-                <%= link_to (p.follower_user.name), profile_path(p.follower_user) %>
+                <div class="image-container">
+                  <%= link_to (p.follower_user.name), profile_path(p.follower_user) %><br/>
+                  <span class="match-criteria"><%= p.match_criteria %></span>
+                  <% if p.match_data.present? %>
+                      ...&nbsp;<span class="match-data"><%= p.match_data %></span>
+                  <% end %>
+                </div>
 
-                <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
-                     alink="Send <%= p.follower_user.profile.first_name %> a message"
+                <div class="im-container"
+                     alink="Message"
                      recipient="<%= p.follower_user.id %>" recipient_firstname="<%= p.follower_user.profile.first_name %>" recipient_lastname="<%= p.follower_user.profile.last_name %>"
                      sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"></div>
 
@@ -30,6 +36,41 @@
 
   </div>
 </div>
+
+<style>
+
+    /*.im-container {*/
+    /*z-index: 1000;*/
+    /*position: relative;*/
+    /*float: right;*/
+    /*display: inline-flex;*/
+    /*right: -15px;*/
+    /*margin-bottom: 19px;*/
+    /*}*/
+
+    .image-container {
+        display: inline-block;
+    }
+
+    .im-container {
+        width: 230px;
+        z-index: 1000;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        text-align: right;
+    }
+
+    .match-criteria {
+        color: black;
+        font-size: 11px;
+    }
+
+    .match-data {
+        color: #5bc0de;
+        font-size: 11px;
+    }
+</style>
 
 <script type='text/javascript'>
     $(function () {

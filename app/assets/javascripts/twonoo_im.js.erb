@@ -99,7 +99,7 @@ var IM = function(im_container) {
 };
 
 IM.prototype.create_parts = function(){
-  this.alink = $('<a>', {id: 'messageMe', class: 'messageMe', text: this.im_container.attr('alink')});
+  this.alink = $('<a>', {id: 'messageMe', class: 'messageMe label label-info', text: this.im_container.attr('alink')});
   this.chatbox = $('<div>', {id: 'chatbox', class: 'chatbox col-md-12', style: 'display:none;padding:0px;margin:0px'});
   this.header = $('<div>', {id: 'header', class: 'header', text: this.recipient.name()});
   this.conversation = $('<div>', {id: 'conversation', class: 'conversation col-md-12'});
