@@ -241,12 +241,12 @@ class User < ActiveRecord::Base
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
         elsif other_user.profile.state == user.profile.state && num_shared_followers >= 4
-          user.recommend_follow!(other_user, 2, "They're following you")
+          user.recommend_follow!(other_user, 2, "You're following several of the same people")
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
         elsif other_user.profile.state == user.profile.state && user.followers.where(id: other_user.id).exists?
-          user.recommend_follow!(other_user, 3, "You're following several of the same people")
+          user.recommend_follow!(other_user, 3, "They're following you")
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
