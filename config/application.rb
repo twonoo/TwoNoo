@@ -15,6 +15,8 @@ end
 module Twonoo
   class Application < Rails::Application
 
+    config.autoload_paths << Rails.root.join('lib/classes')
+
     Obscenity.configure do |config|
       config.blacklist   = File.join(Rails.root, 'config', 'profanity.yml')
       config.replacement = :default

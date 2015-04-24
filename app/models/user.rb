@@ -64,23 +64,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  def shared_interest_option_with(other_user, filter=[])
-    shared_interests = (self.interests.pluck(:name) || []) & (other_user.interests.pluck(:name) || [])
-    if filter and filter.length > 0
-      shared_interests = shared_interests.delete_if { |i| !filter.include? i }
-    end
-    if shared_interests.length > 0
-      shared_interests.each do |interest|
-        interest = Interest.where(name: interest).first
-        if interest.interests_option_id(self.id) == interest.interests_option_id(other_user.id)
-          return InterestsOption.find_by_id(interest.interests_option_id(self.id))
-        end
-      end
-    end
-
-    nil
-  end
-
   def following?(other_user)
     follow_relationships.find_by(followed_id: other_user.id)
   end
@@ -219,54 +202,10 @@ class User < ActiveRecord::Base
   end
 
   def find_people
-
-    other_users = User.unscoped.all
-    user = self
-
-    user_key = Digest::SHA1.hexdigest(user.id.to_s + WEB_SOCKET_CIPHER)
-
-    other_users.each do |other_user|
-      follow_relationship = FollowRelationship.exists?(follower_id: user.id, followed_id: other_user.id)
-
-      if !follow_relationship && other_user.id != user.id
-
-        users_being_followed = other_user.follow_relationships.pluck(:followed_id)
-        users_following = user.follow_relationships.pluck(:followed_id)
-        num_shared_followers = (users_being_followed & users_following).length
-
-        are_friends = other_user.facebook_friends?(user)
-        if are_friends
-          user.recommend_follow!(other_user, 1, "You're facebook friends")
-          Fiber.new do
-            WebsocketRails[:people_you_know].trigger user_key, other_user
-          end.resume
-        elsif other_user.profile.state == user.profile.state
-          shared_interest_option = shared_interest_option_with(other_user, %w(Tennis Running))
-          if shared_interest_option.present?
-            user.recommend_follow!(other_user, 4, "You're at the same level", "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
-            Fiber.new do
-              WebsocketRails[:people_you_know].trigger user_key, other_user
-            end.resume
-          end
-        elsif other_user.profile.state == user.profile.state && num_shared_followers >= 4
-          user.recommend_follow!(other_user, 2, "You're following several of the same people")
-          Fiber.new do
-            WebsocketRails[:people_you_know].trigger user_key, other_user
-          end.resume
-        elsif other_user.profile.state == user.profile.state && user.followers.where(id: other_user.id).exists?
-          user.recommend_follow!(other_user, 3, "They're following you")
-          Fiber.new do
-            WebsocketRails[:people_you_know].trigger user_key, other_user
-          end.resume
-        end
-
-      end
-    end
-
+    PeopleFinder.new(self).find_by_all
     Fiber.new do
       WebsocketRails[:people_you_know].trigger user_key, 'done'
     end.resume
-
   end
 
 end

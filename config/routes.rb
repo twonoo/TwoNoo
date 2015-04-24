@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   get 'credits/create'
   get 'credits/purchase'
 
+  get 'test/test', to: 'test#test'
+
   authenticated :user do
     root :to => 'welcome#index', as: :authenticated_root
   end
