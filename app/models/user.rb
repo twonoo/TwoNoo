@@ -240,6 +240,14 @@ class User < ActiveRecord::Base
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
+        elsif other_user.profile.state == user.profile.state
+          shared_interest_option = shared_interest_option_with(other_user, %w(Tennis Running))
+          if shared_interest_option.present?
+            user.recommend_follow!(other_user, 4, "You're at the same level", "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
+            Fiber.new do
+              WebsocketRails[:people_you_know].trigger user_key, other_user
+            end.resume
+          end
         elsif other_user.profile.state == user.profile.state && num_shared_followers >= 4
           user.recommend_follow!(other_user, 2, "You're following several of the same people")
           Fiber.new do
@@ -250,14 +258,6 @@ class User < ActiveRecord::Base
           Fiber.new do
             WebsocketRails[:people_you_know].trigger user_key, other_user
           end.resume
-        elsif other_user.profile.state == user.profile.state
-          shared_interest_option = shared_interest_option_with(other_user, %w(Tennis Running))
-          if shared_interest_option.present?
-            user.recommend_follow!(other_user, 4,  "You're at the same level", "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
-            Fiber.new do
-              WebsocketRails[:people_you_know].trigger user_key, other_user
-            end.resume
-          end
         end
 
       end
