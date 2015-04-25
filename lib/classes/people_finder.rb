@@ -124,7 +124,7 @@ class PeopleFinder
     user_is_following = @user.follow_relationships.pluck(:followed_id)
     other_user_is_following = other_user.follow_relationships.pluck(:followed_id)
     shared_following = (user_is_following & other_user_is_following).length
-    log "Both parties follow #{shared_following} of the same people"
+    log "Both parties follow #{shared_following} of the same people"; return shared_following
   end
 
   def is_being_followed(other_user)
@@ -146,9 +146,12 @@ class PeopleFinder
         interest = Interest.where(name: interest).first
         if interest.interests_option_id(@user.id) == interest.interests_option_id(other_user.id)
           shared_interest_option = InterestsOption.find_by_id(interest.interests_option_id(@user.id))
-          log "Found shared interest option #{shared_interest_option.option_name} - #{shared_interest_option.option_value}"; return shared_interest_option
+          log "Found shared interest option #{shared_interest_option.option_name} - #{shared_interest_option.option_value}"
+          return shared_interest_option
         end
       end
+    else
+      log 'No shared interests after filter'
     end
 
     log 'No shared interests after filter'; return nil
@@ -173,11 +176,13 @@ class PeopleFinder
   end
 
   def toggle_ar_logger
-    if ActiveRecord::Base.logger.present?
-      @ar_logger = ActiveRecord::Base.logger
-      ActiveRecord::Base.logger = nil
-    else
-      ActiveRecord::Base.logger = @ar_logger
+    if @options[:verbose]
+      if ActiveRecord::Base.logger.present?
+        @ar_logger = ActiveRecord::Base.logger
+        ActiveRecord::Base.logger = nil
+      else
+        ActiveRecord::Base.logger = @ar_logger
+      end
     end
   end
 
