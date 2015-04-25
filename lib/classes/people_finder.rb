@@ -95,7 +95,7 @@ class PeopleFinder
 
   def should_pursue_user?(other_user)
     log(' ')
-    log "Checking against #{other_user.email} - #{other_user.id}"
+    log "Checking #{@user.email}(#{@user.id}) against #{other_user.email}(#{other_user.id})"
     if !follow_relationship_exists?(other_user) && !rec_follow_relationship_exists?(other_user) && other_user.id != @user.id
       log 'Pursuing'; return true
     else
@@ -146,8 +146,12 @@ class PeopleFinder
         interest = Interest.where(name: interest).first
         if interest.interests_option_id(@user.id) == interest.interests_option_id(other_user.id)
           shared_interest_option = InterestsOption.find_by_id(interest.interests_option_id(@user.id))
-          log "Found shared interest option #{shared_interest_option.option_name} - #{shared_interest_option.option_value}"
-          return shared_interest_option
+          if shared_interest_option
+            log "Found shared interest option #{shared_interest_option.option_name} - #{shared_interest_option.option_value}"
+            return shared_interest_option
+          else
+            log 'An interest was found, but it did not contain an option'
+          end
         end
       end
     else
