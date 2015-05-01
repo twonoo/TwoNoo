@@ -3,12 +3,13 @@ class WelcomeController < ApplicationController
     @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
     @suggested_city_search_terms = US_CITIES
 
-    view_log = ViewLog.find_or_initialize_by(user_id: current_user.id, view_name: 'welcome/index')
-    unless current_user.blank? or view_log.persisted?
-      view_log.save
-      FindPeopleJob.perform_later(current_user.id) if current_user
+    if current_user.present?
+      view_log = ViewLog.find_or_initialize_by(user_id: current_user.id, view_name: 'welcome/index')
+      unless view_log.persisted?
+        view_log.save
+        FindPeopleJob.perform_later(current_user.id) if current_user
+      end
     end
-
   end
 
   def trending
