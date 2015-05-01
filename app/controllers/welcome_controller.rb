@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
     @suggested_city_search_terms = US_CITIES
 
     view_log = ViewLog.find_or_initialize_by(user_id: current_user.id, view_name: 'welcome/index')
-    unless view_log.persisted?
+    unless current_user.blank? or view_log.persisted?
       view_log.save
       FindPeopleJob.perform_later(current_user.id) if current_user
     end
