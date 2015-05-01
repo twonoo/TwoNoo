@@ -28,6 +28,8 @@ class InterestsController < ApplicationController
         interests_user_record.save
       end
 
+      FindPeopleJob.perform_later(current_user.id) if current_user
+
     end
 
     flash[:success] = 'Interests saved'
