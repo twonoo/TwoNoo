@@ -183,9 +183,9 @@ class User < ActiveRecord::Base
 
       case profile.state
         when "CO"
-          user1 = User.find_by_id(2) #Keefe
+          # user1 = User.find_by_id(2) #Keefe
           user2 = User.find_by_id(231) #TwoNoo Denver
-          follow!(2) unless (following?(user1) || (self == user1))
+          # follow!(2) unless (following?(user1) || (self == user1))
           follow!(231) unless (user2.nil? || following?(user2))
         when "AK"
           user1 = User.find_by_id(3) # Betts
@@ -202,7 +202,7 @@ class User < ActiveRecord::Base
   end
 
   def find_people
-    PeopleFinder.new(self).find_by_all
+    PeopleFinder.new(self, {verbose: true}).find_by_all
     Fiber.new do
       WebsocketRails[:people_you_know].trigger user_key, 'done'
     end.resume

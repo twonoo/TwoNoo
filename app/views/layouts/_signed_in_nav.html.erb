@@ -57,7 +57,7 @@
     <li class="dropdown wide">
       <a href="/people">Cool People
         <% if current_user.recommended_followers.count > 0%>
-        <span class="people_counter red_badge" id="people_badge"><%= current_user.recommended_followers.count %></span>
+        <span class="people_counter red_badge" id="people_badge"><%= current_user.recommended_followers.where(ignored: false).count %></span>
         <% else %>
         <span class="people_counter badge" id="people_badge">0</span>
         <% end %>

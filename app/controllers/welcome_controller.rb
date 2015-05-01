@@ -2,10 +2,17 @@ class WelcomeController < ApplicationController
   def index
     @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
     @suggested_city_search_terms = US_CITIES
+
+    view_log = ViewLog.find_or_initialize_by(user_id: current_user.id, view_name: 'welcome/index')
+    unless view_log.persisted?
+      view_log.save
+      FindPeopleJob.perform_later(current_user.id) if current_user
+    end
+
   end
 
   def trending
-    @trending = Activity.trending(params[:location]).to_a.sort_by {|x| x.datetime}
+    @trending = Activity.trending(params[:location]).to_a.sort_by { |x| x.datetime }
 
     case @trending.length
       when 13..15
@@ -131,7 +138,7 @@ class WelcomeController < ApplicationController
     #Tag results
     tag_type = ActivityType.where(activity_type: params[:terms]).first
     tag_activities = Activity.where(cancelled: false).joins(:activity_types)
-    .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
+                         .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
 
     #Search results
     search_activities = []
@@ -209,6 +216,10 @@ class WelcomeController < ApplicationController
     end
 
     @users = Profile.terms(params[:terms])
+    if @users && params[:location] && params[:location].include?(',')
+      state = params[:location].split(',').last.strip
+      @users = @users.select { |u| u.state.blank? || u.state.downcase == state.downcase }
+    end
 
     search_history = Search.new(search: params[:terms], location: params[:location])
     search_history.user_id = current_user.id if current_user

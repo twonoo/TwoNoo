@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422171626) do
+ActiveRecord::Schema.define(version: 20150501024234) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "activity_name",      limit: 255
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 20150422171626) do
     t.datetime "updated_at"
     t.string   "match_criteria",          limit: 255
     t.string   "match_data",              limit: 255
+    t.boolean  "ignored",                 limit: 1,   default: false
   end
 
   create_table "rsvps", force: :cascade do |t|

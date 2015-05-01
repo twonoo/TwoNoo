@@ -10,6 +10,12 @@ class Profile < ActiveRecord::Base
 
   after_save :create_notification_setting
 
+  acts_as_mappable :default_units => :miles,
+                   :default_formula => :sphere,
+                   :distance_field_name => :distance,
+                   :lat_column_name => :latitude,
+                   :lng_column_name => :longitude
+
   has_attached_file :profile_picture, :styles => {:medium => "300x300>", :thumb => "100x100#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
   validates_attachment_content_type :profile_picture, :content_type => /\Aimage\/.*\Z/
 

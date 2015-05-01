@@ -1,6 +1,6 @@
 class PeopleFinder
 
-  @@finders = %w(facebook_friends shared_interests shared_following being_followed)
+  @@finders = %w(facebook_friends shared_interest_options shared_interests shared_following being_followed)
 
   def initialize(user, options={})
 
@@ -52,7 +52,22 @@ class PeopleFinder
     @other_users.each do |other_user|
       if should_pursue_user?(other_user) && users_shares_state(other_user)
         if shares_enough_following(other_user)
-          create_recommended_follower_record(other_user, 2, "You're following several of the same people")
+          create_recommended_follower_record(other_user, 2, "You're following 4+ of the same people")
+        end
+      end
+    end
+
+    toggle_ar_logger
+  end
+
+  def find_by_shared_interests
+    toggle_ar_logger
+
+    log '**** Running find_by_shared_interests ****'
+    @other_users.each do |other_user|
+      if should_pursue_user?(other_user) && users_shares_state(other_user)
+        if get_shared_interests(other_user) >= 5
+          create_recommended_follower_record(other_user, 5, 'You have 5+ shared interests', "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
         end
       end
     end
@@ -75,10 +90,10 @@ class PeopleFinder
     toggle_ar_logger
   end
 
-  def find_by_shared_interests
+  def find_by_shared_interest_options
     toggle_ar_logger
 
-    log '**** Running find_by_shared_interests ****'
+    log '**** Running find_by_shared_interest_options ****'
     @other_users.each do |other_user|
       if should_pursue_user?(other_user) && users_shares_state(other_user)
         shared_interest_option = get_shared_interest_option(other_user)
@@ -135,8 +150,12 @@ class PeopleFinder
     end
   end
 
+  def get_shared_interests(other_user)
+    (@user.interests.pluck(:name) || []) & (other_user.interests.pluck(:name) || [])
+  end
+
   def get_shared_interest_option(other_user)
-    shared_interests = (@user.interests.pluck(:name) || []) & (other_user.interests.pluck(:name) || [])
+    shared_interests = get_shared_intersts(other_user)
     log "Shared interests before filter #{shared_interests}"
     shared_interests = shared_interests.delete_if { |i| !@options[:interests_filter].include? i }
     log "Shared interests after filter #{shared_interests}"
