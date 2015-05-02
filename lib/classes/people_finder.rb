@@ -66,7 +66,8 @@ class PeopleFinder
     log '**** Running find_by_shared_interests ****'
     @other_users.each do |other_user|
       if should_pursue_user?(other_user) && users_shares_state(other_user)
-        if get_shared_interests(other_user) >= 5
+        interests = get_shared_interests(other_user)
+        if interests && interests.length >= 5
           create_recommended_follower_record(other_user, 5, 'You have 5+ shared interests', "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
         end
       end
