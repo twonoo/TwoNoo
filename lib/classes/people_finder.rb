@@ -68,11 +68,11 @@ class PeopleFinder
       if should_pursue_user?(other_user) && users_shares_state(other_user)
         interests = get_shared_interests(other_user)
         if interests && interests.length >= 5
-          create_recommended_follower_record(other_user, 5, 'You have 5+ shared interests', "#{shared_interest_option.interest.name} (#{shared_interest_option.option_value})")
+          create_recommended_follower_record(other_user, 5, 'You have 5+ shared interests')
         end
       end
     end
-
+s
     toggle_ar_logger
   end
 
