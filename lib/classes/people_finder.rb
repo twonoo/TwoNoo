@@ -72,7 +72,7 @@ class PeopleFinder
         end
       end
     end
-s
+
     toggle_ar_logger
   end
 
