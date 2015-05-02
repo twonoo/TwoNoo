@@ -3,7 +3,6 @@ class PeopleFinder
   @@finders = %w(facebook_friends shared_interest_options shared_interests shared_following being_followed)
 
   def initialize(user, options={})
-
     @user = user
     @other_users = User.unscoped.all
     @options = options
@@ -11,7 +10,6 @@ class PeopleFinder
     @options.merge!(min_shared_following: 4) if @options[:min_shared_following].nil?
     @options.merge!(interests_filter: %w(Tennis Running)) if @options[:interests_filter].nil?
     @options.merge!(verbose: false) if @options[:verbose].nil?
-
   end
 
   def inspect
@@ -195,7 +193,11 @@ class PeopleFinder
     if recommended_follower_record && recommended_follower_record.persisted?
       log "Created record #{recommended_follower_record.id}"
     else
-      log "Record returned: #{recommended_follower_record.nil? ? 'nil' : recommended_follower_record.errors.full_messages}"
+      if recommended_follower_record.nil?
+        log "Record returned: #{recommended_follower_record}"
+      else
+        log "Record returned: #{recommended_follower_record.errors.full_messages}"
+      end
     end
   end
 
