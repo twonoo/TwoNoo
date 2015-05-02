@@ -202,7 +202,7 @@ class User < ActiveRecord::Base
   end
 
   def find_people
-    PeopleFinder.new(self, {verbose: true}).find_by_all
+    PeopleFinder.new(self).find_by_all
     Fiber.new do
       WebsocketRails[:people_you_know].trigger user_key, 'done'
     end.resume

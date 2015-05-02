@@ -155,7 +155,7 @@ class PeopleFinder
   end
 
   def get_shared_interest_option(other_user)
-    shared_interests = get_shared_intersts(other_user)
+    shared_interests = get_shared_interests(other_user)
     log "Shared interests before filter #{shared_interests}"
     shared_interests = shared_interests.delete_if { |i| !@options[:interests_filter].include? i }
     log "Shared interests after filter #{shared_interests}"

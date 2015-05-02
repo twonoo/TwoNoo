@@ -10,7 +10,7 @@ class MatchedCriteriaOnRecommendedFollowers < ActiveRecord::Migration
         when 1
           puts rf.update_attribute(:match_criteria, "You're facebook friends")
         when 2
-          puts rf.update_attribute(:match_criteria, "You're following several of the same people")
+‹››
         when 3
           puts rf.update_attribute(:match_criteria, "They're following you")
         when 4
