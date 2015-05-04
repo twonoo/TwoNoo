@@ -202,6 +202,7 @@ class User < ActiveRecord::Base
   end
 
   def find_people
+    user_key = Digest::SHA1.hexdigest(user.id.to_s + WEB_SOCKET_CIPHER)
     PeopleFinder.new(self).find_by_all
     Fiber.new do
       WebsocketRails[:people_you_know].trigger user_key, 'done'
