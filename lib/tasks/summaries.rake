@@ -182,7 +182,7 @@ namespace :summaries do
       user_id = Profile.where('id = ?', id).pluck('user_id').first
       puts "user_id: #{user_id}"
 
-      new_followers = User.joins(:follow_relationships).where('followed_id = ?', id).where('follow_relationships.created_at > ?', Time.now - time_period)
+      new_followers = User.joins(:follow_relationships).where('followed_id = ?', user_id).where('follow_relationships.created_at > ?', Time.now - time_period)
 
       if new_followers.present?
         user = User.find(user_id)

@@ -6,6 +6,7 @@ class LikesController < ApplicationController
     params.merge!(referrer_uri: request.referrer) if params[:referrer_uri].blank?
 
     if !permitted.values_at(:activity_id, :referrer_uri).include? nil
+      notify_owner
       render json: {created: Like.add_or_remove(permitted)}, status: 200
     else
       render json: {error: 'missing required parameters'}, status: :unprocessable_entity
@@ -22,6 +23,12 @@ class LikesController < ApplicationController
 
   def permitted
     params.permit(:user_id, :activity_id, :referrer_uri)
+  end
+
+  def notify_owner
+    activity = Activity.find(params[:activity_id])
+    organizer = User.find(activity.user_id)
+    organizer.notify("#{current_user.name} likes your activity", "<a href='#{root_url}/activities/#{activity.id}'>#{activity.activity_name}</a>")
   end
 
 end
