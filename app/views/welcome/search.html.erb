@@ -234,7 +234,7 @@
                     <span class="search-result-list-date"><%= a.datetime.strftime("%A, %B #{a.datetime.day.ordinalize} at %-I:%M %p") %></span>
                   </div>
                   <div class="search-result-list-join">
-                    <%= link_to "Join Us!", activity_path(a.id), class: "btn btn-default btn-sm" %>
+                    <%= link_to "RSVP", activity_path(a.id), class: "btn btn-default btn-sm" %>
                   </div>
                   <div class="search-result-list-attending">
                     <% User.limit(4).find(a.rsvps.map { |r| r.user_id }).each do |u| %>
