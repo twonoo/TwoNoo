@@ -268,7 +268,7 @@ class ActivitiesController < ApplicationController
             promotion = Promotioncode.where(campaign: activity.campaign, user_id: current_user.id).first
             if promotion.nil?
               promotion = Promotioncode.where(campaign: activity.campaign, user_id: nil).first
-            end 
+            end
 
             unless promotion.nil?
               logger.info "Updating promotion code"
@@ -279,7 +279,7 @@ class ActivitiesController < ApplicationController
                 UserMailer.delay.promotion_code(current_user, activity, promotion)
               end
             end
-          end 
+          end
         end
 
         format.html { redirect_to activity_path(activity), notice: "You're now going to #{activity.activity_name}!" }
@@ -330,7 +330,10 @@ class ActivitiesController < ApplicationController
     @activity = Activity.create(parms)
     @activity.user_id = current_user.id
 
-    if @activity.save
+    captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: '6LdHKgcTAAAAACU2zP-lRyL3xxvLzyPQZ4JLX0pi', response: params['g-recaptcha-response']})
+
+    if @activity.save && captcha_response.parsed_response['success'] == true
+
       # Charge the organizer
       Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
 
@@ -356,8 +359,10 @@ class ActivitiesController < ApplicationController
       @selected_tag_ids = (selected_activity_types.map(&:id) || [])
       @activity_types = ActivityType.all.each
       render :new
+
     end
   end
+
 
   def update
 
@@ -412,4 +417,5 @@ class ActivitiesController < ApplicationController
   def activity_params
     params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image, :date, :time, :enddate, :endtime, activity_types: [])
   end
+
 end

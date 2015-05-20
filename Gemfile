@@ -65,3 +65,4 @@ gem 'geoip2', git: 'https://github.com/YotpoLtd/geoip2.git'
 gem 'websocket-rails'
 gem 'httparty'
 gem 'obscenity'
+gem "recaptcha", :require => "recaptcha/rails"
