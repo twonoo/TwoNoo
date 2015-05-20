@@ -330,7 +330,7 @@ class ActivitiesController < ApplicationController
     @activity = Activity.create(parms)
     @activity.user_id = current_user.id
 
-    captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: '6LdHKgcTAAAAACU2zP-lRyL3xxvLzyPQZ4JLX0pi', response: params['g-recaptcha-response']})
+    captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: ENV['RECAPTCHA_PRIVATE_KEY'], response: params[:captcha_response], remoteip: request.env['HTTP_X_FORWARDED_FOR']})
     good_captcha = captcha_response.parsed_response['success'] == true
 
     if @activity.save

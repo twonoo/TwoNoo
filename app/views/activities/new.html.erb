@@ -1,255 +1,255 @@
 <div class="container">
-<div class="row">
-  <div class="panel panel-default">
-    <h4 class="panel-title">Create your Activity</h4>
-  </div>
-  <div class="panel-body">
-    <% if @activity.errors.any? %>
-        <div id="error_explanation">
-          <% @activity.errors.full_messages.each do |msg| %>
-              <div class="alert alert-danger fade in"><%= msg %>
-                <button class="close" data-dismiss="alert">x</button>
-              </div>
-          <% end %>
-          </ul>
-        </div>
-    <% end %>
-    <div class="col-md-7">
-      <script>
-          var bsubmit = false;
-          function confirmCreate() {
-              if (bsubmit) {
-                  return true;
-              }
-
-              <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
-              if (!confirm('Creating this Activity will cost 1 Credit'))
-                  return false;
-              <% end %>
-
-              // get the city and state entered
-              var address1 = $('#activity_street_address_1').val();
-              console.log("address1: " + address1);
-              console.log("address1: " + $('#activity_street_address_1').val());
-              var address2 = $('#activity_street_address_2').val();
-              var city = $('#activity_city').val();
-              var state = $('#activity_state').val();
-
-              var address = '';
-              if (address1 && (address1.length > 0)) {
-                  address += address1 + ", ";
-              }
-              if (address2 && (address2.length > 0)) {
-                  address += address2 + ", ";
-              }
-              address += city + ", " + state;
-              console.log("address: " + address);
-
-              // Get the lat long of the city, state
-              var geocoder = new google.maps.Geocoder();
-
-              geocoder.geocode({'address': address}, function (results, status) {
-                  console.log('results[0].geometry.location:' + results[0].geometry.location);
-                  $('#lat').val(results[0].geometry.location.lat());
-                  $('#lng').val(results[0].geometry.location.lng());
-
-                  bsubmit = true;
-
-                  $('#new_activity').submit();
-              });
-
-              return false;
-          }
-      </script>
-      <%= form_for @activity, html: {class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
-
-          <div class="form-group">
-            <%= f.label 'Activity Name *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-6">
-              <%= f.text_field :activity_name, class: "form-control" %>
-            </div>
+  <div class="row">
+    <div class="panel panel-default">
+      <h4 class="panel-title">Create your Activity</h4>
+    </div>
+    <div class="panel-body">
+      <% if @activity.errors.any? %>
+          <div id="error_explanation">
+            <% @activity.errors.full_messages.each do |msg| %>
+                <div class="alert alert-danger fade in"><%= msg %>
+                  <button class="close" data-dismiss="alert">x</button>
+                </div>
+            <% end %>
+            </ul>
           </div>
-
-          <div class="form-group">
-            <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
-              <%= f.text_field :date, class: "form-control", value: (@activity.date.nil? ? '' : @activity.date) %>
-              <span class="input-group-addon"><span class="icon-calendar"></span></span>
-            </div>
-            <div class='input-group date col-sm-3' id='timepicker1'>
-              <%= f.text_field :time, class: "form-control", value: (@activity.time.nil? ? '' : @activity.time) %>
-              <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'End', class: "col-sm-3 control-label" %>
-            <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker2'>
-              <%= f.text_field :enddate, class: "form-control", value: (@activity.enddate.nil? ? '' : @activity.enddate) %>
-              <span class="input-group-addon"><span class="icon-calendar"></span></span>
-            </div>
-            <div class='input-group date col-sm-3' id='timepicker2'>
-              <%= f.text_field :endtime, class: "form-control", value: (@activity.endtime.nil? ? '' : @activity.endtime) %>
-              <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :venue, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :location_name, class: "form-control" %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :address, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :street_address_1, class: "form-control" %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :address_2, class: "col-sm-3 control-label" %>
-            <div class="col-sm-6">
-              <%= f.text_field :street_address_2, class: "form-control" %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-3">
-              <%= f.text_field :city, class: "form-control" %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-4">
-              <%= f.select :state, us_states, {}, {class: "form-control"} %>
-            </div>
-          </div>
-          <%= hidden_field_tag :lat %>
-          <%= hidden_field_tag :lng %>
-
-          <div class="form-group">
-            <%= f.label :website, class: "col-sm-3 control-label" %>
-            <div class="col-sm-4">
-              <%= f.text_field :website, class: "form-control" %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000" %>
-            <div class="col-sm-8">
-              <%= f.text_area :description, class: "form-control", rows: "3" %>
-            </div>
-          </div>
-          </div>
-
-          <div class="col-md-5">
-            <fieldset>
-              <h3>Upload Activity Image</h3>
-              <%= image_tag "#{ENV['BASEURL']}/no-image.png", width: 180 %>
-              <br/><br/>
-              <%= f.file_field :image %>
-            </fieldset>
-            <br/><br/>
-
-            <div class="form-group">
-              <%= f.label 'Activity Keywords *', class: "control-label", style: "color:#000" %>
-              <%= f.label '', '(eg. Sports, Baseball, etc)', class: "control-label", style: "color:#000;font-size:12px" %>
-              <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
-                <option value></option>
-                <% @activity_types.each do |activity_type| %>
-                    <% if @selected_tag_ids.include? activity_type.id %>
-                        <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
-                    <% else %>
-                        <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
-                    <% end %>
-                <% end %>
-              </select>
-            </div>
-
-            <div class="g-recaptcha" data-sitekey="6LdHKgcTAAAAABVv3nFNYD2IWrak1uANmfrM4Dwx"></div>
-
-            <div style='padding-top:35px;'>
-              <button type="submit" class="btn btn-md btn-success">Create!</button>
-            </div>
-          </div>
-
       <% end %>
+      <div class="col-md-7">
+        <script>
+            var bsubmit = false;
+            function confirmCreate() {
+                if (bsubmit) {
+                    return true;
+                }
 
-      <script type="text/javascript">
-          $(function () {
-              $('#datepicker1').datetimepicker({pickTime: false});
-              $('#datepicker2').datetimepicker({pickTime: false});
+                <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
+                if (!confirm('Creating this Activity will cost 1 Credit'))
+                    return false;
+                <% end %>
 
-              $('#timepicker1').datetimepicker({pickDate: false});
-              $('#timepicker2').datetimepicker({pickDate: false});
-          });
-      </script>
-      </div>
-</div>
+                // get the city and state entered
+                var address1 = $('#activity_street_address_1').val();
+                var address2 = $('#activity_street_address_2').val();
+                var city = $('#activity_city').val();
+                var state = $('#activity_state').val();
 
-<script type='text/javascript'>
-    $(function () {
+                var address = '';
+                if (address1 && (address1.length > 0)) {
+                    address += address1 + ", ";
+                }
+                if (address2 && (address2.length > 0)) {
+                    address += address2 + ", ";
+                }
+                address += city + ", " + state;
 
-        // Get browser location and set selectors
-        function getLocation() {
-            if (($.cookie("city")) && ($.cookie("state"))) {
-                $('#activity_city').val($.cookie("city"));
-                $('#activity_state').val($.cookie("state"));
-            }
-            else if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(getCity, getCityError);
-            }
-            else {
-                $('#activity_city').val('Denver');
-                $('#activity_state').val('CO');
-            }
-        }
+                // Get the lat long of the city, state
+                var geocoder = new google.maps.Geocoder();
 
-        function getCity(position) {
-            var geocoder = new google.maps.Geocoder();
-
-            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            console.log(latlng);
-            $('#lat').val(position.coords.latitude);
-            $('#lng').val(position.coords.longitude);
-
-            var city = 'Pittsburgh';
-            var state = 'PA';
-
-            geocoder.geocode({'latLng': latlng}, function (results, status) {
-                $.each(results[0].address_components, function (i, address_component) {
-                    console.log('address_component:' + i);
-
-                    var type = address_component.types[0];
-                    console.log(i + ": " + type + ":" + address_component.short_name);
-
-                    if (type == 'locality')
-                        city = address_component.short_name;
-                    else if (type == 'administrative_area_level_1')
-                        state = address_component.short_name;
+                geocoder.geocode({'address': address}, function (results, status) {
+                    $('#lat').val(results[0].geometry.location.lat());
+                    $('#lng').val(results[0].geometry.location.lng());
+                    bsubmit = true;
+                    $('#captcha_response').val(grecaptcha.getResponse());
+                    $('#new_activity').submit();
                 });
 
-                console.log("city, state: " + city + ", " + state);
-                console.log(latlng);
+                return false;
+            }
+        </script>
+        <%= form_for @activity, html: {class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
-                $('#activity_city').val(city);
-                $('#activity_state').val(state);
+            <div class="form-group">
+              <%= f.label 'Activity Name *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-6">
+                <%= f.text_field :activity_name, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label 'When *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker1'>
+                <%= f.text_field :date, class: "form-control", value: (@activity.date.nil? ? '' : @activity.date) %>
+                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+              </div>
+              <div class='input-group date col-sm-3' id='timepicker1'>
+                <%= f.text_field :time, class: "form-control", value: (@activity.time.nil? ? '' : @activity.time) %>
+                <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label 'End', class: "col-sm-3 control-label" %>
+              <div class='input-group date col-sm-3' style='padding-left:15px' id='datepicker2'>
+                <%= f.text_field :enddate, class: "form-control", value: (@activity.enddate.nil? ? '' : @activity.enddate) %>
+                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+              </div>
+              <div class='input-group date col-sm-3' id='timepicker2'>
+                <%= f.text_field :endtime, class: "form-control", value: (@activity.endtime.nil? ? '' : @activity.endtime) %>
+                <span class="input-group-addon"><span class="glyphicon-clock"></span></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :venue, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :location_name, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :address, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :street_address_1, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :address_2, class: "col-sm-3 control-label" %>
+              <div class="col-sm-6">
+                <%= f.text_field :street_address_2, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label 'City *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-3">
+                <%= f.text_field :city, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label 'State *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-4">
+                <%= f.select :state, us_states, {}, {class: "form-control"} %>
+              </div>
+            </div>
+            <%= hidden_field_tag :lat %>
+            <%= hidden_field_tag :lng %>
+
+            <div class="form-group">
+              <%= f.label :website, class: "col-sm-3 control-label" %>
+              <div class="col-sm-4">
+                <%= f.text_field :website, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label 'Description *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <div class="col-sm-8">
+                <%= f.text_area :description, class: "form-control", rows: "3" %>
+              </div>
+            </div>
+            </div>
+
+            <div class="col-md-5">
+              <fieldset>
+                <h3>Upload Activity Image</h3>
+                <%= image_tag "#{ENV['BASEURL']}/no-image.png", width: 180 %>
+                <br/><br/>
+                <%= f.file_field :image %>
+              </fieldset>
+              <br/><br/>
+
+              <div class="form-group">
+                <%= f.label 'Activity Keywords *', class: "control-label", style: "color:#000" %>
+                <%= f.label '', '(eg. Sports, Baseball, etc)', class: "control-label", style: "color:#000;font-size:12px" %>
+                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
+                  <option value></option>
+                  <% @activity_types.each do |activity_type| %>
+                      <% if @selected_tag_ids.include? activity_type.id %>
+                          <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                      <% else %>
+                          <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                      <% end %>
+                  <% end %>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <div class="g-recaptcha" opt_widget_id="activity_captcha" data-sitekey="<%= ENV['RECAPTCHA_PUBLIC_KEY'] %>"></div>
+              </div>
+
+              <div style='padding-top:35px;'>
+                <%= hidden_field_tag :captcha_response, '', id: 'captcha_response' %>
+              </div>
+
+              <button type='submit' class="btn btn-md btn-success">Create!</button>
+
+            </div>
+
+        <% end %>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#datepicker1').datetimepicker({pickTime: false});
+                $('#datepicker2').datetimepicker({pickTime: false});
+
+                $('#timepicker1').datetimepicker({pickDate: false});
+                $('#timepicker2').datetimepicker({pickDate: false});
             });
-        }
+        </script>
+        </div>
+  </div>
 
-        function getCityError() {
-            $('#activity_city').val('Denver');
-            $('#activity_state').val('CO');
-        };
+  <script type='text/javascript'>
+      $(function () {
 
-        if ($('#activity_city').val() == '')
-            getLocation();
-    });
+          // Get browser location and set selectors
+          function getLocation() {
+              if (($.cookie("city")) && ($.cookie("state"))) {
+                  $('#activity_city').val($.cookie("city"));
+                  $('#activity_state').val($.cookie("state"));
+              }
+              else if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(getCity, getCityError);
+              }
+              else {
+                  $('#activity_city').val('Denver');
+                  $('#activity_state').val('CO');
+              }
+          }
 
-</script>
+          function getCity(position) {
+              var geocoder = new google.maps.Geocoder();
+
+              var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              console.log(latlng);
+              $('#lat').val(position.coords.latitude);
+              $('#lng').val(position.coords.longitude);
+
+              var city = 'Pittsburgh';
+              var state = 'PA';
+
+              geocoder.geocode({'latLng': latlng}, function (results, status) {
+                  $.each(results[0].address_components, function (i, address_component) {
+                      console.log('address_component:' + i);
+
+                      var type = address_component.types[0];
+                      console.log(i + ": " + type + ":" + address_component.short_name);
+
+                      if (type == 'locality')
+                          city = address_component.short_name;
+                      else if (type == 'administrative_area_level_1')
+                          state = address_component.short_name;
+                  });
+
+                  console.log("city, state: " + city + ", " + state);
+                  console.log(latlng);
+
+                  $('#activity_city').val(city);
+                  $('#activity_state').val(state);
+              });
+          }
+
+          function getCityError() {
+              $('#activity_city').val('Denver');
+              $('#activity_state').val('CO');
+          };
+
+          if ($('#activity_city').val() == '')
+              getLocation();
+      });
+
+  </script>
 
 </div>

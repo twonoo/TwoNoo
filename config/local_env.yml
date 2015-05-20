@@ -1,3 +1,7 @@
+recaptcha_defaults: &recaptcha_defaults
+  PUBLIC_KEY: '6LdHKgcTAAAAABVv3nFNYD2IWrak1uANmfrM4Dwx'
+  PRIVATE_KEY: '6LdHKgcTAAAAACU2zP-lRyL3xxvLzyPQZ4JLX0pi'
+
 facebook_defaults: &facebook_defaults
   SCOPE: 'user_friends,email,user_location'
   LOGO_URL: /assets/main-logo-dash.png
@@ -21,6 +25,8 @@ development:
     APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
   WEBSOCKET:
     USE_SSL: 'false'
+  RECAPTCHA:
+    <<: *recaptcha_defaults
 
 production:
   BASEURL: 'https://www.twonoo.com'
@@ -34,3 +40,5 @@ production:
     APIKEY: 'FWDtyP_2VA85dpsXhuudoA'
   WEBSOCKET:
       USE_SSL: 'true'
+  RECAPTCHA:
+    <<: *recaptcha_defaults
