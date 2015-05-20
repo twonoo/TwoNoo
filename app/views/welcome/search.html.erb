@@ -8,6 +8,34 @@
 
       <script type="text/javascript">
           $(function () {
+              var baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+
+              $('#activities_next').click(function (e) {
+                  e.preventDefault();
+                  window.location.href = baseUrl
+                  + '?<%= @search_params %>'
+                  + '&users_offset=<%= @users_offset %>&users_max=<%= @users_max%>&activities_offset=<%= @activities_offset + @page_increment %>&activities_max=<%= @activities_max + @page_increment %>'
+              });
+              $('#activities_previous').click(function (e) {
+                  e.preventDefault();
+                  window.location.href = baseUrl
+                  + '?<%= @search_params %>'
+                  + '&users_offset=<%= @users_offset %>&users_max=<%= @users_max%>&activities_offset=<%= @activities_offset - @page_increment %>&activities_max=<%= @activities_max - @page_increment %>'
+              });
+              $('#users_next').click(function (e) {
+                  e.preventDefault();
+                  window.location.href = baseUrl
+                  + '?<%= @search_params %>'
+                  + '&activities_offset=<%= @activities_offset %>&activities_max=<%= @activities_max %>&users_offset=<%= @users_offset + @page_increment %>&users_max=<%= @users_max + @page_increment %>'
+              });
+              $('#users_previous').click(function (e) {
+                  e.preventDefault();
+                  window.location.href = baseUrl
+                  + '?<%= @search_params %>'
+                  + '&activities_offset=<%= @activities_offset %>&activities_max=<%= @activities_max %>&users_offset=<%= @users_offset - @page_increment %>&users_max=<%= @users_max - @page_increment %>'
+              });
+
+
               var noResults = <%= @showCreateAlert %>;
               var peopleToggle = $('#peopleToggle');
               if (noResults && peopleToggle.length > 0) {
@@ -195,29 +223,31 @@
       <div class="row" role="tabpanel">
         <div class="col-md-3 side-nav">
           <ul class="nav nav-pills nav-stacked">
+            <% unless @users.blank? %>
+                <li><a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People</a>
+                </li>
+            <% end %>
+
             <% unless @activities.blank? %>
                 <li class="active">
                   <a aria-controls="activity" role="tab" data-toggle="tab" href="#activity" id="activityToggle">Activities</a>
                 </li>
             <% end %>
-            <% unless @users.blank? %>
-                <li><a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People</a>
-                </li>
-            <% end %>
+
           </ul>
           <div class="mobile-hide">
-          <br/>
-          <!-- Sponsored:<br/> -->
-          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-          <!-- Search Results Desktop -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-9784142940851903"
-               data-ad-slot="4367378271"
-               data-ad-format="auto"></ins>
-          <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
+            <br/>
+            <!-- Sponsored:<br/> -->
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Search Results Desktop -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9784142940851903"
+                 data-ad-slot="4367378271"
+                 data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
           </div>
         </div>
         <!-- BEGIN RESULTS -->
@@ -244,6 +274,12 @@
                   </div>
                 </div>
             <% end %>
+            <% if @activities_offset > 0 %>
+                <a class="btn btn-sm" id="activities_previous" style="background-color: #FE0075">Previous</a>
+            <% end %>
+            <% if @total_activities > @activities_max %>
+                <a class="btn btn-sm pull-right" id="activities_next" style="background-color: #FE0075">Next</a>
+            <% end %>
           </div>
           <!--  END ACTIVITY TAB -->
           <!-- TAB ALL THE PEOPLE! -->
@@ -261,7 +297,10 @@
                                   <% end %>
                                 </span>
 
-                          <p class="interests-small hidden-xs"><%= interests_tag(u.user) %></p>
+                          <% if current_user %>
+                              <p class="interests-small"><%= matching_interests_tag(current_user, u.user) %></p>
+                          <% end %>
+
                         </div>
                       </div>
                       <div class="search-result-list-follow col-sm-2 hidden-xs">
@@ -273,6 +312,12 @@
                       </div>
                     </div>
                 <% end %>
+            <% end %>
+            <% if @users_offset > 0 %>
+                <a class="btn btn-sm" id="users_previous" style="background-color: #FE0075">Previous</a>
+            <% end %>
+            <% if @total_users > @users_max %>
+                <a class="btn btn-sm pull-right" id="users_next" style="background-color: #FE0075">Next</a>
             <% end %>
           </div>
           <!-- END PEOPLE TAB -->

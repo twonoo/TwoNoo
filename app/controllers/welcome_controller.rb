@@ -214,6 +214,32 @@ class WelcomeController < ApplicationController
       @users = @users.select { |u| u.state.blank? || u.state.downcase == state.downcase }
     end
 
+    @page_increment = 9
+    @users_offset = params[:users_offset].present? ? params[:users_offset].to_i : 0
+    @users_max = params[:users_max].present? ? params[:users_max].to_i : @page_increment
+    @activities_offset = params[:activities_offset].present? ? params[:activities_offset].to_i : 0
+    @activities_max = params[:activities_max].present? ? params[:activities_max].to_i : @page_increment
+    @total_users = @users.present? ? @users.count : 0
+    @total_activities = @activities.present? ? @activities.count : 0
+    @search_params = {
+        terms: params[:terms],
+        when: params[:when],
+        from_date: params[:from_date],
+        to_date: params[:to_date],
+        distance: params[:distance],
+        lat: params[:lat],
+        lng: params[:lng],
+        location: params[:location],
+    }.to_query
+
+    @users_offset = 0 if @users_offset < 0
+    @users_max = 0 if @users_max < 0
+    @activities_offset = 0 if @activities_offset < 0
+    @activities_max = 0 if @activities_max < 0
+
+    @users = @users[@users_offset..@users_max] if @users.present?
+    @activities = @activities[@activities_offset..@activities_max] if @activities.present?
+
     search_history = Search.new(search: params[:terms], location: params[:location])
     search_history.user_id = current_user.id if current_user
     search_history.save!
