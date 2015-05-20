@@ -50,20 +50,20 @@
               <li id="profile_activities" class="active">
                 <%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
               </li>
-              <li id="profile_attending">
-                <%= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>
-              </li>
+              <!--<li id="profile_attending">-->
+                <!--<%#= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>-->
+              <!--</li>-->
               <li id="profile_followers">
                 <%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
               </li>
               <li id="profile_following">
                 <%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
               </li>
-              <% if current_user.id == @profile.id %>
-                  <li id="profile_people">
-                    <%= link_to 'Cool People', current_user.id.to_s+'/people_profile', :remote => true %>
-                  </li>
-              <% end %>
+              <!--<%# if current_user.id == @profile.id %>-->
+                  <!--<li id="profile_people">-->
+                    <!--<%#= link_to 'Cool People', current_user.id.to_s+'/people_profile', :remote => true %>-->
+                  <!--</li>-->
+              <!--<%# end %>-->
             </ul>
           </div>
         </div>
