@@ -1,4 +1,5 @@
 class WelcomeController < ApplicationController
+
   def index
     @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
     @suggested_city_search_terms = US_CITIES
@@ -221,6 +222,7 @@ class WelcomeController < ApplicationController
     @activities_max = params[:activities_max].present? ? params[:activities_max].to_i : @page_increment
     @total_users = @users.present? ? @users.count : 0
     @total_activities = @activities.present? ? @activities.count : 0
+
     @search_params = {
         terms: params[:terms],
         when: params[:when],
@@ -233,9 +235,9 @@ class WelcomeController < ApplicationController
     }.to_query
 
     @users_offset = 0 if @users_offset < 0
-    @users_max = 0 if @users_max < 0
+    @users_max = @page_increment if @users_max < 0
     @activities_offset = 0 if @activities_offset < 0
-    @activities_max = 0 if @activities_max < 0
+    @activities_max = @page_increment if @activities_max < 0
 
     @users = @users[@users_offset..@users_max] if @users.present?
     @activities = @activities[@activities_offset..@activities_max] if @activities.present?
