@@ -17,12 +17,12 @@ Rails.application.routes.draw do
 
   get 'alerts/create'
 
-  get 'credits/index'
+  # get 'credits/index'
 
-  get 'credits/new'
+  # get 'credits/new'
 
-  get 'credits/create'
-  get 'credits/purchase'
+  # get 'credits/create'
+  # get 'credits/purchase'
 
   get 'test/test', to: 'test#test'
 
@@ -101,7 +101,7 @@ Rails.application.routes.draw do
 
 
   resources :activities
-  resources :credits
+  # resources :credits
 
   devise_for :users, :controllers => {:omniauth_callbacks => 'users/omniauth_callbacks', :registrations => 'users/registrations'}
 

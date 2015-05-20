@@ -22,10 +22,10 @@
                     return true;
                 }
 
-                <% unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>
-                if (!confirm('Creating this Activity will cost 1 Credit'))
-                    return false;
-                <% end %>
+                <!--<%# unless current_user.profile.ambassador == 1 || current_user.profile.nonprofit == 1 %>-->
+//                if (!confirm('Creating this Activity will cost 1 Credit'))
+//                    return false;
+                <!--<%# end %>-->
 
                 // get the city and state entered
                 var address1 = $('#activity_street_address_1').val();

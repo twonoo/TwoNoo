@@ -145,14 +145,16 @@ class ActivitiesController < ApplicationController
   def new
     @activity_types = ActivityType.all.each
     @selected_tag_ids = []
-    if (Transaction.get_balance(current_user) > 0) \
-        || (current_user.profile.nonprofit == 1) \
-        || (current_user.profile.ambassador == 1) \
-    then
-      @activity = Activity.new activity_name: params[:activity_name]
-    else
-      redirect_to credits_purchase_path, alert: "Looks like you are out of credits. In order to create an activity, please purchase more."
-    end
+    @activity = Activity.new activity_name: params[:activity_name]
+
+    # if (Transaction.get_balance(current_user) > 0) \
+    #     || (current_user.profile.nonprofit == 1) \
+    #     || (current_user.profile.ambassador == 1) \
+    # then
+    #   @activity = Activity.new activity_name: params[:activity_name]
+    # else
+    #   redirect_to credits_purchase_path, alert: "Looks like you are out of credits. In order to create an activity, please purchase more."
+    # end
   end
 
   def edit
@@ -336,7 +338,7 @@ class ActivitiesController < ApplicationController
     if @activity.save
       if good_captcha
         # Charge the organizer
-        Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
+        # Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
 
         # Have the organizer RSVP to their own activity
         rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)

@@ -11,8 +11,8 @@
   <li><%= link_to 'Home', root_path %></li>
   <% end %>
   <li><%= link_to "Feedback", '#', class: 'feedback' %></li>
-  <li><a href="/credits/purchase">Credits
-    <span class="badge"><%= Transaction.get_balance(current_user) if current_user %></span></a></li>
+  <!--<li><a href="/credits/purchase">Credits-->
+    <!--<span class="badge"><%#= Transaction.get_balance(current_user) if current_user %></span></a></li>-->
 
     <li class="dropdown wide" id="notifications_menu">
       <a href="#" id="notifications_link" class="dropdown-toggle" data-toggle="dropdown">
