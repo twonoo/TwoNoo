@@ -42,7 +42,11 @@ module InterestsHelper
           end
           interests_array << interest_string
         end
-        "Matching Interests: #{interests_array[0,max].join(', ')}"
+        return_string = "Matching Interests: #{interests_array[0,max].join(', ')}"
+        if matching_interests.count > 20
+          return_string << '...'
+        end
+        return_string
       else
         'Matching Interests: None'
       end
