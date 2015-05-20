@@ -331,26 +331,38 @@ class ActivitiesController < ApplicationController
     @activity.user_id = current_user.id
 
     captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: '6LdHKgcTAAAAACU2zP-lRyL3xxvLzyPQZ4JLX0pi', response: params['g-recaptcha-response']})
+    good_captcha = captcha_response.parsed_response['success'] == true
 
-    if @activity.save && captcha_response.parsed_response['success'] == true
+    if @activity.save
+      if good_captcha
+        # Charge the organizer
+        Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
 
-      # Charge the organizer
-      Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
+        # Have the organizer RSVP to their own activity
+        rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)
+        rsvp.save
 
-      # Have the organizer RSVP to their own activity
-      rsvp = Rsvp.new(activity_id: @activity.id, user_id: current_user.id)
-      rsvp.save
+        # Notfiy all followers of this organizer that a new activity has been created.
+        current_user.followers.each do |follower|
+          UserMailer.delay.new_following_activity(follower, current_user, @activity)
+          follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        end
 
-      # Notfiy all followers of this organizer that a new activity has been created.
-      current_user.followers.each do |follower|
-        UserMailer.delay.new_following_activity(follower, current_user, @activity)
-        follower.notify("#{current_user.name} created a new activity", "<a href='#{root_url}/activities/#{@activity.id}'>#{@activity.activity_name}</a>")
+        #s=t in querystring will display the share modal
+        redirect_to "/activities/#{@activity.id}/?s=t"
+      else
+        #remove all newly created activity types if the form is incomplete
+        new_activity_types.each do |activity_type|
+          activity_type.destroy
+        end
+
+        @selected_tag_ids = (selected_activity_types.map(&:id) || [])
+        @activity_types = ActivityType.all.each
+        flash.now[:error] = 'Invalid Captcha'
+        render :new
       end
 
-      #s=t in querystring will display the share modal
-      redirect_to "/activities/#{@activity.id}/?s=t"
     else
-
       #remove all newly created activity types if the form is incomplete
       new_activity_types.each do |activity_type|
         activity_type.destroy
@@ -359,7 +371,6 @@ class ActivitiesController < ApplicationController
       @selected_tag_ids = (selected_activity_types.map(&:id) || [])
       @activity_types = ActivityType.all.each
       render :new
-
     end
   end
 
