@@ -1,6 +1,6 @@
 recaptcha_defaults: &recaptcha_defaults
-  PUBLIC_KEY: '6LdHKgcTAAAAABVv3nFNYD2IWrak1uANmfrM4Dwx'
-  PRIVATE_KEY: '6LdHKgcTAAAAACU2zP-lRyL3xxvLzyPQZ4JLX0pi'
+  PUBLIC_KEY: '6LebKwcTAAAAABKlBEAJdRaocUb4v46KMG7OyfhR'
+  PRIVATE_KEY: '6LebKwcTAAAAAKzy3FFAV8lo_Bx8w8ZGNzN_UfCY'
 
 facebook_defaults: &facebook_defaults
   SCOPE: 'user_friends,email,user_location'
