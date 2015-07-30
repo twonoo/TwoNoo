@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20150501024234) do
     t.datetime "updated_at"
     t.integer  "activity_summary",              limit: 4, default: 3
     t.integer  "activity_reminder",             limit: 4, default: 1
-    t.integer  "local_activity_summary",        limit: 4, default: 2
+    t.integer  "local_activity_summary",        limit: 4, default: 0
   end
 
   create_table "profiles", force: :cascade do |t|
