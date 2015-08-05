@@ -20,13 +20,13 @@
                 <span class="input-group-btn">
                     <input class="btn" name="commit" type="submit" value="Search">
                 </span> -->
-                <input class="form-control col-md-4" id="terms" name="terms" placeholder="Select interests" autocomplete='off' type="search" title="Enter what interests you…or just leave it blank to see everything!" autofocus>
+                <input class="form-control col-md-4" id="terms" name="terms" placeholder="Select interests" autocomplete='off' type="search" title="Enter your interests, or just leave it blank to see everything!" style='width:300px;border-radius: 6px;' autofocus>
 
                 <div class="btn-group col-md-4" id="location-selection">
                   <input type="hidden" id="lat" name="lat" value="39.737567"/>
                   <input type="hidden" id="lng" name="lng" value="-104.9847179"/>
                   <div class="input-group" style="background-color: #ffffff">
-                  <input type="search" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="width:200px;display:none;"
+                  <input type="search" id="location" name="location" class="form-control input-md" placeholder='City or ZIP' style="display:none;border-radius: 6px; height:46px;"
                          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                          value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
                          <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
@@ -49,7 +49,7 @@
                   </a>
 
                 </div>
-                <button type="button" class="dark_green_btn btn-default dark_green_btn_header" style="margin-top:-2px;">GO</button>
+                <button type="submit" name="commit"  class="dark_green_btn btn-default dark_green_btn_header" style="margin-top:-2px;">GO!</button>
              
               </div>
               <!-- /input-group -->
@@ -151,41 +151,119 @@
 </section>
 
 <%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header" style="border-bottom:none;"> 
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title text-center" id="myModalLabel">Select Interests</h4>
+    <!-- Varun/Monesh : Commented for some time, after approval we will remove  -->
+    <!-- <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 180px; float: none; margin: 0; ">
+      <div class="" style="padding-bottom: 10px">
+        <input style="border: 1px solid;" class="form-control" id="terms" name="terms" placeholder="Enter what interests you...blank shows all" type="search" title="Enter what interests you...blank shows all">
+        <span class="glyphicon glyphicon-search" aria-hidden="true" style="position: absolute; top: <%= current_user ? "17" : "72" %>px; right: 22px;" onclick="document.search_form_mobile.submit(); return false;"></span>
       </div>
-      <div class="modal-body text-center" style="padding-top:0px;">
-           <button type="button" class="dark_grey_btn btn-default" style="margin-bottom:20px;">All</button>
-           <div class="clearfix"> </div>
-           <div class="pop_scroll">
-             <button type="button" class="dark_grey_btn btn-default">Art</button>
-             <button type="button" class="dark_grey_btn btn-default">Basketball</button>
-             <button type="button" class="dark_grey_btn btn-default">Movies</button>
-             <button type="button" class="dark_grey_btn btn-default">Printing</button>
-           </div> 
-            <div class="clearfix"> </div>
-             <button type="button" class="dark_green_btn btn-default pull-right">Done</button>             
-
-      <div class="clearfix"> </div>
+ 
+       <div class="btn-group" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; float: left;"> -->
+        <!--<input type="hidden" id="lat-mobile"" name="lat" value="39.737567"></input>-->
+        <!--<input type="hidden" id="lng-mobile"" name="lng" value="-104.9847179"></input>-->
+        <!-- <input type="hidden" id="lat-mobile" name="lat" value=""/>
+        <input type="hidden" id="lng-mobile" name="lng" value=""/>
+        <input type="text" id="location-mobile" name="location" class="form-control input-md" style="width:125px;display:none;"
+               <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+               value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
+               <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+               value="<%= cookies["city"] %>, <%= cookies["state"] %>"
+               <% else %>
+               value="Denver, CO"
+               <% end %>
+               placeholder="City or ZIP">
+        <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;">
+          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+              <%= current_user.profile.city %>, <%= current_user.profile.state %>
+          <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+              <%= cookies["city"] %>, <%= cookies["state"] %>
+          <% else %>
+              Denver, CO
+          <% end %>
+          <i class='glyphicon glyphicon-chevron-down'></i>
+        </a>
       </div>
-     </div>
+ 
+       <div class="" style="padding-bottom: 10px;width: 49%; float: left;">
+        <div class="btn-group" id="date-dropdown-mobile">
+          <a style="cursor: pointer; background-color: inherit; border: none; color: inherit;" class="dropdown-toggle search_criteria" data-toggle="dropdown">
+            <input type="hidden" name="type" class="hidden-input" id="type-selection-mobile" value="All">
+            <span class="selection" id="activitytype-selection-phrase" sytle="">All</span>
+            <i class='glyphicon glyphicon-chevron-down'></i></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">All</a></li>
+            <% ActivityType.all.each do |at| %>
+                <li><a href="#"><%= at.activity_type %></a></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+ 
+     <input class="btn" name="commit" type="submit" value="Search" style="display: none"> -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="interestModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="border-bottom:none;"> 
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title text-center" id="myModalLabel">Select Interests</h4>
+        </div>
+        <div class="modal-body text-center" style="padding-top:0px;">
+          <button type="button" class="dark_grey_btn activity-interest all-interest" style="margin-bottom:20px;">All</button>
+          <div class="clearfix"> </div>
+          
+          <div class="pop_scroll activity-list">
+            <% Interest.all.each do |int| %>
+              <button type="button" style="float:left;" class="dark_grey_btn activity-interest"><%= int.name %></button>
+            <% end %>
+          </div> 
+          
+          <div class="clearfix"></div>
+          <button type="button" id='submit-interest' data-dismiss="modal" class="dark_green_btn btn-default pull-right">DONE</button>             
+          
+          <div class="clearfix"> </div>
+        </div>
+       </div>
+    </div>
   </div>
+
+  <div class="text-center mob_view">
+    <h3 style='font-style: italic;font-weight: normal;'>Connect with cool people</h3>
+    <button type="button" title="Enter what interests you...blank shows all" class="grey_btn btn-default" data-toggle="modal" data-target="#interestModal">Select Interest</button>
+    <input style="display:none;" class="form-control grey_btn btn-default" id="terms" name="terms" type="search">
+
+    <div class="btn-group grey_btn" id="location-selection-mobile" style="padding-bottom: 10px; width: 49%; ">
+      <!--<input type="hidden" id="lat-mobile"" name="lat" value="39.737567"></input>-->
+      <!--<input type="hidden" id="lng-mobile"" name="lng" value="-104.9847179"></input>-->
+      <input type="hidden" id="lat-mobile" name="lat" value=""/>
+      <input type="hidden" id="lng-mobile" name="lng" value=""/>
+      <input type="text" id="location-mobile" name="location" class="form-control input-md" style="width:125px;display:none;"
+             <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+             value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
+             <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+             value="<%= cookies["city"] %>, <%= cookies["state"] %>"
+             <% else %>
+             value="Denver, CO"
+             <% end %>
+             placeholder="City or ZIP">
+      <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;">
+        <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+            <%= current_user.profile.city %>, <%= current_user.profile.state %>
+        <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+            <%= cookies["city"] %>, <%= cookies["state"] %>
+        <% else %>
+            Denver, CO
+        <% end %>
+        <!-- <i class='glyphicon glyphicon-chevron-down'></i> -->
+      </a>
+    </div>
+
+    <div class="clearfix"> </div>    
+    <button type="button" onclick="document.search_form_mobile.submit(); return false;"  class="dark_green_btn btn-default" style="margin-top:5px;">GO!</button>  
 </div>
-    <div class="text-center mob_view">
-      <button type="button" class="grey_btn btn-default"  data-toggle="modal" data-target="#myModal">Select Interest</button>
-      <button type="button" class="grey_btn btn-default">Denver,co</button>
-     
-      <div class="clearfix"> </div>    
-      <button type="button" class="dark_green_btn btn-default" style="margin-top:5px;">GO</button>  
-  </div>
 <% end %>
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
@@ -194,12 +272,52 @@
 
 <%= javascript_include_tag "welcome" %>
 <script type='text/javascript'>
-    $(function () {
-        var suggestedValues = <%= raw @suggested_search_terms %>;
-        setupSuggestedSearch(suggestedValues);
+  $(function () {
+      var suggestedValues = <%= raw @suggested_search_terms %>;
+      setupSuggestedSearch(suggestedValues);
 
-        var suggestedCityValues = <%= raw @suggested_city_search_terms %>;
-        setupCitySuggestedSearch(suggestedCityValues);
+      var suggestedCityValues = <%= raw @suggested_city_search_terms %>;
+      setupCitySuggestedSearch(suggestedCityValues);
+  });
+         
+  $('.activity-interest').click(function (e) {
+      // e.preventDefault();
+      if($(this).hasClass('selected_btn')){
+        $(this).removeClass('selected_btn');
+      }
+      else{
+        $(this).addClass('selected_btn');
+      }
+
+      if($(this).text()=='All')
+        $('.activity-list button').removeClass('selected_btn');
+      else
+        $('.all-interest').removeClass('selected_btn');
+  });
+
+  $('#interestModal').on('show.bs.modal', function (e) {
+    $('.activity-list button').each(function( i ) {
+      if($(this).text().length > 15)
+        $(this).css({"font-size": "12px"});
+      else if($(this).text().length > 12)
+        $(this).css({"font-size": "14px"});
+      else if($(this).text().length > 10)
+        $(this).css({"font-size": "16px"});
     });
+  });
 
+  $('#submit-interest').click(function (e) {
+    var term = '';
+    var terms = [];
+    if($('.all-interest').hasClass('selected_btn'))
+      term = 'all';
+    else{
+      $('.activity-list button').each(function( i ) {
+        if($(this).hasClass('selected_btn'))
+          terms.push($(this).text());
+      });
+      term = terms.join();
+    }
+    $('#search_form_mobile #terms').val(term);
+  });
 </script>
