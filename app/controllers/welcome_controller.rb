@@ -1,5 +1,7 @@
 class WelcomeController < ApplicationController
 
+  before_filter :add_user_category, only: :search
+
   def index
     @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
     @suggested_city_search_terms = US_CITIES
@@ -235,7 +237,7 @@ class WelcomeController < ApplicationController
     }.to_query
 
     @users_offset = 0 if @users_offset < 0
-    @users_max = @page_increment if @users_max < 0
+    @users_max = (@page_increment + 10) if @users_max < 0
     @activities_offset = 0 if @activities_offset < 0
     @activities_max = @page_increment if @activities_max < 0
 
@@ -259,6 +261,26 @@ class WelcomeController < ApplicationController
 
   def invite_people
     UserMailer.delay.twonoo_invite(current_user, params[:emails])
+  end
+
+  private
+
+  def add_user_category
+    interest_updated = false
+    param_term        = params[:terms].split(',')
+    return if param_term.blank? || param_term.first.downcase=='all'
+    current_user_term = current_user.interests.map(&:name)
+    (param_term - current_user_term).each do |int_name|
+      interest = Interest.find_by_name int_name
+        if interest.present?
+          InterestsUser.create(
+              user_id: current_user.id,
+              interest_id: interest.id
+          )
+          interest_updated = true
+        end
+    end
+    flash[:success] = 'Selected interests have been added to profile.' if interest_updated
   end
 
 end
