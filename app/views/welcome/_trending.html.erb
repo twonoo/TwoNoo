@@ -5,9 +5,10 @@
 
 <div style="background-color: #f2f2f2; margin-top:-10px">
   <div class="container clearfix" style="padding:0">
+    <div style='float:right; font-size:16px;'>Trending events & activities:</div>
     <div class="row">
       <div>
-        <% @trending.each do |t| %>
+        <% @trending.flatten.each do |t| %>
             
               <div class="col-sm-3 trending-card-container">
                 <a href="<%= activity_path(t.id) %>">
