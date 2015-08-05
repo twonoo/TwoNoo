@@ -219,7 +219,7 @@ class WelcomeController < ApplicationController
 
     @page_increment = 9
     @users_offset = params[:users_offset].present? ? params[:users_offset].to_i : 0
-    @users_max = params[:users_max].present? ? params[:users_max].to_i : @page_increment
+    @users_max = params[:users_max].present? ? params[:users_max].to_i : (@page_increment + 10)
     @activities_offset = params[:activities_offset].present? ? params[:activities_offset].to_i : 0
     @activities_max = params[:activities_max].present? ? params[:activities_max].to_i : @page_increment
     @total_users = @users.present? ? @users.count : 0
@@ -237,7 +237,7 @@ class WelcomeController < ApplicationController
     }.to_query
 
     @users_offset = 0 if @users_offset < 0
-    @users_max = (@page_increment + 10) if @users_max < 0
+    @users_max = @page_increment if @users_max < 0
     @activities_offset = 0 if @activities_offset < 0
     @activities_max = @page_increment if @activities_max < 0
 
@@ -268,7 +268,7 @@ class WelcomeController < ApplicationController
   def add_user_category
     interest_updated = false
     param_term        = params[:terms].split(',')
-    return if param_term.blank? || param_term.first.downcase=='all'
+    return if param_term.blank? || param_term.first.downcase=='all' || current_user.blank?
     current_user_term = current_user.interests.map(&:name)
     (param_term - current_user_term).each do |int_name|
       interest = Interest.find_by_name int_name
