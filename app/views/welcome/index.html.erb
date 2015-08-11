@@ -19,7 +19,7 @@
                 
 
   <!-- Modal -->
-  <div class="modal fade" id="interestModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade" id="interestWebModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header" style="border-bottom:none;"> 
@@ -31,8 +31,14 @@
           <div class="clearfix"> </div>
           
           <div class="web_scroll activity-list">
-            <% Interest.all.each do |int| %>
-              <button type="button" style="float:left;" class="dark_grey_btn activity-interest"><%= int.name %></button>
+            <%
+              user_terms = [(params[:terms] || [])].flatten
+              user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
+              Interest.all.each do |int|
+
+                btn_class = 'selected_btn' if user_terms.include?(int.name)
+            %>
+              <button type="button" style="float:left;" class="dark_grey_btn activity-interest <%=btn_class%>"><%= int.name %></button>
             <% end %>
           </div> 
           
@@ -45,7 +51,7 @@
     </div>
   </div>
 <div style="width:625px; margin:0 auto;">
-       <input class="form-control col-md-4" id="terms" name="terms" placeholder="Select interests" autocomplete='off' type="search" title="Enter your interests, or just leave it blank to see everything!" style='width:300px;border-radius: 6px;' data-toggle="modal" data-target="#interestModal1"readonly>
+       <input class="form-control col-md-4" id="terms" name="terms" placeholder="Select interests" autocomplete='off' type="search" title="Enter your interests, or just leave it blank to see everything!" style='width:300px;border-radius: 6px;cursor:pointer;' data-toggle="modal" data-target="#interestWebModal" readonly='true'>
 
                 <div class="btn-group search_city" id="location-selection">
                   <input type="hidden" id="lat" name="lat" value="39.737567"/>
@@ -244,8 +250,14 @@
           <div class="clearfix"> </div>
           
           <div class="pop_scroll activity-list">
-            <% Interest.all.each do |int| %>
-              <button type="button" style="float:left;" class="dark_grey_btn activity-interest"><%= int.name %></button>
+            <%
+              user_terms = [(params[:terms] || [])].flatten
+              user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
+              Interest.all.each do |int|
+
+                btn_class = 'selected_btn' if user_terms.include?(int.name)
+            %>
+              <button type="button" style="float:left;" class="dark_grey_btn activity-interest <%=btn_class%>"><%= int.name %></button>
             <% end %>
           </div> 
           
@@ -294,7 +306,7 @@
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
 
-<section class="" id="trending" name="trending" style="padding:0px; margin-top:2px"></section>
+<section class="" id="trending" name="trending" style="padding:0px; margin-top:<%= current_user.present? ? '52px' : '2px' %>"></section>
 
 <%= javascript_include_tag "welcome" %>
 <script type='text/javascript'>
@@ -321,8 +333,10 @@
         $('.all-interest').removeClass('selected_btn');
   });
 
-  $('#interestModal').on('show.bs.modal', function (e) {
+  $('#interestModal, #interestWebModal').on('show.bs.modal', function (e) {
     $('.activity-list button').each(function( i ) {
+      if($(this).text().length > 18)
+        $(this).css({"font-size": "9px"});
       if($(this).text().length > 15)
         $(this).css({"font-size": "11px"});
       else if($(this).text().length > 13)
@@ -334,19 +348,34 @@
     });
   });
 
-  $('#submit-interest').click(function (e) {
+  $('#interestModal #submit-interest').click(function (e) {
     var term = '';
     var terms = [];
-    if($('.all-interest').hasClass('selected_btn'))
+    if($('#interestModal .all-interest').hasClass('selected_btn'))
       term = 'all';
     else{
-      $('.activity-list button').each(function( i ) {
+      $('#interestModal .activity-list button').each(function( i ) {
         if($(this).hasClass('selected_btn'))
           terms.push($(this).text());
       });
       term = terms.join();
     }
     $('#search_form_mobile #terms').val(term);
+  });
+
+  $('#interestWebModal #submit-interest').click(function (e) {
+    var term = '';
+    var terms = [];
+    if($('#interestWebModal .all-interest').hasClass('selected_btn'))
+      term = 'all';
+    else{
+      $('#interestWebModal .activity-list button').each(function( i ) {
+        if($(this).hasClass('selected_btn'))
+          terms.push($(this).text());
+      });
+      term = terms.join();
+    }
+    $('#search_form #terms').val(term);
   });
 
   $("#location-mobile").blur(function() {

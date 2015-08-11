@@ -266,6 +266,7 @@ class WelcomeController < ApplicationController
   private
 
   def add_user_category
+    return unless params[:terms].present?
     interest_updated = false
     param_term        = params[:terms].split(',')
     return if param_term.blank? || param_term.first.downcase=='all' || current_user.blank?
