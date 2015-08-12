@@ -33,7 +33,7 @@
           <div class="web_scroll activity-list">
             <%
               user_terms = [(params[:terms] || [])].flatten
-              user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
+              # user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
               Interest.all.each do |int|
 
                 btn_class = 'selected_btn' if user_terms.include?(int.name)
@@ -172,6 +172,7 @@
               height: 32px;
               margin-bottom: 15px;
           }
+          #social {height: 37px;max-height: 37px;}
       </style>
 
     </div>
@@ -252,7 +253,7 @@
           <div class="pop_scroll activity-list">
             <%
               user_terms = [(params[:terms] || [])].flatten
-              user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
+              # user_terms = current_user.interests.map(&:name) if user_terms.blank? && current_user.present?
               Interest.all.each do |int|
 
                 btn_class = 'selected_btn' if user_terms.include?(int.name)
@@ -275,7 +276,7 @@
 
 <div style="display:inline-block;">
 
-    <button type="button" title="Enter what interests you...blank shows all" class="grey_btn btn-default" data-toggle="modal" data-target="#interestModal">Select Interest</button>
+    <button type="button" title="Enter what interests you...blank shows all" class="grey_btn btn-default" data-toggle="modal" data-target="#interestModal" id="terms-btn">Select Interest</button>
     <input style="display:none;" class="form-control grey_btn btn-default" id="terms" name="terms" type="search">
 
     <div class="btn-group grey_btn" id="location-selection-mobile">
@@ -352,7 +353,7 @@
     var term = '';
     var terms = [];
     if($('#interestModal .all-interest').hasClass('selected_btn'))
-      term = 'all';
+      term = 'All';
     else{
       $('#interestModal .activity-list button').each(function( i ) {
         if($(this).hasClass('selected_btn'))
@@ -361,13 +362,15 @@
       term = terms.join();
     }
     $('#search_form_mobile #terms').val(term);
+    var btn_term = term.length>16 ? term.substring(0,14)+'...' : term;
+    $('#search_form_mobile #terms-btn').text(btn_term);
   });
 
   $('#interestWebModal #submit-interest').click(function (e) {
     var term = '';
     var terms = [];
     if($('#interestWebModal .all-interest').hasClass('selected_btn'))
-      term = 'all';
+      term = 'All';
     else{
       $('#interestWebModal .activity-list button').each(function( i ) {
         if($(this).hasClass('selected_btn'))
