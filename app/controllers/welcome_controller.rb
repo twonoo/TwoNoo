@@ -31,7 +31,12 @@ class WelcomeController < ApplicationController
   end
 
   def search
+    param_term_modified = false
     if params[:terms].present?
+      if params[:terms]=='All'
+        params[:terms] = Interest.all.map(&:name).join(",") 
+        param_term_modified = true
+      end
       params[:terms] = params[:terms].gsub(/[^0-9A-Za-z]/, ' ').strip
     else
       params[:terms] = ''
@@ -226,7 +231,7 @@ class WelcomeController < ApplicationController
     @total_activities = @activities.present? ? @activities.count : 0
 
     @search_params = {
-        terms: params[:terms],
+        terms: (param_term_modified ? 'All' : params[:terms]),
         when: params[:when],
         from_date: params[:from_date],
         to_date: params[:to_date],
@@ -244,7 +249,7 @@ class WelcomeController < ApplicationController
     @users = @users[@users_offset..@users_max] if @users.present?
     @activities = @activities[@activities_offset..@activities_max] if @activities.present?
 
-    search_history = Search.new(search: params[:terms], location: params[:location])
+    search_history = Search.new(search: (param_term_modified ? 'All' : params[:terms]), location: params[:location])
     search_history.user_id = current_user.id if current_user
     search_history.save!
 
