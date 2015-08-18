@@ -65,3 +65,17 @@ gem 'geoip2', git: 'https://github.com/YotpoLtd/geoip2.git'
 gem 'websocket-rails'
 gem 'httparty'
 gem 'obscenity'
+
+group :test do
+  gem 'capybara-webkit', '>= 1.2.0'
+  gem 'database_cleaner'
+  gem 'email_spec'
+  gem 'factory_girl_rails'
+  gem 'formulaic'
+  gem 'launchy'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers', require: false
+  gem 'simplecov', require: false
+  gem 'timecop'
+  gem 'webmock'
+end

@@ -42,3 +42,18 @@ production:
       USE_SSL: 'true'
   RECAPTCHA:
     <<: *recaptcha_defaults
+
+test:
+  BASEURL: 'http://staging.twonoo.com:8080'
+  FACEBOOK:
+    KEY: '1524267501137363'
+    SECRET: '6f6e76f615fcf6c4a552cce0f51e71c4'
+    <<: *facebook_defaults
+  GOOGLE:
+    <<: *google_defaults
+  MANDRILL:
+    APIKEY: 'FkIb4ZNcFM9oEkj7OmjYiQ'
+  WEBSOCKET:
+    USE_SSL: 'false'
+  RECAPTCHA:
+    <<: *recaptcha_defaults

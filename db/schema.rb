@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501024234) do
+ActiveRecord::Schema.define(version: 20150812191815) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "activity_name",      limit: 255
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 20150501024234) do
 
   create_table "searches", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
-    t.string   "search",     limit: 255
+    t.text     "search",     limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "location",   limit: 255

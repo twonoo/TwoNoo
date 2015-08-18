@@ -11,9 +11,6 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-/config/database.yml
-
-
 # Ignore Profile Images
 /public/*
 
@@ -33,12 +30,9 @@ doc/
 .DS_Store
 .idea
 .secret
-
-
-config/database.yml
 /sidekiq.pid
 sidekiq.pid
-
+.env
 config/database.yml
-
-config/database.yml
+*.rdb
+.rspec
