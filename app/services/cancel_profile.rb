@@ -8,14 +8,13 @@ class CancelProfile
   end
 
   def perform
-    close_profile
+    profile.tap do |p|
+      p.update(cancelled: true)
+      p.profile_picture.clear
+    end
   end
 
   private
 
   attr_reader :profile
-
-  def close_profile
-    profile.update(cancelled: true)
-  end
 end
