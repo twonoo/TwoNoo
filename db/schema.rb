@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150812191815) do
+ActiveRecord::Schema.define(version: 20150818182952) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "activity_name",      limit: 255
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20150812191815) do
     t.string   "city",                         limit: 255
     t.string   "state",                        limit: 255
     t.string   "neighborhood",                 limit: 255
+    t.datetime "cancelled_at"
   end
 
   create_table "promotioncodes", force: :cascade do |t|
@@ -311,7 +312,6 @@ ActiveRecord::Schema.define(version: 20150812191815) do
     t.string  "view_name", limit: 255
   end
 
-  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
 end

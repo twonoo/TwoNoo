@@ -65,6 +65,7 @@ gem 'geoip2', git: 'https://github.com/YotpoLtd/geoip2.git'
 gem 'websocket-rails'
 gem 'httparty'
 gem 'obscenity'
+gem 'time_for_a_boolean'
 
 group :test do
   gem 'capybara-webkit', '>= 1.2.0'
