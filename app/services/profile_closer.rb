@@ -1,4 +1,4 @@
-class CancelProfile
+class ProfileCloser
   def initialize(profile:, reason: '')
     @profile = profile
     @reason = reason
@@ -9,7 +9,7 @@ class CancelProfile
   end
 
   def perform
-    if profile.cancelled?
+    if profile.closed?
       profile
     else
       profile.tap do |p|
@@ -31,8 +31,8 @@ class CancelProfile
 
   def profile_attributes
     {
-      cancelled: true,
-      cancel_reason: reason,
+      closed: true,
+      closed_reason: reason,
       first_name: 'CANCELLED',
       last_name: 'ACCOUNT'
     }

@@ -9,8 +9,9 @@ FactoryGirl.define do
       profile_picture { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'blank.png'), 'image/png') }
     end
 
-    trait :cancelled do
-      cancelled_at { Time.current }
+    trait :closed do
+      closed_at { Time.current }
+      closed_reason 'I have multiple accounts'
     end
   end
 end

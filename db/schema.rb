@@ -217,8 +217,8 @@ ActiveRecord::Schema.define(version: 20150819162306) do
     t.string   "city",                         limit: 255
     t.string   "state",                        limit: 255
     t.string   "neighborhood",                 limit: 255
-    t.datetime "cancelled_at"
-    t.string   "cancel_reason",                limit: 255
+    t.datetime "closed_at"
+    t.string   "closed_reason",                limit: 255
   end
 
   create_table "promotioncodes", force: :cascade do |t|

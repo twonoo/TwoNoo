@@ -18,9 +18,9 @@ class Profile < ActiveRecord::Base
 
   has_attached_file :profile_picture, :styles => {:medium => "300x300>", :thumb => "100x100#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
   validates_attachment_content_type :profile_picture, :content_type => /\Aimage\/.*\Z/
-  validates :cancel_reason, length: { maximum: 255 }
+  validates :closed_reason, length: { maximum: 255 }
 
-  time_for_a_boolean :cancelled
+  time_for_a_boolean :closed
 
   def must_be_18_or_older
     if birthday.present? && birthday > Date.today - 6570
