@@ -44,8 +44,6 @@ gem 'quiet_assets', group: :development
 
 gem 'paperclip', '~> 4.1'
 
-gem 'byebug'
-
 gem 'geokit'
 gem 'geokit-rails', '2.1.0'
 gem 'timezone'
@@ -66,6 +64,11 @@ gem 'websocket-rails'
 gem 'httparty'
 gem 'obscenity'
 gem 'time_for_a_boolean'
+
+group :development do
+  gem 'pry-byebug'
+  gem 'pry-rails'
+end
 
 group :test do
   gem 'capybara-webkit', '>= 1.2.0'
