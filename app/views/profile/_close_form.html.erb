@@ -1,0 +1,36 @@
+<div class="js-close-account-modal hidden close-account-modal">
+  <div class="container">
+    <%= form_for(@user.profile, url: close_profile_path, method: :post, html: { class: 'col-sm-6 col-sm-offset-3' }) do |form| %>
+      <div class="form-group">
+        <%= form.label :closed_reason, 'Why are you closing your account?', class: 'control-label' %>
+        <div class="checkbox">
+          <%= label_tag do %>
+            <%= form.radio_button :closed_reason, 'I have multiple accounts' %>
+            I have multiple accounts
+          <% end %>
+        </div>
+        <div class="checkbox">
+          <%= label_tag do %>
+            <%= form.radio_button :closed_reason, 'Too many emails' %>
+            Too many emails
+          <% end %>
+        </div>
+        <div class="checkbox">
+          <%= label_tag do %>
+            <%= form.radio_button :closed_reason, "I don't see the value" %>
+            I don't see the value
+          <% end %>
+        </div>
+        <div class="checkbox">
+          <%= label_tag do %>
+            <%= radio_button :profile, :closed_reason, '', checked: true %>
+            Other
+            <%= text_field_tag :other_reason %>
+          <% end %>
+        </div>
+      </div>
+      <%= form.submit 'Close Account', class: 'btn btn-danger' %>
+      or <%= link_to 'Cancel', nil, class: 'remove-close-account-modal' %>
+    <% end %>
+  </div>
+</div>

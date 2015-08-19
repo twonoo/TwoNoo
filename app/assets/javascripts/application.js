@@ -44,4 +44,4 @@
 //= require chosen.proto.js
 //= require chosen.custom.js
 //= require likes.js.erb
-
+//= require profile.js

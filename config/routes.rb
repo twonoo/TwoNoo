@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   resources :interests
   resources :background_jobs
   resources :people
+
   get 'profile/index'
 
   get 'profile/edit'
@@ -56,7 +57,7 @@ Rails.application.routes.draw do
 
   get 'profile/:id' => 'profile#show', as: :profile
   get 'profile/:id' => 'profile#show', as: :user
-
+  post 'profile/close', to: 'profile#close', as: :close_profile
 
   get 'profile/:id/activities_profile' => 'profile#activities_profile', as: :activities_profile
   get 'profile/:id/attending_profile' => 'profile#attending_profile', as: :attending_profile

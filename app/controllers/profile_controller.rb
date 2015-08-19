@@ -142,4 +142,19 @@ class ProfileController < ApplicationController
     end
   end
 
+  def close
+    profile = current_user.profile
+    ProfileCloser.perform(profile: profile,
+                          reason: closing_profile_params[:closed_reason])
+
+    sign_out(profile.user)
+
+    redirect_to root_url
+  end
+
+  private
+
+  def closing_profile_params
+    params.require(:profile).permit(:closed_reason)
+  end
 end
