@@ -8,11 +8,15 @@ class CancelProfile
   end
 
   def perform
-    profile.tap do |p|
-      p.update(profile_attributes)
-      p.profile_picture.clear
-      user.skip_reconfirmation!
-      user.update(email: "cancelled#{profile.user.email}")
+    if profile.cancelled?
+      profile
+    else
+      profile.tap do |p|
+        p.update(profile_attributes)
+        p.profile_picture.clear
+        user.skip_reconfirmation!
+        user.update(email: "cancelled#{profile.user.email}")
+      end
     end
   end
 

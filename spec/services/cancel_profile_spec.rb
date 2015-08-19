@@ -2,6 +2,16 @@ require 'rails_helper'
 
 describe CancelProfile do
   describe '#perform' do
+    context 'when the profile is already cancelled' do
+      it "doesn't try to re-cancel the account" do
+        profile = create(:profile, :cancelled)
+
+        CancelProfile.perform(profile)
+
+        expect(profile.first_name).not_to eq('CANCELLED')
+      end
+    end
+
     it 'sets the profile.cancelled to true' do
       profile = create(:user).profile
 

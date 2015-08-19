@@ -8,5 +8,9 @@ FactoryGirl.define do
     trait :with_profile_picture do
       profile_picture { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'blank.png'), 'image/png') }
     end
+
+    trait :cancelled do
+      cancelled_at { Time.current }
+    end
   end
 end
