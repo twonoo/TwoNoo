@@ -152,7 +152,7 @@
 
               <div class="form-group">
                 <%= f.label 'Activity Keywords *', class: "control-label", style: "color:#000" %>
-                <%= f.label '', '(eg. Sports, Baseball, etc)', class: "control-label", style: "color:#000;font-size:12px" %>
+                <%= f.label '', '(maximum of 5)', class: "control-label", style: "color:#000;font-size:12px" %>
                 <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
                   <option value></option>
                   <% @activity_types.each do |activity_type| %>
