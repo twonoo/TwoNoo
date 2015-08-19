@@ -6,7 +6,7 @@ describe CancelProfile do
       it "doesn't try to re-cancel the account" do
         profile = create(:profile, :cancelled)
 
-        CancelProfile.perform(profile)
+        CancelProfile.perform(profile: profile, reason: '')
 
         expect(profile.first_name).not_to eq('CANCELLED')
       end
@@ -15,7 +15,7 @@ describe CancelProfile do
     it 'sets the profile.cancelled to true' do
       profile = create(:user).profile
 
-      CancelProfile.perform(profile)
+      CancelProfile.perform(profile: profile, reason: '')
 
       expect(profile).to be_cancelled
     end
@@ -24,7 +24,7 @@ describe CancelProfile do
       profile = build(:profile, :with_profile_picture)
       create(:user, profile: profile)
 
-      CancelProfile.perform(profile)
+      CancelProfile.perform(profile: profile, reason: '')
 
       expect(profile.profile_picture).not_to be_present
     end
@@ -35,7 +35,7 @@ describe CancelProfile do
       first_name = "CANCELLED"
       last_name = "ACCOUNT"
 
-      CancelProfile.perform(profile)
+      CancelProfile.perform(profile: profile, reason: '')
 
       expect(profile.first_name).to eq(first_name)
       expect(profile.last_name).to eq(last_name)
@@ -46,10 +46,20 @@ describe CancelProfile do
       profile = user.profile
       cancelled_email = "cancelled#{user.email}"
 
-      CancelProfile.perform(profile)
+      CancelProfile.perform(profile: profile, reason: '')
       user.reload
 
       expect(user.email).to eq(cancelled_email)
+    end
+
+    it 'sets the reason for canceling' do
+      user = create(:user)
+      profile = user.profile
+      cancel_reason = 'Too many emails'
+
+      CancelProfile.perform(profile: profile, reason: cancel_reason)
+
+      expect(profile.cancel_reason).to eq(cancel_reason)
     end
   end
 end

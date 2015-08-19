@@ -1,10 +1,11 @@
 class CancelProfile
-  def initialize(profile)
+  def initialize(profile:, reason: '')
     @profile = profile
+    @reason = reason
   end
 
-  def self.perform(profile)
-    new(profile).perform
+  def self.perform(profile:, reason: '')
+    new(profile: profile, reason: reason).perform
   end
 
   def perform
@@ -22,7 +23,7 @@ class CancelProfile
 
   private
 
-  attr_reader :profile
+  attr_reader :profile, :reason
 
   def user
     @user ||= profile.user
@@ -31,6 +32,7 @@ class CancelProfile
   def profile_attributes
     {
       cancelled: true,
+      cancel_reason: reason,
       first_name: 'CANCELLED',
       last_name: 'ACCOUNT'
     }
