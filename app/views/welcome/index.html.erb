@@ -306,8 +306,8 @@
 <% end %>
 
 <%= current_user ? render('layouts/user_sub_nav') : nil %>
-
-<section class="" id="trending" name="trending" style="padding:0px; margin-top:<%= current_user.present? ? '52px' : '2px' %>"></section>
+<!-- Remove Trending -->
+<!-- <section class="" id="trending" name="trending" style="padding:0px; margin-top:<%= current_user.present? ? '52px' : '2px' %>"></section> -->
 
 <%= javascript_include_tag "welcome" %>
 <script type='text/javascript'>
