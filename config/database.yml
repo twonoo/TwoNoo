@@ -3,8 +3,8 @@ development:
   encoding: utf8
   database: twonoo_dev
   pool: 5
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASS'] %>
+  username: root
+  password: manager
   # host: 104.131.156.51
 
 test:
@@ -12,8 +12,8 @@ test:
   encoding: utf8
   database: twonoo_test
   pool: 5
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASS'] %>
+  username: root
+  password: manager
   # host: 104.131.156.51
 
 # Warning: The database defined as "test" will be erased and

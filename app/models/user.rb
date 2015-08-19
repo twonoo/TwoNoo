@@ -86,7 +86,6 @@ class User < ActiveRecord::Base
   end
 
   def self.from_omniauth(auth)
-
     #facebooks uid is not always the same any more, so in the event they return a different one, we need to look up the user by email.
     user = where(provider: 'facebook', uid: auth.uid).first
     user = where(email: auth.info.email).first if user.blank?
@@ -208,5 +207,4 @@ class User < ActiveRecord::Base
       WebsocketRails[:people_you_know].trigger user_key, 'done'
     end.resume
   end
-
 end
