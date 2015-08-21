@@ -188,7 +188,7 @@
   </div>
 </section>
 
-<%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();") do %>
+<%= form_tag("/search", method: "get", id: "search_form_mobile", name: :search_form_mobile, onsubmit: "return confirmSearchMobile();" ) do %>
     <!-- Varun/Monesh : Commented for some time, after approval we will remove  -->
     <!-- <div class="mobile-search navbar-toggle collapsed" style="padding: 10px; height: 180px; float: none; margin: 0; ">
       <div class="" style="padding-bottom: 10px">
@@ -300,7 +300,7 @@
         <!-- <i class='glyphicon glyphicon-chevron-down'></i> -->
     </div>
     <div class="clearfix"> </div>  
-       <button type="button" onclick="return check_mobile_interests();"  class="dark_green_btn btn-default pull-right" style="margin-top:5px; min-width: 69px;">GO!</button>    
+       <button type="submit" onclick="return check_mobile_interests();" id='mobile_search_submit' class="dark_green_btn btn-default pull-right" style="margin-top:5px; min-width: 69px;">GO!</button>    
 
 </div>
 
@@ -415,7 +415,9 @@
     }
     else {
       $('#no_interest_selected').hide();
-      document.search_form_mobile.submit();
+      confirmSearchMobile();
+      // document.search_form_mobile.submit();
+      $(this).click();
       return true;
     }
   }

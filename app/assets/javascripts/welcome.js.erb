@@ -261,7 +261,7 @@ function confirmSearch()
     var state
 
     geocoder.geocode({'address': $('#location').val()}, function(results, status){
-        if (!$.isNumeric($('#location').val()) && status == google.maps.GeocoderStatus.OK)
+        if (status == google.maps.GeocoderStatus.OK)
         {
             console.log('results[0].geometry.location:'+results[0].geometry.location);
             $('#lat').val(results[0].geometry.location.lat());
@@ -350,8 +350,9 @@ function confirmSearchMobile()
         bsubmit = true;
 
         $('#search_form-mobile').submit();
+        $('#mobile_search_submit').click();
+        $('#mobile_search_submit').dblclick();
     });
 
     return false;
-
 }
