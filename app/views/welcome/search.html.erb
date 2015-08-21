@@ -287,7 +287,7 @@
           <div role="tabpanel" class="tab-pane <%= @activities.blank? ? 'fade in active' : nil %>" id="people">
             <% if @users.present? %>
                 <% @users.each do |u| %>
-                    <div style="background: #FFFFFF" class="col-md-12 people-search-result-list">
+                    <div style="background: #FFFFFF; cursor:pointer;" onclick='location.href="<%=profile_path(u.user)%>"'  class="col-md-12 people-search-result-list">
                       <div class="col-sm-12 people-search-result-list-details">
                         <div class="col-sm-2 col-xs-4"><%= profile_img(u.user) %></div>
                         <div class="col-sm-7 col-xs-8">
