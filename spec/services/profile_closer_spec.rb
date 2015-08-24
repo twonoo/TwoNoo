@@ -61,5 +61,17 @@ describe ProfileCloser do
 
       expect(profile.closed_reason).to eq(closed_reason)
     end
+
+    it 'removes the facebook token from the user' do
+      user = create(:user)
+      profile = user.profile
+      closed_reason = 'Too many emails'
+
+      ProfileCloser.perform(profile: profile, reason: closed_reason)
+      user.reload
+
+      expect(user.fb_token).to be_nil
+      expect(user.fb_token_expires_in).to be_nil
+    end
   end
 end

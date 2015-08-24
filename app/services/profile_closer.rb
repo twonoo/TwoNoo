@@ -16,7 +16,7 @@ class ProfileCloser
         p.update(profile_attributes)
         p.profile_picture.clear
         user.skip_reconfirmation!
-        user.update(email: "cancelled#{profile.user.email}")
+        user.update(user_attributes)
       end
     end
   end
@@ -35,6 +35,14 @@ class ProfileCloser
       closed_reason: reason,
       first_name: 'CANCELLED',
       last_name: 'ACCOUNT'
+    }
+  end
+
+  def user_attributes
+    {
+      email: "cancelled#{profile.user.email}",
+      fb_token: nil,
+      fb_token_expires_in: nil
     }
   end
 end
