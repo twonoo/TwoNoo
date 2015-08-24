@@ -11,6 +11,6 @@ $(document).ready(function() {
   });
 
   $('#other_reason').keyup(function() {
-    $("#profile_closed_reason").val($(this).val())
+    $("#profile_closed_reason_other").val($(this).val())
   });
 });
