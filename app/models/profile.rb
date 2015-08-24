@@ -71,6 +71,7 @@ class Profile < ActiveRecord::Base
 
       query = query.join(' AND ')
       query << " OR user_id IN (#{user_ids.uniq.join(',')})" unless user_ids.blank?
+      query << " AND closed_at IS NULL"
 
       where(query) unless query.blank?
 
