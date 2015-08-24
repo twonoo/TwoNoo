@@ -40,12 +40,20 @@ class ProfileCloser
 
   def user_attributes
     {
-      email: "#{SecureRandom.hex(2)}cancelled#{profile.user.email}",
+      email: "#{random_email_prefix}#{profile.user.email}",
       fb_token: nil,
       fb_token_expires_in: nil,
       provider: nil,
       uid: nil,
-      encrypted_password: SecureRandom.hex(20)
+      encrypted_password: random_password
     }
+  end
+
+  def random_password
+    SecureRandom.hex(20)
+  end
+
+  def random_email_prefix
+    "#{SecureRandom.hex(2)}cancelled"
   end
 end

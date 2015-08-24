@@ -29,7 +29,7 @@ describe ProfileCloser do
       expect(profile.profile_picture).not_to be_present
     end
 
-    it 'changes the users name to closed ACCOUNT' do
+    it 'changes the users name to CANCELLED ACCOUNT' do
       profile = build(:profile)
       create(:user, profile: profile)
       first_name = "CANCELLED"
@@ -41,10 +41,11 @@ describe ProfileCloser do
       expect(profile.last_name).to eq(last_name)
     end
 
-    it 'prepends "cancelled" to the profile users email' do
+    it 'prepends a random number and "cancelled" to the profile users email' do
       user = create(:user)
       profile = user.profile
-      closed_email = "cancelled#{user.email}"
+      allow(SecureRandom).to receive(:hex).and_return('1234')
+      closed_email = "1234cancelled#{user.email}"
 
       ProfileCloser.perform(profile: profile, reason: '')
       user.reload
@@ -62,16 +63,27 @@ describe ProfileCloser do
       expect(profile.closed_reason).to eq(closed_reason)
     end
 
-    it 'removes the facebook token from the user' do
-      user = create(:user)
+    it 'removes the facebook info from the user' do
+      user = create(:user, :facebook)
       profile = user.profile
-      closed_reason = 'Too many emails'
 
-      ProfileCloser.perform(profile: profile, reason: closed_reason)
+      ProfileCloser.perform(profile: profile)
       user.reload
 
       expect(user.fb_token).to be_nil
       expect(user.fb_token_expires_in).to be_nil
+      expect(user.provider).to be_nil
+      expect(user.uid).to be_nil
+    end
+
+    it 'sets the encrypted_password to a random string' do
+      allow(SecureRandom).to receive(:hex).and_return('1234')
+      user = create(:user, encrypted_password: 'abcd')
+
+      ProfileCloser.perform(profile: user.profile)
+      user.reload
+
+      expect(user.encrypted_password).to eq('1234')
     end
   end
 end
