@@ -42,7 +42,10 @@ class ProfileCloser
     {
       email: "cancelled#{profile.user.email}",
       fb_token: nil,
-      fb_token_expires_in: nil
+      fb_token_expires_in: nil,
+      provider: nil,
+      uid: nil,
+      encrypted_password: SecureRandom.hex(20)
     }
   end
 end
