@@ -77,7 +77,7 @@ describe ProfileCloser do
     end
 
     it 'sets the encrypted_password to a random string' do
-      allow(SecureRandom).to receive(:hex).and_return('1234')
+      allow(BCrypt::Password).to receive(:create).and_return('1234')
       user = create(:user, encrypted_password: 'abcd')
 
       ProfileCloser.perform(profile: user.profile)

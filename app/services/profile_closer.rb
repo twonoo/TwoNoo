@@ -50,7 +50,7 @@ class ProfileCloser
   end
 
   def random_password
-    SecureRandom.hex(20)
+    BCrypt::Password.create(SecureRandom.hex(20))
   end
 
   def random_email_prefix
