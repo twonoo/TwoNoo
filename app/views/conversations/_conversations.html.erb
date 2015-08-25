@@ -2,12 +2,12 @@
   <p id="conversation_<%=conversation.id.to_s%>">
     <% unless conversation.originator.nil? || conversation.recipients[0].nil? %>
       <% if (conversation.originator == current_user) %>
-        <%= link_to conversation.recipients[0].profile.first_name + ' ' + conversation.recipients[0].profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
+        <%= link_to ProfileDecorator.new(conversation.recipients[0].profile).display_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
         <script>
           $(function(){$('#conversation_<%=conversation.id.to_s%>').dblclick(function(){window.location.href = '<%=profile_path(conversation.recipients[0].id)%>';});});
         </script>
       <% else %>
-        <%= link_to conversation.originator.profile.first_name + ' ' + conversation.originator.profile.last_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
+        <%= link_to ProfileDecorator.new(conversation.originator.profile).display_name, '/conversations/' + conversation.id.to_s + '/display', :remote => true %>
         <script>
           $(function(){$('#conversation_<%=conversation.id.to_s%>').dblclick(function(){window.location.href = '<%=profile_path(conversation.originator.id)%>';});});
         </script>

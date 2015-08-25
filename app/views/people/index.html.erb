@@ -27,8 +27,8 @@
 
                 <div class="im-container"
                      alink="Message"
-                     recipient="<%= p.follower_user.id %>" recipient_firstname="<%= p.follower_user.profile.first_name %>" recipient_lastname="<%= p.follower_user.profile.last_name %>"
-                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"></div>
+                     recipient="<%= p.follower_user.id %>" recipient_firstname="<%= p.follower_user.profile.first_name %>" recipient_lastname="<%= ProfileDecorator.new(p.follower_user.profile).last_initial %>"
+                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>"></div>
 
                 <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:25%" user_id="<%= p.follower_user.id %>" user_name="<%= p.follower_user.name %>">
                   <a class='label label-info' style="color:#FFF;vertical-align:middle;">Follow</a>

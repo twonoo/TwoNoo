@@ -5,8 +5,8 @@
       <% if !current_user.nil? && (current_user != person.follower_user) %>
           <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
                alink="Send <%= person.follower_user.profile.first_name %> a message"
-               recipient="<%= person.follower_user.id %>" recipient_firstname="<%= person.follower_user.profile.first_name %>" recipient_lastname="<%= person.follower_user.profile.last_name %>"
-               sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
+               recipient="<%= person.follower_user.id %>" recipient_firstname="<%= person.follower_user.profile.first_name %>" recipient_lastname="<%= ProfileDecorator.new(person.follower_user.profile).last_initial %>"
+               sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>"
           ></div>
           <% unless (current_user == person.follower_user) || (current_user.following?(person.follower_user)) %>
               <div class="follow_link" style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%" user_id="<%= person.follower_user.id %>" user_name="<%= person.follower_user.name %>">

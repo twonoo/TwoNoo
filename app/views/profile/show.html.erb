@@ -7,23 +7,23 @@
     <div style="background-color:#333;height:285px">
       <div class="col-md-6 col-md-offset-3">
         <div class="text-center" style="margin-top:15px;color:#FFF;">
-          <%= profile_img(@profile) %>
+          <%= profile_img(@user) %>
 
           <h2 style="color:white; margin-top:20px">
-            <strong><%= @profile.profile.first_name %> <%= @profile.profile.last_name %></strong>
+            <strong><%= ProfileDecorator.new(@user.profile).display_name %></strong>
           </h2>
 
-          <p><%= @profile.profile.about_me %></p>
+          <p><%= @user.profile.about_me %></p>
 
-          <p class="interests-small"><%= interests_tag(@profile) %></p>
+          <p class="interests-small"><%= interests_tag(@user) %></p>
 
-          <% if !current_user.nil? && (current_user != @profile) then %>
+          <% if !current_user.nil? && (current_user != @user) then %>
               <h3>
-                <%= current_user.following?(@profile) ? (link_to 'Unfollow', unfollow_path(@profile.id), class: 'label label-info') : (link_to 'Follow', follow_path(@profile.id), class: 'label label-info') %>
+                <%= current_user.following?(@user) ? (link_to 'Unfollow', unfollow_path(@user.id), class: 'label label-info') : (link_to 'Follow', follow_path(@user.id), class: 'label label-info') %>
                 <div id="profile-im" style="display:inline-block;cursor: pointer; cursor: hand;" class="im-container"
-                     alink="Send <%= @profile.profile.first_name %> a message"
-                     recipient="<%= @profile.id %>" recipient_firstname="<%= @profile.profile.first_name %>" recipient_lastname="<%= @profile.profile.last_name %>"
-                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>">
+                     alink="Send <%= @user.profile.first_name %> a message"
+                     recipient="<%= @user.id %>" recipient_firstname="<%= @user.profile.first_name %>" recipient_lastname="<%= ProfileDecorator.new(@user.profile).last_initial %>"
+                     sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>">
                 </div>
                 <script>
                     (function () {
@@ -35,7 +35,7 @@
               </h3>
           <% else %>
               <a id="messageMe" class="messageMe label label-info" style="display:inline-block;cursor: pointer; cursor: hand;">Follow</a>
-              <a id="followMe" class="messageMe label label-info" style="display:inline-block;cursor: pointer; cursor: hand;">Send <%= @profile.profile.first_name %> a
+              <a id="followMe" class="messageMe label label-info" style="display:inline-block;cursor: pointer; cursor: hand;">Send <%= @user.profile.first_name %> a
                 message</a>
           <% end %>
         </div>
@@ -48,18 +48,18 @@
           <div class="text-center">
             <ul class="nav nav-pills nav-justified">
               <li id="profile_activities" class="active">
-                <%= link_to 'Activities', @profile.id.to_s+'/activities_profile', :remote => true %>
+                <%= link_to 'Activities', @user.id.to_s+'/activities_profile', :remote => true %>
               </li>
               <!--<li id="profile_attending">-->
-                <!--<%#= link_to 'Attending', @profile.id.to_s+'/attending_profile', :remote => true %>-->
+                <!--<%#= link_to 'Attending', @user.id.to_s+'/attending_profile', :remote => true %>-->
               <!--</li>-->
               <li id="profile_followers">
-                <%= link_to 'Followers', @profile.id.to_s+'/followers_profile', :remote => true %>
+                <%= link_to 'Followers', @user.id.to_s+'/followers_profile', :remote => true %>
               </li>
               <li id="profile_following">
-                <%= link_to 'Following', @profile.id.to_s+'/following_profile', :remote => true %>
+                <%= link_to 'Following', @user.id.to_s+'/following_profile', :remote => true %>
               </li>
-              <!--<%# if current_user.id == @profile.id %>-->
+              <!--<%# if current_user.id == @user.id %>-->
                   <!--<li id="profile_people">-->
                     <!--<%#= link_to 'Cool People', current_user.id.to_s+'/people_profile', :remote => true %>-->
                   <!--</li>-->

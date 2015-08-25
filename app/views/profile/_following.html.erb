@@ -4,9 +4,9 @@
       <%= link_to (f.name), profile_path(f) %>
       <% if !current_user.nil? && (current_user != f) then %>
         <div class="im-container" style="width:230px;z-index:1000;position:absolute;right:0px;top:0px;text-align:right;"
-          alink="Send <%=f.profile.first_name%> a message"
-          recipient="<%=f.id%>" recipient_firstname="<%=f.profile.first_name%>" recipient_lastname="<%=f.profile.last_name%>"
-          sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
+          alink="Send <%= f.profile.first_name %> a message"
+          recipient="<%= f.id %>" recipient_firstname="<%= f.profile.first_name %>" recipient_lastname="<%= ProfileDecorator.new(f.profile).last_initial %>"
+          sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>"
         ></div>
         <% if current_user == User.find(params[:id]) %>
           <div style="cursor:pointer;padding-top:0em;position:absolute;right:0px;display:inline;top:30%"><%=(link_to 'Unfollow', unfollow_path(f.id), class: 'label label-info')%></div>

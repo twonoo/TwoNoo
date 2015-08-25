@@ -193,7 +193,7 @@
       <div class="panel panel-default">
         <div class="panel-body text-center">
           <%= profile_img(@organizer) %>
-          <h3><%= link_to @organizer.profile.first_name + ' ' + @organizer.profile.last_name, @organizer %></h3>
+          <h3><%= link_to @profile.display_name, @organizer %></h3>
           <h4><%= @organizer.profile.about_me %></h4>
           <% if @organizer != current_user && current_user %>
               <h4><%= current_user.following?(@organizer) ? (link_to 'Unfollow', unfollow_path(@organizer.id), class: 'label label-info') : (link_to 'Follow', follow_path(@organizer.id), class: 'label label-info') %></h4>
@@ -205,8 +205,8 @@
             <div class="aim-container" style="width:230px;z-index:1000;"
                  alink="Send <%= @organizer.profile.first_name %> a message"
                  activity_name="<%= @activity.activity_name %>"
-                 recipient="<%= @organizer.id %>" recipient_firstname="<%= @organizer.profile.first_name %>" recipient_lastname="<%= @organizer.profile.last_name %>"
-                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= current_user.profile.last_name %>"
+                 recipient="<%= @organizer.id %>" recipient_firstname="<%= @organizer.profile.first_name %>" recipient_lastname="<%= ProfileDecorator.new(@organizer.profile).last_initial %>"
+                 sender="<%= current_user.id %>" sender_firstname="<%= current_user.profile.first_name %>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>"
             ></div>
         <% end %>
       </div>
@@ -224,7 +224,7 @@
                     <a class='label label-info' style="color:#FFF;">Follow</a>
                   </div>
               <% end %>
-              <%= link_to @going.profile.first_name + ' ' + @going.profile.last_name, @going %>
+              <%= link_to ProfileDecorator.new(@going.profile).display_name, @going %>
               </p>
           <% end %>
         </div>
@@ -453,11 +453,11 @@
                 success: function (data) {
                     if (type == 'rsvp') {
                         showOverlay();
-                        $('#whos_going').append('<p><%= link_to current_user.profile.first_name + ' ' + current_user.profile.last_name, current_user %></p>')
+                        $('#whos_going').append('<p><%= link_to current_user.profile.first_name + ' ' + ProfileDecorator.new(current_user.profile).last_initial, current_user %></p>')
                         setupUnRsvp();
                     } else {
                         hideOverlay();
-                        $("#whos_going p:contains('<%= current_user.profile.first_name + ' ' + current_user.profile.last_name %>')").remove();
+                        $("#whos_going p:contains('<%= current_user.profile.first_name + ' ' + ProfileDecorator.new(current_user.profile).last_initial %>')").remove();
                         setupRsvp();
                     }
                 },

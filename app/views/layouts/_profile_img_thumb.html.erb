@@ -1,5 +1,5 @@
 <% if current_user.profile.profile_picture_file_name %>
 	<%= image_tag current_user.profile.profile_picture.url(:thumb), class: 'profile-img' %>
 <% else %>
-	<span style="padding:20px; background-color:#e3e3e3; font-size:50px; color:gray; line-height:125px" class="profile-img"><%= current_user.profile.first_name[0] + current_user.profile.last_name[0] %></span>
+	<span style="padding:20px; background-color:#e3e3e3; font-size:50px; color:gray; line-height:125px" class="profile-img"><%= ProfileDecorator.new(current_user.profile).display_name %></span>
 <% end %>

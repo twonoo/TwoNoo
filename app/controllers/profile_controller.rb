@@ -67,8 +67,8 @@ class ProfileController < ApplicationController
   end
 
   def show
-    @profile = User.find_by_id(params[:id])
-    if @profile.nil? || @profile.profile.closed?
+    @user = User.find_by_id(params[:id])
+    if @user.nil? || @user.profile.closed?
       redirect_to root_url
     end
 

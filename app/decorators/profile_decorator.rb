@@ -3,9 +3,17 @@ class ProfileDecorator < SimpleDelegator
     "#{first_name.capitalize} #{last_initial.capitalize}"
   end
 
-  private
+  def initials
+    "#{first_initial.capitalize}#{last_initial.capitalize}"
+  end
 
   def last_initial
     last_name.first
+  end
+
+  private
+
+  def first_initial
+    first_name.first
   end
 end

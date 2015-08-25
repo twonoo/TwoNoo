@@ -291,7 +291,7 @@
                       <div class="col-sm-12 people-search-result-list-details">
                         <div class="col-sm-2 col-xs-4"><%= profile_img(u.user) %></div>
                         <div class="col-sm-7 col-xs-8">
-                          <span><%= link_to u.first_name + ' ' + u.last_name, profile_path(u.user), class: 'search-result-list-name' %></span>
+                          <span><%= link_to ProfileDecorator.new(u).display_name, profile_path(u.user), class: 'search-result-list-name' %></span>
                                 <span class="search-result-list-location"><%= "#{u.city}, #{u.state}" %>
                                   <% if u.neighborhood.present? %>
                                     <%= "(#{u.neighborhood})" %>

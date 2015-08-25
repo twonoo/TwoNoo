@@ -2,8 +2,8 @@
   recipient = (conversation.originator == current_user) ? recipient = conversation.recipients[0] : conversation.originator
 %>
 <div class="cim-container"
-  recipient="<%=recipient.id%>" recipient_firstname="<%=recipient.profile.first_name%>" recipient_lastname="<%=recipient.profile.last_name%>"
-  sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%=current_user.profile.last_name%>"
+  recipient="<%=recipient.id%>" recipient_firstname="<%=recipient.profile.first_name%>" recipient_lastname="<%= ProfileDecorator.new(recipient.profile).last_initial %>"
+  sender="<%=current_user.id%>" sender_firstname="<%=current_user.profile.first_name%>" sender_lastname="<%= ProfileDecorator.new(current_user.profile).last_initial %>"
 ></div>
 <hr>
 <h3 class="text-center"><%=recipient.name%> </h3>

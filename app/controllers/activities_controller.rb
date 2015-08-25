@@ -136,6 +136,7 @@ class ActivitiesController < ApplicationController
       @rsvps = Rsvp.includes(:user).where(activity_id: @activity.id)
       @activity.increase_view
       @organizer = User.find(@activity.user_id)
+      @profile = ProfileDecorator.new(@organizer.profile)
     else
       redirect_to root_url
     end
