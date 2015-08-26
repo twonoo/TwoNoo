@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    return self.profile.first_name + ' ' + self.profile.last_name
+    ProfileDecorator.new(profile).display_name
   end
 
   def sign_up_ip=(ip)
