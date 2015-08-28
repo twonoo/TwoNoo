@@ -153,13 +153,13 @@
               <div class="form-group">
                 <%= f.label 'Activity Keywords *', class: "control-label", style: "color:#000" %>
                 <%= f.label '', '(maximum of 5)', class: "control-label", style: "color:#000;font-size:12px" %>
-                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
+                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activities_interests][]'>
                   <option value></option>
-                  <% @activity_types.each do |activity_type| %>
-                      <% if @selected_tag_ids.include? activity_type.id %>
-                          <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                  <% @interests.each do |interest| %>
+                      <% if @selected_tag_ids.include? interest.id %>
+                          <option selected value="<%= interest.name %>"><%= interest.name %></option>
                       <% else %>
-                          <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                          <option value="<%= interest.name %>"><%= interest.name %></option>
                       <% end %>
                   <% end %>
                 </select>

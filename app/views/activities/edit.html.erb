@@ -121,12 +121,13 @@
               </div>
 
               <div class="form-group">
-                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activity_types][]'>
-                  <% @activity_types.each do |activity_type| %>
-                      <% if @activity.activity_types.pluck(:id).include? activity_type.id %>
-                          <option selected value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activities_interests][]'>
+                  <% activity_activity_types = @activity.interests.pluck(:interest_id) %>
+                  <% @interests.each do |interest| %>
+                      <% if activity_activity_types.include? interest.id %>
+                          <option selected value="<%= interest.name %>"><%= interest.name %></option>
                       <% else %>
-                          <option value="<%= activity_type.activity_type %>"><%= activity_type.activity_type %></option>
+                          <option value="<%= interest.name %>"><%= interest.name %></option>
                       <% end %>
                   <% end %>
                 </select>

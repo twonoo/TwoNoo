@@ -1,6 +1,7 @@
 class ActivitiesController < ApplicationController
   require 'mandrill'
   before_filter :authenticate_user!, :except => [:index, :search, :show]
+  before_filter :get_interests, only: [:new, :edit]
 
   def add_to_gcal
     respond_to do |format|
@@ -144,7 +145,7 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    @activity_types = ActivityType.all.each
+    # get_interests
     @selected_tag_ids = []
     @activity = Activity.new activity_name: params[:activity_name]
 
@@ -159,7 +160,7 @@ class ActivitiesController < ApplicationController
   end
 
   def edit
-    @activity_types = ActivityType.all.each
+    # get_interests
     @activity = Activity.find(params[:id])
   end
 
@@ -245,10 +246,10 @@ class ActivitiesController < ApplicationController
 
     unless old_activity.nil?
       @activity = old_activity.dup
-      @activity.activity_type_ids = old_activity.activity_type_ids
-      @activity_types = ActivityType.all.each
-      @selected_tag_ids = @activity.activity_type_ids
-      logger.info @activity.activity_type_ids
+      @activity.interest_ids = old_activity.interest_ids
+      get_interests
+      @selected_tag_ids = @activity.interest_ids
+      logger.info @activity.interest_ids
     end
     render :new
   end
@@ -309,21 +310,15 @@ class ActivitiesController < ApplicationController
   def create
     parms = activity_params
 
-    new_activity_types = []
     selected_activity_types = []
-    (parms[:activity_types] || []).each do |tag|
-      next if Obscenity.offensive(tag).present?
-
-      selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
-      if !selected_activity_types.last.persisted?
-        selected_activity_types.last.save
-        new_activity_types << selected_activity_types.last
-      end
-
+    parms[:activities_interests].present? && parms[:activities_interests].each do |interest|
+      # next if Obscenity.offensive(tag).present?
+       inter = Interest.find_by_name interest
+       selected_activity_types << inter.id if inter.present?
     end
 
-    parms[:activity_type_ids] = selected_activity_types.map(&:id)
-    parms.delete(:activity_types)
+    parms[:interest_ids] = selected_activity_types
+    parms.delete(:activities_interests)
 
     if params[:lat].present? && params[:lng].present?
       parms[:latitude] = params[:lat]
@@ -335,7 +330,6 @@ class ActivitiesController < ApplicationController
 
     captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: ENV['RECAPTCHA_PRIVATE_KEY'], response: params[:captcha_response], remoteip: request.env['HTTP_X_FORWARDED_FOR']})
     good_captcha = captcha_response.parsed_response['success'] == true
-
     if @activity.save
       if good_captcha
         # Charge the organizer
@@ -354,25 +348,15 @@ class ActivitiesController < ApplicationController
         #s=t in querystring will display the share modal
         redirect_to "/activities/#{@activity.id}/?s=t"
       else
-        #remove all newly created activity types if the form is incomplete
-        new_activity_types.each do |activity_type|
-          activity_type.destroy
-        end
-
-        @selected_tag_ids = (selected_activity_types.map(&:id) || [])
-        @activity_types = ActivityType.all.each
+        @selected_tag_ids = selected_activity_types
+        get_interests
         flash.now[:error] = 'Invalid Captcha'
         render :new
       end
 
     else
-      #remove all newly created activity types if the form is incomplete
-      new_activity_types.each do |activity_type|
-        activity_type.destroy
-      end
-
-      @selected_tag_ids = (selected_activity_types.map(&:id) || [])
-      @activity_types = ActivityType.all.each
+      @selected_tag_ids = selected_activity_types
+      get_interests
       render :new
     end
   end
@@ -382,24 +366,17 @@ class ActivitiesController < ApplicationController
 
     @activity = Activity.find(params[:id])
     params = activity_params
-    @activity.activity_type_ids = params[:activity_type_ids]
+    @activity.interest_ids = params[:interest_ids]
 
-    new_activity_types = []
     selected_activity_types = []
-    (params[:activity_types] || []).each do |tag|
-      next if Obscenity.offensive(tag).present?
-
-      selected_activity_types << ActivityType.find_or_initialize_by(activity_type: tag.downcase.titleize)
-      if !selected_activity_types.last.persisted?
-        selected_activity_types.last.save
-        new_activity_types << selected_activity_types.last
-      end
-
+    params[:activities_interests].present? && params[:activities_interests].each do |interest|
+      # next if Obscenity.offensive(tag).present?
+       inter = Interest.find_by_name interest
+       selected_activity_types << inter.id if inter.present?
     end
 
-    params[:activity_type_ids] = selected_activity_types.map(&:id)
-    params.delete(:activity_types)
-
+    params[:interest_ids] = selected_activity_types
+    params.delete(:activities_interests)
     @activity.update(params)
 
     if @activity.save
@@ -416,12 +393,7 @@ class ActivitiesController < ApplicationController
       end
       redirect_to @activity
     else
-      #remove all newly created activity types if the form is incomplete
-      new_activity_types.each do |activity_type|
-        activity_type.destroy
-      end
-
-      @activity_types = ActivityType.all.each
+      get_interests
       render :edit
     end
   end
@@ -429,7 +401,13 @@ class ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2, :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image, :date, :time, :enddate, :endtime, activity_types: [])
+    params.require(:activity).permit(:activity_name, :location_name, :street_address_1, :street_address_2,
+                                     :city, :state, :website, :description, :rsvp, :latitude, :longitude, :image,
+                                     :date, :time, :enddate, :endtime, activities_interests: [])
+  end
+
+  def get_interests
+    @interests = Interest.all #ActivityType.all.each
   end
 
 end

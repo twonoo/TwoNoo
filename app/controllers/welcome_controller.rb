@@ -3,7 +3,7 @@ class WelcomeController < ApplicationController
   before_filter :add_user_category, only: :search
 
   def index
-    @suggested_search_terms = [*Interest.all.pluck(:name) + ActivityType.all.pluck(:activity_type)].uniq.sort_by { |word| word.downcase }
+    @suggested_search_terms = [*Interest.all.pluck(:name)].uniq.sort_by { |word| word.downcase }
     @suggested_city_search_terms = US_CITIES
   end
 
@@ -137,7 +137,7 @@ class WelcomeController < ApplicationController
     #end
 
     #Tag results
-    tag_type = ActivityType.where(activity_type: params[:terms]).first
+    tag_type = Interest.where(name: params[:terms]).first
     tag_activities = Activity.where(cancelled: false).joins(:activity_types)
                          .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
 
@@ -149,7 +149,7 @@ class WelcomeController < ApplicationController
       search_activities = Activity.terms(params[:terms]).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false)
     end
 
-    type = ActivityType.where(activity_type: (params[:type] || 'All')).first
+    type = Interest.where(name: (params[:type] || 'All')).first
     search_activities = search_activities.joins(:activity_types).where('activity_types.id' => type.id).where('cancelled = ?', false) if type
 
     #Join both results
@@ -285,8 +285,8 @@ class WelcomeController < ApplicationController
           )
           interest_updated = true
         end
+      flash[:success] = 'Selected interests have been added to profile.' if interest_updated
     end
-    flash[:success] = 'Selected interests have been added to profile.' if interest_updated
   end
 
 end

@@ -2,6 +2,7 @@ class Interest < ActiveRecord::Base
 
   has_many :interests_options
   has_and_belongs_to_many :users
+  has_and_belongs_to_many :activities
 
   before_create :generate_code
 

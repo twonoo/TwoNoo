@@ -5,7 +5,8 @@ class Activity < ActiveRecord::Base
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
   belongs_to :user
   has_many :likes
-  has_and_belongs_to_many :activity_types
+  # has_and_belongs_to_many :activity_types
+  has_and_belongs_to_many :interests
   #geocoded_by :address
   before_validation :geocodecache
   before_save :assign_timezone
@@ -22,7 +23,7 @@ class Activity < ActiveRecord::Base
 
   #validate :distance_cannot_be_greater_than_100_miles
   validate :end_not_more_than_30_days
-  validate :presence_of_activity_types
+  validate :presence_of_interests
 
   acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
@@ -227,9 +228,15 @@ class Activity < ActiveRecord::Base
 
   private
 
-  def presence_of_activity_types
-    unless activity_types.present?
-      errors[:base] << 'Please add at least one keyword'
+  # def presence_of_activity_types
+  #   unless activity_types.present?
+  #     errors[:base] << 'Please add at least one keyword'
+  #   end
+  # end
+
+  def presence_of_interests
+    unless interests.present?
+      errors[:base] << 'Please add at least one interest keyword'
     end
   end
 

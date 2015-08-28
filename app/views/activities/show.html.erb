@@ -103,8 +103,8 @@
           <!--<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>-->
 
           <div>
-            <% @activity.activity_types.each do |a| %>
-                <span class="label label-danger"><%= a.activity_type %></span>
+            <% @activity.interests.each do |a| %>
+                <span class="label label-danger"><%= a.name %></span>
             <% end %>
           </div>
           </br>

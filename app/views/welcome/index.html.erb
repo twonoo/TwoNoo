@@ -202,22 +202,22 @@
         <!-- <input type="hidden" id="lat-mobile" name="lat" value=""/>
         <input type="hidden" id="lng-mobile" name="lng" value=""/>
         <input type="text" id="location-mobile" name="location" class="form-control input-md" style="width:125px;display:none;"
-               <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+               <% #if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
                value="<%= current_user.profile.city %>, <%= current_user.profile.state %>"
-               <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+               <% #elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
                value="<%= cookies["city"] %>, <%= cookies["state"] %>"
-               <% else %>
+               <% #else %>
                value="Denver, CO"
-               <% end %>
+               <% #end %>
                placeholder="City or ZIP">
         <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;">
-          <% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
+          <% #if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %>
               <%= current_user.profile.city %>, <%= current_user.profile.state %>
-          <% elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
+          <% #elsif !(cookies["city"].nil? || cookies["state"].nil?) %>
               <%= cookies["city"] %>, <%= cookies["state"] %>
-          <% else %>
+          <% #else %>
               Denver, CO
-          <% end %>
+          <% #end %>
           <i class='glyphicon glyphicon-chevron-down'></i>
         </a>
       </div>
@@ -230,9 +230,9 @@
             <i class='glyphicon glyphicon-chevron-down'></i></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="#">All</a></li>
-            <% ActivityType.all.each do |at| %>
-                <li><a href="#"><%= at.activity_type %></a></li>
-            <% end %>
+            <% #ActivityType.all.each do |at| %>
+                <li><a href="#"><%#= at.activity_type %></a></li>
+            <% #end %>
           </ul>
         </div>
       </div>
