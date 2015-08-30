@@ -32,11 +32,13 @@ class WelcomeController < ApplicationController
 
   def search
     param_term_modified = false
+    submitted_terms = ''
     if params[:terms].present?
       if params[:terms]=='All'
         params[:terms] = Interest.all.map(&:name).join(",") 
         param_term_modified = true
       end
+      submitted_terms = params[:terms]
       params[:terms] = params[:terms].gsub(/[^0-9A-Za-z]/, ' ').strip
     else
       params[:terms] = ''
@@ -138,8 +140,8 @@ class WelcomeController < ApplicationController
 
     #Tag results
     tag_type = Interest.where(name: params[:terms]).first
-    tag_activities = Activity.where(cancelled: false).joins(:activity_types)
-                         .where('activity_types.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
+    tag_activities = Activity.where(cancelled: false).joins(:interests)
+                         .where('interests.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
 
     #Search results
     search_activities = []
@@ -150,7 +152,7 @@ class WelcomeController < ApplicationController
     end
 
     type = Interest.where(name: (params[:type] || 'All')).first
-    search_activities = search_activities.joins(:activity_types).where('activity_types.id' => type.id).where('cancelled = ?', false) if type
+    search_activities = search_activities.joins(:interests).where('interests.id' => type.id).where('cancelled = ?', false) if type
 
     #Join both results
     both_activities = nil
@@ -174,7 +176,7 @@ class WelcomeController < ApplicationController
       @showCreateAlert = true
 
       @activities = Activity.terms(params[:terms])
-      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
       if end_date.present?
         @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       else
@@ -189,7 +191,7 @@ class WelcomeController < ApplicationController
       @showCreateAlert = true
 
       @activities = Activity.all
-      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
       if end_date.present?
         @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       else
@@ -206,7 +208,7 @@ class WelcomeController < ApplicationController
       @showCreateAlert = true
 
       @activities = Activity.all
-      @activities = @activities.joins(:activity_types).where('activity_types.id' => type) unless type.nil?
+      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
       if end_date.present?
         @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       else
