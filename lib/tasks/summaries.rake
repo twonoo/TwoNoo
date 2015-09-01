@@ -362,43 +362,48 @@ namespace :summaries do
     profile_ids = NotificationSetting.where('local_activity_summary  = ?', config_setting).pluck('profile_id')
 
     profile_ids.each do |id|
-      user_id = Profile.where('id = ?', id).pluck('user_id').first
-      puts "user_id: #{user_id}"
-
-      # Get the user's location
-      user = User.find_by_id(user_id)
+      profile = Profile.where('id = ?', id).first rescue next
+      user = profile.user
       next if user.nil?
-      city = user.profile.city
-      state = user.profile.state
 
-      unless city.nil? || state.nil?
-        coords = Geocode.coordinates(city, state)
-        puts "coordinate #{coords}"
-        new_activities = Activity.where('activities.created_at > ?', Time.now - time_period).within(25, origin: coords).where('cancelled = ?', false)
+      puts "user_id: #{user.id}, #{profile.city}, #{profile.state}"
 
-        if new_activities.present?
-          user = User.find(user_id)
-          
-          puts "processing new activities for #{user.name}"
+      city = profile.city
+      state = profile.state
 
-          html = ''
-          new_activities.each do |activity|
-            puts "#{activity.activity_name} has been created!"
-            organizer = User.find(activity.user_id)
+      next if city.nil? || state.nil?
 
-            # for each recommended follower generate a table row with the activity image and name
-            html = html + "<tr>"
-            html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
-            html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
-            html = html + "<td>#{activity.description[0...149]}</td>"
-            html = html + "</tr>"
+      coords = Geocode.coordinates(city, state)
+      puts "coordinate #{coords}"
+      new_activities = Activity.where('activities.created_at > ? AND cancelled = false', Time.now - time_period).within(25, origin: coords)
 
-          end
+      next if new_activities.blank?  
 
-          send_mandrill_table_email('summary_new_local_activities', user.email, html)
+      puts "processing new activities for #{user.name} (#{user.id})"
 
-        end
-      end 
+      html = ''
+      new_activities.each do |activity|
+        #To check if user has any common interest with new activities.
+        matched_interest = ((user.interests.map(&:id)) & (activity.interests.map(&:id)))
+        next if matched_interest.blank?
+        puts "Matched user interest #{matched_interest.join(',')} with created activity : #{activity.activity_name}(#{activity.id})"
+
+        organizer = User.find(activity.user_id)
+
+        # for each recommended follower generate a table row with the activity image and name
+        html = html + "<tr>"
+        html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
+        html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
+        html = html + "<td>#{activity.description[0...149]}</td>"
+        html = html + "</tr>"
+
+      end
+      
+      if html.present?
+        puts "Sending email to => #{user.name} (#{user.id}) #{user.email}, for activities #{new_activities.map(&:id)}"
+        send_mandrill_table_email('summary_new_local_activities', user.email, html)
+      end
+
 		end
   end
 
