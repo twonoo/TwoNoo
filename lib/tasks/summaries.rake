@@ -363,6 +363,7 @@ namespace :summaries do
 
     profile_ids.each do |id|
       profile = Profile.where('id = ?', id).first rescue next
+      next if profile.nil?
       user = profile.user
       next if user.nil?
 
