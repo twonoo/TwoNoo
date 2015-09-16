@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="panel panel-default">
-      <h4 class="panel-title">Create your Activity</h4>
+      <h4 class="panel-title">Create your Activity or teammate request</h4>
     </div>
     <div class="panel-body">
       <% if @activity.errors.any? %>
@@ -59,7 +59,7 @@
         <%= form_for @activity, html: {class: "form-horizontal", onsubmit: "return confirmCreate()"} do |f| %>
 
             <div class="form-group">
-              <%= f.label 'Activity Name *', class: "col-sm-3 control-label", style: "color:#000" %>
+              <%= f.label 'Title *', class: "col-sm-3 control-label", style: "color:#000" %>
               <div class="col-sm-6">
                 <%= f.text_field :activity_name, class: "form-control" %>
               </div>
@@ -151,8 +151,7 @@
               <br/><br/>
 
               <div class="form-group">
-                <%= f.label 'Activity Keywords *', class: "control-label", style: "color:#000" %>
-                <%= f.label '', '(maximum of 5)', class: "control-label", style: "color:#000;font-size:12px" %>
+                <%= f.label 'Activity Type *', class: "control-label", style: "color:#000" %>
                 <select data-placeholder="Add tags..." multiple="" tabindex="3" id='activity_select' class='allow_additem' name='activity[activities_interests][]'>
                   <option value></option>
                   <% @interests.each do |interest| %>
