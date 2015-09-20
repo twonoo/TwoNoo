@@ -21,7 +21,6 @@ module InterestsHelper
 
   def matching_interests_tag(user, other_user, max=20)
 
-    interests_array = []
     user_interests = user.present? ? user.interests.order(:name) : []
     other_user_interests = other_user.present? ? other_user.interests.order(:name) : []
     matching_interests = []
@@ -35,25 +34,33 @@ module InterestsHelper
       end
 
       if matching_interests.length > 0
-        matching_interests.each do |interest|
-          interest_string = interest.name
-          if interest.interests_option_value(user.id).present?
-            interest_string << " (#{interest.interests_option_value(user.id)})"
-          end
-          interests_array << interest_string
-        end
-        return_string = "Matching Interests: #{interests_array[0,max].join(', ')}"
-        if matching_interests.count > 20
-          return_string << '...'
-        end
-        return_string
+        matching_interests_to_string(matching_interests, user, max)
       else
         'Matching Interests: None'
       end
+    elsif user.nil?
+      # No user logged in, so we show all user interests
+      matching_interests_to_string(other_user_interests, nil)
     else
       'Matching Interests: None'
     end
+  end
 
+  def matching_interests_to_string(interests, user, max=20)
+    int_strings = interests.map{|x| human_readable_interest_str(x, user)}
+    if user.nil?
+      "Interests: #{int_strings[0,max].join(', ')}#{'...' if interests.count > max}"
+    else
+      "Matching Interests: #{int_strings[0,max].join(', ')}#{'...' if interests.count > max}"
+    end
+  end
+
+  def human_readable_interest_str(interest, user)
+    if user && interest.interests_option_value(user.id).present?
+      "#{interest.name} (#{interest.interests_option_value(user.id)})"
+    else
+      interest.name
+    end
   end
 
 end
