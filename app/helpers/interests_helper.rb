@@ -34,7 +34,7 @@ module InterestsHelper
       end
 
       if matching_interests.length > 0
-        matching_interests_to_string(matching_interests, user, max)
+        matching_interests_to_string(matching_interests, other_user, max)
       else
         'Matching Interests: None'
       end
@@ -46,18 +46,18 @@ module InterestsHelper
     end
   end
 
-  def matching_interests_to_string(interests, user, max=20)
-    int_strings = interests.map{|x| human_readable_interest_str(x, user)}
-    if user.nil?
+  def matching_interests_to_string(interests, other_user, max=20)
+    int_strings = interests.map{|x| human_readable_interest_str(x, other_user)}
+    if other_user.nil?
       "Interests: #{int_strings[0,max].join(', ')}#{'...' if interests.count > max}"
     else
       "Matching Interests: #{int_strings[0,max].join(', ')}#{'...' if interests.count > max}"
     end
   end
 
-  def human_readable_interest_str(interest, user)
-    if user && interest.interests_option_value(user.id).present?
-      "#{interest.name} (#{interest.interests_option_value(user.id)})"
+  def human_readable_interest_str(interest, other_user)
+    if other_user && interest.interests_option_value(other_user.id).present?
+      "#{interest.name} (#{interest.interests_option_value(other_user.id)})"
     else
       interest.name
     end
