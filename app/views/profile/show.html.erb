@@ -12,6 +12,12 @@
           <h2 style="color:white; margin-top:20px">
             <strong><%= ProfileDecorator.new(@user.profile).display_name %></strong>
           </h2>
+          <p>
+            <%= "#{@user.profile && @user.profile.city}, #{@user.profile && @user.profile.state}" %>
+            <% if @user.profile && @user.profile.neighborhood.present? %>
+              <%= "(#{@user.profile && @user.profile.neighborhood})" %>
+            <% end %>
+          </p>
 
           <p><%= @user.profile.about_me %></p>
 
