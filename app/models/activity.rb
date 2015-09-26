@@ -1,7 +1,24 @@
 class Activity < ActiveRecord::Base
   acts_as_commentable
 
-  has_attached_file :image, :styles => {:medium => "300x300>", :thumb => "100x75>", :map_image => "250x100#", :trending => "650x500#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
+  has_attached_file :image, :styles => {:medium => "300x300>", 
+                                        :thumb => "100x75>", 
+                                        :map_image => "250x100#", 
+                                        :trending => "650x500#"}, 
+                            :default_url => proc { |image| activity_default_image_url(image) }
+
+  # This method takes in the paperclip attachment object.
+  # It then gets the corresponding Activity, figures out if it's interest has a default
+  # image, and serves that.  If no such image exists, it serves the default missing image.
+  def self.activity_default_image_url(image)
+    activity = image.instance # weird paperclip way of getting object from attachment object
+    primary_interest = activity.interests.first
+    if primary_interest && primary_interest.default_image_exists?
+      "#{ENV['BASEURL']}/#{primary_interest.default_image_path}"
+    else
+      "#{ENV['BASEURL']}/no-image.png"
+    end
+  end
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
   belongs_to :user
   has_many :likes

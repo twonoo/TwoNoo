@@ -22,6 +22,20 @@ class Interest < ActiveRecord::Base
     InterestsOption.where(id: interests_option_id(user_id)).pluck(:option_name).first
   end
 
+  # For now, these images are manually put in the public/ folder.  In the future, we may want to
+  # change this to be a paperclip field, so that the image can be updated in the admin interface, 
+  # and also so the file names don't have to match the activity name.
+  def default_image_exists?
+    File.exist? default_image_path
+  end
+
+  # Default image file name is gotten by removing all white space from name, then turning all non
+  # letter characters into underscores(_), then downcasing.
+  # Example: Skiing - Cross Country becomes skiing_crosscountry
+  def default_image_path
+    "default_interest_images/#{name.gsub(/\s/,'').gsub(/\W/,'_').downcase}.png"
+  end
+
   private
 
   def generate_code
