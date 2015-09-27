@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828193217) do
+ActiveRecord::Schema.define(version: 20150927210934) do
 
   create_table "activities", force: :cascade do |t|
     t.string   "activity_name",      limit: 255
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 20150828193217) do
     t.integer "conversation_id",   limit: 4
   end
 
-  add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "fk_rails_72df6ae9b5", using: :btree
+  add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "mb_opt_outs_on_conversations_id", using: :btree
 
   create_table "mailboxer_conversations", force: :cascade do |t|
     t.string   "subject",    limit: 255, default: ""
@@ -226,6 +226,8 @@ ActiveRecord::Schema.define(version: 20150828193217) do
     t.string   "neighborhood",                 limit: 255
     t.datetime "closed_at"
     t.string   "closed_reason",                limit: 255
+    t.float    "city_state_latitude",          limit: 24
+    t.float    "city_state_longitude",         limit: 24
   end
 
   create_table "promotioncodes", force: :cascade do |t|
@@ -320,7 +322,3 @@ ActiveRecord::Schema.define(version: 20150828193217) do
     t.string  "view_name", limit: 255
   end
 
-  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id"
-  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id"
-  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id"
-end
