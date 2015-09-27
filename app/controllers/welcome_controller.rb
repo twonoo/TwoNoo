@@ -84,10 +84,10 @@ class WelcomeController < ApplicationController
     end
 
     @users = Profile.having_interests(searched_interest_ids).where("closed_at IS NULL")
+    @users = @users.order("IF(city_state_latitude,1,0) desc").by_distance(origin: search_coordinates)
     if @users && params[:location] && params[:location].include?(',')
       state = params[:location].split(',').last.strip.downcase
       @users = @users.where("(profiles.state IS NULL OR profiles.state = #{ActiveRecord::Base.connection.quote(state)})")
-      @users = @users.order("IF(city_state_latitude,1,0) desc").by_distance(origin: search_coordinates)
     end
 
     @page_increment = 9
