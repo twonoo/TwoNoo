@@ -44,6 +44,7 @@ class WelcomeController < ApplicationController
 
     # Convert search parameter to coordinates
     lat,lon,outside_supported_area = determine_lat_lon
+    search_coordinates = [lat.to_f,lon.to_f]
 
     params[:distance] ||= 25
     params[:terms] ||= ''
@@ -86,6 +87,7 @@ class WelcomeController < ApplicationController
     if @users && params[:location] && params[:location].include?(',')
       state = params[:location].split(',').last.strip.downcase
       @users = @users.where("(profiles.state IS NULL OR profiles.state = #{ActiveRecord::Base.connection.quote(state)})")
+      @users = @users.order("IF(city_state_latitude,1,0) desc").by_distance(origin: search_coordinates)
     end
 
     @page_increment = 9
@@ -105,7 +107,6 @@ class WelcomeController < ApplicationController
     search_history = Search.new(search: (params[:terms]), location: params[:location])
     search_history.user_id = current_user.id if current_user
     search_history.save!
-
     if current_user
       if current_user.last_search_location != params[:location]
         u = User.find(current_user)

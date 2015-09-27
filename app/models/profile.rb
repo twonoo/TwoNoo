@@ -8,13 +8,14 @@ class Profile < ActiveRecord::Base
 
   after_initialize :init
 
+  before_save :update_lat_lon
   after_save :create_notification_setting
 
   acts_as_mappable :default_units => :miles,
                    :default_formula => :sphere,
                    :distance_field_name => :distance,
-                   :lat_column_name => :latitude,
-                   :lng_column_name => :longitude
+                   :lat_column_name => :city_state_latitude,
+                   :lng_column_name => :city_state_longitude
 
   has_attached_file :profile_picture, :styles => {:medium => "300x300>", :thumb => "100x100#"}, :default_url => "#{ENV['BASEURL']}/no-image.png"
   validates_attachment_content_type :profile_picture, :content_type => /\Aimage\/.*\Z/
@@ -99,4 +100,11 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def update_lat_lon
+    if city_changed? || state_changed? || city_state_latitude.blank? || city_state_longitude.blank?
+      coords = Geocode.coordinates(city, state) rescue [nil,nil]
+      self.city_state_latitude = coords[0]
+      self.city_state_longitude = coords[1]
+    end
+  end
 end

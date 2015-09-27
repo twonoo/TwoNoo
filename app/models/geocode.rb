@@ -5,7 +5,7 @@ class Geocode < ActiveRecord::Base
 	end
 
   def self.coordinates(city, state)
-    geocode = where(city: city).where(state: state).first
+    geocode = where(city: city, state: state).first
 
     # we don't have the latlon
     unless geocode.nil? then
