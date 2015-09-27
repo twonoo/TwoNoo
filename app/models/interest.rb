@@ -26,7 +26,7 @@ class Interest < ActiveRecord::Base
   # change this to be a paperclip field, so that the image can be updated in the admin interface, 
   # and also so the file names don't have to match the activity name.
   def default_image_exists?
-    !!(Rails.application.assets.find_asset "#{default_image_path}_medium.jpg")
+    !!(File.exists? Rails.root.join('public',"#{default_image_path}_medium.jpg"))
   end
 
   # Default image file name is gotten by removing all white space from name, then turning all non
