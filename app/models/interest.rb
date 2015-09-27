@@ -26,14 +26,15 @@ class Interest < ActiveRecord::Base
   # change this to be a paperclip field, so that the image can be updated in the admin interface, 
   # and also so the file names don't have to match the activity name.
   def default_image_exists?
-    File.exist? default_image_path
+    File.exist? Rails.root.join('public',default_image_path)
   end
 
   # Default image file name is gotten by removing all white space from name, then turning all non
   # letter characters into underscores(_), then downcasing.
   # Example: Skiing - Cross Country becomes skiing_crosscountry
   def default_image_path
-    "default_interest_images/#{name.gsub(/\s/,'').gsub(/\W/,'_').downcase}.png"
+    # "default_interest_images/#{name.gsub(/\s/,'').gsub(/\W/,'_').downcase}.jpg"
+    "#{name.gsub(/\s/,'').gsub(/\W/,'_').downcase}.jpg"
   end
 
   private
