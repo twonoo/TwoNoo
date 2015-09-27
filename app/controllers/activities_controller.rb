@@ -331,7 +331,7 @@ class ActivitiesController < ApplicationController
     captcha_response = HTTParty.post('https://www.google.com/recaptcha/api/siteverify', body: {secret: ENV['RECAPTCHA_PRIVATE_KEY'], response: params[:captcha_response], remoteip: request.env['HTTP_X_FORWARDED_FOR']})
     good_captcha = captcha_response.parsed_response['success'] == true
     if @activity.save
-      if good_captcha
+      if good_captcha || Rails.env.development?
         # Charge the organizer
         # Transaction.create!(transaction_type_id: 2, user_id: current_user.id, amount: 1, balance: ((current_user.profile.nonprofit == 1) || current_user.profile.ambassador == 1) ? Transaction.get_balance(current_user) : (Transaction.get_balance(current_user) - 1))
 
