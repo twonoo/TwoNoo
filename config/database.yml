@@ -1,11 +1,10 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: twonoo_dev
+  database: twonoo_dev_20150927
   pool: 5
   username: root
-  password: manager
-  # host: 104.131.156.51
+  password: 
 
 test:
   adapter: mysql2
@@ -13,7 +12,7 @@ test:
   database: twonoo_test
   pool: 5
   username: root
-  password: manager
+  password: 
   # host: 104.131.156.51
 
 # Warning: The database defined as "test" will be erased and

@@ -1,5 +1,4 @@
 require 'webmock/rspec'
-require 'capybara/poltergeist'
 
 # http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
@@ -18,10 +17,6 @@ RSpec.configure do |config|
 end
 
 WebMock.disable_net_connect!(allow_localhost: true)
-
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: false)
-end
 
 def stub_geocode_with(location = {})
   before :each do

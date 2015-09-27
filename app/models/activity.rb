@@ -14,7 +14,7 @@ class Activity < ActiveRecord::Base
     activity = image.instance # weird paperclip way of getting object from attachment object
     primary_interest = activity.interests.first
     if primary_interest && primary_interest.default_image_exists?
-      ActionController::Base.helpers.image_url(primary_interest.default_image_path)
+      ActionController::Base.helpers.image_url("#{primary_interest.default_image_path}_:style.jpg")
     else
       "#{ENV['BASEURL']}/no-image.png"
     end
