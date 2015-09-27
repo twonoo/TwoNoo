@@ -46,6 +46,16 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def self.having_interests(searched_interest_ids)
+    # searched_interest_ids is an array of integers, so it cannot be an injection attack.
+    if searched_interest_ids.present?
+      joins(:user => :interests).where("interests.id IN (#{searched_interest_ids.map(&:to_i).map(&:to_s).join(',')})").uniq
+    else
+      where("1=0") #If no interests are passed in, we want to not return any profiles
+    end
+  end
+
+  # This is a SQL injection vulnerability.  We need to take this out.
   def self.terms(terms)
 
     if terms.present?

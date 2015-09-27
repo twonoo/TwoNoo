@@ -31,227 +31,78 @@ class WelcomeController < ApplicationController
   end
 
   def search
-    param_term_modified = false
-    submitted_terms = ''
-    if params[:terms].present?
-      if params[:terms]=='All'
-        params[:terms] = Interest.all.map(&:name).join(",") 
-        param_term_modified = true
-      end
-      submitted_terms = params[:terms]
-      params[:terms] = params[:terms].gsub(/[^0-9A-Za-z]/, ' ').strip
+    if params[:terms] == 'All'
+      searched_interest_ids = Interest.all.map(&:id)
     else
-      params[:terms] = ''
+      searched_interest_ids = params[:term_ids].split(',').map(&:to_i)
     end
 
-
-    @outsideSupportedArea = false
     # Setup location constraints
     denver = [39.737567, -104.9847179]
     pittsburgh = [40.44062479999999, -79.9958864]
     fairbanks = [64.8377778, -147.7163889]
 
     # Convert search parameter to coordinates
-    if (params[:lat].present? || params[:lng].present?)
-      lat = params[:lat]
-      lon = params[:lng]
-      search_coordinates = [params[:lat].to_f, params[:lng].to_f]
-      logger.info "using passed in coords"
-    elsif !(params[:location].present?)
-      # TODO: add in looking cookies
-      # try to get it by the IP address
-      begin
-        search_coordinates = Geocode.coordinates_by_ip(request.remote_ip)
-        lat = search_coordinates[0]
-        lon = search_coordinates[1]
-      rescue
-        logger.info "Geocode by IP failed"
-      end
-    else
-      begin
-        search_coordinates = Geocoder.search("#{params[:location].split(',').first}, #{params[:location].split(',').last}").first.coordinates
-        lat = search_coordinates[0]
-        lon = search_coordinates[1]
-      rescue
-        logger.info "Geocode by IP failed"
-      end
-    end
+    lat,lon,outside_supported_area = determine_lat_lon
 
-    if (!defined?(search_coordinates) || search_coordinates.nil?)
-      # Need to have this look at the GeoCodecache
-      begin
-        search_location = Geocoder.search(params[:location]).first
-        search_coordinates = search_location.coordinates
-        lat = search_location.latitude
-        lon = search_location.longitude
-      rescue
-        logger.info "Geocode by location failed"
-      end
-    end
-
-    if !defined?(search_coordinates) || search_coordinates.nil?
-      @outsideSupportedArea = true
-    end
-
-    #    unless (Geocoder::Calculations.distance_between(search_coordinates, denver) < 300 ||
-    #           Geocoder::Calculations.distance_between(search_coordinates, pittsburgh) < 100 ||
-    #           Geocoder::Calculations.distance_between(search_coordinates, fairbanks) < 600)
-    #      flash.now[:notice] = "You are trying to search outside TwoNoo's currently supported areas, but here are some results from other locations..."
-    #      @outsideSupportedArea = true
-    #    end
-
-    params[:distance] = 25 unless params[:distance].present?
-    params[:terms] = '' unless params[:terms].present?
-
-    end_date = nil
-    from_date = nil
+    params[:distance] ||= 25
+    params[:terms] ||= ''
 
     # Determine date range
-    if params[:when].present?
-      case params[:when]
-        when "Today"
-          end_date = DateTime.tomorrow
-        when "This Week"
-          end_date = DateTime.now.at_end_of_week
-        when "This Weekend"
-          end_date = DateTime.now.at_end_of_week
-          from_date = end_date - 2
-        when "Next Two Weeks"
-          end_date = 2.weeks.from_now
-        when "Anytime"
-          end_date = nil
-        else
-          end_date = 1.month.from_now
-      end
-    else
-      from_date = Date.strptime(params[:from_date], '%m/%d/%Y') if params[:from_date].present? rescue from_date = DateTime.now.beginning_of_day
-      end_date = Date.strptime(params[:to_date], '%m/%d/%Y') if params[:to_date].present? rescue end_date = nil
-    end
+    end_date, from_date = determine_search_dates
 
-    from_date = DateTime.now.beginning_of_day unless from_date
-
-    #fdsafasd
-    # Get Timezone
-    #begin
-    #tz = Timezone::Zone.new(:latlon => search_coordinates).active_support_time_zone
-    #rescue
+    # Get timezone
     tz = Timezone::Zone.new(:latlon => denver).active_support_time_zone
-    #end
 
-    #Tag results
-    tag_type = Interest.where(name: params[:terms]).first
-    tag_activities = Activity.where(cancelled: false).joins(:interests)
-                         .where('interests.id' => tag_type.id).where('cancelled = ?', false).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false) if tag_type
-
-    #Search results
-    search_activities = []
+    # Build up the search
+    @activities = Activity.having_interests(searched_interest_ids)
+                          .where('cancelled IS NOT TRUE')
+                          .order('datetime ASC')
     if end_date.present?
-      search_activities = Activity.terms(params[:terms]).between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
+      @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
     else
-      search_activities = Activity.terms(params[:terms]).after_date(from_date.in_time_zone(tz).utc).where('cancelled = ?', false)
+      @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
     end
 
-    type = Interest.where(name: (params[:type] || 'All')).first
-    search_activities = search_activities.joins(:interests).where('interests.id' => type.id).where('cancelled = ?', false) if type
-
-    #Join both results
-    both_activities = nil
-    if search_activities.present? && tag_activities.present?
-      both_activities = search_activities.all | tag_activities.all
-      both_activities = Activity.where(id: both_activities.map(&:id)).order('datetime ASC')
-    elsif search_activities.present?
-      both_activities = search_activities
-    elsif tag_activities.present?
-      both_activities = tag_activities
-    end
-
-    unless @outsideSupportedArea
-      both_activities = both_activities.within(params[:distance], origin: search_coordinates).order('datetime ASC') if both_activities
-    end
-
-    @activities = both_activities.order('datetime') if both_activities
-    @showCreateAlert = false
-
-    if @activities.blank?
+    @activities = @activities.within(params[:distance], origin: search_coordinates) unless outside_supported_area
+    if @activities.count == 0
+      # If no activities match the search parameters, we want to loosen the requirements, 
+      # ignoring the type requirements
       @showCreateAlert = true
 
-      @activities = Activity.terms(params[:terms])
-      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
+      @activities = Activity.joins(:interests)
+                            .where('cancelled IS NOT TRUE')
+                            .order('datetime ASC')
       if end_date.present?
         @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
       else
         @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
       end
 
-      @activities = @activities.where('cancelled = ?', false)
-      @activities = @activities.order('datetime ASC')
+      @activities = @activities.within(params[:distance], origin: search_coordinates) unless outside_supported_area
     end
 
-    if @activities.blank?
-      @showCreateAlert = true
-
-      @activities = Activity.all
-      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
-      if end_date.present?
-        @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
-      else
-        @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
-      end
-      @activities = @activities.where('cancelled = ?', false)
-      unless @outsideSupportedArea
-        @activities = @activities.within(params[:distance], origin: search_coordinates).order('datetime ASC')
-      end
-      @activities = @activities.order('datetime ASC')
-    end
-
-    if @activities.blank?
-      @showCreateAlert = true
-
-      @activities = Activity.all
-      @activities = @activities.joins(:interests).where('interests.id' => type) unless type.nil?
-      if end_date.present?
-        @activities = @activities.between_dates(from_date.in_time_zone(tz).utc, end_date.in_time_zone(tz).utc)
-      else
-        @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
-      end
-      @activities = @activities.where('cancelled = ?', false)
-      @activities = @activities.order('datetime ASC')
-    end
-
-    @users = Profile.terms(params[:terms])
+    @users = Profile.having_interests(searched_interest_ids).where("closed_at IS NULL")
     if @users && params[:location] && params[:location].include?(',')
-      state = params[:location].split(',').last.strip
-      @users = @users.select { |u| u.state.blank? || u.state.downcase == state.downcase }
+      state = params[:location].split(',').last.strip.downcase
+      @users = @users.where("(profiles.state IS NULL OR profiles.state = #{ActiveRecord::Base.connection.quote(state)})")
     end
 
     @page_increment = 9
-    @users_offset = params[:users_offset].present? ? params[:users_offset].to_i : 0
-    @users_max = params[:users_max].present? ? params[:users_max].to_i : (@page_increment + 10)
-    @activities_offset = params[:activities_offset].present? ? params[:activities_offset].to_i : 0
-    @activities_max = params[:activities_max].present? ? params[:activities_max].to_i : @page_increment
+    @users_offset = [params[:users_offset].to_i, 0].max
+    @users_max = [params[:users_max].to_i, (@page_increment + 10)].max
+    @activities_offset = [params[:activities_offset].to_i, 0].max
+    @activities_max = [params[:activities_max].to_i, @page_increment].max
     @total_users = @users.present? ? @users.count : 0
     @total_activities = @activities.present? ? @activities.count : 0
 
-    @search_params = {
-        terms: (param_term_modified ? 'All' : params[:terms]),
-        when: params[:when],
-        from_date: params[:from_date],
-        to_date: params[:to_date],
-        distance: params[:distance],
-        lat: params[:lat],
-        lng: params[:lng],
-        location: params[:location],
-    }.to_query
-
-    @users_offset = 0 if @users_offset < 0
-    @users_max = @page_increment if @users_max < 0
-    @activities_offset = 0 if @activities_offset < 0
-    @activities_max = @page_increment if @activities_max < 0
+    @search_params = params.slice(:terms, :when, :from_date, :to_date, 
+                                  :distance, :lat, :lng, :location).to_query
 
     @users = @users[@users_offset..@users_max] if @users.present?
     @activities = @activities[@activities_offset..@activities_max] if @activities.present?
 
-    search_history = Search.new(search: (param_term_modified ? 'All' : params[:terms]), location: params[:location])
+    search_history = Search.new(search: (params[:terms]), location: params[:location])
     search_history.user_id = current_user.id if current_user
     search_history.save!
 
@@ -264,6 +115,7 @@ class WelcomeController < ApplicationController
         u.save!
       end
     end
+
   end
 
   def invite_people
@@ -289,6 +141,58 @@ class WelcomeController < ApplicationController
         end
       flash[:success] = 'Selected interests have been added to profile.' if interest_updated
     end
+  end
+ 
+  def determine_lat_lon
+    if (params[:lat].present? && params[:lng].present?)
+      lat = params[:lat]
+      lon = params[:lng]
+    else
+      # TODO: add in looking cookies
+      # First, look at IP address, then look at passed in location
+      search_coordinates = Geocode.coordinates_by_ip(request.remote_ip) rescue nil
+      search_coordinates ||= Geocoder.search("#{params[:location].split(',').first}, #{params[:location].split(',').last}").first.coordinates rescue nil
+      if search_coordinates
+        lat = search_coordinates[0]
+        lon = search_coordinates[1]
+      else
+        search_location = Geocoder.search(params[:location]).first
+        lat = search_location && search_location.latitude
+        lon = search_location &&search_location.longitude
+      end
+    end
+
+    if !defined?(search_coordinates) || search_coordinates.nil?
+      outside_supported_area = true
+    else
+      outside_supported_area = false
+    end
+
+    return lat,lon,outside_supported_area
+  end
+
+  def determine_search_dates
+    case params[:when]
+      when "Today"
+        end_date = DateTime.tomorrow
+      when "This Week"
+        end_date = DateTime.now.at_end_of_week
+      when "This Weekend"
+        end_date = DateTime.now.at_end_of_week
+        from_date = end_date - 2
+      when "Next Two Weeks"
+        end_date = 2.weeks.from_now
+      when "Anytime"
+        end_date = nil
+      when nil
+        from_date = Date.strptime(params[:from_date], '%m/%d/%Y') if params[:from_date].present? rescue nil
+        end_date = Date.strptime(params[:to_date], '%m/%d/%Y') if params[:to_date].present? rescue nil
+      else
+        end_date = 1.month.from_now
+    end
+
+    from_date ||= DateTime.now.beginning_of_day
+    return end_date, from_date
   end
 
 end

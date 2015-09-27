@@ -174,7 +174,7 @@ class Activity < ActiveRecord::Base
 
   def geocodecache
     logger.info "geocodecache"
-    geocode = Geocode.where(city: city).where(state: state).first
+    geocode = Geocode.where(city: city, state: state).first
 
     if latitude.blank? || longitude.blank?
       # for some reason we don't have the latlon
@@ -203,6 +203,16 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def self.having_interests(searched_interest_ids)
+    if searched_interest_ids.present?
+      # searched_interest_ids is an array of integers, so it cannot be an injection attack.
+      joins(:interests).where("interests.id IN (#{searched_interest_ids.map(&:to_i).map(&:to_s).join(',')})").uniq
+    else
+      where("1=0") #If no interests are passed in, we want to not return any profiles
+    end
+  end
+
+  # This is bad - this is a SQL injection vulnerability.
   def self.terms(terms)
     query = []
     terms.split.each do |t|

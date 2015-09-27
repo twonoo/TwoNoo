@@ -1,6 +1,7 @@
-<!-- <div class="alert alert-info search-result-alert" style="margin-bottom:0px;display:none;" role="alert" id="noMatchesAlert">
-  <span>No activities matched search criteria, showing expanded results. Create an alert to be notified of future activities! <%= link_to 'Create Alert', alert_create_path(params), method: 'POST', class: 'btn btn-default btn-sm pull-right' %></span>
-</div> -->
+
+<div class="alert alert-info search-result-alert" style="margin-bottom:0px;display:none;" role="alert" id="noMatchesAlert">
+  <span>No activities matched search criteria, showing expanded results. Create an alert to be notified of future activities! <%= link_to 'Create Alert', alert_create_path(terms: params[:terms], distance: params[:distance], location: params[:location]), method: 'POST', class: 'btn btn-default btn-sm pull-right' %></span>
+</div>
 <div class="container">
   <div class="row center-block" style="margin-bottom:5px">
 

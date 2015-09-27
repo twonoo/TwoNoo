@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   after_save :default_follow
   after_create :initial_credits
 
+  # TODO: This default_scope is causing a lot of overhead, but it might be dangerous to get rid of.
   default_scope { includes(:profile, :activities) }
 
   # Include default devise modules. Others available are:
