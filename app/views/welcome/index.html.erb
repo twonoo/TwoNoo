@@ -310,14 +310,15 @@
   $('#interestModal #submit-interest').click(function (e) {
     var term_string = '';
     var terms = [];
-    var term_ids = []
+    var term_ids = [];
     if($('#interestModal .all-interest').hasClass('selected_btn'))
       term_string = 'All';
     else{
       $('#interestModal .activity-list button').each(function( i ) {
-        if($(this).hasClass('selected_btn'))
+        if($(this).hasClass('selected_btn')) {
           term_ids.push($(this).attr('data-value'));
           terms.push($(this).text());
+        }
       });
       term_string = terms.join();
     }
@@ -332,14 +333,15 @@
   $('#interestWebModal #submit-interest').click(function (e) {
     var term_string = '';
     var terms = [];
-    var term_ids = []
+    var term_ids = [];
     if($('#interestWebModal .all-interest').hasClass('selected_btn'))
       term_string = 'All';
     else{
       $('#interestWebModal .activity-list button').each(function( i ) {
-        if($(this).hasClass('selected_btn'))
+        if($(this).hasClass('selected_btn')) {
           term_ids.push($(this).attr('data-value'));
           terms.push($(this).text());
+        }
       });
       term_string = terms.join();
     }
