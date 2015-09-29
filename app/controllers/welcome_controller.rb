@@ -45,7 +45,8 @@ class WelcomeController < ApplicationController
     # Convert search parameter to coordinates
     lat,lon,outside_supported_area = determine_lat_lon
     search_coordinates = [lat.to_f,lon.to_f]
-
+    @showCreateAlert = false
+    
     params[:distance] ||= 25
     params[:terms] ||= ''
 
@@ -92,7 +93,7 @@ class WelcomeController < ApplicationController
 
     @page_increment = 9
     @users_offset = [params[:users_offset].to_i, 0].max
-    @users_max = [params[:users_max].to_i, (@page_increment + 10)].max
+    @users_max = [params[:users_max].to_i, (1)].max
     @activities_offset = [params[:activities_offset].to_i, 0].max
     @activities_max = [params[:activities_max].to_i, @page_increment].max
     @total_users = @users.present? ? @users.count : 0
