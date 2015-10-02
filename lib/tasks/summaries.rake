@@ -359,7 +359,9 @@ namespace :summaries do
 
   def new_local_activities_summary(config_setting, time_period)
     # Get the people that want to be informed once a week
+    puts
     profile_ids = NotificationSetting.where('local_activity_summary  = ?', config_setting).pluck('profile_id')
+    puts "Running new_local_activities_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles.  They are #{profile_ids.inspect}"
 
     profile_ids.each do |id|
       profile = Profile.where('id = ?', id).first rescue next
