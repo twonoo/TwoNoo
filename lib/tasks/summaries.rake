@@ -144,6 +144,9 @@ namespace :summaries do
     # Get the people that want to be informed once a week
     profile_ids = NotificationSetting.where('attending_activity_update = ?', config_setting).pluck('profile_id')
 
+    puts
+    puts "Running attending_activity_update_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
+
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
       puts "user_id: #{user_id}"
@@ -177,6 +180,9 @@ namespace :summaries do
   def follower_summary(config_setting, time_period)
     # Get the people that want to be informed once a week
     profile_ids = NotificationSetting.where('new_follower = ?', config_setting).pluck('profile_id')
+
+    puts
+    puts "Running follower_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
 
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
@@ -216,6 +222,9 @@ namespace :summaries do
   def new_comments_on_attending_activity_summary(config_setting, time_period)
     # Get the people that want to be informed either daily or weekly
     profile_ids = NotificationSetting.where('comment_on_attending_activity = ?', config_setting).pluck('profile_id')
+
+    puts
+    puts "Running new_comments_on_attending_activity_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
 
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
@@ -270,6 +279,9 @@ namespace :summaries do
     # Get the people that want to be informed either daily or weekly
     profile_ids = NotificationSetting.where('comment_on_owned_activity = ?', config_setting).pluck('profile_id')
 
+    puts
+    puts "Running new_comments_on_owned_activity_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
+
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
       puts "user_id: #{user_id}"
@@ -323,6 +335,9 @@ namespace :summaries do
     # Get the people that want to be informed once a week
     profile_ids = NotificationSetting.where('new_following_activity = ?', config_setting).pluck('profile_id')
 
+    puts
+    puts "Running new_following_activities_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
+
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
       puts "user_id: #{user_id}"
@@ -359,60 +374,66 @@ namespace :summaries do
 
   def new_local_activities_summary(config_setting, time_period)
     # Get the people that want to be informed once a week
-    puts
     profile_ids = NotificationSetting.where('local_activity_summary  = ?', config_setting).pluck('profile_id')
-    puts "Running new_local_activities_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles.  They are #{profile_ids.inspect}"
+    puts
+    puts "Running new_local_activities_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
 
     profile_ids.each do |id|
-      profile = Profile.where('id = ?', id).first rescue next
-      next if profile.nil?
-      user = profile.user
-      next if user.nil?
+      begin
+        profile = Profile.where('id = ?', id).first
+        next if profile.nil?
+        user = profile.user
+        next if user.nil?
 
-      puts "user_id: #{user.id}, #{profile.city}, #{profile.state}"
+        puts "user_id: #{user.id}, #{profile.city}, #{profile.state}"
 
-      city = profile.city
-      state = profile.state
+        city = profile.city
+        state = profile.state
 
-      next if city.nil? || state.nil?
+        next if city.nil? || state.nil?
 
-      coords = Geocode.coordinates(city, state)
-      puts "coordinate #{coords}"
-      new_activities = Activity.where('activities.created_at > ? AND cancelled = false', Time.now - time_period).within(25, origin: coords)
+        coords = Geocode.coordinates(city, state)
+        puts "coordinate #{coords}"
+        new_activities = Activity.where('activities.created_at > ? AND cancelled = false', Time.now - time_period).within(25, origin: coords)
 
-      next if new_activities.blank?  
+        next if new_activities.blank?  
 
-      puts "processing new activities for #{user.name} (#{user.id})"
+        puts "processing new activities for #{user.name} (#{user.id})"
 
-      html = ''
-      new_activities.each do |activity|
-        #To check if user has any common interest with new activities.
-        matched_interest = ((user.interests.map(&:id)) & (activity.interests.map(&:id)))
-        next if matched_interest.blank?
-        puts "Matched user interest #{matched_interest.join(',')} with created activity : #{activity.activity_name}(#{activity.id})"
+        html = ''
+        new_activities.each do |activity|
+          #To check if user has any common interest with new activities.
+          matched_interest = ((user.interests.map(&:id)) & (activity.interests.map(&:id)))
+          next if matched_interest.blank?
+          puts "Matched user interest #{matched_interest.join(',')} with created activity : #{activity.activity_name}(#{activity.id})"
 
-        organizer = User.find(activity.user_id)
+          organizer = User.find(activity.user_id)
 
-        # for each recommended follower generate a table row with the activity image and name
-        html = html + "<tr>"
-        html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
-        html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
-        html = html + "<td>#{activity.description[0...149]}</td>"
-        html = html + "</tr>"
+          # for each recommended follower generate a table row with the activity image and name
+          html = html + "<tr>"
+          html = html + "<td>#{profile_img_small(organizer)}</td><td><a href=\"https://www.twonoo.com/profile/#{organizer.id}\">#{organizer.name}</a></td>"
+          html = html + "<td>#{activity_img(activity)}</td><td><a href=\"https://www.twonoo.com/activities/#{activity.id}\">#{activity.activity_name}</a></td>"
+          html = html + "<td>#{activity.description[0...149]}</td>"
+          html = html + "</tr>"
 
+        end
+        
+        if html.present?
+          puts "Sending email to => #{user.name} (#{user.id}) #{user.email}, for activities #{new_activities.map(&:id)}"
+          send_mandrill_table_email('summary_new_local_activities', user.email, html)
+        end
+      rescue
+        next
       end
-      
-      if html.present?
-        puts "Sending email to => #{user.name} (#{user.id}) #{user.email}, for activities #{new_activities.map(&:id)}"
-        send_mandrill_table_email('summary_new_local_activities', user.email, html)
-      end
-
 		end
   end
 
   def new_messages_summary(config_setting, time_period)
     # Get the people that want to be informed either daily or weekly
     profile_ids = NotificationSetting.where('new_message = ?', config_setting).pluck('profile_id')
+
+    puts
+    puts "Running new_messages_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
 
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
@@ -447,6 +468,9 @@ namespace :summaries do
   def new_rsvps_summary(config_setting, time_period)
     # Get the people that want to be informed once a week
     profile_ids = NotificationSetting.where('new_rsvp = ?', config_setting).pluck('profile_id')
+
+    puts
+    puts "Running new_rsvps_summary for config setting #{config_setting} and time period #{time_period} at #{DateTime.now}.  I found #{profile_ids.count} profiles."
 
     profile_ids.each do |id|
       user_id = Profile.where('id = ?', id).pluck('user_id').first
