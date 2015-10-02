@@ -39,9 +39,10 @@
 
               var noResults = <%= @showCreateAlert %>;
               var peopleToggle = $('#peopleToggle');
-              if (peopleToggle.length > 0) {
-                  peopleToggle.click();
-              } else if (noResults) {
+              // if (peopleToggle.length > 0) {
+              //     peopleToggle.click();
+              // } else if (noResults) {
+              if (noResults) {
                   $('#noMatchesAlert').show();
               }
 

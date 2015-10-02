@@ -43,7 +43,7 @@ class WelcomeController < ApplicationController
     fairbanks = [64.8377778, -147.7163889]
 
     # Convert search parameter to coordinates
-    lat,lon,outside_supported_area = determine_lat_lon
+    lat,lon = determine_lat_lon
     search_coordinates = [lat.to_f,lon.to_f]
     @showCreateAlert = false
 
@@ -66,7 +66,7 @@ class WelcomeController < ApplicationController
       @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
     end
 
-    @activities = @activities.within(params[:distance], origin: search_coordinates) unless outside_supported_area
+    @activities = @activities.within(params[:distance], origin: search_coordinates)
     if @activities.count == 0
       # If no activities match the search parameters, we want to loosen the requirements, 
       # ignoring the type requirements
@@ -81,7 +81,7 @@ class WelcomeController < ApplicationController
         @activities = @activities.after_date(from_date.in_time_zone(tz).utc)
       end
 
-      @activities = @activities.within(params[:distance], origin: search_coordinates) unless outside_supported_area
+      # @activities = @activities.within(params[:distance], origin: search_coordinates) unless outside_supported_area
     end
 
     @users = Profile.having_interests(searched_interest_ids).where("closed_at IS NULL")
@@ -160,17 +160,11 @@ class WelcomeController < ApplicationController
       else
         search_location = Geocoder.search(params[:location]).first
         lat = search_location && search_location.latitude
-        lon = search_location &&search_location.longitude
+        lon = search_location && search_location.longitude
       end
     end
 
-    if !defined?(search_coordinates) || search_coordinates.nil?
-      outside_supported_area = true
-    else
-      outside_supported_area = false
-    end
-
-    return lat,lon,outside_supported_area
+    return lat,lon
   end
 
   def determine_search_dates
