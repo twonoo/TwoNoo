@@ -61,9 +61,9 @@ class Activity < ActiveRecord::Base
 
   def increase_view
     if views.nil?
-      update_attribute(:views, 1)
+      update_columns(:views => 1)
     else
-      update_attribute(:views, views + 1)
+      update_columns(:views => views + 1)
     end
   end
 
