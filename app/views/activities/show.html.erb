@@ -73,7 +73,7 @@
                    data-layout="button"
                    style="padding: 0px; vertical-align: top; width: 63px; height: 24px;"></div>
 
-              <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+              <!--<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
               <div class="g-plusone"
                    data-height="24"
                    data-href="<%= activity_url(id: @activity.id, referrer: current_user.id) %>"></div>
@@ -87,7 +87,7 @@
                       js.src = p + '://platform.twitter.com/widgets.js';
                       fjs.parentNode.insertBefore(js, fjs);
                   }
-              }(document, 'script', 'twitter-wjs');</script>
+              }(document, 'script', 'twitter-wjs');</script>-->
 
               <% if @activity.image.exists?
                    @imageURL = root_url + @activity.image.url
