@@ -325,7 +325,7 @@
     if(term_string!=''){
       $('#search_form_mobile #terms').val(term_string);
       $('#search_form_mobile #term_ids').val(term_ids);
-      var btn_term = term.length>16 ? term.substring(0,14)+'...' : term;
+      var btn_term = term_string.length>16 ? term_string.substring(0,14)+'...' : term_string;
       $('#search_form_mobile #terms-btn').text(btn_term);
     }
   });
@@ -379,6 +379,7 @@
     if (term_val=='' || term_val==undefined || term_val==[])
       $('#search_form_mobile #terms').val('All');
 
+    
     // var term_val = $('#search_form_mobile #terms').val();
     // if (term_val=='' || term_val==undefined){
     //   $('#no_interest_selected').show();
