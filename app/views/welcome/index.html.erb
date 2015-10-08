@@ -30,7 +30,7 @@
           <h3 class="modal-title text-center" id="myModalLabel">Select Interests</h4>
         </div>
         <div class="modal-body text-center" style="padding-top:0px;">
-          <button type="button" class="dark_grey_btn activity-interest all-interest" style="margin-bottom:20px;">All</button>
+          <button type="button" class="dark_grey_btn activity-interest all-interest selected_btn" style="margin-bottom:20px;">All</button>
           <div class="clearfix"> </div>
           
           <div class="web_scroll activity-list">
@@ -54,7 +54,7 @@
     </div>
   </div>
 <div style="width:625px; margin:0 auto;">
-       <input class="form-control col-md-4" id="terms" name="terms" placeholder="Select Interests" autocomplete='off' type="search" title="Enter your interests or select All to see everything!" style='width:300px;border-radius: 6px;cursor:pointer;' data-toggle="modal" data-target="#interestWebModal" readonly='true'>
+       <input class="form-control col-md-4" id="terms" name="terms" placeholder="All Interests" autocomplete='off' type="search" title="Enter your interests or select All to see everything!" style='width:300px;border-radius: 6px;cursor:pointer;' data-toggle="modal" data-target="#interestWebModal" readonly='true'>
        <input type="hidden" id="term_ids" name="term_ids" value="[]">
 
                 <div class="btn-group search_city" id="location-selection">
@@ -200,7 +200,7 @@
           <h3 class="modal-title text-center" id="myModalLabel">Select Interests</h4>
         </div>
         <div class="modal-body text-center" style="padding-top:0px;">
-          <button type="button" class="dark_grey_btn activity-interest all-interest" style="margin-bottom:20px;">All</button>
+          <button type="button" class="dark_grey_btn activity-interest all-interest selected_btn" style="margin-bottom:20px;">All</button>
           <div class="clearfix"> </div>
           
           <div class="pop_scroll activity-list">
@@ -233,7 +233,7 @@
 
 <div style="display:inline-block;">
 
-    <button type="button" title="Enter what interests you...blank shows all" class="grey_btn btn-default" data-toggle="modal" data-target="#interestModal" id="terms-btn">Select Interest</button>
+    <button type="button" title="Enter what interests you...blank shows all" class="grey_btn btn-default" data-toggle="modal" data-target="#interestModal" id="terms-btn">All Interests</button>
     <input style="display:none;" class="form-control grey_btn btn-default" id="terms" name="terms" type="search">
     <input type="hidden" id="term_ids" name="term_ids" value="[]">
 
@@ -360,28 +360,30 @@
   });
 
   function check_interests(){
-    var term_val = $('#search_form #terms').val();
-    if (term_val=='' || term_val==undefined){
-      $('#no_interest_selected').show();
-      return false;
-    }
-    else
-      $('#no_interest_selected').hide();
+    $('#search_form #terms').val('All');
+    // var term_val = $('#search_form #terms').val();
+    // if (term_val=='' || term_val==undefined){
+    //   $('#no_interest_selected').show();
+    //   return false;
+    // }
+    // else
+    //   $('#no_interest_selected').hide();
 
     return true;
   }
   function check_mobile_interests(){
-    var term_val = $('#search_form_mobile #terms').val();
-    if (term_val=='' || term_val==undefined){
-      $('#no_interest_selected').show();
-      return false;
-    }
-    else {
+    $('#search_form_mobile #terms').val('All');
+    // var term_val = $('#search_form_mobile #terms').val();
+    // if (term_val=='' || term_val==undefined){
+    //   $('#no_interest_selected').show();
+    //   return false;
+    // }
+    // else {
       $('#no_interest_selected').hide();
       confirmSearchMobile();
       // document.search_form_mobile.submit();
       $(this).click();
       return true;
-    }
+    // }
   }
 </script>
