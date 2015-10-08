@@ -360,7 +360,10 @@
   });
 
   function check_interests(){
-    $('#search_form #terms').val('All');
+    var term_val = $('#search_form #terms').val();
+    if (term_val=='' || term_val==undefined)
+      $('#search_form #terms').val('All');
+    
     // var term_val = $('#search_form #terms').val();
     // if (term_val=='' || term_val==undefined){
     //   $('#no_interest_selected').show();
@@ -372,7 +375,10 @@
     return true;
   }
   function check_mobile_interests(){
-    $('#search_form_mobile #terms').val('All');
+    var term_val = $('#search_form_mobile #terms').val();
+    if (term_val=='' || term_val==undefined || term_val==[])
+      $('#search_form_mobile #terms').val('All');
+
     // var term_val = $('#search_form_mobile #terms').val();
     // if (term_val=='' || term_val==undefined){
     //   $('#no_interest_selected').show();
