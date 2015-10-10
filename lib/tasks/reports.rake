@@ -10,7 +10,7 @@ end
     number_of_cancelled_users = Profile.where("closed_at > '#{DateTime.now.beginning_of_day}'").count
 
     # Mandrill integration
-    mandrill_to = [{:email => "dylan.cashman@tufts.edu", :type => 'to'}]
+    mandrill_to = [{:email => "skeefe15@gmail.com", :type => 'to'}]
     mandrill = Mandrill::API.new
     template = 'admin_stats_report'
     tc = [{"name" => "twonoo", "content" => "TwoNoo"}]
