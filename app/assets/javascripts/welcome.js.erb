@@ -356,3 +356,40 @@ function confirmSearchMobile()
 
     return false;
 }
+
+function animate_sign_up_note() {
+  var sign_up_element = $('#sign_up')
+  var position = sign_up_element.position()
+  var y = position['top'] + sign_up_element.height()
+  var width = 3*sign_up_element.width()
+  var x = $( window ).width() - position['left'] - width/2
+
+  notif({
+    msg: "<b>Why should I sign up?</b>",
+    type: "warning",
+    autohide: false,
+    width: width,
+    offset: x,
+    vertoffset: y,
+    multiline: true,
+    position: 'right',
+    fade: true
+  });
+  $('#ui_notifIt')
+  .on('mouseenter', function(){
+      $(this).animate({ width: "+=20", height: "+=200" });
+      $('#ui_notifIt').append( "<div id='notifItmsg'><p>Sign up today to get active, get outside, and find new teammates.  With an account at TwoNoo, you will be able to search for events in your neighborhood where you can play your favorite sports.  You can also be notified when people in your area are looking for teammates.</p>" );
+  })
+  .on('mouseleave', function(){
+      $(this).animate({ width: "-=20", height: "-=200" });
+      $('#notifItmsg').remove();
+  })
+  .on('click', function(){
+      $.cookie('seen_sign_up_note', true);;
+  });
+}
+
+// if (($.cookie('seen_sign_up_note') == null) && ($( window ).width() >= 860)) {
+if (($( window ).width() >= 860)) {
+  window.setTimeout(animate_sign_up_note, 2000);
+}

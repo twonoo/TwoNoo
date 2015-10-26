@@ -45,3 +45,4 @@
 //= require chosen.custom.js
 //= require likes.js.erb
 //= require profile.js
+//= require notifit.js
