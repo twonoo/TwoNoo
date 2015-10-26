@@ -358,11 +358,12 @@ function confirmSearchMobile()
 }
 
 function animate_sign_up_note() {
-  var sign_up_element = $('#sign_up')
-  var position = sign_up_element.position()
-  var y = position['top'] + sign_up_element.height()
-  var width = 3*sign_up_element.width()
-  var x = $( window ).width() - position['left'] - width/2
+  var sign_up_element = $('#sign_up');
+  var position = sign_up_element.position();
+  var y = position['top'] + sign_up_element.height();
+  var width = 3*sign_up_element.width();
+  // var x = $( window ).width() - position['left'] - width/2
+  var x = 0;
 
   notif({
     msg: "<b>Why should I sign up?</b>",
@@ -387,9 +388,4 @@ function animate_sign_up_note() {
   .on('click', function(){
       $.cookie('seen_sign_up_note', true);;
   });
-}
-
-// if (($.cookie('seen_sign_up_note') == null) && ($( window ).width() >= 860)) {
-if (($( window ).width() >= 860)) {
-  window.setTimeout(animate_sign_up_note, 2000);
 }

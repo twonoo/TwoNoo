@@ -394,3 +394,14 @@
     // }
   }
 </script>
+
+<% if !user_signed_in? %>
+  <script type='text/javascript'>
+    $(function () {
+      if (($( window ).width() >= 860)) {
+        window.setTimeout(animate_sign_up_note, 2000);
+      }
+    });
+    // if (($.cookie('seen_sign_up_note') == null) && ($( window ).width() >= 860)) {
+  </script>
+<% end %>
