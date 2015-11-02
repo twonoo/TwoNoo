@@ -148,3 +148,11 @@
       background-color:  red;
       border-radius: 10px;
 }
+
+.notifItmsg_mobile {
+  font-size: 24px;
+}
+
+#notifIt_close {
+  font-size: 36px;
+}

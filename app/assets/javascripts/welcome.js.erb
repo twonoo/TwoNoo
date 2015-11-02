@@ -378,14 +378,53 @@ function animate_sign_up_note() {
   });
   $('#ui_notifIt')
   .on('mouseenter', function(){
-      $(this).animate({ width: "+=20", height: "+=200" });
+      $(this).animate({ width: "+=0", height: "+=100" });
       $('#ui_notifIt').append( "<div id='notifItmsg'><p>Register today to get notified when people in your area are looking for teammates or organizing pickup games for your favorite sports.</p>" );
   })
   .on('mouseleave', function(){
-      $(this).animate({ width: "-=20", height: "-=200" });
+      $(this).animate({ width: "-=0", height: "-=100" });
       $('#notifItmsg').remove();
   })
   .on('click', function(){
       $.cookie('seen_sign_up_note', true);;
   });
+}
+
+function animate_sign_up_note_mobile() {
+  var y = $( window ).height() - 100;
+  var width = $( window ).width();
+  // var x = $( window ).width() - position['left'] - width/2
+  var x = 0;
+
+  notif({
+    msg: "<div class='notifItmsg_mobile'><b>Why should I sign up?</b></div>",
+    type: "warning",
+    autohide: false,
+    width: width,
+    offset: x,
+    vertoffset: y,
+    multiline: true,
+    position: 'right',
+    fade: true,
+    clickable: true
+  });
+
+  var clickState = 0;
+  $('#ui_notifIt')
+  .on('click', function(e){
+    if($(e.target).is('span')){
+            e.preventDefault();
+            return;
+    } else {
+      if (clickState == 0) {
+        $(this).animate({ top: "-=100", width: "+=0", height: "+=100" });
+        $('#ui_notifIt').append( "<div id='notifItmsg'><p style='font-size: 24px'>Register today to get notified when people in your area are looking for teammates or organizing pickup games for your favorite sports.</p>" );
+        clickState = 1;
+      } else {
+        $(this).animate({ top: "+=100", width: "-=0", height: "-=100" });
+        $('#notifItmsg').remove();
+        clickState = 0;
+      }
+    }
+  })
 }
