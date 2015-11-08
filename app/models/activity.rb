@@ -31,6 +31,7 @@ class Activity < ActiveRecord::Base
   before_save :convert_to_enddatetime
   before_save :format_url
   before_save :format_description
+  after_save :force_facebook_to_rescrape
   has_many :rsvps
 
   validates :activity_name, :date, :time, :city, :state, :description, presence: true
@@ -312,5 +313,10 @@ class Activity < ActiveRecord::Base
     end
   end
 
-
+  def force_facebook_to_rescrape
+    if !Rails.env.development? && (activity_name_changed? || description_changed? || image_file_name_changed?)
+      my_url = Rails.application.routes.url_helpers.activity_url(self)
+      HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
+    end
+  end
 end
