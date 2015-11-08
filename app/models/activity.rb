@@ -315,11 +315,10 @@ class Activity < ActiveRecord::Base
   end
 
   def force_facebook_to_rescrape
-    if (activity_name_changed? || description_changed? || image_file_name_changed?)
+    # if (activity_name_changed? || description_changed? || image_file_name_changed?)
       # For some reason we need to explicitly grab the host from the default options
-      host = Rails.application.config.action_mailer.default_url_options[:host]
-      my_url = Rails.application.routes.url_helpers.activity_url(self, host: host)
+      my_url = ENV['BASEURL'] + '/activities/' + self.id
       HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
-    end
+    # end
   end
 end
