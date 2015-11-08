@@ -380,11 +380,9 @@ class ActivitiesController < ApplicationController
     @activity.update(params)
 
     if @activity.save
-      if @activity.needs_facebook_rescrape
-        activity_url = base_url + activity_path(@activity)
-        puts "POSTING to https://graph.facebook.com/?id=#{activity_url}&scrape=true"
-        HTTParty.post("https://graph.facebook.com/?id=#{activity_url}&scrape=true")
-      end
+      activity_url = base_url + activity_path(@activity)
+      puts "POSTING to https://graph.facebook.com/?id=#{activity_url}&scrape=true"
+      HTTParty.post("https://graph.facebook.com/?id=#{activity_url}&scrape=true")
 
       # Get the rsvp'd users
       @rsvps = Rsvp.where(activity_id: @activity.id).all
