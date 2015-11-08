@@ -314,7 +314,7 @@ class Activity < ActiveRecord::Base
   end
 
   def force_facebook_to_rescrape
-    if !Rails.env.development? && (activity_name_changed? || description_changed? || image_file_name_changed?)
+    if (activity_name_changed? || description_changed? || image_file_name_changed?)
       my_url = Rails.application.routes.url_helpers.activity_url(self)
       HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
     end
