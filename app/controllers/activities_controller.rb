@@ -383,7 +383,8 @@ class ActivitiesController < ApplicationController
       # activity_url = base_url + activity_path(@activity)
       # puts "POSTING to https://graph.facebook.com/?id=#{activity_url}&scrape=true"
       # HTTParty.post("https://graph.facebook.com/?id=#{activity_url}&scrape=true")
-
+      @activity.force_facebook_to_rescrape
+      
       # Get the rsvp'd users
       @rsvps = Rsvp.where(activity_id: @activity.id).all
       @rsvps.each do |rsvp|

@@ -31,7 +31,6 @@ class Activity < ActiveRecord::Base
   before_save :convert_to_enddatetime
   before_save :format_url
   before_save :format_description
-  after_update :force_facebook_to_rescrape
   has_many :rsvps
   attr_accessor :needs_facebook_rescrape
 
@@ -255,6 +254,12 @@ class Activity < ActiveRecord::Base
     .limit(16)
   end
 
+  def force_facebook_to_rescrape
+    # For some reason we need to explicitly grab the host from the default options
+    my_url = ENV['BASEURL'] + '/activities/' + self.id.to_s
+    HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
+  end
+
   private
 
   # def presence_of_activity_types
@@ -314,11 +319,4 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def force_facebook_to_rescrape
-    # For some reason we need to explicitly grab the host from the default options
-    # if (activity_name_changed? || description_changed? || image_file_name_changed?)
-    my_url = ENV['BASEURL'] + '/activities/' + self.id.to_s
-    HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
-    # end
-  end
 end
