@@ -315,10 +315,10 @@ class Activity < ActiveRecord::Base
   end
 
   def force_facebook_to_rescrape
-      # For some reason we need to explicitly grab the host from the default options
-    if (activity_name_changed? || description_changed? || image_file_name_changed?)
-      my_url = ENV['BASEURL'] + '/activities/' + self.id.to_s
-      HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
-    end
+    # For some reason we need to explicitly grab the host from the default options
+    # if (activity_name_changed? || description_changed? || image_file_name_changed?)
+    my_url = ENV['BASEURL'] + '/activities/' + self.id.to_s
+    HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
+    # end
   end
 end
