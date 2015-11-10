@@ -32,7 +32,6 @@ class Activity < ActiveRecord::Base
   before_save :format_url
   before_save :format_description
   has_many :rsvps
-  attr_accessor :needs_facebook_rescrape
 
   validates :activity_name, :date, :time, :city, :state, :description, presence: true
 
