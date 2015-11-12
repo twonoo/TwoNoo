@@ -254,12 +254,18 @@ class Activity < ActiveRecord::Base
   end
 
   def force_facebook_to_rescrape
+    self.delay.delayed_force_facebook_to_rescrape
+  end
+
+  private
+
+  def delayed_force_facebook_to_rescrape
+    sleep 3 # we sleep to make sure the newest form of page will get served
+            # Thus this should only be called in a delayed job.
     # For some reason we need to explicitly grab the host from the default options
     my_url = ENV['BASEURL'] + '/activities/' + self.id.to_s
     HTTParty.post("https://graph.facebook.com/?id=#{my_url}&scrape=true")
   end
-
-  private
 
   # def presence_of_activity_types
   #   unless activity_types.present?
