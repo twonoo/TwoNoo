@@ -81,7 +81,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { :host => 'staging.twonoo.com:8080' }
+  config.action_mailer.default_url_options = { :host => 'twonoo.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default :charset => "utf-8"
@@ -94,16 +94,6 @@ Rails.application.configure do
     user_name: "info@twonoo.com",
     password: "FWDtyP_2VA85dpsXhuudoA"
   }
-#  config.action_mailer.smtp_settings = {
-#    address: "smtp.gmail.com",
-#    port: 587,
-#    domain: "twonoo.com",
-#    authentication: "plain",
-#    enable_starttls_auto: true,
-#    user_name: "info@twonoo.com",
-#    password: "Tw0#oo01"
-#  }
-
 
   config.secret_key_base = 'f875f67fdc2bc511c4130f11dcbfc8143bc2a74184b2ccdd66b0c2243ffc928504e3f4dcb929a809729107cf278e13184f96e4cd4b74646f793c5753b6033194'
 end
