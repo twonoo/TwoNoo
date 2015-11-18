@@ -167,7 +167,7 @@
             <!--<button id="messages_mobile" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex3-collapse" style="font-size:.8em;width:40px;height:34px;padding:0px;vertical-align:middle;"> <span class="sr-only">Toggle navigation</span><span class="glyphicon-envelope"></span><span class="badge" id="messages_badge_mobile" style="font-size:.5em;"><%= current_user.mailbox.inbox({:read => false}).count %></span></button>-->
             <!--
         <% end %>-->
-        <a class="collapse navbar-collapse navbar-brand" href="/"><img class="logo" height="35px" src="<%= asset_path 'main-logo-dash.png' %>"></a>
+        <a class="collapse navbar-collapse navbar-brand" href="/"><img class="logo" height="50px" src="<%= asset_path 'main-logo-dash.png' %>"></a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse" id="scrollTarget" style="height: 1px;">
         <%= current_user ? render('layouts/signed_in_nav') : render('layouts/sign_in_nav') %>
