@@ -227,7 +227,7 @@
           <ul class="nav nav-pills nav-stacked">
             <% unless @users.blank? %>
                 <li>
-                  <a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People</a>
+                  <a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People (<%=@users.count%>)</a>
                 </li>
             <% end %>
 
