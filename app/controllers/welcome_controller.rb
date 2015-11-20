@@ -102,6 +102,10 @@ class WelcomeController < ApplicationController
     @search_params = params.slice(:terms, :when, :from_date, :to_date, 
                                   :distance, :lat, :lng, :location).to_query
 
+    # We record the count before the pagination occurs
+    @user_count = @users.count
+    @activity_count = @activities.count
+
     @users = @users[@users_offset..@users_max] if @users.present?
     @activities = @activities[@activities_offset..@activities_max] if @activities.present?
 
