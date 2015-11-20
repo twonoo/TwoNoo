@@ -16,32 +16,40 @@
                   window.location.href = baseUrl
                   + '/?<%= @search_params.html_safe %>'
                   + '<%= ("&users_offset=#{@users_offset}&users_max=#{@users_max}&activities_offset=#{@activities_offset + @page_increment}&activities_max=#{@activities_max + @page_increment}").html_safe %>'
+                  + '&show_activities=1'
               });
               $('#activities_previous').click(function (e) {
                   e.preventDefault();
                   window.location.href = baseUrl
                   + '/?<%= @search_params.html_safe %>'
                   + '<%= ("&users_offset=#{@users_offset}&users_max=#{@users_max}&activities_offset=#{@activities_offset - @page_increment}&activities_max=#{@activities_max - @page_increment}").html_safe %>'
+                  + '&show_activities=1'
               });
               $('#users_next').click(function (e) {
                   e.preventDefault();
                   window.location.href = baseUrl
                   + '/?<%= @search_params.html_safe %>'
                   + '<%= ("&activities_offset=#{@activities_offset}&activities_max=#{@activities_max}&users_offset=#{@users_offset + @page_increment}&users_max=#{@users_max + @page_increment}").html_safe %>'
+                  + '&show_users=1'
               });
               $('#users_previous').click(function (e) {
                   e.preventDefault();
                   window.location.href = baseUrl
                   + '/?<%= @search_params.html_safe %>'
                   + '<%= ("&activities_offset=#{@activities_offset}&activities_max=#{@activities_max}&users_offset=#{@users_offset - @page_increment}&users_max=#{@users_max - @page_increment}").html_safe %>'
+                  + '&show_users=1'
               });
 
 
               var noResults = <%= @showCreateAlert %>;
               var peopleToggle = $('#peopleToggle');
+              <% if params['show_users'] %>
+                peopleToggle.click();
+              <% end %>
               // if (peopleToggle.length > 0) {
               //     peopleToggle.click();
               // } else if (noResults) {
+
               if (noResults) {
                   $('#noMatchesAlert').show();
               }
@@ -227,7 +235,7 @@
           <ul class="nav nav-pills nav-stacked">
             <% unless @users.blank? %>
                 <li>
-                  <a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People (<%=@users.count%>)</a>
+                  <a aria-controls="people" role="tab" data-toggle="tab" href="#people" id="peopleToggle">People (<%=@user_count%>)</a>
                 </li>
             <% end %>
 
