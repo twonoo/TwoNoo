@@ -11,6 +11,7 @@
 
         <div class="panel-body" style="background-color:#F8F8F8">
           <%= link_to "Sign up with Facebook", user_omniauth_authorize_path(:facebook), class: 'btn btn-md btn-primary btn-block' %>
+          <!-- Only allowing Facebook Signup>
           <h1>
             <small>OR</small>
           </h1>
@@ -58,6 +59,7 @@
                   <%= profile_form.hidden_field 'referrer', value: cookies[:referrer] %>
               <% end %>
               <div class="text-center"><%= f.submit "Sign up", class: 'btn btn-success btn-md btn-block' %>
+              -->
               </div>
 
 
