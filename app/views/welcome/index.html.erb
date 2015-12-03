@@ -251,7 +251,7 @@
              value="Boston, MA"
              <% end %>
              placeholder="City or ZIP">
-      <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;"><% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %><%= current_user.profile.city %>, <%= current_user.profile.state %><% elsif !(cookies["city"].nil? || cookies["state"].nil?) %><%= cookies["city"] %>, <%= cookies["state"] %><% else %>Denver, CO<% end %></a>
+      <a id="selection-mobile" class="selection location_selection_mobile" style="color: inherit;"><% if user_signed_in? && !(current_user.profile.city.nil? || current_user.profile.state.nil?) %><%= current_user.profile.city %>, <%= current_user.profile.state %><% elsif !(cookies["city"].nil? || cookies["state"].nil?) %><%= cookies["city"] %>, <%= cookies["state"] %><% else %>Boston, MA<% end %></a>
         <!-- <i class='glyphicon glyphicon-chevron-down'></i> -->
     </div>
     <div class="clearfix"> </div>  
